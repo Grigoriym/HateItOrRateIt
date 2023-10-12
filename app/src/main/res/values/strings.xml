@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">HateItOrRateIt</string>
+
+    <string name="add_file">Please add a file</string>
+    <string name="set_name">Please set a name for a document</string>
+</resources>
