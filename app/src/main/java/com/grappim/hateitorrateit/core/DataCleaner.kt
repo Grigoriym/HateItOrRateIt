@@ -1,11 +1,16 @@
 package com.grappim.hateitorrateit.core
 
 import com.grappim.hateitorrateit.core.di.ApplicationCoroutineScope
+import com.grappim.hateitorrateit.core.di.IoDispatcher
 import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
 import com.grappim.hateitorrateit.utils.DraftDocument
 import com.grappim.hateitorrateit.utils.FileUtils
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -16,7 +21,9 @@ import javax.inject.Inject
 class DataCleaner @Inject constructor(
     private val fileUtils: FileUtils,
     private val documentRepository: DocsRepository,
-    @ApplicationCoroutineScope private val appDispatcher: CoroutineScope
+    @ApplicationCoroutineScope private val appDispatcher: CoroutineScope,
+    private val hateItOrRateItDatabase: HateItOrRateItDatabase,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     suspend fun clearDocumentData(
@@ -35,4 +42,15 @@ class DataCleaner @Inject constructor(
         fileUtils.deleteFolder(draftDocument.folderName)
         documentRepository.removeDocumentById(draftDocument.id)
     }.join()
+
+    suspend fun clearAllData() = withContext(ioDispatcher) {
+        hateItOrRateItDatabase.runInTransaction {
+            runBlocking {
+                hateItOrRateItDatabase.clearAllTables()
+                hateItOrRateItDatabase.databaseDao().clearPrimaryKeyIndex()
+            }
+        }
+
+        fileUtils.getMainFolder("").deleteRecursively()
+    }
 }

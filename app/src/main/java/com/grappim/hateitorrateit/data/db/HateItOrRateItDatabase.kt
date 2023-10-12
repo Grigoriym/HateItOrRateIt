@@ -18,4 +18,5 @@ TypeConverters(
 abstract class HateItOrRateItDatabase : RoomDatabase() {
 
     abstract fun documentsDao(): DocumentsDao
+    abstract fun databaseDao(): DatabaseDao
 }

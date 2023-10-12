@@ -47,7 +47,7 @@ class FileUtils @Inject constructor(
         folderName: String
     ): CameraTakePictureData {
         val fileName = getBitmapFileName()
-        val file = File(getFolder(folderName), fileName)
+        val file = File(getMainFolder(folderName), fileName)
         val uri = getFileUri(file)
         return CameraTakePictureData(
             uri = uri,
@@ -56,7 +56,7 @@ class FileUtils @Inject constructor(
     }
 
     fun deleteFolder(documentFolderName: String) {
-        val file = getFolder(documentFolderName)
+        val file = getMainFolder(documentFolderName)
         file.deleteRecursively()
     }
 
@@ -123,7 +123,7 @@ class FileUtils @Inject constructor(
         folderName: String
     ): File {
         val extension = getUriFileExtension(uri)
-        val localFile = File(getFolder(folderName), getFileName(extension))
+        val localFile = File(getMainFolder(folderName), getFileName(extension))
         writeDataToFile(uri, localFile)
         Timber.d("createFileLocally, $localFile")
         return localFile
@@ -155,7 +155,7 @@ class FileUtils @Inject constructor(
         }
     }
 
-    fun getFolder(
+    fun getMainFolder(
         child: String
     ): File {
         val folder = File(context.filesDir, "docs/$child")
@@ -203,7 +203,7 @@ class FileUtils @Inject constructor(
         folderName: String,
         fileName: String
     ): Uri {
-        val tmpFile = File(getFolder(folderName), fileName)
+        val tmpFile = File(getMainFolder(folderName), fileName)
         return getFileUri(tmpFile)
     }
 
@@ -212,7 +212,7 @@ class FileUtils @Inject constructor(
         folderName: String,
     ): Uri {
         val fileName = getBitmapFileName("preview")
-        val tempFile = File(getFolder(folderName), fileName)
+        val tempFile = File(getMainFolder(folderName), fileName)
         val bytes = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
         val bitmapData = bytes.toByteArray()

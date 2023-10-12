@@ -27,7 +27,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
-import com.grappim.hateitorrateit.ui.screens.SettingsScreen
+import com.grappim.hateitorrateit.ui.screens.settings.SettingsScreen
 import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
 
 @Composable
@@ -79,7 +79,7 @@ fun RootMainScreen(
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(Icons.Filled.Home, contentDescription = null) },
+                        icon = { Icon(screen.imageVector, contentDescription = null) },
                     )
                 }
             }
@@ -102,7 +102,11 @@ fun RootMainScreen(
                     )
                 }
                 composable(HomeNavDestination.Settings.route) {
-                    SettingsScreen()
+                    SettingsScreen(
+                        goBack = {
+                            navController.popBackStack()
+                        }
+                    )
                 }
             }
         }
