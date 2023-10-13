@@ -4,10 +4,8 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
-import androidx.sqlite.db.SupportSQLiteQuery
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -19,12 +17,11 @@ interface DocumentsDao {
     @[Transaction Query("SELECT * FROM document_table")]
     fun getAllDocsFlow(): Flow<List<DocumentWithFilesEntity>>
 
-    @RawQuery
-    fun getAllDocsByQueryFlow(query: SupportSQLiteQuery): Flow<List<DocumentWithFilesEntity>>
-
-    @Query("SELECT * FROM document_table " +
-            "WHERE name LIKE '%' || :query || '%' " +
-            "OR shop LIKE '%' || :query || '%'")
+    @Query(
+        "SELECT * FROM document_table " +
+                "WHERE name LIKE '%' || :query || '%' " +
+                "OR shop LIKE '%' || :query || '%'"
+    )
     fun getAllDocsByQueryFlow(query: String): Flow<List<DocumentWithFilesEntity>>
 
     @[Transaction Query("SELECT * FROM document_table WHERE documentId = :id LIMIT 1")]
