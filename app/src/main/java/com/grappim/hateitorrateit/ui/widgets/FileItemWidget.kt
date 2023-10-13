@@ -36,7 +36,7 @@ fun FileItemWidget(
             shape = RoundedCornerShape(8.dp)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(fileData.preview),
+                painter = rememberAsyncImagePainter(fileData.uri),
                 contentDescription = ""
             )
         }

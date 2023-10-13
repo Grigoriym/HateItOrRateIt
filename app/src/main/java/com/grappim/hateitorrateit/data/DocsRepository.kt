@@ -68,6 +68,10 @@ class DocsRepository @Inject constructor(
             documentsDao.getAllDocsByQueryFlow(
                 SimpleSQLiteQuery(sqlQuery.toString())
             )
+        }.map {
+            it.filter { entity ->
+                entity.files?.isNotEmpty() == true
+            }
         }.map { it.toDocument() }
 
     suspend fun removeDocumentById(id: Long) {

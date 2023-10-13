@@ -19,10 +19,5 @@ data class DocumentFileDataEntity(
     val uriPath: String,
     val uriString: String,
 
-    @Deprecated("remove it")
-    val previewUriString: String? = null,
-    @Deprecated("remove it")
-    val previewUriPath: String? = null,
-
     val md5: String
 )

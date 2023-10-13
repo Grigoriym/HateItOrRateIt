@@ -15,7 +15,6 @@ import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.DraftDocument
 import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.hateitorrateit.utils.FileUtils
-import com.grappim.hateitorrateit.utils.MimeTypes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -130,20 +129,12 @@ class HateOrRateViewModel @Inject constructor(
                     id = currentDraft.id,
                     name = name,
                     filesUri = _viewState.value.filesUris.map {
-                        val previewUri: Uri? = if (it.mimeType in MimeTypes.images) {
-                            it.preview as? Uri
-                        } else {
-                            null
-                        }
-
                         DocumentFileData(
                             name = it.name,
                             mimeType = it.mimeType,
                             uriPath = it.uri.path ?: "",
                             uriString = it.uri.toString(),
                             size = it.size,
-                            previewUriString = previewUri?.toString(),
-                            previewUriPath = previewUri?.path,
                             md5 = it.md5
                         )
                     },
@@ -165,9 +156,11 @@ class HateOrRateViewModel @Inject constructor(
                 _viewState.value.documentName.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.set_name))
                 }
+
                 _viewState.value.filesUris.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.add_file))
                 }
+
                 else -> {
                     saveDocument()
                 }

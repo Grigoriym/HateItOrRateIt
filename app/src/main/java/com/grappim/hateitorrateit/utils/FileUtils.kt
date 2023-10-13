@@ -37,7 +37,6 @@ class FileUtils @Inject constructor(
             size = fileSize,
             sizeToDemonstrate = formatFileSize(fileSize),
             mimeType = mimeType,
-            preview = newUri,
             mimeTypeToDemonstrate = MimeTypes.formatMimeType(mimeType),
             md5 = hashUtils.md5(newFile)
         )
@@ -62,7 +61,7 @@ class FileUtils @Inject constructor(
 
     fun removeFile(fileData: FileData): Boolean {
         val file = File(fileData.uri.path)
-        (fileData.preview as? Uri)?.path?.let {
+        fileData.uri.path?.let {
             val previewDeleted = File(it).deleteRecursively()
             Timber.d("previewDeleted: $previewDeleted")
         }
@@ -79,7 +78,6 @@ class FileUtils @Inject constructor(
         val mimeType = getMimeType(uri)
         return FileData(
             uri = uri,
-            preview = uri,
             name = getUriFileName(uri),
             size = fileSize,
             sizeToDemonstrate = formatFileSize(fileSize),

@@ -9,6 +9,5 @@ data class FileData(
     val sizeToDemonstrate: String,
     val mimeType: String,
     val mimeTypeToDemonstrate: String,
-    var preview: Any? = null,
     val md5: String
 )

@@ -2,7 +2,6 @@ package com.grappim.hateitorrateit.model
 
 import com.grappim.hateitorrateit.domain.Document
 import com.grappim.hateitorrateit.utils.DateTimeUtils
-import com.grappim.hateitorrateit.utils.MimeTypes
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -21,12 +20,7 @@ class UiModelsMapper @Inject constructor(
             createdDate = formattedCreatedDate,
             preview = doc
                 .filesUri
-                .find {
-                    it.mimeType.contains(MimeTypes.Image.PREFIX)
-                }?.uriString
-                ?: doc.filesUri.find {
-                    it.previewUriString != null
-                }?.previewUriString ?: "",
+                .firstOrNull() ?: "",
             documentFolderName = doc.documentFolderName,
             shop = doc.shop,
         )

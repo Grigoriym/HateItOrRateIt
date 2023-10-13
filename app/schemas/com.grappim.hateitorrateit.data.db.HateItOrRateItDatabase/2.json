@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "76b7aa6acc7dfaed151cfb8a39e44008",
+    "identityHash": "ecc1219cd8c56b83f8a0da2f2c23ec81",
     "entities": [
       {
         "tableName": "document_table",
@@ -56,7 +56,7 @@
       },
       {
         "tableName": "document_file_data_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fileId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `documentId` INTEGER NOT NULL, `name` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `size` INTEGER NOT NULL, `uriPath` TEXT NOT NULL, `uriString` TEXT NOT NULL, `previewUriString` TEXT, `previewUriPath` TEXT, `md5` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fileId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `documentId` INTEGER NOT NULL, `name` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `size` INTEGER NOT NULL, `uriPath` TEXT NOT NULL, `uriString` TEXT NOT NULL, `md5` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "fileId",
@@ -101,18 +101,6 @@
             "notNull": true
           },
           {
-            "fieldPath": "previewUriString",
-            "columnName": "previewUriString",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
-            "fieldPath": "previewUriPath",
-            "columnName": "previewUriPath",
-            "affinity": "TEXT",
-            "notNull": false
-          },
-          {
             "fieldPath": "md5",
             "columnName": "md5",
             "affinity": "TEXT",
@@ -132,7 +120,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '76b7aa6acc7dfaed151cfb8a39e44008')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ecc1219cd8c56b83f8a0da2f2c23ec81')"
     ]
   }
 }

@@ -18,16 +18,14 @@ fun DocumentEntity.toDocument(
     Document(
         id = this.documentId,
         name = this.name,
-        filesUri = fileDataList?.map { dto ->
+        filesUri = fileDataList?.map { documentFileDataEntity ->
             DocumentFileData(
-                name = dto.name,
-                mimeType = dto.mimeType,
-                uriPath = dto.uriPath,
-                uriString = dto.uriString,
-                size = dto.size,
-                previewUriPath = dto.previewUriPath,
-                previewUriString = dto.previewUriString,
-                md5 = dto.md5
+                name = documentFileDataEntity.name,
+                mimeType = documentFileDataEntity.mimeType,
+                uriPath = documentFileDataEntity.uriPath,
+                uriString = documentFileDataEntity.uriString,
+                size = documentFileDataEntity.size,
+                md5 = documentFileDataEntity.md5
             )
         } ?: emptyList(),
         createdDate = this.createdDate,
@@ -55,8 +53,6 @@ fun CreateDocument.toFileDataEntityList(): List<DocumentFileDataEntity> =
             size = it.size,
             uriPath = it.uriPath,
             uriString = it.uriString,
-            previewUriString = it.previewUriString,
-            previewUriPath = it.previewUriPath,
             md5 = it.md5
         )
     }
