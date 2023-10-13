@@ -1,9 +1,7 @@
 package com.grappim.hateitorrateit.data
 
-import androidx.sqlite.db.SimpleSQLiteQuery
 import com.grappim.hateitorrateit.data.db.DocumentEntity
 import com.grappim.hateitorrateit.data.db.DocumentsDao
-import com.grappim.hateitorrateit.data.db.getStringForDbQuery
 import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntity
 import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
@@ -62,12 +60,7 @@ class DocsRepository @Inject constructor(
         if (query.isEmpty()) {
             documentsDao.getAllDocsFlow()
         } else {
-            val sqlQuery = StringBuilder("SELECT * FROM document_table ")
-                .append("WHERE name LIKE '${query.getStringForDbQuery()}' ")
-                .append("OR shop LIKE '${query.getStringForDbQuery()}' ")
-            documentsDao.getAllDocsByQueryFlow(
-                SimpleSQLiteQuery(sqlQuery.toString())
-            )
+            documentsDao.getAllDocsByQueryFlow(query)
         }.map {
             it.filter { entity ->
                 entity.files?.isNotEmpty() == true

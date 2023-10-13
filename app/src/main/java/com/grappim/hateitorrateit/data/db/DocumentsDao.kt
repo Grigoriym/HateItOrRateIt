@@ -22,6 +22,11 @@ interface DocumentsDao {
     @RawQuery
     fun getAllDocsByQueryFlow(query: SupportSQLiteQuery): Flow<List<DocumentWithFilesEntity>>
 
+    @Query("SELECT * FROM document_table " +
+            "WHERE name LIKE '%' || :query || '%' " +
+            "OR shop LIKE '%' || :query || '%'")
+    fun getAllDocsByQueryFlow(query: String): Flow<List<DocumentWithFilesEntity>>
+
     @[Transaction Query("SELECT * FROM document_table WHERE documentId = :id LIMIT 1")]
     suspend fun getDocById(id: Long): DocumentWithFilesEntity
 
