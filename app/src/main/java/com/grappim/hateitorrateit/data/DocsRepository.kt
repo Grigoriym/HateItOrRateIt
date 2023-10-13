@@ -1,7 +1,9 @@
 package com.grappim.hateitorrateit.data
 
+import androidx.sqlite.db.SimpleSQLiteQuery
 import com.grappim.hateitorrateit.data.db.DocumentEntity
 import com.grappim.hateitorrateit.data.db.DocumentsDao
+import com.grappim.hateitorrateit.data.db.getStringForDbQuery
 import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntity
 import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
@@ -56,18 +58,17 @@ class DocsRepository @Inject constructor(
         )
     }
 
-    fun getAllDocsFlow(): Flow<List<Document>> =
-        documentsDao.getAllDocsFlow()
-            .map {
-                it.filter { entity ->
-                    entity.files?.isNotEmpty() == true
-                }
-            }
-            .map {
-                it.map { documentWithFilesEntity ->
-                    documentWithFilesEntity.documentEntity.toDocument(documentWithFilesEntity.files)
-                }
-            }
+    fun getAllDocsFlow(query: String): Flow<List<Document>> =
+        if (query.isEmpty()) {
+            documentsDao.getAllDocsFlow()
+        } else {
+            val sqlQuery = StringBuilder("SELECT * FROM document_table ")
+                .append("WHERE name LIKE '${query.getStringForDbQuery()}' ")
+                .append("OR shop LIKE '${query.getStringForDbQuery()}' ")
+            documentsDao.getAllDocsByQueryFlow(
+                SimpleSQLiteQuery(sqlQuery.toString())
+            )
+        }.map { it.toDocument() }
 
     suspend fun removeDocumentById(id: Long) {
         documentsDao.deleteDocumentWithData(id)

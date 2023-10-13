@@ -2,9 +2,15 @@ package com.grappim.hateitorrateit.data.mappers
 
 import com.grappim.hateitorrateit.data.db.DocumentEntity
 import com.grappim.hateitorrateit.data.db.DocumentFileDataEntity
+import com.grappim.hateitorrateit.data.db.DocumentWithFilesEntity
 import com.grappim.hateitorrateit.domain.Document
 import com.grappim.hateitorrateit.domain.DocumentFileData
 import com.grappim.hateitorrateit.model.CreateDocument
+
+fun List<DocumentWithFilesEntity>.toDocument() =
+    this.map { documentWithFilesEntity ->
+        documentWithFilesEntity.documentEntity.toDocument(documentWithFilesEntity.files)
+    }
 
 fun DocumentEntity.toDocument(
     fileDataList: List<DocumentFileDataEntity>?
