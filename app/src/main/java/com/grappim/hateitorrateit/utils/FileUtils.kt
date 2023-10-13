@@ -2,7 +2,6 @@ package com.grappim.hateitorrateit.utils
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.text.format.Formatter.formatShortFileSize
@@ -10,7 +9,6 @@ import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
-import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.time.Instant
@@ -182,12 +180,12 @@ class FileUtils @Inject constructor(
         return MimeTypes.formatMimeType(mimeType)
     }
 
-    fun getMimeType(uri: Uri): String =
+    private fun getMimeType(uri: Uri): String =
         context.contentResolver.getType(uri)
             ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(File(uri.path).extension)
             ?: error("Cannot get mimeType from $uri")
 
-    fun getFileUri(
+    private fun getFileUri(
         file: File
     ): Uri {
         val uri = FileProvider.getUriForFile(
@@ -196,32 +194,6 @@ class FileUtils @Inject constructor(
             file
         )
         Timber.d("getFileUri from FileProvider: $uri")
-        return uri
-    }
-
-    fun getFileUri(
-        folderName: String,
-        fileName: String
-    ): Uri {
-        val tmpFile = File(getMainFolder(folderName), fileName)
-        return getFileUri(tmpFile)
-    }
-
-    fun fromBitmapToUri(
-        bitmap: Bitmap,
-        folderName: String,
-    ): Uri {
-        val fileName = getBitmapFileName("preview")
-        val tempFile = File(getMainFolder(folderName), fileName)
-        val bytes = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 80, bytes)
-        val bitmapData = bytes.toByteArray()
-
-        val fileOutPut = FileOutputStream(tempFile)
-        fileOutPut.write(bitmapData)
-        fileOutPut.flush()
-        fileOutPut.close()
-        val uri = getFileUri(tempFile)
         return uri
     }
 

@@ -162,11 +162,9 @@ class HateOrRateViewModel @Inject constructor(
                 _viewState.value.documentName.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.set_name))
                 }
-
                 _viewState.value.filesUris.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.add_file))
                 }
-
                 else -> {
                     saveDocument()
                 }
@@ -181,17 +179,6 @@ class HateOrRateViewModel @Inject constructor(
                 val updatedFilesUris = currentState.filesUris.filterNot { it == fileData }
                 currentState.copy(filesUris = updatedFilesUris)
             }
-
-//            _viewState.update { currentState ->
-//                currentState.copy(
-//                    filesUris = currentState.filesUris.toMutableList()
-//                        .apply { remove(fileData) })
-//            }
-//            val newList = _viewState.value.filesUris.toMutableList()
-//            newList.remove(fileData)
-//            _viewState.update {
-//                it.copy(filesUris = newList)
-//            }
         }
     }
 }
