@@ -1,9 +1,11 @@
 package com.grappim.hateitorrateit.utils
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.provider.OpenableColumns
+import android.text.format.Formatter.formatShortFileSize
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -26,6 +28,11 @@ class FileUtils @Inject constructor(
         uri: Uri,
         draftDocument: DraftDocument,
     ): FileData {
+        context.contentResolver.takePersistableUriPermission(
+            uri,
+            Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+
         Timber.d("getFileUrisFromGalleryUri, $uri")
         val newFile = createFileLocally(uri, draftDocument.folderName)
         val newUri = getFileUri(newFile)
@@ -60,12 +67,8 @@ class FileUtils @Inject constructor(
     }
 
     fun removeFile(fileData: FileData): Boolean {
-        val file = File(fileData.uri.path)
-        fileData.uri.path?.let {
-            val previewDeleted = File(it).deleteRecursively()
-            Timber.d("previewDeleted: $previewDeleted")
-        }
-        return file.deleteRecursively()
+        val deletedRows = context.contentResolver.delete(fileData.uri, null, null)
+        return deletedRows > 0
     }
 
     fun getFileDataFromCameraPicture(
@@ -111,10 +114,9 @@ class FileUtils @Inject constructor(
         }
     }
 
-    fun formatFileSize(
+    private fun formatFileSize(
         fileSize: Long
-    ): String =
-        android.text.format.Formatter.formatShortFileSize(context, fileSize)
+    ): String = formatShortFileSize(context, fileSize)
 
     private fun createFileLocally(
         uri: Uri,

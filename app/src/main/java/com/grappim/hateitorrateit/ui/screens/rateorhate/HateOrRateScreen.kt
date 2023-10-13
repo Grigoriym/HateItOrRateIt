@@ -1,13 +1,11 @@
 package com.grappim.hateitorrateit.ui.screens.rateorhate
 
-import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,39 +17,45 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Button
-import androidx.compose.material3.DismissDirection.EndToStart
-import androidx.compose.material3.DismissValue
+import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
-import com.grappim.hateitorrateit.ui.widgets.FileItemWidget
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.ui.widgets.PlatoAlertDialog
+import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
+import kotlinx.coroutines.launch
+import kotlin.math.absoluteValue
 
 @Composable
 fun RateOrHateScreen(
@@ -81,7 +85,7 @@ fun RateOrHateScreen(
             showAlertDialog = true
         } else {
             backEnabled = false
-            viewModel.removeData()
+            state.removeData()
             goBack()
         }
     }
@@ -94,12 +98,12 @@ fun RateOrHateScreen(
         onConfirmButtonClicked = {
             showAlertDialog = false
             backEnabled = false
-            viewModel.saveData()
+            state.saveData()
         },
         onDismissButtonClicked = {
             showAlertDialog = false
             backEnabled = false
-            viewModel.removeData()
+            state.removeData()
             goBack()
         }
     )
@@ -127,11 +131,7 @@ private fun RateOrHateScreenContent(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         uri?.let {
-            context.contentResolver.takePersistableUriPermission(
-                uri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-            viewModel.addImageFromGallery(uri)
+            state.onAddImageFromGalleryClicked(uri)
         }
     }
 
@@ -139,7 +139,7 @@ private fun RateOrHateScreenContent(
         ActivityResultContracts.TakePicture()
     ) { isSuccess: Boolean ->
         if (isSuccess) {
-            viewModel.addCameraPicture(cameraTakePictureData)
+            state.onAddCameraPictureClicked(cameraTakePictureData)
         }
     }
 
@@ -180,7 +180,7 @@ private fun RateOrHateScreenContent(
                     )
                     .height(42.dp),
                 onClick = {
-                    viewModel.createDocument()
+                    state.createDocument()
                 }
             ) {
                 Text(text = "Create")
@@ -235,7 +235,7 @@ private fun RateOrHateScreenContent(
 
             AddFromContent(
                 onCameraClicked = {
-                    cameraTakePictureData = viewModel.getCameraImageFileUri()
+                    cameraTakePictureData = state.getCameraImageFileUri()
                     cameraLauncher.launch(cameraTakePictureData.uri)
                 },
                 onGalleryClicked = {
@@ -249,9 +249,8 @@ private fun RateOrHateScreenContent(
 
             FilesList(
                 fileUris = state.filesUris,
-                onFileRemoved = { fileData ->
-                    viewModel.removeFile(fileData)
-                })
+                onFileRemoved = state.onRemoveFileTriggered,
+            )
         }
     }
 }
@@ -286,51 +285,61 @@ private fun FilesList(
     fileUris: List<FileData>,
     onFileRemoved: (fileData: FileData) -> Unit,
 ) {
-    LazyColumn(
+    val pagerState = rememberPagerState {
+        fileUris.size
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(fileUris) {
+        coroutineScope.launch {
+            if (fileUris.isNotEmpty()) {
+                pagerState.animateScrollToPage(fileUris.lastIndex)
+            }
+        }
+    }
+
+    HorizontalPager(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(
-            top = 8.dp,
-            bottom = 8.dp
-        )
-    ) {
-        items(items = fileUris,
-            key = { fileData ->
-                fileData.uri
-            }) { fileData ->
-            val dismissState = rememberDismissState(
-                confirmValueChange = { dismissValue ->
-                    if (dismissValue == DismissValue.DismissedToStart) {
-                        onFileRemoved(fileData)
-                    }
-                    true
+            .padding(top = 16.dp)
+            .fillMaxSize(),
+        state = pagerState,
+        contentPadding = PaddingValues(horizontal = 16.dp),
+        pageSpacing = 8.dp
+    ) { page ->
+        val file = fileUris[page]
+        Card(
+            modifier = Modifier
+                .graphicsLayer {
+                    val pageOffset = ((pagerState.currentPage - page)
+                            + pagerState.currentPageOffsetFraction).absoluteValue
+                    alpha = lerp(
+                        start = 0.4f,
+                        stop = 1f,
+                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
+                    )
                 }
-            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    painter = rememberAsyncImagePainter(file.uri),
+                    contentDescription = null,
+                    contentScale = ContentScale.Crop
+                )
 
-            SwipeToDismiss(
-                state = dismissState,
-                directions = setOf(EndToStart),
-                background = {
-                    val color by animateColorAsState(
-                        when (dismissState.targetValue) {
-                            DismissValue.Default -> Color.White
-                            DismissValue.DismissedToEnd -> Color.Red
-                            DismissValue.DismissedToStart -> Color.Red
-                        },
-                        label = "",
-                    )
-
-                    Box(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .background(color)
-                            .padding(20.dp)
-                    )
-                }, dismissContent = {
-                    FileItemWidget(fileData = fileData, onFileClicked = {})
-                })
+                PlatoIconButton(
+                    modifier = Modifier
+                        .align(Alignment.TopEnd),
+                    icon = Icons.Filled.Delete,
+                    onButtonClick = {
+                        onFileRemoved(file)
+                    },
+                )
+            }
         }
     }
 }

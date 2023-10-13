@@ -43,6 +43,13 @@ class HateOrRateViewModel @Inject constructor(
             setDescription = ::setDescription,
             setName = ::setName,
             setShop = ::setShop,
+            onRemoveFileTriggered = ::removeFile,
+            onAddImageFromGalleryClicked = ::addImageFromGallery,
+            onAddCameraPictureClicked = ::addCameraPicture,
+            removeData = ::removeData,
+            saveData = ::saveData,
+            createDocument = ::createDocument,
+            getCameraImageFileUri = ::getCameraImageFileUri,
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -57,10 +64,9 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    fun addImageFromGallery(uri: Uri) {
+    private fun addImageFromGallery(uri: Uri) {
         viewModelScope.launch {
             val fileData = fileUtils.getFileUrisFromGalleryUri(uri, draftDocument.first())
-
             addFileData(fileData)
         }
     }
@@ -72,7 +78,7 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    fun addCameraPicture(cameraTakePictureData: CameraTakePictureData) {
+    private fun addCameraPicture(cameraTakePictureData: CameraTakePictureData) {
         viewModelScope.launch {
             val fileData = fileUtils.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData
@@ -81,17 +87,17 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    fun getCameraImageFileUri(): CameraTakePictureData =
+    private fun getCameraImageFileUri(): CameraTakePictureData =
         fileUtils.getFileUriForTakePicture(_draftDocument.value!!.folderName)
 
-    fun removeData() {
+    private fun removeData() {
         viewModelScope.launch {
             val draftDoc = draftDocument.first()
             dataCleaner.clearDocumentData(draftDoc)
         }
     }
 
-    fun saveData() {
+    private fun saveData() {
         viewModelScope.launch {
             saveDocument()
         }
@@ -150,7 +156,7 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    fun createDocument() {
+    private fun createDocument() {
         viewModelScope.launch {
             when {
                 _viewState.value.documentName.isEmpty() -> {
@@ -168,10 +174,24 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    fun removeFile(fileData: FileData) {
+    private fun removeFile(fileData: FileData) {
         if (fileUtils.removeFile(fileData)) {
             Timber.d("file removed: $fileData")
-            _viewState.value.filesUris.toMutableList().remove(fileData)
+            _viewState.update { currentState ->
+                val updatedFilesUris = currentState.filesUris.filterNot { it == fileData }
+                currentState.copy(filesUris = updatedFilesUris)
+            }
+
+//            _viewState.update { currentState ->
+//                currentState.copy(
+//                    filesUris = currentState.filesUris.toMutableList()
+//                        .apply { remove(fileData) })
+//            }
+//            val newList = _viewState.value.filesUris.toMutableList()
+//            newList.remove(fileData)
+//            _viewState.update {
+//                it.copy(filesUris = newList)
+//            }
         }
     }
 }

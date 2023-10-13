@@ -20,7 +20,8 @@ class UiModelsMapper @Inject constructor(
             createdDate = formattedCreatedDate,
             preview = doc
                 .filesUri
-                .firstOrNull() ?: "",
+                .firstOrNull()
+                ?.uriString ?: "",
             documentFolderName = doc.documentFolderName,
             shop = doc.shop,
         )

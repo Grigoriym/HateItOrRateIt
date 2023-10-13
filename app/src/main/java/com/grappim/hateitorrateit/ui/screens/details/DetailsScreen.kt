@@ -38,8 +38,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.ui.widgets.TopAppBarIconButton
+import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.text.TextHeadlineLarge
+import timber.log.Timber
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -96,14 +97,14 @@ private fun DetailsScreenContent(
                 val file = state.filesUri[page]
                 Card(
                     modifier = Modifier
-//                        .clickable {
-//                            val encodedUrl = URLEncoder.encode(
-//                                file.uriString,
-//                                StandardCharsets.UTF_8.toString()
-//                            )
-//                            onDocImageClicked(encodedUrl)
-//                        }
-                    ,
+                        .clickable {
+                            Timber.d("Clicked on image: ${file.uriString}")
+                            val encodedUrl = URLEncoder.encode(
+                                file.uriString,
+                                StandardCharsets.UTF_8.toString()
+                            )
+                            onDocImageClicked(encodedUrl)
+                        },
                 ) {
                     Image(
                         modifier = Modifier
@@ -144,14 +145,14 @@ private fun DetailsScreenContent(
                 ),
                 title = {},
                 navigationIcon = {
-                    TopAppBarIconButton(icon = Icons.Filled.ArrowBack, onButtonClick = goBack)
+                    PlatoIconButton(icon = Icons.Filled.ArrowBack, onButtonClick = goBack)
                 },
                 actions = {
                     if (state.isEdit) {
-                        TopAppBarIconButton(icon = Icons.Filled.Done, onButtonClick = onEditSubmit)
-                        TopAppBarIconButton(icon = Icons.Filled.Close, onButtonClick = onEditCancel)
+                        PlatoIconButton(icon = Icons.Filled.Done, onButtonClick = onEditSubmit)
+                        PlatoIconButton(icon = Icons.Filled.Close, onButtonClick = onEditCancel)
                     } else {
-                        TopAppBarIconButton(
+                        PlatoIconButton(
                             icon = Icons.Filled.Edit,
                             onButtonClick = onEditModeClicked
                         )
