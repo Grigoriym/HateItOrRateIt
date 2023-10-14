@@ -1,8 +1,8 @@
 package com.grappim.ui.widgets
 
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Button
+import androidx.compose.material.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -14,12 +14,10 @@ fun PlatoIconButton(
     icon: ImageVector,
     onButtonClick: () -> Unit
 ) {
-    IconButton(
+    Button(
         modifier = modifier,
         onClick = onButtonClick,
-        colors = IconButtonDefaults.iconButtonColors(
-            containerColor = Color.White
-        ),
+        shape = CircleShape
     ) {
         Icon(
             imageVector = icon,

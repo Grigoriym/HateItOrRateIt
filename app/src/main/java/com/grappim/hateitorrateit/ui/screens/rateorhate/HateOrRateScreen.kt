@@ -17,17 +17,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material.Button
+import androidx.compose.material.Card
 import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -160,16 +161,15 @@ private fun RateOrHateScreenContent(
     Scaffold(
         modifier = Modifier
             .imePadding()
-            .navigationBarsPadding()
-            .padding(
-                horizontal = 16.dp
-            ),
+            .statusBarsPadding()
+            .navigationBarsPadding(),
         snackbarHost = {
             SnackbarHost(snackbarHostState)
         },
         topBar = {
             PlatoTopBar(text = "Hate Or Rate", goBack = goBack)
         },
+
         bottomBar = {
             Button(
                 modifier = Modifier
@@ -178,6 +178,7 @@ private fun RateOrHateScreenContent(
                         top = 12.dp,
                         bottom = 16.dp
                     )
+                    .padding(horizontal = 16.dp)
                     .height(42.dp),
                 onClick = {
                     state.createDocument()
@@ -190,6 +191,7 @@ private fun RateOrHateScreenContent(
         Column(
             modifier = Modifier
                 .padding(it)
+                .padding(horizontal = 16.dp)
         ) {
             OutlinedTextField(
                 modifier = Modifier

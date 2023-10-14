@@ -12,21 +12,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.OutlinedTextField
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -39,6 +37,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.ui.widgets.PlatoIconButton
+import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextHeadlineLarge
 import timber.log.Timber
 import java.net.URLEncoder
@@ -79,6 +78,7 @@ private fun DetailsScreenContent(
     }
     Column(
         modifier = Modifier
+            .statusBarsPadding()
             .imePadding(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
@@ -139,14 +139,10 @@ private fun DetailsScreenContent(
                 }
             }
 
-            TopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color.Transparent
-                ),
-                title = {},
-                navigationIcon = {
-                    PlatoIconButton(icon = Icons.Filled.ArrowBack, onButtonClick = goBack)
-                },
+            PlatoTopBar(text = "",
+                goBack = goBack,
+                backgroundColor = Color.Transparent,
+                elevation = 0.dp,
                 actions = {
                     if (state.isEdit) {
                         PlatoIconButton(icon = Icons.Filled.Done, onButtonClick = onEditSubmit)
@@ -157,8 +153,7 @@ private fun DetailsScreenContent(
                             onButtonClick = onEditModeClicked
                         )
                     }
-                },
-            )
+                })
         }
 
         Column(

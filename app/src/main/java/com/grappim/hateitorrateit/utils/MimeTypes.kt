@@ -21,5 +21,4 @@ object MimeTypes {
         const val JPEG = PREFIX + "jpeg"
         const val PNG = PREFIX + "png"
     }
-
 }

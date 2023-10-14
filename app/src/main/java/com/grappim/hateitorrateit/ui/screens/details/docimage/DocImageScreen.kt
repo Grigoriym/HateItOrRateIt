@@ -3,9 +3,8 @@ package com.grappim.hateitorrateit.ui.screens.details.docimage
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,7 +31,8 @@ private fun DocImageContent(
 ) {
     Scaffold {
         Image(
-            modifier = Modifier.padding(it)
+            modifier = Modifier
+                .padding(it)
                 .fillMaxSize(),
             painter = rememberAsyncImagePainter(model = state.uri),
             contentDescription = "",

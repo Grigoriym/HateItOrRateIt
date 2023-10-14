@@ -7,10 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class HashUtils @Inject constructor(
-
-) {
-
+class HashUtils @Inject constructor() {
     fun md5(file: File): String {
         Timber.d("get md5 from $file")
         val md = MessageDigest.getInstance("MD5")
@@ -25,5 +22,4 @@ class HashUtils @Inject constructor(
             md.digest().joinToString("") { "%02x".format(it) }
         }
     }
-
 }

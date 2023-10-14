@@ -11,7 +11,6 @@ class DateTimeUtils @Inject constructor(
     @DtfToStore private val dtfToStore: DateTimeFormatter,
     @DtfToDemonstrate private val dtfToDemonstrate: DateTimeFormatter,
     @DtfGDriveDocumentFolder private val dtfGDriveDocumentFolder: DateTimeFormatter,
-    @DtfGDriveRfc3339 private val dtfGDriveRfc3339: DateTimeFormatter
 ) {
 
     fun formatToStore(offsetDateTime: OffsetDateTime): String =
