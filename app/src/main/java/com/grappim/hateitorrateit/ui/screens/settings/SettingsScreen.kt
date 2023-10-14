@@ -46,13 +46,16 @@ private fun SettingsScreenContent(
     }) {
         PlatoLoadingDialog(state.isLoading)
 
-        PlatoAlertDialog(showAlertDialog = state.showAlertDialog, onDismissRequest = {
-            state.onDismissDialog()
-        }, onConfirmButtonClicked = {
-            state.onAlertDialogConfirmButtonClicked()
-        }, onDismissButtonClicked = {
-            state.onDismissDialog()
-        })
+        PlatoAlertDialog(
+            text = "Are you sure you want to clear all the data?",
+            showAlertDialog = state.showAlertDialog,
+            onDismissRequest = {
+                state.onDismissDialog()
+            }, onConfirmButtonClicked = {
+                state.onAlertDialogConfirmButtonClicked()
+            }, onDismissButtonClicked = {
+                state.onDismissDialog()
+            })
 
         Column(
             modifier = Modifier

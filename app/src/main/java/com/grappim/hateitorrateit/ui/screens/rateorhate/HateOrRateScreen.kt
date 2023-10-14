@@ -57,8 +57,9 @@ import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.hateitorrateit.utils.hateColors
-import com.grappim.hateitorrateit.utils.icon
+import com.grappim.hateitorrateit.utils.hateIcon
 import com.grappim.hateitorrateit.utils.rateColors
+import com.grappim.hateitorrateit.utils.rateIcon
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
@@ -99,6 +100,7 @@ fun RateOrHateScreen(
     }
 
     PlatoAlertDialog(
+        text = "Save the changes before exit?",
         showAlertDialog = showAlertDialog,
         onDismissRequest = {
             showAlertDialog = false
@@ -289,7 +291,7 @@ private fun HateRateContent(
             shape = CircleShape,
             colors = hateColors,
         ) {
-            Icon(imageVector = state.type.icon(), contentDescription = "")
+            Icon(imageVector = state.type.hateIcon(), contentDescription = "")
         }
         Button(
             modifier = Modifier
@@ -300,7 +302,7 @@ private fun HateRateContent(
             shape = CircleShape,
             colors = rateColors,
         ) {
-            Icon(imageVector = state.type.icon(), contentDescription = "")
+            Icon(imageVector = state.type.rateIcon(), contentDescription = "")
         }
     }
 }

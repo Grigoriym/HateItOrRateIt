@@ -37,7 +37,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.model.DocumentListUI
 import com.grappim.hateitorrateit.utils.color
 import com.grappim.hateitorrateit.utils.icon
@@ -191,19 +190,11 @@ private fun DocItem(
                             .padding(start = 10.dp)
                             .wrapContentWidth()
                     ) {
-                        if (document.type == HateRateType.HATE) {
-                            Icon(
-                                imageVector = document.type.icon(),
-                                contentDescription = "",
-                                tint = document.type.color(),
-                            )
-                        } else {
-                            Icon(
-                                imageVector = document.type.icon(),
-                                contentDescription = "",
-                                tint = document.type.color(),
-                            )
-                        }
+                        Icon(
+                            imageVector = document.type.icon(),
+                            contentDescription = "",
+                            tint = document.type.color(),
+                        )
                     }
                 }
             }

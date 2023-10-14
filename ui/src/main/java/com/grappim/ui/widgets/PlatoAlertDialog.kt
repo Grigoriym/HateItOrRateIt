@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 
 @Composable
 fun PlatoAlertDialog(
+    text: String,
     showAlertDialog: Boolean,
     onDismissRequest: () -> Unit,
     onConfirmButtonClicked: () -> Unit,
@@ -16,7 +17,7 @@ fun PlatoAlertDialog(
         AlertDialog(
             onDismissRequest = onDismissRequest,
             title = {
-                Text(text = "Save the changes before exit?")
+                Text(text = text)
             },
             confirmButton = {
                 Button(

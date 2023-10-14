@@ -42,7 +42,13 @@ fun HateRateType.color() = if (this == HateRateType.HATE) {
 
 @Composable
 fun HateRateType.icon() = if (this == HateRateType.HATE) {
-    Icons.Filled.ThumbDown
+    hateIcon()
 } else {
-    Icons.Filled.ThumbUp
+    rateIcon()
 }
+
+@Composable
+fun HateRateType.hateIcon() = Icons.Filled.ThumbDown
+
+@Composable
+fun HateRateType.rateIcon() = Icons.Filled.ThumbUp

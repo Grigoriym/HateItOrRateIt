@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.utils.color
 import com.grappim.hateitorrateit.utils.icon
 import com.grappim.ui.widgets.PlatoIconButton
@@ -237,19 +236,11 @@ private fun DetailsScreenContent(
                     .padding(top = 16.dp)
             ) {
                 state.type?.let {
-                    if (it == HateRateType.HATE) {
-                        Icon(
-                            imageVector = state.type.icon(),
-                            contentDescription = "",
-                            tint = state.type.color(),
-                        )
-                    } else {
-                        Icon(
-                            imageVector = state.type.icon(),
-                            contentDescription = "",
-                            tint = state.type.color(),
-                        )
-                    }
+                    Icon(
+                        imageVector = state.type.icon(),
+                        contentDescription = "",
+                        tint = state.type.color(),
+                    )
                 }
             }
         }
