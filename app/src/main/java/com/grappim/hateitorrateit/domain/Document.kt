@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.domain
 
+import com.grappim.hateitorrateit.core.HateRateType
 import java.time.OffsetDateTime
 
 data class Document(
@@ -10,4 +11,5 @@ data class Document(
     val documentFolderName: String,
     val description: String,
     val shop: String,
+    val type: HateRateType,
 )

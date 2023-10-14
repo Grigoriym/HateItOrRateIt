@@ -102,7 +102,6 @@ fun RootMainScreen(
         ) {
             NavHost(
                 navController = navController,
-                modifier = Modifier.padding(it),
                 startDestination = HomeNavDestination.Home.route,
             ) {
                 composable(HomeNavDestination.Home.route) {

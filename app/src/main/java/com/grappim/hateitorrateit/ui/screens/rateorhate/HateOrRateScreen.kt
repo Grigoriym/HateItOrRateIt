@@ -17,11 +17,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
+import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
@@ -29,6 +32,8 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -47,11 +52,14 @@ import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
+import com.grappim.hateitorrateit.utils.hateColors
+import com.grappim.hateitorrateit.utils.rateColors
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
@@ -235,6 +243,8 @@ private fun RateOrHateScreenContent(
                 }
             )
 
+            HateRateContent(state = state)
+
             AddFromContent(
                 onCameraClicked = {
                     cameraTakePictureData = state.getCameraImageFileUri()
@@ -253,6 +263,45 @@ private fun RateOrHateScreenContent(
                 fileUris = state.filesUris,
                 onFileRemoved = state.onRemoveFileTriggered,
             )
+        }
+    }
+}
+
+@Composable
+private fun HateRateContent(
+    state: HateOrRateViewState
+) {
+    Row(
+        modifier = Modifier
+            .padding(top = 12.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        val currentType = state.type
+        val hateColors = currentType.hateColors()
+        val rateColors = currentType.rateColors()
+
+        Button(
+            modifier = Modifier
+                .size(100.dp),
+            onClick = {
+                state.onTypeClicked(HateRateType.HATE)
+            },
+            shape = CircleShape,
+            colors = hateColors,
+        ) {
+            Icon(imageVector = Icons.Filled.ThumbDown, contentDescription = "")
+        }
+        Button(
+            modifier = Modifier
+                .size(100.dp),
+            onClick = {
+                state.onTypeClicked(HateRateType.RATE)
+            },
+            shape = CircleShape,
+            colors = rateColors,
+        ) {
+            Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "")
         }
     }
 }
@@ -335,7 +384,11 @@ private fun FilesList(
 
                 PlatoIconButton(
                     modifier = Modifier
-                        .align(Alignment.TopEnd),
+                        .align(Alignment.TopEnd)
+                        .padding(
+                            top = 8.dp,
+                            end = 8.dp,
+                        ),
                     icon = Icons.Filled.Delete,
                     onButtonClick = {
                         onFileRemoved(file)

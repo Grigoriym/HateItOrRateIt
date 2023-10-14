@@ -17,14 +17,18 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -36,9 +40,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.grappim.hateitorrateit.core.HateRateType
+import com.grappim.ui.theme.Cinnabar
+import com.grappim.ui.theme.FruitSalad
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
-import com.grappim.ui.widgets.text.TextHeadlineLarge
+import com.grappim.ui.widgets.text.TextH4
 import timber.log.Timber
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -98,13 +105,17 @@ private fun DetailsScreenContent(
                 Card(
                     modifier = Modifier
                         .clickable {
-                            Timber.d("Clicked on image: ${file.uriString}")
-                            val encodedUrl = URLEncoder.encode(
-                                file.uriString,
-                                StandardCharsets.UTF_8.toString()
-                            )
-                            onDocImageClicked(encodedUrl)
+//                            Timber.d("Clicked on image: ${file.uriString}")
+//                            val encodedUrl = URLEncoder.encode(
+//                                file.uriString,
+//                                StandardCharsets.UTF_8.toString()
+//                            )
+//                            onDocImageClicked(encodedUrl)
                         },
+                    shape = RoundedCornerShape(
+                        bottomEnd = 16.dp,
+                        bottomStart = 16.dp,
+                    )
                 ) {
                     Image(
                         modifier = Modifier
@@ -174,7 +185,7 @@ private fun DetailsScreenContent(
                             state.onSaveName(newValue)
                         })
                 } else {
-                    TextHeadlineLarge(text = state.name)
+                    TextH4(text = state.name)
                 }
             }
 
@@ -217,6 +228,27 @@ private fun DetailsScreenContent(
                     Text(
                         text = state.shop,
                     )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+            ) {
+                state.type?.let {
+                    if (it == HateRateType.HATE) {
+                        Icon(
+                            imageVector = Icons.Filled.ThumbDown,
+                            contentDescription = "",
+                            tint = Cinnabar,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Filled.ThumbUp,
+                            contentDescription = "",
+                            tint = FruitSalad,
+                        )
+                    }
                 }
             }
         }

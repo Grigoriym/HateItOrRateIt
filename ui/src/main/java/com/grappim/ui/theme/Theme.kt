@@ -13,27 +13,27 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 val LightColorPalette = lightColors(
-    primary = Color(0xFFE8B98E), // Primary color
-    primaryVariant = Color(0xFFCA9E7A), // Variant of the primary color
-    secondary = Color(0xFFA48775), // Secondary color
-    background = Color(0xFFF2E9DF), // Background color
-    surface = Color(0xFFCEC7BF), // Surface color
-    onPrimary = Color.Black, // Color for text on primary background
-    onSecondary = Color.White, // Color for text on secondary background
-    onBackground = Color.Black, // Color for text on background
-    onSurface = Color.Black // Color for text on surface
+    primary = Color(0xFFE8B98E),
+    primaryVariant = Color(0xFFCA9E7A),
+    secondary = Color(0xFFA48775),
+    background = Color(0xFFF2E9DF),
+    surface = Color(0xFFCEC7BF),
+    onPrimary = Color.Black,
+    onSecondary = Color.White,
+    onBackground = Color.Black,
+    onSurface = Color.Black
 )
 
 val DarkColorPalette = darkColors(
-    primary = Color(0xFFE8B98E), // Primary color
-    primaryVariant = Color(0xFFCA9E7A), // Variant of the primary color
-    secondary = Color(0xFFA48775), // Secondary color
-    background = Color(0xFF333333), // Background color
-    surface = Color(0xFF1C1C1C), // Surface color
-    onPrimary = Color.White, // Color for text on primary background
-    onSecondary = Color.White, // Color for text on secondary background
-    onBackground = Color.White, // Color for text on background
-    onSurface = Color.White // Color for text on surface
+    primary = Color(0xFFE8B98E),
+    primaryVariant = Color(0xFFCA9E7A),
+    secondary = Color(0xFFA48775),
+    background = Color(0xFF333333),
+    surface = Color(0xFF1C1C1C),
+    onPrimary = Color.White,
+    onSecondary = Color.White,
+    onBackground = Color.White,
+    onSurface = Color.White
 )
 
 @Composable

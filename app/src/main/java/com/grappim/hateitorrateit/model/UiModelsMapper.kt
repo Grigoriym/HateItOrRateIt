@@ -24,6 +24,7 @@ class UiModelsMapper @Inject constructor(
                 ?.uriString ?: "",
             documentFolderName = doc.documentFolderName,
             shop = doc.shop,
+            type = doc.type,
         )
     }
 
@@ -39,6 +40,7 @@ class UiModelsMapper @Inject constructor(
             documentFolderName = doc.documentFolderName,
             description = doc.description,
             shop = doc.shop,
+            type = doc.type,
         )
     }
 }

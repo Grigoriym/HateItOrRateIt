@@ -1,7 +1,8 @@
-package com.grappim.hateitorrateit.data.db
+package com.grappim.hateitorrateit.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.grappim.hateitorrateit.core.HateRateType
 import java.time.OffsetDateTime
 
 @Entity(
@@ -15,4 +16,5 @@ data class DocumentEntity(
     val documentFolderName: String,
     val description: String,
     val shop: String,
+    val type: HateRateType,
 )

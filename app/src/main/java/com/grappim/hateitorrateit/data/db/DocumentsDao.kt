@@ -6,6 +6,9 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
+import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
+import com.grappim.hateitorrateit.data.db.entities.DocumentWithFilesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

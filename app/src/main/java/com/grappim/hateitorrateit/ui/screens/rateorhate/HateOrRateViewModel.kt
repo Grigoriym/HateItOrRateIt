@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.R
 import com.grappim.hateitorrateit.core.DataCleaner
+import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.SnackbarStateViewModel
 import com.grappim.hateitorrateit.core.SnackbarStateViewModelImpl
@@ -50,6 +51,7 @@ class HateOrRateViewModel @Inject constructor(
             saveData = ::saveData,
             createDocument = ::createDocument,
             getCameraImageFileUri = ::getCameraImageFileUri,
+            onTypeClicked = ::onTypeClicked,
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -58,9 +60,19 @@ class HateOrRateViewModel @Inject constructor(
         addDraftDoc()
     }
 
+    private fun onTypeClicked(newType: HateRateType) {
+        if (_viewState.value.type == newType) return
+        _viewState.update {
+            it.copy(type = HateRateType.changeType(it.type))
+        }
+    }
+
     private fun addDraftDoc() {
         viewModelScope.launch {
             _draftDocument.value = docsRepository.addDraftDocument()
+            _viewState.update {
+                it.copy(type = _draftDocument.value!!.type)
+            }
         }
     }
 
@@ -129,6 +141,7 @@ class HateOrRateViewModel @Inject constructor(
             }
             val description = _viewState.value.description
             val shop = _viewState.value.shop
+            val type = _viewState.value.type
 
             docsRepository.addDocument(
                 CreateDocument(
@@ -147,7 +160,8 @@ class HateOrRateViewModel @Inject constructor(
                     createdDate = currentDraft.date,
                     documentFolderName = currentDraft.folderName,
                     description = description,
-                    shop = shop
+                    shop = shop,
+                    type = type,
                 )
             )
             _viewState.update {
@@ -162,9 +176,11 @@ class HateOrRateViewModel @Inject constructor(
                 _viewState.value.documentName.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.set_name))
                 }
+
                 _viewState.value.filesUris.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.add_file))
                 }
+
                 else -> {
                     saveDocument()
                 }

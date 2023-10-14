@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.rateorhate
 
 import android.net.Uri
+import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
 
@@ -9,6 +10,7 @@ data class HateOrRateViewState(
     val documentName: String = "",
     val description: String = "",
     val shop: String = "",
+    val type: HateRateType = HateRateType.HATE,
 
     val setDescription: (description: String) -> Unit,
     val setName: (name: String) -> Unit,
@@ -24,4 +26,5 @@ data class HateOrRateViewState(
     val createDocument: () -> Unit,
 
     val getCameraImageFileUri: () -> CameraTakePictureData,
+    val onTypeClicked: (newType: HateRateType) -> Unit,
 )

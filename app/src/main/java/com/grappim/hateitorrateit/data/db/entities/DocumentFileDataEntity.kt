@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.data.db
+package com.grappim.hateitorrateit.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

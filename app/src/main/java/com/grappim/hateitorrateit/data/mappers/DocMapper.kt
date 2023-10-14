@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.data.mappers
 
-import com.grappim.hateitorrateit.data.db.DocumentEntity
-import com.grappim.hateitorrateit.data.db.DocumentFileDataEntity
-import com.grappim.hateitorrateit.data.db.DocumentWithFilesEntity
+import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
+import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
+import com.grappim.hateitorrateit.data.db.entities.DocumentWithFilesEntity
 import com.grappim.hateitorrateit.domain.Document
 import com.grappim.hateitorrateit.domain.DocumentFileData
 import com.grappim.hateitorrateit.model.CreateDocument
@@ -32,6 +32,7 @@ fun DocumentEntity.toDocument(
         documentFolderName = this.documentFolderName,
         description = this.description,
         shop = this.shop,
+        type = this.type
     )
 
 fun CreateDocument.toEntity(): DocumentEntity =
@@ -42,6 +43,7 @@ fun CreateDocument.toEntity(): DocumentEntity =
         documentFolderName = this.documentFolderName,
         description = this.description,
         shop = this.shop,
+        type = this.type
     )
 
 fun CreateDocument.toFileDataEntityList(): List<DocumentFileDataEntity> =

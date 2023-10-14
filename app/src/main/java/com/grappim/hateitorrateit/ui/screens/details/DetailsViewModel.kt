@@ -88,7 +88,8 @@ class DetailsViewModel @Inject constructor(
                     shop = docUi.shop,
                     createdDate = docUi.createdDate,
                     filesUri = docUi.filesUri,
-                    isLoading = false
+                    isLoading = false,
+                    type = docUi.type,
                 )
             }
         }

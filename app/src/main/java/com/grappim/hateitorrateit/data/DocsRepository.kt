@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.data
 
-import com.grappim.hateitorrateit.data.db.DocumentEntity
+import com.grappim.hateitorrateit.core.HateRateType
+import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.DocumentsDao
 import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntity
@@ -45,6 +46,7 @@ class DocsRepository @Inject constructor(
                 documentFolderName = "",
                 description = "",
                 shop = "",
+                type = HateRateType.HATE,
             )
         )
         val folderDate = dateTimeUtils.formatToGDrive(nowDate)
@@ -52,7 +54,8 @@ class DocsRepository @Inject constructor(
         return DraftDocument(
             id = id,
             date = nowDate,
-            folderName = folderName
+            folderName = folderName,
+            type = HateRateType.HATE,
         )
     }
 
