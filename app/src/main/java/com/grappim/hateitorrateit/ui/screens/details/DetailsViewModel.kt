@@ -26,7 +26,9 @@ class DetailsViewModel @Inject constructor(
         DetailsViewState(
             onSaveName = ::setName,
             onSaveDescription = ::setDescription,
-            onSaveShop = ::onSaveShop
+            onSaveShop = ::onSaveShop,
+            toggleEditMode = ::toggleEditMode,
+            onEditSubmit= ::onEditSubmit
         )
     )
 
@@ -36,13 +38,13 @@ class DetailsViewModel @Inject constructor(
         getDoc(docId)
     }
 
-    fun toggleEditMode() {
+    private fun toggleEditMode() {
         _viewState.update {
             it.copy(isEdit = !_viewState.value.isEdit)
         }
     }
 
-    fun onEditSubmit() {
+    private fun onEditSubmit() {
         toggleEditMode()
         viewModelScope.launch {
             docsRepository.updateDoc(
@@ -70,10 +72,6 @@ class DetailsViewModel @Inject constructor(
         _viewState.update {
             it.copy(shop = shop)
         }
-    }
-
-    fun onEditCancel() {
-        toggleEditMode()
     }
 
     private fun getDoc(id: Long) {

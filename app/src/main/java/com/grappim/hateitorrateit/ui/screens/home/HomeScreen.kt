@@ -24,8 +24,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,8 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.model.DocumentListUI
-import com.grappim.ui.theme.Cinnabar
-import com.grappim.ui.theme.FruitSalad
+import com.grappim.hateitorrateit.utils.color
+import com.grappim.hateitorrateit.utils.icon
 import com.grappim.ui.widgets.text.TextH5
 
 @Composable
@@ -195,15 +193,15 @@ private fun DocItem(
                     ) {
                         if (document.type == HateRateType.HATE) {
                             Icon(
-                                imageVector = Icons.Filled.ThumbDown,
+                                imageVector = document.type.icon(),
                                 contentDescription = "",
-                                tint = Cinnabar,
+                                tint = document.type.color(),
                             )
                         } else {
                             Icon(
-                                imageVector = Icons.Filled.ThumbUp,
+                                imageVector = document.type.icon(),
                                 contentDescription = "",
-                                tint = FruitSalad,
+                                tint = document.type.color(),
                             )
                         }
                     }

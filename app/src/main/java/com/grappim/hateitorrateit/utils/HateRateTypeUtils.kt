@@ -1,6 +1,9 @@
 package com.grappim.hateitorrateit.utils
 
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.grappim.hateitorrateit.core.HateRateType
@@ -35,4 +38,11 @@ fun HateRateType.color() = if (this == HateRateType.HATE) {
     Cinnabar
 } else {
     FruitSalad
+}
+
+@Composable
+fun HateRateType.icon() = if (this == HateRateType.HATE) {
+    Icons.Filled.ThumbDown
+} else {
+    Icons.Filled.ThumbUp
 }

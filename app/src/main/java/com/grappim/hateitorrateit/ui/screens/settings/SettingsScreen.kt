@@ -1,24 +1,23 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.utils.color
+import com.grappim.hateitorrateit.utils.icon
+import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoLoadingDialog
 import com.grappim.ui.widgets.PlatoTopBar
 
@@ -31,9 +30,6 @@ fun SettingsScreen(
     SettingsScreenContent(
         state = state,
         goBack = goBack,
-        onClearDataClicked = {
-            viewModel.clearData()
-        }
     )
 }
 
@@ -41,38 +37,40 @@ fun SettingsScreen(
 private fun SettingsScreenContent(
     state: SettingsViewState,
     goBack: () -> Unit,
-    onClearDataClicked: () -> Unit,
 ) {
-    Scaffold(
-        topBar = {
-            PlatoTopBar(
-                text = "Settings",
-                goBack = goBack,
-            )
-        }
-    ) {
+    Scaffold(topBar = {
+        PlatoTopBar(
+            text = "Settings",
+            goBack = goBack,
+        )
+    }) {
         PlatoLoadingDialog(state.isLoading)
+
+        PlatoAlertDialog(showAlertDialog = state.showAlertDialog, onDismissRequest = {
+            state.onDismissDialog()
+        }, onConfirmButtonClicked = {
+            state.onAlertDialogConfirmButtonClicked()
+        }, onDismissButtonClicked = {
+            state.onDismissDialog()
+        })
+
         Column(
             modifier = Modifier
                 .padding(it)
                 .fillMaxSize()
         ) {
-            ListItem(
-                modifier = Modifier
-                    .clickable {
-                        onClearDataClicked()
-                    },
-                text = {
-                    Text(text = "Clear Data")
-                })
-            ListItem(
-                text = {
-                    Text(text = "Default Type")
-                },
-                trailing = {
-                    CustomSwitch(state = state)
-                }
-            )
+            ListItem(modifier = Modifier.clickable {
+                state.onClearDataClicked()
+            }, text = {
+                Text(text = "Clear Data")
+            })
+            ListItem(modifier = Modifier.clickable {
+                state.setType()
+            }, text = {
+                Text(text = "Default Type")
+            }, trailing = {
+                CustomSwitch(state = state)
+            })
         }
     }
 }
@@ -81,18 +79,16 @@ private fun SettingsScreenContent(
 fun CustomSwitch(
     state: SettingsViewState
 ) {
-    val icon = if (state.type == HateRateType.HATE) {
-        Icons.Filled.ThumbDown
-    } else {
-        Icons.Filled.ThumbUp
-    }
-
-    IconButton(onClick = { state.setType() }) {
+    Crossfade(
+        targetState = state.type,
+        label = "",
+        animationSpec = tween(500),
+    ) {
         Icon(
             modifier = Modifier,
-            imageVector = icon,
+            imageVector = it.icon(),
             contentDescription = null,
-            tint = state.type.color(),
+            tint = it.color(),
         )
     }
 }

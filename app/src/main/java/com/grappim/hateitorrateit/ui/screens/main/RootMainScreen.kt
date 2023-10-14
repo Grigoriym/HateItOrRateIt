@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.main
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -31,6 +32,8 @@ import androidx.navigation.compose.rememberNavController
 import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
 import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
 import com.grappim.hateitorrateit.ui.screens.settings.SettingsScreen
+import com.grappim.ui.theme.bottomNavigationBackgroundDark
+import com.grappim.ui.theme.bottomNavigationBackgroundLight
 
 @Composable
 fun RootMainScreen(
@@ -69,7 +72,9 @@ fun RootMainScreen(
                             topStart = 16.dp,
                             topEnd = 16.dp
                         )
-                    )
+                    ),
+                backgroundColor = if (isSystemInDarkTheme()) bottomNavigationBackgroundDark
+                else bottomNavigationBackgroundLight
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination

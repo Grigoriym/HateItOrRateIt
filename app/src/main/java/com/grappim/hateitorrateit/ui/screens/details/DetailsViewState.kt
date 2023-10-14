@@ -17,5 +17,8 @@ data class DetailsViewState(
 
     val onSaveName: (name: String) -> Unit,
     val onSaveDescription: (description: String) -> Unit,
-    val onSaveShop: (shop: String) -> Unit
+    val onSaveShop: (shop: String) -> Unit,
+
+    val toggleEditMode: () -> Unit,
+    val onEditSubmit: () -> Unit
 )

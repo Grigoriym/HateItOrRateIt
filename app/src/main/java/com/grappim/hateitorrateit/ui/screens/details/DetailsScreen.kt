@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -27,8 +29,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -41,14 +41,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.core.HateRateType
-import com.grappim.ui.theme.Cinnabar
-import com.grappim.ui.theme.FruitSalad
+import com.grappim.hateitorrateit.utils.color
+import com.grappim.hateitorrateit.utils.icon
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
-import timber.log.Timber
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun DetailsScreen(
@@ -64,9 +61,6 @@ fun DetailsScreen(
             state = state,
             goBack = goBack,
             onDocImageClicked = onDocImageClicked,
-            onEditModeClicked = viewModel::toggleEditMode,
-            onEditSubmit = viewModel::onEditSubmit,
-            onEditCancel = viewModel::onEditCancel
         )
     }
 }
@@ -76,9 +70,6 @@ private fun DetailsScreenContent(
     state: DetailsViewState,
     goBack: () -> Unit,
     onDocImageClicked: (uriString: String) -> Unit,
-    onEditModeClicked: () -> Unit,
-    onEditSubmit: () -> Unit,
-    onEditCancel: () -> Unit,
 ) {
     val pagerState = rememberPagerState {
         state.filesUri.size
@@ -127,41 +118,51 @@ private fun DetailsScreenContent(
                 }
             }
 
-            Row(
-                modifier = Modifier
-                    .wrapContentHeight()
-                    .fillMaxWidth()
-                    .align(Alignment.BottomCenter),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                repeat(state.filesUri.size) { iteration ->
-                    val color =
-                        if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-                    Box(
-                        modifier = Modifier
-                            .padding(
-                                horizontal = 4.dp,
-                                vertical = 6.dp
-                            )
-                            .clip(CircleShape)
-                            .background(color)
-                            .size(16.dp)
-                    )
+            if (state.filesUri.size > 1) {
+                Row(
+                    modifier = Modifier
+                        .wrapContentHeight()
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    repeat(state.filesUri.size) { iteration ->
+                        val color =
+                            if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                        Box(
+                            modifier = Modifier
+                                .padding(
+                                    horizontal = 4.dp,
+                                    vertical = 6.dp
+                                )
+                                .clip(CircleShape)
+                                .background(color)
+                                .size(12.dp)
+                        )
+                    }
                 }
             }
 
-            PlatoTopBar(text = "",
+            PlatoTopBar(
                 goBack = goBack,
+                defaultBackButton = false,
                 backgroundColor = Color.Transparent,
                 elevation = 0.dp,
                 actions = {
                     if (state.isEdit) {
-                        PlatoIconButton(icon = Icons.Filled.Done, onButtonClick = onEditSubmit)
-                        PlatoIconButton(icon = Icons.Filled.Close, onButtonClick = onEditCancel)
+                        PlatoIconButton(
+                            icon = Icons.Filled.Done,
+                            onButtonClick = state.onEditSubmit
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        PlatoIconButton(
+                            icon = Icons.Filled.Close,
+                            onButtonClick = state.toggleEditMode
+                        )
                     } else {
                         PlatoIconButton(
                             icon = Icons.Filled.Edit,
-                            onButtonClick = onEditModeClicked
+                            onButtonClick = state.toggleEditMode
                         )
                     }
                 })
@@ -238,15 +239,15 @@ private fun DetailsScreenContent(
                 state.type?.let {
                     if (it == HateRateType.HATE) {
                         Icon(
-                            imageVector = Icons.Filled.ThumbDown,
+                            imageVector = state.type.icon(),
                             contentDescription = "",
-                            tint = Cinnabar,
+                            tint = state.type.color(),
                         )
                     } else {
                         Icon(
-                            imageVector = Icons.Filled.ThumbUp,
+                            imageVector = state.type.icon(),
                             contentDescription = "",
-                            tint = FruitSalad,
+                            tint = state.type.color(),
                         )
                     }
                 }

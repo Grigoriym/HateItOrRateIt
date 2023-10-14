@@ -16,8 +16,9 @@ import androidx.compose.ui.unit.Dp
 
 @Composable
 fun PlatoTopBar(
-    text: String,
+    text: String = "",
     goBack: () -> Unit,
+    defaultBackButton: Boolean = true,
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
     actions: @Composable RowScope.() -> Unit = {},
@@ -29,10 +30,17 @@ fun PlatoTopBar(
         elevation = elevation,
         backgroundColor = backgroundColor,
         navigationIcon = {
-            IconButton(onClick = goBack) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = "Go Back from Hate It"
+            if (defaultBackButton) {
+                IconButton(onClick = goBack) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = "Go Back from Hate It"
+                    )
+                }
+            } else {
+                PlatoIconButton(
+                    icon = Icons.Filled.ArrowBack,
+                    onButtonClick = goBack,
                 )
             }
         },

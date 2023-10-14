@@ -32,8 +32,6 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,6 +57,7 @@ import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.hateitorrateit.utils.hateColors
+import com.grappim.hateitorrateit.utils.icon
 import com.grappim.hateitorrateit.utils.rateColors
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoIconButton
@@ -290,7 +289,7 @@ private fun HateRateContent(
             shape = CircleShape,
             colors = hateColors,
         ) {
-            Icon(imageVector = Icons.Filled.ThumbDown, contentDescription = "")
+            Icon(imageVector = state.type.icon(), contentDescription = "")
         }
         Button(
             modifier = Modifier
@@ -301,7 +300,7 @@ private fun HateRateContent(
             shape = CircleShape,
             colors = rateColors,
         ) {
-            Icon(imageVector = Icons.Filled.ThumbUp, contentDescription = "")
+            Icon(imageVector = state.type.icon(), contentDescription = "")
         }
     }
 }

@@ -21,6 +21,9 @@ class SettingsViewModel @Inject constructor(
     private val _viewState = MutableStateFlow(
         SettingsViewState(
             setType = ::setNewType,
+            onClearDataClicked = ::askIfShouldClearData,
+            onAlertDialogConfirmButtonClicked = ::clearData,
+            onDismissDialog = ::dismissDialog,
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -41,10 +44,22 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun clearData() {
+    private fun askIfShouldClearData() {
+        _viewState.update {
+            it.copy(showAlertDialog = true)
+        }
+    }
+
+    private fun dismissDialog() {
+        _viewState.update {
+            it.copy(showAlertDialog = false)
+        }
+    }
+
+    private fun clearData() {
         viewModelScope.launch {
             _viewState.update {
-                it.copy(isLoading = true)
+                it.copy(isLoading = true, showAlertDialog = false)
             }
             dataCleaner.clearAllData()
             _viewState.update {
