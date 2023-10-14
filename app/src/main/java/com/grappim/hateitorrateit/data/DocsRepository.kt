@@ -6,11 +6,13 @@ import com.grappim.hateitorrateit.data.db.DocumentsDao
 import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntity
 import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
+import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
 import com.grappim.hateitorrateit.domain.Document
 import com.grappim.hateitorrateit.model.CreateDocument
 import com.grappim.hateitorrateit.utils.DateTimeUtils
 import com.grappim.hateitorrateit.utils.DraftDocument
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -19,6 +21,7 @@ import javax.inject.Singleton
 class DocsRepository @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
     private val documentsDao: DocumentsDao,
+    private val localDataStorage: LocalDataStorage,
 ) {
 
     suspend fun getDocById(id: Long): Document {
@@ -39,6 +42,7 @@ class DocsRepository @Inject constructor(
     suspend fun addDraftDocument(): DraftDocument {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
         val formattedDate = dateTimeUtils.formatToDemonstrate(nowDate)
+        val type = localDataStorage.typeFlow.first()
         val id = documentsDao.insert(
             DocumentEntity(
                 name = formattedDate,
@@ -46,7 +50,7 @@ class DocsRepository @Inject constructor(
                 documentFolderName = "",
                 description = "",
                 shop = "",
-                type = HateRateType.HATE,
+                type = type,
             )
         )
         val folderDate = dateTimeUtils.formatToGDrive(nowDate)
@@ -55,7 +59,7 @@ class DocsRepository @Inject constructor(
             id = id,
             date = nowDate,
             folderName = folderName,
-            type = HateRateType.HATE,
+            type = type,
         )
     }
 

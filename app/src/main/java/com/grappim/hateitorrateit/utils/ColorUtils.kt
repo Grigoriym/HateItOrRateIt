@@ -29,3 +29,10 @@ fun HateRateType.rateColors() = if (this == HateRateType.RATE) {
 } else {
     deactivatedColors()
 }
+
+@Composable
+fun HateRateType.color() = if (this == HateRateType.HATE) {
+    Cinnabar
+} else {
+    FruitSalad
+}

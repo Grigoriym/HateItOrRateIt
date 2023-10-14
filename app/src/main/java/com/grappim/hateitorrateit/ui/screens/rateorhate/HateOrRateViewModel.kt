@@ -10,6 +10,7 @@ import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.SnackbarStateViewModel
 import com.grappim.hateitorrateit.core.SnackbarStateViewModelImpl
 import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
 import com.grappim.hateitorrateit.domain.DocumentFileData
 import com.grappim.hateitorrateit.model.CreateDocument
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
@@ -32,6 +33,7 @@ class HateOrRateViewModel @Inject constructor(
     private val fileUtils: FileUtils,
     private val docsRepository: DocsRepository,
     private val dataCleaner: DataCleaner,
+    private val localDataStorage: LocalDataStorage,
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
 
@@ -57,6 +59,14 @@ class HateOrRateViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
+        viewModelScope.launch {
+            localDataStorage.typeFlow.collect { value ->
+                _viewState.update {
+                    it.copy(type = value)
+                }
+            }
+        }
+
         addDraftDoc()
     }
 

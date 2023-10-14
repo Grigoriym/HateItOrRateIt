@@ -4,14 +4,21 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Icon
+import androidx.compose.material.IconButton
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ThumbDown
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.grappim.hateitorrateit.core.HateRateType
+import com.grappim.hateitorrateit.utils.color
 import com.grappim.ui.widgets.PlatoLoadingDialog
 import com.grappim.ui.widgets.PlatoTopBar
 
@@ -58,6 +65,34 @@ private fun SettingsScreenContent(
                 text = {
                     Text(text = "Clear Data")
                 })
+            ListItem(
+                text = {
+                    Text(text = "Default Type")
+                },
+                trailing = {
+                    CustomSwitch(state = state)
+                }
+            )
         }
+    }
+}
+
+@Composable
+fun CustomSwitch(
+    state: SettingsViewState
+) {
+    val icon = if (state.type == HateRateType.HATE) {
+        Icons.Filled.ThumbDown
+    } else {
+        Icons.Filled.ThumbUp
+    }
+
+    IconButton(onClick = { state.setType() }) {
+        Icon(
+            modifier = Modifier,
+            imageVector = icon,
+            contentDescription = null,
+            tint = state.type.color(),
+        )
     }
 }
