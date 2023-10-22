@@ -43,6 +43,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.grappim.ui.R
 import com.grappim.ui.color
 import com.grappim.ui.icon
+import com.grappim.ui.widgets.PlatoCard
 import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
@@ -94,7 +95,7 @@ private fun DetailsScreenContent(
                 state = pagerState,
             ) { page ->
                 val file = state.filesUri[page]
-                Card(
+                PlatoCard(
                     modifier = Modifier
 //                        .clickable {
 //                            Timber.d("Clicked on image: ${file.uriString}")

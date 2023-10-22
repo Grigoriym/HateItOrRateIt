@@ -42,6 +42,7 @@ import com.grappim.hateitorrateit.model.DocumentListUI
 import com.grappim.ui.R
 import com.grappim.ui.color
 import com.grappim.ui.icon
+import com.grappim.ui.widgets.PlatoCard
 import com.grappim.ui.widgets.text.TextH5
 
 @Composable
@@ -141,12 +142,11 @@ private fun DocItem(
     document: DocumentListUI,
     onDocumentClick: (id: Long) -> Unit,
 ) {
-    Card(
+    PlatoCard(
         modifier = Modifier
             .padding(vertical = 8.dp)
             .fillMaxWidth()
             .height(200.dp),
-        shape = RoundedCornerShape(16.dp),
         onClick = {
             onDocumentClick(document.id.toLong())
         },
@@ -161,7 +161,7 @@ private fun DocItem(
                 contentDescription = "",
             )
 
-            Card(
+            PlatoCard(
                 modifier = Modifier
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 12.dp)

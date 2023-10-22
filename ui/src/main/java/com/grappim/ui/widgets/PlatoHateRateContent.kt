@@ -32,13 +32,13 @@ fun PlatoHateRateContent(
     val buttonsSize = 80.dp
     val hateColors = currentType.hateColors()
     val rateColors = currentType.rateColors()
-    Card(
+    PlatoCard(
         modifier = modifier
             .padding(top = 12.dp, bottom = 12.dp)
+            .padding(horizontal = 32.dp)
             .fillMaxWidth(),
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(8.dp, currentType.color()),
-        elevation = 8.dp
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

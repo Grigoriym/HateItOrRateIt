@@ -57,6 +57,7 @@ import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.ui.R
 import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoAlertDialog
+import com.grappim.ui.widgets.PlatoCard
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 import kotlinx.coroutines.launch
@@ -198,7 +199,7 @@ private fun RateOrHateScreenContent(
                 .padding(it)
                 .padding(horizontal = 4.dp)
         ) {
-            Card(
+            PlatoCard(
                 modifier = Modifier
                     .padding(top = 8.dp),
                 shape = RoundedCornerShape(16.dp),
@@ -245,7 +246,6 @@ private fun RateOrHateScreenContent(
             }
 
             PlatoHateRateContent(
-                modifier = Modifier.padding(horizontal = 16.dp),
                 currentType = state.type,
                 onTypeClicked = state.onTypeClicked,
             )
@@ -328,7 +328,7 @@ private fun FilesList(
         pageSpacing = 8.dp
     ) { page ->
         val file = fileUris[page]
-        Card(
+        PlatoCard(
             modifier = Modifier
                 .graphicsLayer {
                     val pageOffset = ((pagerState.currentPage - page)
