@@ -17,10 +17,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
@@ -36,6 +37,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,6 +50,9 @@ import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
+import timber.log.Timber
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun DetailsScreen(
@@ -56,9 +61,7 @@ fun DetailsScreen(
     onDocImageClicked: (uriString: String) -> Unit,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    if (state.isLoading) {
-        CircularProgressIndicator()
-    } else {
+    if (state.isLoading.not()) {
         DetailsScreenContent(
             state = state,
             goBack = goBack,
@@ -96,20 +99,18 @@ private fun DetailsScreenContent(
             ) { page ->
                 val file = state.filesUri[page]
                 PlatoCard(
-                    modifier = Modifier
-//                        .clickable {
-//                            Timber.d("Clicked on image: ${file.uriString}")
-//                            val encodedUrl = URLEncoder.encode(
-//                                file.uriString,
-//                                StandardCharsets.UTF_8.toString()
-//                            )
-//                            onDocImageClicked(encodedUrl)
-//                        }
-                    ,
                     shape = RoundedCornerShape(
                         bottomEnd = 16.dp,
                         bottomStart = 16.dp,
-                    )
+                    ),
+                    onClick = {
+                        Timber.d("Clicked on image: ${file.uriString}")
+                        val encodedUrl = URLEncoder.encode(
+                            file.uriString,
+                            StandardCharsets.UTF_8.toString()
+                        )
+                        onDocImageClicked(encodedUrl)
+                    }
                 ) {
                     Image(
                         modifier = Modifier
@@ -175,7 +176,8 @@ private fun DetailsScreenContent(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .weight(1f)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -185,10 +187,13 @@ private fun DetailsScreenContent(
             ) {
                 if (state.isEdit) {
                     OutlinedTextField(
-                        value = state.name,
+                        value = state.nameToEdit,
                         onValueChange = state.onSaveName,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
                         label = {
-                            Text(text = "Name *")
+                            Text(text = stringResource(id = R.string.name_obligatory))
                         })
                 } else {
                     TextH4(text = state.name)
@@ -207,11 +212,14 @@ private fun DetailsScreenContent(
             ) {
                 if (state.isEdit) {
                     OutlinedTextField(
-                        value = state.description,
+                        value = state.descriptionToEdit,
                         onValueChange = state.onSaveDescription,
                         singleLine = false,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
                         label = {
-                            Text(text = "Description")
+                            Text(text = stringResource(id = R.string.description))
                         }
                     )
                 } else {
@@ -227,8 +235,11 @@ private fun DetailsScreenContent(
             ) {
                 if (state.isEdit) {
                     OutlinedTextField(
-                        value = state.shop,
-                        onValueChange = state.onSaveDescription,
+                        value = state.shopToEdit,
+                        onValueChange = state.onSaveShop,
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            imeAction = ImeAction.Done
+                        ),
                         label = {
                             Text(text = stringResource(id = R.string.shop))
                         }
@@ -244,19 +255,18 @@ private fun DetailsScreenContent(
                 modifier = Modifier
                     .padding(top = 16.dp)
             ) {
-                state.type?.let {
-                    if (state.isEdit) {
-                        PlatoHateRateContent(
-                            currentType = state.type,
-                            onTypeClicked = state.onTypeChanged,
-                        )
-                    } else {
-                        Icon(
-                            imageVector = state.type.icon(),
-                            contentDescription = "",
-                            tint = state.type.color(),
-                        )
-                    }
+                if (state.isEdit) {
+                    PlatoHateRateContent(
+                        currentType = requireNotNull(state.typeToEdit),
+                        onTypeClicked = state.onTypeChanged,
+                    )
+                } else {
+                    requireNotNull(state.type)
+                    Icon(
+                        imageVector = state.type.icon(),
+                        contentDescription = "",
+                        tint = state.type.color(),
+                    )
                 }
             }
         }

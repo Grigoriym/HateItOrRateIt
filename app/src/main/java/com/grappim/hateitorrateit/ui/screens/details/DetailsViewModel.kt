@@ -27,10 +27,10 @@ class DetailsViewModel @Inject constructor(
         DetailsViewState(
             onSaveName = ::setName,
             onSaveDescription = ::setDescription,
-            onSaveShop = ::onSaveShop,
+            onSaveShop = ::setShop,
             toggleEditMode = ::toggleEditMode,
             onEditSubmit = ::onEditSubmit,
-            onTypeChanged = ::onTypeChanged,
+            onTypeChanged = ::setType,
         )
     )
 
@@ -42,45 +42,59 @@ class DetailsViewModel @Inject constructor(
 
     private fun toggleEditMode() {
         _viewState.update {
-            it.copy(isEdit = !_viewState.value.isEdit)
-        }
-    }
-
-    private fun onTypeChanged(newType: HateRateType) {
-        if (_viewState.value.type == newType) return
-        _viewState.update {
-            it.copy(type = HateRateType.changeType(requireNotNull(it.type)))
+            it.copy(
+                nameToEdit = viewState.value.name,
+                descriptionToEdit = viewState.value.description,
+                shopToEdit = viewState.value.shop,
+                typeToEdit = viewState.value.type,
+                isEdit = !viewState.value.isEdit
+            )
         }
     }
 
     private fun onEditSubmit() {
-        toggleEditMode()
         viewModelScope.launch {
             docsRepository.updateDoc(
                 id = viewState.value.id.toLong(),
-                name = viewState.value.name,
-                description = viewState.value.description,
-                shop = viewState.value.shop,
-                type = requireNotNull(viewState.value.type)
+                name = viewState.value.nameToEdit,
+                description = viewState.value.descriptionToEdit,
+                shop = viewState.value.shopToEdit,
+                type = requireNotNull(viewState.value.typeToEdit)
+            )
+        }
+        _viewState.update {
+            it.copy(
+                name = viewState.value.nameToEdit,
+                description = viewState.value.descriptionToEdit,
+                shop = viewState.value.shopToEdit,
+                type = viewState.value.typeToEdit,
+                isEdit = !viewState.value.isEdit
             )
         }
     }
 
     private fun setName(name: String) {
         _viewState.update {
-            it.copy(name = name)
+            it.copy(nameToEdit = name)
         }
     }
 
     private fun setDescription(description: String) {
         _viewState.update {
-            it.copy(description = description)
+            it.copy(descriptionToEdit = description)
         }
     }
 
-    private fun onSaveShop(shop: String) {
+    private fun setShop(shop: String) {
         _viewState.update {
-            it.copy(shop = shop)
+            it.copy(shopToEdit = shop)
+        }
+    }
+
+    private fun setType(newType: HateRateType) {
+        if (_viewState.value.typeToEdit == newType) return
+        _viewState.update {
+            it.copy(typeToEdit = HateRateType.changeType(requireNotNull(it.type)))
         }
     }
 

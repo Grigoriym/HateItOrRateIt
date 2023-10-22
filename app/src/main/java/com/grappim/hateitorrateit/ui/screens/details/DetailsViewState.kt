@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
+import com.grappim.domain.DocumentFileData
 import com.grappim.domain.HateRateType
 
 data class DetailsViewState(
@@ -8,8 +9,13 @@ data class DetailsViewState(
     val description: String = "",
     val shop: String = "",
     val createdDate: String = "",
-    val filesUri: List<com.grappim.domain.DocumentFileData> = emptyList(),
+    val filesUri: List<DocumentFileData> = emptyList(),
     val type: HateRateType? = null,
+
+    val nameToEdit: String = name,
+    val descriptionToEdit: String = description,
+    val shopToEdit: String = shop,
+    val typeToEdit: HateRateType? = type,
 
     val isLoading: Boolean = true,
     val isEdit: Boolean = false,
