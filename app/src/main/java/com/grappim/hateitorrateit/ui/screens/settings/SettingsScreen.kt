@@ -13,10 +13,12 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.grappim.hateitorrateit.utils.color
-import com.grappim.hateitorrateit.utils.icon
+import com.grappim.ui.R
+import com.grappim.ui.color
+import com.grappim.ui.icon
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoLoadingDialog
 import com.grappim.ui.widgets.PlatoTopBar
@@ -40,14 +42,14 @@ private fun SettingsScreenContent(
 ) {
     Scaffold(topBar = {
         PlatoTopBar(
-            text = "Settings",
+            text = stringResource(id = R.string.settings),
             goBack = goBack,
         )
     }) {
         PlatoLoadingDialog(state.isLoading)
 
         PlatoAlertDialog(
-            text = "Are you sure you want to clear all the data?",
+            text = stringResource(id = R.string.are_you_sure_clear_all_data),
             showAlertDialog = state.showAlertDialog,
             onDismissRequest = {
                 state.onDismissDialog()
@@ -65,12 +67,12 @@ private fun SettingsScreenContent(
             ListItem(modifier = Modifier.clickable {
                 state.onClearDataClicked()
             }, text = {
-                Text(text = "Clear Data")
+                Text(text = stringResource(id = R.string.clear_data))
             })
             ListItem(modifier = Modifier.clickable {
                 state.setType()
             }, text = {
-                Text(text = "Default Type")
+                Text(text = stringResource(id = R.string.default_type))
             }, trailing = {
                 CustomSwitch(state = state)
             })
@@ -84,7 +86,7 @@ fun CustomSwitch(
 ) {
     Crossfade(
         targetState = state.type,
-        label = "",
+        label = "custom_switch_label",
         animationSpec = tween(500),
     ) {
         Icon(

@@ -32,14 +32,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.model.DocumentListUI
-import com.grappim.hateitorrateit.utils.color
-import com.grappim.hateitorrateit.utils.icon
+import com.grappim.ui.R
+import com.grappim.ui.color
+import com.grappim.ui.icon
 import com.grappim.ui.widgets.text.TextH5
 
 @Composable
@@ -107,17 +109,17 @@ private fun SearchContent(
         },
         shape = RoundedCornerShape(10.dp),
         leadingIcon = {
-            Icon(imageVector = Icons.Filled.Search, contentDescription = "")
+            Icon(imageVector = Icons.Filled.Search, contentDescription = "search button")
         },
         trailingIcon = {
             if (query.isNotEmpty()) {
                 IconButton(onClick = onClearClicked) {
-                    Icon(imageVector = Icons.Filled.Cancel, contentDescription = "")
+                    Icon(imageVector = Icons.Filled.Cancel, contentDescription = "cancel button")
                 }
             }
         },
         placeholder = {
-            Text(text = "Search")
+            Text(text = stringResource(id = R.string.search))
         },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,

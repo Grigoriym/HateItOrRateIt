@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.db
 
 import androidx.room.TypeConverter
-import com.grappim.hateitorrateit.core.HateRateType
+import com.grappim.domain.HateRateType
 
 class HateRateTypeConverter {
 

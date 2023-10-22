@@ -75,6 +75,7 @@ kapt {
 
 dependencies {
     implementation(project(":ui"))
+    implementation(project(":domain"))
 
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
@@ -88,7 +89,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-util")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
-//    implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material")
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")

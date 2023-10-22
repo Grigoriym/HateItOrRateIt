@@ -2,7 +2,6 @@ package com.grappim.hateitorrateit.ui.screens.details
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,12 +35,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.hateitorrateit.utils.color
-import com.grappim.hateitorrateit.utils.icon
+import com.grappim.ui.R
+import com.grappim.ui.color
+import com.grappim.ui.icon
+import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
@@ -94,14 +96,15 @@ private fun DetailsScreenContent(
                 val file = state.filesUri[page]
                 Card(
                     modifier = Modifier
-                        .clickable {
+//                        .clickable {
 //                            Timber.d("Clicked on image: ${file.uriString}")
 //                            val encodedUrl = URLEncoder.encode(
 //                                file.uriString,
 //                                StandardCharsets.UTF_8.toString()
 //                            )
 //                            onDocImageClicked(encodedUrl)
-                        },
+//                        }
+                    ,
                     shape = RoundedCornerShape(
                         bottomEnd = 16.dp,
                         bottomStart = 16.dp,
@@ -180,9 +183,11 @@ private fun DetailsScreenContent(
                     .padding(top = 8.dp)
             ) {
                 if (state.isEdit) {
-                    OutlinedTextField(value = state.name,
-                        onValueChange = { newValue ->
-                            state.onSaveName(newValue)
+                    OutlinedTextField(
+                        value = state.name,
+                        onValueChange = state.onSaveName,
+                        label = {
+                            Text(text = "Name *")
                         })
                 } else {
                     TextH4(text = state.name)
@@ -202,9 +207,11 @@ private fun DetailsScreenContent(
                 if (state.isEdit) {
                     OutlinedTextField(
                         value = state.description,
-                        onValueChange = { newValue ->
-                            state.onSaveDescription(newValue)
-                        },
+                        onValueChange = state.onSaveDescription,
+                        singleLine = false,
+                        label = {
+                            Text(text = "Description")
+                        }
                     )
                 } else {
                     Text(
@@ -220,9 +227,10 @@ private fun DetailsScreenContent(
                 if (state.isEdit) {
                     OutlinedTextField(
                         value = state.shop,
-                        onValueChange = { newValue ->
-                            state.onSaveDescription(newValue)
-                        },
+                        onValueChange = state.onSaveDescription,
+                        label = {
+                            Text(text = stringResource(id = R.string.shop))
+                        }
                     )
                 } else {
                     Text(
@@ -236,11 +244,18 @@ private fun DetailsScreenContent(
                     .padding(top = 16.dp)
             ) {
                 state.type?.let {
-                    Icon(
-                        imageVector = state.type.icon(),
-                        contentDescription = "",
-                        tint = state.type.color(),
-                    )
+                    if (state.isEdit) {
+                        PlatoHateRateContent(
+                            currentType = state.type,
+                            onTypeClicked = state.onTypeChanged,
+                        )
+                    } else {
+                        Icon(
+                            imageVector = state.type.icon(),
+                            contentDescription = "",
+                            tint = state.type.color(),
+                        )
+                    }
                 }
             }
         }

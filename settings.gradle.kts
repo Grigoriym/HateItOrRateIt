@@ -16,3 +16,4 @@ dependencyResolutionManagement {
 rootProject.name = "HateItOrRateIt"
 include(":app")
 include(":ui")
+include(":domain")

@@ -17,14 +17,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
-import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
@@ -45,21 +43,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
-import com.grappim.hateitorrateit.utils.hateColors
-import com.grappim.hateitorrateit.utils.hateIcon
-import com.grappim.hateitorrateit.utils.rateColors
-import com.grappim.hateitorrateit.utils.rateIcon
+import com.grappim.ui.R
+import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
@@ -100,7 +96,7 @@ fun RateOrHateScreen(
     }
 
     PlatoAlertDialog(
-        text = "Save the changes before exit?",
+        text = stringResource(id = R.string.save_changes_before_exit),
         showAlertDialog = showAlertDialog,
         onDismissRequest = {
             showAlertDialog = false
@@ -176,7 +172,7 @@ private fun RateOrHateScreenContent(
             SnackbarHost(snackbarHostState)
         },
         topBar = {
-            PlatoTopBar(text = "Hate Or Rate", goBack = goBack)
+            PlatoTopBar(text = stringResource(id = R.string.hate_or_rate), goBack = goBack)
         },
 
         bottomBar = {
@@ -193,60 +189,69 @@ private fun RateOrHateScreenContent(
                     state.createDocument()
                 }
             ) {
-                Text(text = "Create")
+                Text(text = stringResource(id = R.string.create))
             }
         }
     ) {
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 4.dp)
         ) {
-            OutlinedTextField(
+            Card(
                 modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                value = state.documentName,
-                onValueChange = { newValue ->
-                    state.setName(newValue)
-                },
-                singleLine = true,
-                label = {
-                    Text(text = "Name")
-                }
-            )
+                    .padding(top = 8.dp),
+                shape = RoundedCornerShape(16.dp),
+            ) {
+                Column(
+                    modifier = Modifier.padding(horizontal = 16.dp)
+                ) {
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .fillMaxWidth(),
+                        value = state.documentName,
+                        onValueChange = state.setName,
+                        singleLine = true,
+                        label = {
+                            Text(text = stringResource(id = R.string.name_obligatory))
+                        }
+                    )
 
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                value = state.description,
-                onValueChange = { newValue ->
-                    state.setDescription(newValue)
-                },
-                singleLine = false,
-                label = {
-                    Text(text = "Description")
-                }
-            )
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .fillMaxWidth(),
+                        value = state.description,
+                        onValueChange = state.setDescription,
+                        singleLine = false,
+                        label = {
+                            Text(text = stringResource(id = R.string.description))
+                        }
+                    )
 
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                value = state.shop,
-                onValueChange = { newValue ->
-                    state.setShop(newValue)
-                },
-                singleLine = true,
-                label = {
-                    Text(text = "Shop")
+                    OutlinedTextField(
+                        modifier = Modifier
+                            .padding(top = 8.dp, bottom = 8.dp)
+                            .fillMaxWidth(),
+                        value = state.shop,
+                        onValueChange = state.setShop,
+                        singleLine = true,
+                        label = {
+                            Text(text = stringResource(id = R.string.shop))
+                        }
+                    )
                 }
-            )
+            }
 
-            HateRateContent(state = state)
+            PlatoHateRateContent(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                currentType = state.type,
+                onTypeClicked = state.onTypeClicked,
+            )
 
             AddFromContent(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 onCameraClicked = {
                     cameraTakePictureData = state.getCameraImageFileUri()
                     cameraLauncher.launch(cameraTakePictureData.uri)
@@ -269,65 +274,29 @@ private fun RateOrHateScreenContent(
 }
 
 @Composable
-private fun HateRateContent(
-    state: HateOrRateViewState
-) {
-    Row(
-        modifier = Modifier
-            .padding(top = 12.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        val currentType = state.type
-        val hateColors = currentType.hateColors()
-        val rateColors = currentType.rateColors()
-
-        Button(
-            modifier = Modifier
-                .size(100.dp),
-            onClick = {
-                state.onTypeClicked(HateRateType.HATE)
-            },
-            shape = CircleShape,
-            colors = hateColors,
-        ) {
-            Icon(imageVector = state.type.hateIcon(), contentDescription = "")
-        }
-        Button(
-            modifier = Modifier
-                .size(100.dp),
-            onClick = {
-                state.onTypeClicked(HateRateType.RATE)
-            },
-            shape = CircleShape,
-            colors = rateColors,
-        ) {
-            Icon(imageVector = state.type.rateIcon(), contentDescription = "")
-        }
-    }
-}
-
-@Composable
 private fun AddFromContent(
+    modifier: Modifier = Modifier,
     onCameraClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
 ) {
-    Text(
-        modifier = Modifier
-            .padding(top = 16.dp),
-        text = "Add picture from:"
-    )
-    Row(
-        modifier = Modifier
-            .padding(top = 8.dp)
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
-    ) {
-        Button(onClick = onCameraClicked) {
-            Text(text = "Camera")
-        }
-        Button(onClick = onGalleryClicked) {
-            Text(text = "Gallery")
+    Box(modifier = modifier) {
+        Text(
+            modifier = Modifier
+                .padding(top = 16.dp),
+            text = stringResource(id = R.string.add_picture_from)
+        )
+        Row(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Button(onClick = onCameraClicked) {
+                Text(text = stringResource(id = R.string.camera))
+            }
+            Button(onClick = onGalleryClicked) {
+                Text(text = stringResource(id = R.string.gallery))
+            }
         }
     }
 }

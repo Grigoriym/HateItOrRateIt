@@ -1,13 +1,13 @@
 package com.grappim.hateitorrateit.data
 
-import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.DocumentsDao
 import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntity
 import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
-import com.grappim.hateitorrateit.domain.Document
+import com.grappim.domain.Document
+import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.model.CreateDocument
 import com.grappim.hateitorrateit.utils.DateTimeUtils
 import com.grappim.hateitorrateit.utils.DraftDocument
@@ -35,8 +35,9 @@ class DocsRepository @Inject constructor(
         name: String,
         description: String,
         shop: String,
+        type: HateRateType,
     ) {
-        documentsDao.updateDoc(id, name, description, shop)
+        documentsDao.updateDoc(id, name, description, shop, type)
     }
 
     suspend fun addDraftDocument(): DraftDocument {

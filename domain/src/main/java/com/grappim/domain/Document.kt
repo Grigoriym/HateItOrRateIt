@@ -1,6 +1,5 @@
-package com.grappim.hateitorrateit.domain
+package com.grappim.domain
 
-import com.grappim.hateitorrateit.core.HateRateType
 import java.time.OffsetDateTime
 
 data class Document(

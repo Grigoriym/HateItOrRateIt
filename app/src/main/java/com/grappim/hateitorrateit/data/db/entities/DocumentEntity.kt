@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.grappim.hateitorrateit.core.HateRateType
+import com.grappim.domain.HateRateType
 import java.time.OffsetDateTime
 
 @Entity(

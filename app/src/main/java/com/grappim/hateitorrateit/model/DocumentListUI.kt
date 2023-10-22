@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.hateitorrateit.core.HateRateType
+import com.grappim.domain.HateRateType
 
 data class DocumentListUI(
     val id: String,

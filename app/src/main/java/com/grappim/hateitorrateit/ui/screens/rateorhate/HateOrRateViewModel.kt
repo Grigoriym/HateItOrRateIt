@@ -3,26 +3,21 @@ package com.grappim.hateitorrateit.ui.screens.rateorhate
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.R
+import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
-import com.grappim.hateitorrateit.core.HateRateType
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.SnackbarStateViewModel
 import com.grappim.hateitorrateit.core.SnackbarStateViewModelImpl
 import com.grappim.hateitorrateit.data.DocsRepository
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
-import com.grappim.hateitorrateit.domain.DocumentFileData
 import com.grappim.hateitorrateit.model.CreateDocument
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.DraftDocument
 import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.ui.R
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -36,10 +31,6 @@ class HateOrRateViewModel @Inject constructor(
     private val localDataStorage: LocalDataStorage,
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
-
-    private val _draftDocument = MutableStateFlow<DraftDocument?>(null)
-    private val draftDocument: Flow<DraftDocument>
-        get() = _draftDocument.filterNotNull()
 
     private val _viewState = MutableStateFlow(
         HateOrRateViewState(
@@ -79,16 +70,22 @@ class HateOrRateViewModel @Inject constructor(
 
     private fun addDraftDoc() {
         viewModelScope.launch {
-            _draftDocument.value = docsRepository.addDraftDocument()
+            val draftDoc = docsRepository.addDraftDocument()
             _viewState.update {
-                it.copy(type = _draftDocument.value!!.type)
+                it.copy(
+                    type = draftDoc.type,
+                    draftDocument = draftDoc,
+                )
             }
         }
     }
 
     private fun addImageFromGallery(uri: Uri) {
         viewModelScope.launch {
-            val fileData = fileUtils.getFileUrisFromGalleryUri(uri, draftDocument.first())
+            val fileData = fileUtils.getFileUrisFromGalleryUri(
+                uri = uri,
+                draftDocument = requireNotNull(viewState.value.draftDocument)
+            )
             addFileData(fileData)
         }
     }
@@ -110,11 +107,11 @@ class HateOrRateViewModel @Inject constructor(
     }
 
     private fun getCameraImageFileUri(): CameraTakePictureData =
-        fileUtils.getFileUriForTakePicture(_draftDocument.value!!.folderName)
+        fileUtils.getFileUriForTakePicture((requireNotNull(viewState.value.draftDocument)).folderName)
 
     private fun removeData() {
         viewModelScope.launch {
-            val draftDoc = draftDocument.first()
+            val draftDoc = requireNotNull(viewState.value.draftDocument)
             dataCleaner.clearDocumentData(draftDoc)
         }
     }
@@ -145,12 +142,10 @@ class HateOrRateViewModel @Inject constructor(
 
     private fun saveDocument() {
         viewModelScope.launch {
-            val currentDraft = draftDocument.first()
-            val name = _viewState.value.documentName.ifEmpty {
-                currentDraft.folderName
-            }
-            val description = _viewState.value.description
-            val shop = _viewState.value.shop
+            val currentDraft = requireNotNull(viewState.value.draftDocument)
+            val name = _viewState.value.documentName.trim()
+            val description = _viewState.value.description.trim()
+            val shop = _viewState.value.shop.trim()
             val type = _viewState.value.type
 
             docsRepository.addDocument(
@@ -158,7 +153,7 @@ class HateOrRateViewModel @Inject constructor(
                     id = currentDraft.id,
                     name = name,
                     filesUri = _viewState.value.filesUris.map {
-                        DocumentFileData(
+                        com.grappim.domain.DocumentFileData(
                             name = it.name,
                             mimeType = it.mimeType,
                             uriPath = it.uri.path ?: "",
@@ -183,7 +178,7 @@ class HateOrRateViewModel @Inject constructor(
     private fun createDocument() {
         viewModelScope.launch {
             when {
-                _viewState.value.documentName.isEmpty() -> {
+                _viewState.value.documentName.isBlank() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.set_name))
                 }
 

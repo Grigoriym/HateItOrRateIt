@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">HateItOrRateIt</string>
+
+    <string name="add_file">Please add a file</string>
+    <string name="set_name">Please set a name for a document</string>
+    <string name="add_picture_from">Add picture from:</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="shop">Shop</string>
+    <string name="description">Description</string>
+    <string name="name_obligatory">Name *</string>
+    <string name="create">Create</string>
+    <string name="hate_or_rate">Hate Or Rate</string>
+    <string name="save_changes_before_exit">Save the changes before exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="clear_data">Clear Data</string>
+    <string name="default_type">Default Type</string>
+    <string name="settings">Settings</string>
+    <string name="are_you_sure_clear_all_data">Are you sure you want to clear all the data?</string>
+    <string name="search">Search</string>
+</resources>

@@ -3,6 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.DocsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
@@ -28,7 +29,8 @@ class DetailsViewModel @Inject constructor(
             onSaveDescription = ::setDescription,
             onSaveShop = ::onSaveShop,
             toggleEditMode = ::toggleEditMode,
-            onEditSubmit= ::onEditSubmit
+            onEditSubmit = ::onEditSubmit,
+            onTypeChanged = ::onTypeChanged,
         )
     )
 
@@ -44,6 +46,13 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    private fun onTypeChanged(newType: HateRateType) {
+        if (_viewState.value.type == newType) return
+        _viewState.update {
+            it.copy(type = HateRateType.changeType(requireNotNull(it.type)))
+        }
+    }
+
     private fun onEditSubmit() {
         toggleEditMode()
         viewModelScope.launch {
@@ -52,6 +61,7 @@ class DetailsViewModel @Inject constructor(
                 name = viewState.value.name,
                 description = viewState.value.description,
                 shop = viewState.value.shop,
+                type = requireNotNull(viewState.value.type)
             )
         }
     }

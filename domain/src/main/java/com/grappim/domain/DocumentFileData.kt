@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.domain
+package com.grappim.domain
 
 data class DocumentFileData(
     val name: String,

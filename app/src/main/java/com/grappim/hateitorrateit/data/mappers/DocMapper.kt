@@ -3,8 +3,8 @@ package com.grappim.hateitorrateit.data.mappers
 import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentWithFilesEntity
-import com.grappim.hateitorrateit.domain.Document
-import com.grappim.hateitorrateit.domain.DocumentFileData
+import com.grappim.domain.Document
+import com.grappim.domain.DocumentFileData
 import com.grappim.hateitorrateit.model.CreateDocument
 
 fun List<DocumentWithFilesEntity>.toDocument() =
@@ -14,12 +14,12 @@ fun List<DocumentWithFilesEntity>.toDocument() =
 
 fun DocumentEntity.toDocument(
     fileDataList: List<DocumentFileDataEntity>?
-): Document =
-    Document(
+): com.grappim.domain.Document =
+    com.grappim.domain.Document(
         id = this.documentId,
         name = this.name,
         filesUri = fileDataList?.map { documentFileDataEntity ->
-            DocumentFileData(
+            com.grappim.domain.DocumentFileData(
                 name = documentFileDataEntity.name,
                 mimeType = documentFileDataEntity.mimeType,
                 uriPath = documentFileDataEntity.uriPath,

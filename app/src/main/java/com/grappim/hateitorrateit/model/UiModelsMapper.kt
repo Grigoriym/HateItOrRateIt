@@ -1,20 +1,23 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.hateitorrateit.domain.Document
+import com.grappim.hateitorrateit.core.di.IoDispatcher
+import com.grappim.domain.Document
 import com.grappim.hateitorrateit.utils.DateTimeUtils
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class UiModelsMapper @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
-    fun toDocumentUi(doc: Document): DocumentListUI {
+    suspend fun toDocumentUi(doc: com.grappim.domain.Document): DocumentListUI = withContext(ioDispatcher) {
         val formattedCreatedDate = dateTimeUtils
             .formatToDemonstrate(doc.createdDate, true)
-
-        return DocumentListUI(
+        DocumentListUI(
             id = doc.id.toString(),
             name = doc.name,
             createdDate = formattedCreatedDate,
@@ -28,7 +31,7 @@ class UiModelsMapper @Inject constructor(
         )
     }
 
-    fun toDocumentDetailsUi(doc: Document): DocumentDetailsUi {
+    fun toDocumentDetailsUi(doc: com.grappim.domain.Document): DocumentDetailsUi {
         val formattedCreatedDate = dateTimeUtils
             .formatToDemonstrate(doc.createdDate, true)
 

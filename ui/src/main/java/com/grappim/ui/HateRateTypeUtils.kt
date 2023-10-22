@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils
+package com.grappim.ui
 
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
@@ -6,9 +6,9 @@ import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.grappim.hateitorrateit.core.HateRateType
-import com.grappim.ui.theme.Cinnabar
-import com.grappim.ui.theme.FruitSalad
+import com.grappim.domain.HateRateType
+import com.grappim.ui.theme.AtomicTangerine
+import com.grappim.ui.theme.Feijoa
 
 @Composable
 fun deactivatedColors() = ButtonDefaults.buttonColors(
@@ -18,7 +18,7 @@ fun deactivatedColors() = ButtonDefaults.buttonColors(
 @Composable
 fun HateRateType.hateColors() = if (this == HateRateType.HATE) {
     ButtonDefaults.buttonColors(
-        backgroundColor = Cinnabar
+        backgroundColor = AtomicTangerine
     )
 } else {
     deactivatedColors()
@@ -27,7 +27,7 @@ fun HateRateType.hateColors() = if (this == HateRateType.HATE) {
 @Composable
 fun HateRateType.rateColors() = if (this == HateRateType.RATE) {
     ButtonDefaults.buttonColors(
-        backgroundColor = FruitSalad
+        backgroundColor = Feijoa
     )
 } else {
     deactivatedColors()
@@ -35,9 +35,9 @@ fun HateRateType.rateColors() = if (this == HateRateType.RATE) {
 
 @Composable
 fun HateRateType.color() = if (this == HateRateType.HATE) {
-    Cinnabar
+    AtomicTangerine
 } else {
-    FruitSalad
+    Feijoa
 }
 
 @Composable

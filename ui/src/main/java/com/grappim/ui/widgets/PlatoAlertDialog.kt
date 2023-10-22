@@ -4,6 +4,8 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import com.grappim.ui.R
 
 @Composable
 fun PlatoAlertDialog(
@@ -23,14 +25,14 @@ fun PlatoAlertDialog(
                 Button(
                     onClick = onConfirmButtonClicked
                 ) {
-                    Text("Yes")
+                    Text(stringResource(id = R.string.yes))
                 }
             },
             dismissButton = {
                 Button(
                     onClick = onDismissButtonClicked
                 ) {
-                    Text("No")
+                    Text(stringResource(id = R.string.no))
                 }
             }
         )
