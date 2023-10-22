@@ -50,15 +50,12 @@ import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
-import timber.log.Timber
-import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @Composable
 fun DetailsScreen(
     viewModel: DetailsViewModel = hiltViewModel(),
     goBack: () -> Unit,
-    onDocImageClicked: (uriString: String) -> Unit,
+    onDocImageClicked: (docId: String, index: Int) -> Unit,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     if (state.isLoading.not()) {
@@ -74,7 +71,7 @@ fun DetailsScreen(
 private fun DetailsScreenContent(
     state: DetailsViewState,
     goBack: () -> Unit,
-    onDocImageClicked: (uriString: String) -> Unit,
+    onDocImageClicked: (docId: String, index: Int) -> Unit,
 ) {
     val pagerState = rememberPagerState {
         state.filesUri.size
@@ -104,12 +101,12 @@ private fun DetailsScreenContent(
                         bottomStart = 16.dp,
                     ),
                     onClick = {
-                        Timber.d("Clicked on image: ${file.uriString}")
-                        val encodedUrl = URLEncoder.encode(
-                            file.uriString,
-                            StandardCharsets.UTF_8.toString()
-                        )
-                        onDocImageClicked(encodedUrl)
+                        if (state.isEdit.not()) {
+                            onDocImageClicked(
+                                state.id,
+                                page
+                            )
+                        }
                     }
                 ) {
                     Image(

@@ -27,5 +27,5 @@ data class DetailsViewState(
     val toggleEditMode: () -> Unit,
     val onEditSubmit: () -> Unit,
 
-    val onTypeChanged: (newType: HateRateType) -> Unit
+    val onTypeChanged: (newType: HateRateType) -> Unit,
 )

@@ -10,6 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -76,24 +78,27 @@ class MainActivity : ComponentActivity() {
                     arguments = listOf(navArgument(RootNavDestinations.Details.KEY) {
                         type = NavType.LongType
                     })
-                ) {
+                ) { navBackStackEntry ->
                     DetailsScreen(
                         goBack = {
                             navController.popBackStack()
                         },
-                        onDocImageClicked = {
-                            navController.navigate(
-                                RootNavDestinations.DetailsImage.getRouteWithUri(
-                                    it
+                        onDocImageClicked = { docId, index ->
+                            if (navBackStackEntry.lifecycleIsResumed()) {
+                                navController.navigate(
+                                    RootNavDestinations.DetailsImage.getRouteWithUri(
+                                        docId = docId,
+                                        index = index
+                                    )
                                 )
-                            )
+                            }
                         }
                     )
                 }
                 composable(
                     route = RootNavDestinations.DetailsImage.route,
-                    arguments = listOf(navArgument(RootNavDestinations.DetailsImage.KEY) {
-                        type = NavType.StringType
+                    arguments = listOf(navArgument(RootNavDestinations.DetailsImage.KEY_INDEX) {
+                        type = NavType.IntType
                     })
                 ) {
                     DocImageScreen(
@@ -106,3 +111,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+private fun NavBackStackEntry.lifecycleIsResumed(): Boolean =
+    this.lifecycle.currentState == Lifecycle.State.RESUMED
+
