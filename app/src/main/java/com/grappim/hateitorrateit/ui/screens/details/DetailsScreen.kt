@@ -197,12 +197,6 @@ private fun DetailsScreenContent(
                 }
             }
 
-            Text(
-                modifier = Modifier
-                    .padding(top = 8.dp),
-                text = state.createdDate
-            )
-
             Box(
                 modifier = Modifier
                     .padding(top = 8.dp),
@@ -246,6 +240,14 @@ private fun DetailsScreenContent(
                         text = state.shop,
                     )
                 }
+            }
+
+            if (state.isEdit.not()) {
+                Text(
+                    modifier = Modifier
+                        .padding(top = 8.dp),
+                    text = state.createdDate
+                )
             }
 
             Box(

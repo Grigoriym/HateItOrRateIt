@@ -94,7 +94,7 @@ class DetailsViewModel @Inject constructor(
     private fun setType(newType: HateRateType) {
         if (_viewState.value.typeToEdit == newType) return
         _viewState.update {
-            it.copy(typeToEdit = HateRateType.changeType(requireNotNull(it.type)))
+            it.copy(typeToEdit = HateRateType.changeType(requireNotNull(it.typeToEdit)))
         }
     }
 

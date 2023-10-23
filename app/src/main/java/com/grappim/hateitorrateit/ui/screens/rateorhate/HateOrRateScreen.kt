@@ -17,12 +17,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarHost
@@ -55,9 +56,9 @@ import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.FileData
 import com.grappim.ui.R
-import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoCard
+import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 import kotlinx.coroutines.launch
@@ -175,7 +176,6 @@ private fun RateOrHateScreenContent(
         topBar = {
             PlatoTopBar(text = stringResource(id = R.string.hate_or_rate), goBack = goBack)
         },
-
         bottomBar = {
             Button(
                 modifier = Modifier
@@ -198,51 +198,47 @@ private fun RateOrHateScreenContent(
             modifier = Modifier
                 .padding(it)
                 .padding(horizontal = 4.dp)
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState()),
         ) {
-            PlatoCard(
-                modifier = Modifier
-                    .padding(top = 8.dp),
-                shape = RoundedCornerShape(16.dp),
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 16.dp)
-                ) {
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .fillMaxWidth(),
-                        value = state.documentName,
-                        onValueChange = state.setName,
-                        singleLine = true,
-                        label = {
-                            Text(text = stringResource(id = R.string.name_obligatory))
-                        }
-                    )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .fillMaxWidth(),
+                    value = state.documentName,
+                    onValueChange = state.setName,
+                    singleLine = true,
+                    label = {
+                        Text(text = stringResource(id = R.string.name_obligatory))
+                    }
+                )
 
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .padding(top = 8.dp)
-                            .fillMaxWidth(),
-                        value = state.description,
-                        onValueChange = state.setDescription,
-                        singleLine = false,
-                        label = {
-                            Text(text = stringResource(id = R.string.description))
-                        }
-                    )
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(top = 8.dp)
+                        .fillMaxWidth(),
+                    value = state.description,
+                    onValueChange = state.setDescription,
+                    singleLine = false,
+                    label = {
+                        Text(text = stringResource(id = R.string.description))
+                    }
+                )
 
-                    OutlinedTextField(
-                        modifier = Modifier
-                            .padding(top = 8.dp, bottom = 8.dp)
-                            .fillMaxWidth(),
-                        value = state.shop,
-                        onValueChange = state.setShop,
-                        singleLine = true,
-                        label = {
-                            Text(text = stringResource(id = R.string.shop))
-                        }
-                    )
-                }
+                OutlinedTextField(
+                    modifier = Modifier
+                        .padding(top = 8.dp, bottom = 8.dp)
+                        .fillMaxWidth(),
+                    value = state.shop,
+                    onValueChange = state.setShop,
+                    singleLine = true,
+                    label = {
+                        Text(text = stringResource(id = R.string.shop))
+                    }
+                )
             }
 
             PlatoHateRateContent(
@@ -266,6 +262,7 @@ private fun RateOrHateScreenContent(
             )
 
             FilesList(
+                modifier = Modifier,
                 fileUris = state.filesUris,
                 onFileRemoved = state.onRemoveFileTriggered,
             )
@@ -279,17 +276,18 @@ private fun AddFromContent(
     onCameraClicked: () -> Unit,
     onGalleryClicked: () -> Unit,
 ) {
-    Box(modifier = modifier) {
+    Column(modifier = modifier) {
         Text(
             modifier = Modifier
-                .padding(top = 16.dp),
-            text = stringResource(id = R.string.add_picture_from)
+                .padding(top = 16.dp)
+                .align(Alignment.CenterHorizontally),
+            text = stringResource(id = R.string.add_picture_from),
         )
         Row(
             modifier = Modifier
                 .padding(top = 8.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(onClick = onCameraClicked) {
                 Text(text = stringResource(id = R.string.camera))
@@ -303,6 +301,7 @@ private fun AddFromContent(
 
 @Composable
 private fun FilesList(
+    modifier: Modifier = Modifier,
     fileUris: List<FileData>,
     onFileRemoved: (fileData: FileData) -> Unit,
 ) {
@@ -320,9 +319,9 @@ private fun FilesList(
     }
 
     HorizontalPager(
-        modifier = Modifier
+        modifier = modifier
             .padding(top = 16.dp)
-            .fillMaxSize(),
+            .fillMaxWidth(),
         state = pagerState,
         contentPadding = PaddingValues(horizontal = 16.dp),
         pageSpacing = 8.dp
@@ -342,7 +341,7 @@ private fun FilesList(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxSize()
+                    .size(300.dp)
             ) {
                 Image(
                     modifier = Modifier

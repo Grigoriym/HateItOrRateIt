@@ -10,7 +10,7 @@ import javax.inject.Singleton
 class DateTimeUtils @Inject constructor(
     @DtfToStore private val dtfToStore: DateTimeFormatter,
     @DtfToDemonstrate private val dtfToDemonstrate: DateTimeFormatter,
-    @DtfGDriveDocumentFolder private val dtfGDriveDocumentFolder: DateTimeFormatter,
+    @DtfDocumentFolder private val dtfDocumentFolder: DateTimeFormatter,
 ) {
 
     fun formatToStore(offsetDateTime: OffsetDateTime): String =
@@ -31,7 +31,7 @@ class DateTimeUtils @Inject constructor(
         }
 
     fun formatToGDrive(offsetDateTime: OffsetDateTime): String =
-        dtfGDriveDocumentFolder.format(offsetDateTime)
+        dtfDocumentFolder.format(offsetDateTime)
 
     fun getDateTimeUTCNow(): OffsetDateTime =
         OffsetDateTime.now(ZoneOffset.UTC)
