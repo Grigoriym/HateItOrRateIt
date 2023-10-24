@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Card
+import androidx.compose.material.FilterChip
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
@@ -23,6 +23,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.model.DocumentListUI
 import com.grappim.ui.R
 import com.grappim.ui.color
@@ -50,24 +52,17 @@ fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
     onDocumentClick: (id: Long) -> Unit
 ) {
-    val documents by viewModel.docs.collectAsState()
-    val query by viewModel.query.collectAsState()
+    val state by viewModel.viewState.collectAsState()
     HomeScreenContent(
-        query = query,
-        setQuery = viewModel::onSearchQueryChanged,
-        documents = documents,
+        state = state,
         onDocumentClick = onDocumentClick,
-        onClearClicked = viewModel::clearQuery,
     )
 }
 
 @Composable
 private fun HomeScreenContent(
-    query: String,
-    setQuery: (query: String) -> Unit,
-    documents: List<DocumentListUI>,
+    state: HomeViewState,
     onDocumentClick: (id: Long) -> Unit,
-    onClearClicked: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -76,16 +71,52 @@ private fun HomeScreenContent(
             .padding(top = 16.dp, bottom = 8.dp)
     ) {
         SearchContent(
-            query = query,
-            setQuery = setQuery,
-            onClearClicked = onClearClicked,
+            state = state,
         )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            FilterChip(
+                selected = state.selectedType == HateRateType.HATE,
+                onClick = {
+                    state.onFilterSelected(HateRateType.HATE)
+                },
+                leadingIcon = if (state.selectedType == HateRateType.HATE) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = "Done icon",
+                        )
+                    }
+                } else {
+                    null
+                }) {
+                Text("Hate")
+            }
+            FilterChip(
+                selected = state.selectedType == HateRateType.RATE,
+                onClick = {
+                    state.onFilterSelected(HateRateType.RATE)
+                },
+                leadingIcon = if (state.selectedType == HateRateType.RATE) {
+                    {
+                        Icon(
+                            imageVector = Icons.Filled.Done,
+                            contentDescription = "Done icon",
+                        )
+                    }
+                } else {
+                    null
+                }) {
+                Text("Rate")
+            }
+        }
         LazyColumn(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .fillMaxSize()
         ) {
-            items(documents) { document ->
+            items(state.docs) { document ->
                 DocItem(document, onDocumentClick)
             }
         }
@@ -95,26 +126,22 @@ private fun HomeScreenContent(
 @Composable
 private fun SearchContent(
     modifier: Modifier = Modifier,
-    query: String,
-    setQuery: (query: String) -> Unit,
-    onClearClicked: () -> Unit,
+    state: HomeViewState,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
         modifier = modifier
             .fillMaxWidth(),
-        value = query,
-        onValueChange = {
-            setQuery(it)
-        },
+        value = state.query,
+        onValueChange = state.onSearchQueryChanged,
         shape = RoundedCornerShape(10.dp),
         leadingIcon = {
             Icon(imageVector = Icons.Filled.Search, contentDescription = "search button")
         },
         trailingIcon = {
-            if (query.isNotEmpty()) {
-                IconButton(onClick = onClearClicked) {
+            if (state.query.isNotEmpty()) {
+                IconButton(onClick = state.onClearQueryClicked) {
                     Icon(imageVector = Icons.Filled.Cancel, contentDescription = "cancel button")
                 }
             }

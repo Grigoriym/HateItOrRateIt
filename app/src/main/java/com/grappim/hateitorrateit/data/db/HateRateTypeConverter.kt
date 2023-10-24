@@ -6,7 +6,7 @@ import com.grappim.domain.HateRateType
 class HateRateTypeConverter {
 
     @TypeConverter
-    fun toHateRate(value: String) = enumValueOf<HateRateType>(value)
+    fun toHateRate(value: String): HateRateType = enumValueOf(value)
 
     @TypeConverter
     fun fromHateRate(value: HateRateType) = value.name

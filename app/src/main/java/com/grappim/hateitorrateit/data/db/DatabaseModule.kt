@@ -16,7 +16,7 @@ class DatabaseModule {
     @[Provides Singleton]
     fun provideRoomDatabase(
         @ApplicationContext context: Context,
-        dateTimeConverter: DateTimeConverter
+        dateTimeConverter: DateTimeConverter,
     ): HateItOrRateItDatabase =
         Room.databaseBuilder(
             context,

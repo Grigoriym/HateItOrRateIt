@@ -1,19 +1,24 @@
 package com.grappim.hateitorrateit.data
 
-import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
+import androidx.sqlite.db.SimpleSQLiteQuery
+import com.grappim.domain.Document
+import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.core.di.IoDispatcher
 import com.grappim.hateitorrateit.data.db.DocumentsDao
+import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
+import com.grappim.hateitorrateit.data.db.wrapWithPercentWildcards
+import com.grappim.hateitorrateit.data.db.wrapWithSingleQuotes
 import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntity
 import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
-import com.grappim.domain.Document
-import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.model.CreateDocument
 import com.grappim.hateitorrateit.utils.DateTimeUtils
 import com.grappim.hateitorrateit.utils.DraftDocument
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -22,6 +27,7 @@ class DocsRepository @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
     private val documentsDao: DocumentsDao,
     private val localDataStorage: LocalDataStorage,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     suspend fun getDocById(id: Long): Document {
@@ -64,16 +70,58 @@ class DocsRepository @Inject constructor(
         )
     }
 
-    fun getAllDocsFlow(query: String): Flow<List<Document>> =
-        if (query.isEmpty()) {
-            documentsDao.getAllDocsFlow()
-        } else {
-            documentsDao.getAllDocsByQueryFlow(query)
-        }.map {
-            it.filter { entity ->
+    suspend fun getAllDocs(
+        query: String,
+        type: HateRateType?,
+    ): List<Document> =
+        withContext(ioDispatcher) {
+            if (query.isEmpty() && type == null) {
+                documentsDao.getAllDocs()
+            } else {
+                val sqLiteQuery = buildSqlQuery(query, type)
+                documentsDao.getAllDocsByRawQuery(SimpleSQLiteQuery(sqLiteQuery))
+            }.filter { entity ->
                 entity.files?.isNotEmpty() == true
+            }.map {
+                it.toDocument()
             }
-        }.map { it.toDocument() }
+        }
+
+    private fun buildSqlQuery(
+        query: String,
+        type: HateRateType?
+    ): String {
+        val sqlQuery = StringBuilder("SELECT * FROM document_table ")
+        if (query.isNotEmpty() || type != null) {
+            sqlQuery.append("WHERE ")
+        }
+        if (query.isNotEmpty()) {
+            sqlQuery.append(
+                "name LIKE ${
+                    query.wrapWithPercentWildcards().wrapWithSingleQuotes()
+                } "
+            )
+            sqlQuery.append(
+                "OR shop LIKE ${
+                    query.wrapWithPercentWildcards().wrapWithSingleQuotes()
+                } "
+            )
+            sqlQuery.append(
+                "OR description LIKE ${
+                    query.wrapWithPercentWildcards().wrapWithSingleQuotes()
+                } "
+            )
+        }
+        if (type != null) {
+            if (query.isNotEmpty()) {
+                sqlQuery.append("AND ")
+            }
+            sqlQuery.append("type=${type.name.wrapWithSingleQuotes()} ")
+        }
+        sqlQuery.append("ORDER BY createdDate DESC")
+        Timber.d("sqlQuery: $sqlQuery")
+        return sqlQuery.toString()
+    }
 
     suspend fun removeDocumentById(id: Long) {
         documentsDao.deleteDocumentWithData(id)

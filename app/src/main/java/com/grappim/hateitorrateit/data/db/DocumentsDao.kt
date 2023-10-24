@@ -4,13 +4,14 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentWithFilesEntity
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DocumentsDao {
@@ -19,16 +20,11 @@ interface DocumentsDao {
     suspend fun insert(documentEntity: DocumentEntity): Long
 
     @[Transaction Query("SELECT * FROM document_table ORDER BY createdDate DESC")]
-    fun getAllDocsFlow(): Flow<List<DocumentWithFilesEntity>>
-
-    @[Transaction Query(
-        "SELECT * FROM document_table " +
-                "WHERE name LIKE '%' || :query || '%' " +
-                "OR shop LIKE '%' || :query || '%' " +
-                "OR description LIKE '%' || :query || '%' " +
-                "ORDER BY createdDate DESC"
-    )]
-    fun getAllDocsByQueryFlow(query: String): Flow<List<DocumentWithFilesEntity>>
+    suspend fun getAllDocs(): List<DocumentWithFilesEntity>
+    @[Transaction RawQuery]
+    suspend fun getAllDocsByRawQuery(
+        query: SupportSQLiteQuery
+    ): List<DocumentWithFilesEntity>
 
     @[Transaction Query("SELECT * FROM document_table WHERE documentId = :id LIMIT 1")]
     suspend fun getDocById(id: Long): DocumentWithFilesEntity
@@ -36,10 +32,12 @@ interface DocumentsDao {
     @Query("DELETE FROM document_table WHERE documentId = :id")
     suspend fun deleteById(id: Long)
 
-    @Query("UPDATE document_table SET name=:name, " +
-            "description=:description, shop=:shop, " +
-            "type=:type " +
-            "WHERE documentId=:id")
+    @Query(
+        "UPDATE document_table SET name=:name, " +
+                "description=:description, shop=:shop, " +
+                "type=:type " +
+                "WHERE documentId=:id"
+    )
     suspend fun updateDoc(
         id: Long,
         name: String,

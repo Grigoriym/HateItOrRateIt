@@ -2,45 +2,72 @@ package com.grappim.hateitorrateit.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.WhileViewSubscribed
+import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.data.DocsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    docsRepository: DocsRepository,
+    private val docsRepository: DocsRepository,
     private val uiModelsMapper: UiModelsMapper,
 ) : ViewModel() {
 
-    private val _query = MutableStateFlow("")
-    val query = _query.asStateFlow()
-
-    val docs = query
-        .flatMapLatest {
-            docsRepository.getAllDocsFlow(it)
-        }.map { list ->
-            list.map { document ->
-                uiModelsMapper.toDocumentUi(document)
-            }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = WhileViewSubscribed,
-            initialValue = emptyList(),
+    private val _viewState = MutableStateFlow(
+        HomeViewState(
+            onSearchQueryChanged = ::onSearchQueryChanged,
+            onClearQueryClicked = ::clearQuery,
+            onFilterSelected = ::onFilterSelected,
         )
+    )
 
-    fun onSearchQueryChanged(query: String) {
-        _query.value = query
+    val viewState = _viewState.asStateFlow()
+
+    init {
+        getDocs()
     }
 
-    fun clearQuery() {
-        _query.value = ""
+    private fun onFilterSelected(type: HateRateType) {
+        _viewState.update {
+            it.copy(
+                selectedType = if (type == viewState.value.selectedType) null else type,
+            )
+        }
+        getDocs()
+    }
+
+    private fun getDocs() {
+        viewModelScope.launch {
+            val docs = docsRepository.getAllDocs(
+                query = viewState.value.query,
+                type = viewState.value.selectedType,
+            ).map { document ->
+                uiModelsMapper.toDocumentUi(document)
+            }
+            _viewState.update {
+                it.copy(
+                    docs = docs
+                )
+            }
+        }
+    }
+
+    private fun onSearchQueryChanged(query: String) {
+        _viewState.update {
+            it.copy(query = query)
+        }
+        getDocs()
+    }
+
+    private fun clearQuery() {
+        _viewState.update {
+            it.copy(query = "")
+        }
+        getDocs()
     }
 }
