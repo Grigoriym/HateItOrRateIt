@@ -26,8 +26,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -170,7 +172,14 @@ private fun RateOrHateScreenContent(
 
     LaunchedEffect(snackBarMessage) {
         if (snackBarMessage.data !is NativeText.Empty) {
-            snackbarHostState.showSnackbar(snackBarMessage.data.asString(context))
+            val result = snackbarHostState.showSnackbar(
+                message = snackBarMessage.data.asString(context),
+                actionLabel = "Close",
+                duration = SnackbarDuration.Short,
+            )
+            if(result == SnackbarResult.ActionPerformed) {
+                snackbarHostState.currentSnackbarData?.dismiss()
+            }
         }
     }
 
