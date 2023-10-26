@@ -12,6 +12,7 @@ import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentWithFilesEntity
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface DocumentsDao {
@@ -19,12 +20,13 @@ interface DocumentsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(documentEntity: DocumentEntity): Long
 
-    @[Transaction Query("SELECT * FROM document_table ORDER BY createdDate DESC")]
-    suspend fun getAllDocs(): List<DocumentWithFilesEntity>
+    @[Transaction Query("SELECT * FROM document_table WHERE isCreated=1 ORDER BY createdDate DESC")]
+    fun getAllDocsFlow(): Flow<List<DocumentWithFilesEntity>>
+
     @[Transaction RawQuery]
-    suspend fun getAllDocsByRawQuery(
+    fun getAllDocsByRawQueryFlow(
         query: SupportSQLiteQuery
-    ): List<DocumentWithFilesEntity>
+    ): Flow<List<DocumentWithFilesEntity>>
 
     @[Transaction Query("SELECT * FROM document_table WHERE documentId = :id LIMIT 1")]
     suspend fun getDocById(id: Long): DocumentWithFilesEntity
@@ -64,9 +66,18 @@ interface DocumentsDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     suspend fun update(documentEntity: DocumentEntity)
 
+    @Query("UPDATE document_table SET documentFolderName=:folder WHERE documentId=:id")
+    suspend fun updateDocFolderName(folder:String, id:Long)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFiles(list: List<DocumentFileDataEntity>)
 
     @Query("DELETE FROM document_file_data_table WHERE documentId = :id")
     suspend fun removeDocumentFileDataById(id: Long)
+
+    @[Transaction Query("SELECT * FROM document_table WHERE isCreated=0")]
+    suspend fun getEmptyFiles(): List<DocumentWithFilesEntity>
+
+    @Query("DELETE FROM document_table WHERE isCreated=0")
+    suspend fun deleteEmptyFiles()
 }

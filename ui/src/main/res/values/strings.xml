@@ -14,7 +14,8 @@
     <string name="save_changes_before_exit">Save the changes before exit?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="clear_data">Clear Data</string>
+    <string name="cancel">Cancel</string>
+    <string name="clear_data">Clear All Data</string>
     <string name="default_type">Default Type</string>
     <string name="settings">Settings</string>
     <string name="are_you_sure_clear_all_data">Are you sure you want to clear all the data?</string>

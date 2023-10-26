@@ -3,6 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.rateorhate
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.domain.DocumentFileData
 import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.NativeText
@@ -45,6 +46,8 @@ class HateOrRateViewModel @Inject constructor(
             createDocument = ::createDocument,
             getCameraImageFileUri = ::getCameraImageFileUri,
             onTypeClicked = ::onTypeClicked,
+            onShowAlertDialog = ::onShowAlertDialog,
+            onForceQuit = ::onForceQuit,
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -59,6 +62,20 @@ class HateOrRateViewModel @Inject constructor(
         }
 
         addDraftDoc()
+    }
+
+    private fun onForceQuit() {
+        _viewState.update {
+            it.copy(forceQuit = true)
+        }
+    }
+
+    private fun onShowAlertDialog(show: Boolean) {
+        _viewState.update {
+            it.copy(
+                showAlertDialog = show
+            )
+        }
     }
 
     private fun onTypeClicked(newType: HateRateType) {
@@ -153,7 +170,7 @@ class HateOrRateViewModel @Inject constructor(
                     id = currentDraft.id,
                     name = name,
                     filesUri = _viewState.value.filesUris.map {
-                        com.grappim.domain.DocumentFileData(
+                        DocumentFileData(
                             name = it.name,
                             mimeType = it.mimeType,
                             uriPath = it.uri.path ?: "",

@@ -39,7 +39,8 @@ fun CreateDocument.toEntity(): DocumentEntity =
         documentFolderName = this.documentFolderName,
         description = this.description,
         shop = this.shop,
-        type = this.type
+        type = this.type,
+        isCreated = true,
     )
 
 fun CreateDocument.toFileDataEntityList(): List<DocumentFileDataEntity> =

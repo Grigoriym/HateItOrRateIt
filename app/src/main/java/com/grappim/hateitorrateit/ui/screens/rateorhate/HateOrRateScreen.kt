@@ -44,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
@@ -78,41 +79,27 @@ fun RateOrHateScreen(
         }
     }
 
-    var backEnabled by remember {
-        mutableStateOf(true)
-    }
-    var showAlertDialog by remember {
-        mutableStateOf(false)
+    BackHandler(enabled = true) {
+        handleBackAction(state, goBack)
     }
 
-    BackHandler(
-        enabled = backEnabled
-    ) {
-        if (state.filesUris.isNotEmpty()) {
-            showAlertDialog = true
-        } else {
-            backEnabled = false
-            state.removeData()
-            goBack()
+    LaunchedEffect(state.forceQuit) {
+        if (state.forceQuit) {
+            handleBackAction(state, goBack)
         }
     }
 
     PlatoAlertDialog(
-        text = stringResource(id = R.string.save_changes_before_exit),
-        showAlertDialog = showAlertDialog,
+        text = "If you quit, you will lose all the data",
+        showAlertDialog = state.showAlertDialog,
         onDismissRequest = {
-            showAlertDialog = false
+            state.onShowAlertDialog(false)
         },
         onConfirmButtonClicked = {
-            showAlertDialog = false
-            backEnabled = false
-            state.saveData()
+            state.onForceQuit()
         },
         onDismissButtonClicked = {
-            showAlertDialog = false
-            backEnabled = false
-            state.removeData()
-            goBack()
+            state.onShowAlertDialog(false)
         }
     )
 
@@ -123,6 +110,25 @@ fun RateOrHateScreen(
     )
 }
 
+fun handleBackAction(state: HateOrRateViewState, goBack: () -> Unit) {
+    fun doOnQuit() {
+        state.onShowAlertDialog(false)
+        state.removeData()
+        goBack()
+    }
+
+    if (state.forceQuit) {
+        doOnQuit()
+        return
+    }
+
+    if (state.filesUris.isNotEmpty() || state.documentName.isNotEmpty()) {
+        state.onShowAlertDialog(true)
+    } else {
+        doOnQuit()
+    }
+}
+
 @Composable
 private fun RateOrHateScreenContent(
     viewModel: HateOrRateViewModel,
@@ -130,6 +136,7 @@ private fun RateOrHateScreenContent(
     goBack: () -> Unit,
 ) {
     val context = LocalContext.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     var cameraTakePictureData by remember {
         mutableStateOf(CameraTakePictureData.empty())
@@ -138,6 +145,7 @@ private fun RateOrHateScreenContent(
     val galleryLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
+        keyboardController?.hide()
         uri?.let {
             state.onAddImageFromGalleryClicked(uri)
         }
@@ -146,6 +154,7 @@ private fun RateOrHateScreenContent(
     val cameraLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { isSuccess: Boolean ->
+        keyboardController?.hide()
         if (isSuccess) {
             state.onAddCameraPictureClicked(cameraTakePictureData)
         }
@@ -174,7 +183,9 @@ private fun RateOrHateScreenContent(
             SnackbarHost(snackbarHostState)
         },
         topBar = {
-            PlatoTopBar(text = stringResource(id = R.string.hate_or_rate), goBack = goBack)
+            PlatoTopBar(text = stringResource(id = R.string.hate_or_rate), goBack = {
+                handleBackAction(state, goBack)
+            })
         },
         bottomBar = {
             Button(
@@ -249,10 +260,12 @@ private fun RateOrHateScreenContent(
             AddFromContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 onCameraClicked = {
+                    keyboardController?.hide()
                     cameraTakePictureData = state.getCameraImageFileUri()
                     cameraLauncher.launch(cameraTakePictureData.uri)
                 },
                 onGalleryClicked = {
+                    keyboardController?.hide()
                     galleryLauncher.launch(
                         PickVisualMediaRequest(
                             ActivityResultContracts.PickVisualMedia.ImageOnly
@@ -320,10 +333,10 @@ private fun FilesList(
 
     HorizontalPager(
         modifier = modifier
-            .padding(top = 16.dp)
+            .padding(top = 16.dp, bottom = 16.dp)
             .fillMaxWidth(),
         state = pagerState,
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = PaddingValues(horizontal = 32.dp),
         pageSpacing = 8.dp
     ) { page ->
         val file = fileUris[page]
@@ -333,7 +346,7 @@ private fun FilesList(
                     val pageOffset = ((pagerState.currentPage - page)
                             + pagerState.currentPageOffsetFraction).absoluteValue
                     alpha = lerp(
-                        start = 0.4f,
+                        start = 0.5f,
                         stop = 1f,
                         fraction = 1f - pageOffset.coerceIn(0f, 1f)
                     )
@@ -341,7 +354,7 @@ private fun FilesList(
         ) {
             Box(
                 modifier = Modifier
-                    .size(300.dp)
+                    .size(width = 350.dp, height = 300.dp)
             ) {
                 Image(
                     modifier = Modifier

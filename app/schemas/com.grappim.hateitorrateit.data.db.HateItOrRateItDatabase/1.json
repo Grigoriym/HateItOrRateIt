@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "202163db7f3055163bb113b5140028d5",
+    "identityHash": "25241770bf8a9f45232f5e4dc8e225d0",
     "entities": [
       {
         "tableName": "document_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`documentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `createdDate` TEXT NOT NULL, `documentFolderName` TEXT NOT NULL, `description` TEXT NOT NULL, `shop` TEXT NOT NULL, `type` TEXT NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`documentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `createdDate` TEXT NOT NULL, `documentFolderName` TEXT NOT NULL, `description` TEXT NOT NULL, `shop` TEXT NOT NULL, `type` TEXT NOT NULL, `isCreated` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "documentId",
@@ -48,6 +48,12 @@
             "fieldPath": "type",
             "columnName": "type",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isCreated",
+            "columnName": "isCreated",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -126,7 +132,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '202163db7f3055163bb113b5140028d5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '25241770bf8a9f45232f5e4dc8e225d0')"
     ]
   }
 }

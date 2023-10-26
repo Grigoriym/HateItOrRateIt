@@ -29,4 +29,10 @@ data class HateOrRateViewState(
 
     val getCameraImageFileUri: () -> CameraTakePictureData,
     val onTypeClicked: (newType: HateRateType) -> Unit,
+
+    val forceQuit: Boolean = false,
+    val onForceQuit: () -> Unit,
+
+    val showAlertDialog: Boolean = false,
+    val onShowAlertDialog: (show: Boolean) -> Unit,
 )

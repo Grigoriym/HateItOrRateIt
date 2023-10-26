@@ -74,14 +74,14 @@ private fun SettingsScreenContent(
             }, text = {
                 Text(text = stringResource(id = R.string.default_type))
             }, trailing = {
-                CustomSwitch(state = state)
+                TypeIcon(state = state)
             })
         }
     }
 }
 
 @Composable
-fun CustomSwitch(
+fun TypeIcon(
     state: SettingsViewState
 ) {
     Crossfade(

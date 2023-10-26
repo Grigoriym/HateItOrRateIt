@@ -8,6 +8,10 @@ import com.grappim.hateitorrateit.model.UiModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -38,22 +42,26 @@ class HomeScreenViewModel @Inject constructor(
                 selectedType = if (type == viewState.value.selectedType) null else type,
             )
         }
-        getDocs()
     }
 
     private fun getDocs() {
         viewModelScope.launch {
-            val docs = docsRepository.getAllDocs(
-                query = viewState.value.query,
-                type = viewState.value.selectedType,
-            ).map { document ->
-                uiModelsMapper.toDocumentUi(document)
-            }
-            _viewState.update {
-                it.copy(
-                    docs = docs
-                )
-            }
+            viewState.flatMapLatest { state ->
+                docsRepository.getAllDocsFlow(
+                    query = state.query,
+                    type = state.selectedType,
+                ).map {
+                    it.map { document ->
+                        uiModelsMapper.toDocumentUi(document)
+                    }
+                }.onEach { docs ->
+                    _viewState.update {
+                        it.copy(
+                            docs = docs
+                        )
+                    }
+                }
+            }.collect()
         }
     }
 
@@ -61,13 +69,11 @@ class HomeScreenViewModel @Inject constructor(
         _viewState.update {
             it.copy(query = query)
         }
-        getDocs()
     }
 
     private fun clearQuery() {
         _viewState.update {
             it.copy(query = "")
         }
-        getDocs()
     }
 }

@@ -17,4 +17,5 @@ data class DocumentEntity(
     val description: String,
     val shop: String,
     val type: HateRateType,
+    val isCreated: Boolean = false,
 )

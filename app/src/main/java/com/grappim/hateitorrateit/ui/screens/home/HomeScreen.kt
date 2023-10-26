@@ -18,6 +18,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.FilterChip
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
@@ -141,7 +142,10 @@ private fun SearchContent(
         },
         trailingIcon = {
             if (state.query.isNotEmpty()) {
-                IconButton(onClick = state.onClearQueryClicked) {
+                IconButton(onClick = {
+                    keyboardController?.hide()
+                    state.onClearQueryClicked()
+                }) {
                     Icon(imageVector = Icons.Filled.Cancel, contentDescription = "cancel button")
                 }
             }
@@ -195,6 +199,9 @@ private fun DocItem(
                     .wrapContentWidth()
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(20.dp),
+                backgroundColor = MaterialTheme.colors.surface.copy(
+                    alpha = 0.4f
+                )
             ) {
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

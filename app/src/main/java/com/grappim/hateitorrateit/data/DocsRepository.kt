@@ -16,8 +16,11 @@ import com.grappim.hateitorrateit.model.CreateDocument
 import com.grappim.hateitorrateit.utils.DateTimeUtils
 import com.grappim.hateitorrateit.utils.DraftDocument
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.mapLatest
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -48,20 +51,20 @@ class DocsRepository @Inject constructor(
 
     suspend fun addDraftDocument(): DraftDocument {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
-        val formattedDate = dateTimeUtils.formatToDemonstrate(nowDate)
         val type = localDataStorage.typeFlow.first()
-        val id = documentsDao.insert(
-            DocumentEntity(
-                name = formattedDate,
-                createdDate = nowDate,
-                documentFolderName = "",
-                description = "",
-                shop = "",
-                type = type,
-            )
-        )
         val folderDate = dateTimeUtils.formatToGDrive(nowDate)
+        val documentEntity = DocumentEntity(
+            name = "",
+            createdDate = nowDate,
+            documentFolderName = "",
+            description = "",
+            shop = "",
+            type = type,
+        )
+
+        val id = documentsDao.insert(documentEntity)
         val folderName = "${id}_${folderDate}"
+        documentsDao.updateDocFolderName(folderName, id)
         return DraftDocument(
             id = id,
             date = nowDate,
@@ -70,22 +73,23 @@ class DocsRepository @Inject constructor(
         )
     }
 
-    suspend fun getAllDocs(
+    suspend fun getEmptyFiles() = documentsDao.getEmptyFiles()
+
+    suspend fun deleteEmptyFiles() = documentsDao.deleteEmptyFiles()
+
+    fun getAllDocsFlow(
         query: String,
         type: HateRateType?,
-    ): List<Document> =
-        withContext(ioDispatcher) {
-            if (query.isEmpty() && type == null) {
-                documentsDao.getAllDocs()
-            } else {
-                val sqLiteQuery = buildSqlQuery(query, type)
-                documentsDao.getAllDocsByRawQuery(SimpleSQLiteQuery(sqLiteQuery))
-            }.filter { entity ->
-                entity.files?.isNotEmpty() == true
-            }.map {
-                it.toDocument()
-            }
-        }
+    ): Flow<List<Document>> = flow {
+        emitAll(if (query.isEmpty() && type == null) {
+            documentsDao.getAllDocsFlow()
+        } else {
+            val sqLiteQuery = buildSqlQuery(query, type)
+            documentsDao.getAllDocsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
+        }.mapLatest { list ->
+            list.map { it.toDocument() }
+        })
+    }
 
     private fun buildSqlQuery(
         query: String,
@@ -97,7 +101,7 @@ class DocsRepository @Inject constructor(
         }
         if (query.isNotEmpty()) {
             sqlQuery.append(
-                "name LIKE ${
+                "(name LIKE ${
                     query.wrapWithPercentWildcards().wrapWithSingleQuotes()
                 } "
             )
@@ -109,7 +113,7 @@ class DocsRepository @Inject constructor(
             sqlQuery.append(
                 "OR description LIKE ${
                     query.wrapWithPercentWildcards().wrapWithSingleQuotes()
-                } "
+                }) "
             )
         }
         if (type != null) {
@@ -118,6 +122,7 @@ class DocsRepository @Inject constructor(
             }
             sqlQuery.append("type=${type.name.wrapWithSingleQuotes()} ")
         }
+        sqlQuery.append("AND isCreated=1 ")
         sqlQuery.append("ORDER BY createdDate DESC")
         Timber.d("sqlQuery: $sqlQuery")
         return sqlQuery.toString()
