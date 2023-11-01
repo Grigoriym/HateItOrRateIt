@@ -1,6 +1,6 @@
 package com.grappim.domain
 
-data class DocumentFileData(
+data class ProductFileData(
     val name: String,
     val mimeType: String,
     val uriPath: String,

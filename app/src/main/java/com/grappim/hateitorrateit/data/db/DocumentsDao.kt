@@ -34,6 +34,19 @@ interface DocumentsDao {
     @Query("DELETE FROM document_table WHERE documentId = :id")
     suspend fun deleteById(id: Long)
 
+    @Transaction
+    suspend fun updateDocAndFiles(
+        id: Long,
+        name: String,
+        description: String,
+        shop: String,
+        type: HateRateType,
+        files: List<DocumentFileDataEntity>,
+    ) {
+        updateDoc(id, name, description, shop, type)
+        insertFiles(files)
+    }
+
     @Query(
         "UPDATE document_table SET name=:name, " +
                 "description=:description, shop=:shop, " +
@@ -67,13 +80,16 @@ interface DocumentsDao {
     suspend fun update(documentEntity: DocumentEntity)
 
     @Query("UPDATE document_table SET documentFolderName=:folder WHERE documentId=:id")
-    suspend fun updateDocFolderName(folder:String, id:Long)
+    suspend fun updateDocFolderName(folder: String, id: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertFiles(list: List<DocumentFileDataEntity>)
 
     @Query("DELETE FROM document_file_data_table WHERE documentId = :id")
     suspend fun removeDocumentFileDataById(id: Long)
+
+    @Query("DELETE FROM document_file_data_table WHERE documentId = :id AND name=:name")
+    suspend fun deleteDocumentImage(id: Long, name: String)
 
     @[Transaction Query("SELECT * FROM document_table WHERE isCreated=0")]
     suspend fun getEmptyFiles(): List<DocumentWithFilesEntity>

@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.domain.DocumentFileData
+import com.grappim.domain.ProductFileData
 
 data class DocumentDetailsImageUi(
-    val filesUri: List<DocumentFileData> = emptyList(),
+    val filesUri: List<ProductFileData> = emptyList(),
 )

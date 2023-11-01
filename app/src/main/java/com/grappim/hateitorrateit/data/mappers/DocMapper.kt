@@ -1,5 +1,7 @@
 package com.grappim.hateitorrateit.data.mappers
 
+import com.grappim.domain.Document
+import com.grappim.domain.ProductFileData
 import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
 import com.grappim.hateitorrateit.data.db.entities.DocumentWithFilesEntity
@@ -10,12 +12,12 @@ fun DocumentWithFilesEntity.toDocument() =
 
 fun DocumentEntity.toDocument(
     fileDataList: List<DocumentFileDataEntity>?
-): com.grappim.domain.Document =
-    com.grappim.domain.Document(
+): Document =
+    Document(
         id = this.documentId,
         name = this.name,
         filesUri = fileDataList?.map { documentFileDataEntity ->
-            com.grappim.domain.DocumentFileData(
+            ProductFileData(
                 name = documentFileDataEntity.name,
                 mimeType = documentFileDataEntity.mimeType,
                 uriPath = documentFileDataEntity.uriPath,
@@ -29,6 +31,20 @@ fun DocumentEntity.toDocument(
         description = this.description,
         shop = this.shop,
         type = this.type
+    )
+
+fun List<ProductFileData>.toEntities(docId: Long) =
+    this.map { it.toEntity(docId) }
+
+fun ProductFileData.toEntity(docId: Long): DocumentFileDataEntity =
+    DocumentFileDataEntity(
+        name = this.name,
+        mimeType = this.mimeType,
+        uriPath = this.uriPath,
+        uriString = this.uriString,
+        size = this.size,
+        md5 = this.md5,
+        documentId = docId
     )
 
 fun CreateDocument.toEntity(): DocumentEntity =

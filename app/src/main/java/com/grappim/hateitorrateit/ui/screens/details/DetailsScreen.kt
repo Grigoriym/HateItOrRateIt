@@ -1,5 +1,9 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -22,34 +26,49 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Button
 import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Image
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.ui.R
 import com.grappim.ui.color
 import com.grappim.ui.icon
+import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoCard
 import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
+import com.grappim.ui.widgets.PlatoProgressIndicator
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun DetailsScreen(
@@ -58,12 +77,21 @@ fun DetailsScreen(
     onDocImageClicked: (docId: String, index: Int) -> Unit,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(state.productDeleted) {
+        if (state.productDeleted) {
+            goBack()
+        }
+    }
+
     if (state.isLoading.not()) {
         DetailsScreenContent(
             state = state,
             goBack = goBack,
             onDocImageClicked = onDocImageClicked,
         )
+    } else {
+        PlatoProgressIndicator(true)
     }
 }
 
@@ -73,9 +101,60 @@ private fun DetailsScreenContent(
     goBack: () -> Unit,
     onDocImageClicked: (docId: String, index: Int) -> Unit,
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     val pagerState = rememberPagerState {
-        state.filesUri.size
+        state.filesUris.size
     }
+
+    var cameraTakePictureData by remember {
+        mutableStateOf(CameraTakePictureData.empty())
+    }
+
+    val galleryLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.PickVisualMedia()
+    ) { uri: Uri? ->
+        keyboardController?.hide()
+        uri?.let {
+            state.onAddImageFromGalleryClicked(uri)
+        }
+    }
+
+    val cameraLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { isSuccess: Boolean ->
+        keyboardController?.hide()
+        if (isSuccess) {
+            state.onAddCameraPictureClicked(cameraTakePictureData)
+        }
+    }
+
+    var firstRecomposition by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(state.filesUris) {
+        Timber.d("")
+        coroutineScope.launch {
+            if (!firstRecomposition && state.filesUris.isNotEmpty()) {
+                pagerState.animateScrollToPage(state.filesUris.lastIndex)
+            }
+            firstRecomposition = false
+        }
+    }
+
+    PlatoAlertDialog(
+        text = stringResource(id = R.string.are_you_sure_to_delete_product),
+        showAlertDialog = state.showAlertDialog,
+        onDismissRequest = {
+            state.onShowAlertDialog(false)
+        },
+        onConfirmButtonClicked = {
+            state.onDeleteProductConfirm()
+        },
+        onDismissButtonClicked = {
+            state.onShowAlertDialog(false)
+        }
+    )
+
     Column(
         modifier = Modifier
             .statusBarsPadding()
@@ -93,8 +172,8 @@ private fun DetailsScreenContent(
                     .fillMaxSize()
                     .align(Alignment.TopCenter),
                 state = pagerState,
-            ) { page ->
-                val file = state.filesUri[page]
+            ) { index ->
+                val file = state.filesUris[index]
                 PlatoCard(
                     shape = RoundedCornerShape(
                         bottomEnd = 16.dp,
@@ -104,7 +183,7 @@ private fun DetailsScreenContent(
                         if (state.isEdit.not()) {
                             onDocImageClicked(
                                 state.id,
-                                page
+                                index
                             )
                         }
                     }
@@ -119,7 +198,7 @@ private fun DetailsScreenContent(
                 }
             }
 
-            if (state.filesUri.size > 1) {
+            if (state.filesUris.size > 1) {
                 Row(
                     modifier = Modifier
                         .wrapContentHeight()
@@ -127,7 +206,7 @@ private fun DetailsScreenContent(
                         .align(Alignment.BottomCenter),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    repeat(state.filesUri.size) { iteration ->
+                    repeat(state.filesUris.size) { iteration ->
                         val color =
                             if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                         Box(
@@ -144,7 +223,46 @@ private fun DetailsScreenContent(
                 }
             }
 
+            Row(
+                modifier = Modifier
+                    .align(Alignment.BottomStart)
+                    .padding(start = 8.dp, bottom = 8.dp)
+            ) {
+                PlatoIconButton(
+                    icon = Icons.Filled.Camera,
+                    onButtonClick = {
+                        keyboardController?.hide()
+                        cameraTakePictureData = state.getCameraImageFileUri()
+                        cameraLauncher.launch(cameraTakePictureData.uri)
+                    }
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                PlatoIconButton(
+                    icon = Icons.Filled.Image,
+                    onButtonClick = {
+                        keyboardController?.hide()
+                        galleryLauncher.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
+                    }
+                )
+            }
+
+            Button(
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 8.dp),
+                onClick = {
+                    state.onDeleteImage(pagerState.currentPage)
+                }
+            ) {
+                Text(text = stringResource(id = R.string.delete_image))
+            }
+
             PlatoTopBar(
+                modifier = Modifier.padding(top = 2.dp),
                 goBack = goBack,
                 defaultBackButton = false,
                 backgroundColor = Color.Transparent,
@@ -164,6 +282,11 @@ private fun DetailsScreenContent(
                         PlatoIconButton(
                             icon = Icons.Filled.Edit,
                             onButtonClick = state.toggleEditMode
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        PlatoIconButton(
+                            icon = Icons.Filled.Delete,
+                            onButtonClick = state.onDeleteDocument
                         )
                     }
                 })
@@ -214,9 +337,11 @@ private fun DetailsScreenContent(
                         }
                     )
                 } else {
-                    Text(
-                        text = state.description,
-                    )
+                    if (state.description.isNotEmpty()) {
+                        Text(
+                            text = state.description,
+                        )
+                    }
                 }
             }
 
@@ -236,13 +361,15 @@ private fun DetailsScreenContent(
                         }
                     )
                 } else {
-                    Text(
-                        text = state.shop,
-                    )
+                    if (state.shop.isNotEmpty()) {
+                        Text(
+                            text = state.shop,
+                        )
+                    }
                 }
             }
 
-            if (state.isEdit.not()) {
+            if (state.isEdit.not() && state.createdDate.isNotEmpty()) {
                 Text(
                     modifier = Modifier
                         .padding(top = 8.dp),

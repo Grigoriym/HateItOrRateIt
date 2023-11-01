@@ -50,6 +50,7 @@ private fun SettingsScreenContent(
 
         PlatoAlertDialog(
             text = stringResource(id = R.string.are_you_sure_clear_all_data),
+            dismissButtonText = stringResource(id = R.string.no),
             showAlertDialog = state.showAlertDialog,
             onDismissRequest = {
                 state.onDismissDialog()

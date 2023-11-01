@@ -3,7 +3,6 @@ package com.grappim.hateitorrateit.ui.screens.rateorhate
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.domain.DocumentFileData
 import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.NativeText
@@ -101,14 +100,14 @@ class HateOrRateViewModel @Inject constructor(
         viewModelScope.launch {
             val fileData = fileUtils.getFileUrisFromGalleryUri(
                 uri = uri,
-                draftDocument = requireNotNull(viewState.value.draftDocument)
+                folderName = requireNotNull(viewState.value.draftDocument).folderName
             )
             addFileData(fileData)
         }
     }
 
     private fun addFileData(fileData: FileData) {
-        val result = _viewState.value.filesUris.toMutableList() + fileData
+        val result = _viewState.value.filesUris + fileData
         _viewState.update {
             it.copy(filesUris = result)
         }
@@ -170,14 +169,7 @@ class HateOrRateViewModel @Inject constructor(
                     id = currentDraft.id,
                     name = name,
                     filesUri = _viewState.value.filesUris.map {
-                        DocumentFileData(
-                            name = it.name,
-                            mimeType = it.mimeType,
-                            uriPath = it.uri.path ?: "",
-                            uriString = it.uri.toString(),
-                            size = it.size,
-                            md5 = it.md5
-                        )
+                        fileUtils.toDocumentFileData(it)
                     },
                     createdDate = currentDraft.date,
                     documentFolderName = currentDraft.folderName,
@@ -211,7 +203,7 @@ class HateOrRateViewModel @Inject constructor(
     }
 
     private fun removeFile(fileData: FileData) {
-        if (fileUtils.removeFile(fileData)) {
+        if (fileUtils.deleteFile(fileData.uri)) {
             Timber.d("file removed: $fileData")
             _viewState.update { currentState ->
                 val updatedFilesUris = currentState.filesUris.filterNot { it == fileData }

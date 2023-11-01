@@ -89,6 +89,7 @@ private fun DocImageContent(
             }
 
             PlatoTopBar(
+                modifier = Modifier.padding(top = 2.dp),
                 goBack = goBack,
                 defaultBackButton = false,
                 backgroundColor = Color.Transparent,

@@ -3,12 +3,14 @@ package com.grappim.hateitorrateit.data
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.grappim.domain.Document
 import com.grappim.domain.HateRateType
+import com.grappim.domain.ProductFileData
 import com.grappim.hateitorrateit.core.di.IoDispatcher
 import com.grappim.hateitorrateit.data.db.DocumentsDao
 import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
 import com.grappim.hateitorrateit.data.db.wrapWithPercentWildcards
 import com.grappim.hateitorrateit.data.db.wrapWithSingleQuotes
 import com.grappim.hateitorrateit.data.mappers.toDocument
+import com.grappim.hateitorrateit.data.mappers.toEntities
 import com.grappim.hateitorrateit.data.mappers.toEntity
 import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
@@ -21,6 +23,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -45,11 +48,19 @@ class DocsRepository @Inject constructor(
         description: String,
         shop: String,
         type: HateRateType,
-    ) {
+    ) = withContext(ioDispatcher) {
         documentsDao.updateDoc(id, name, description, shop, type)
     }
 
-    suspend fun addDraftDocument(): DraftDocument {
+    suspend fun updateImagesInProduct(
+        id: Long,
+        files: List<ProductFileData>
+    ) = withContext(ioDispatcher) {
+        val filesEntity = files.toEntities(id)
+        documentsDao.insertFiles(filesEntity)
+    }
+
+    suspend fun addDraftDocument(): DraftDocument = withContext(ioDispatcher) {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
         val type = localDataStorage.typeFlow.first()
         val folderDate = dateTimeUtils.formatToGDrive(nowDate)
@@ -65,7 +76,7 @@ class DocsRepository @Inject constructor(
         val id = documentsDao.insert(documentEntity)
         val folderName = "${id}_${folderDate}"
         documentsDao.updateDocFolderName(folderName, id)
-        return DraftDocument(
+        DraftDocument(
             id = id,
             date = nowDate,
             folderName = folderName,
@@ -76,6 +87,9 @@ class DocsRepository @Inject constructor(
     suspend fun getEmptyFiles() = documentsDao.getEmptyFiles()
 
     suspend fun deleteEmptyFiles() = documentsDao.deleteEmptyFiles()
+
+    suspend fun deleteDocumentImage(id: Long, name: String) =
+        documentsDao.deleteDocumentImage(id, name)
 
     fun getAllDocsFlow(
         query: String,
@@ -132,7 +146,7 @@ class DocsRepository @Inject constructor(
         documentsDao.deleteDocumentWithData(id)
     }
 
-    suspend fun addDocument(document: CreateDocument) {
+    suspend fun addDocument(document: CreateDocument) = withContext(ioDispatcher) {
         val entity = document.toEntity()
         val list = document.toFileDataEntityList()
         documentsDao.updateDocumentAndFiles(

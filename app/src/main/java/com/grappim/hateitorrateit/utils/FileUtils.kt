@@ -7,6 +7,7 @@ import android.provider.OpenableColumns
 import android.text.format.Formatter.formatShortFileSize
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.grappim.domain.ProductFileData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.File
@@ -22,9 +23,20 @@ class FileUtils @Inject constructor(
     private val hashUtils: HashUtils,
     private val dateTimeUtils: DateTimeUtils,
 ) {
+
+    fun toDocumentFileData(fileData: FileData): ProductFileData =
+        ProductFileData(
+            name = fileData.name,
+            mimeType = fileData.mimeType,
+            uriPath = fileData.uri.path ?: "",
+            uriString = fileData.uri.toString(),
+            size = fileData.size,
+            md5 = fileData.md5,
+        )
+
     fun getFileUrisFromGalleryUri(
         uri: Uri,
-        draftDocument: DraftDocument,
+        folderName: String,
     ): FileData {
         context.contentResolver.takePersistableUriPermission(
             uri,
@@ -32,7 +44,7 @@ class FileUtils @Inject constructor(
         )
 
         Timber.d("getFileUrisFromGalleryUri, $uri")
-        val newFile = createFileLocally(uri, draftDocument.folderName)
+        val newFile = createFileLocally(uri, folderName)
         val newUri = getFileUri(newFile)
         val fileSize = getUriFileSize(newUri)
         val mimeType = getMimeType(uri)
@@ -40,9 +52,7 @@ class FileUtils @Inject constructor(
             uri = newUri,
             name = newFile.name,
             size = fileSize,
-            sizeToDemonstrate = formatFileSize(fileSize),
             mimeType = mimeType,
-            mimeTypeToDemonstrate = MimeTypes.formatMimeType(mimeType),
             md5 = hashUtils.md5(newFile)
         )
     }
@@ -64,8 +74,13 @@ class FileUtils @Inject constructor(
         file.deleteRecursively()
     }
 
-    fun removeFile(fileData: FileData): Boolean {
-        val deletedRows = context.contentResolver.delete(fileData.uri, null, null)
+    fun deleteFile(uriString: String): Boolean {
+        val uri = Uri.parse(uriString)
+        return deleteFile(uri)
+    }
+
+    fun deleteFile(uri: Uri): Boolean {
+        val deletedRows = context.contentResolver.delete(uri, null, null)
         return deletedRows > 0
     }
 
@@ -81,9 +96,7 @@ class FileUtils @Inject constructor(
             uri = uri,
             name = getUriFileName(uri),
             size = fileSize,
-            sizeToDemonstrate = formatFileSize(fileSize),
             mimeType = mimeType,
-            mimeTypeToDemonstrate = MimeTypes.formatMimeType(mimeType),
             md5 = hashUtils.md5(file)
         )
     }

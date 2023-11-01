@@ -1,12 +1,17 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
+import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.DocsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
+import com.grappim.hateitorrateit.utils.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.FileData
+import com.grappim.hateitorrateit.utils.FileUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,6 +23,8 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     private val docsRepository: DocsRepository,
     private val uiModelsMapper: UiModelsMapper,
+    private val dataCleaner: DataCleaner,
+    private val fileUtils: FileUtils,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -31,6 +38,13 @@ class DetailsViewModel @Inject constructor(
             toggleEditMode = ::toggleEditMode,
             onEditSubmit = ::onEditSubmit,
             onTypeChanged = ::setType,
+            onDeleteDocument = ::onDeleteDocument,
+            onShowAlertDialog = ::onShowAlertDialog,
+            onDeleteProductConfirm = ::onDeleteConfirm,
+            onDeleteImage = ::onDeleteImage,
+            onAddImageFromGalleryClicked = ::addImageFromGallery,
+            onAddCameraPictureClicked = ::addCameraPicture,
+            getCameraImageFileUri = ::getCameraImageFileUri,
         )
     )
 
@@ -40,6 +54,92 @@ class DetailsViewModel @Inject constructor(
         getDoc(docId)
     }
 
+    private fun addCameraPicture(cameraTakePictureData: CameraTakePictureData) {
+        viewModelScope.launch {
+            val fileData = fileUtils.getFileDataFromCameraPicture(
+                cameraTakePictureData = cameraTakePictureData
+            )
+            addFileData(fileData)
+        }
+    }
+
+    private fun addImageFromGallery(uri: Uri) {
+        viewModelScope.launch {
+            val fileData = fileUtils.getFileUrisFromGalleryUri(
+                uri = uri,
+                folderName = viewState.value.documentFolderName,
+            )
+            addFileData(fileData)
+        }
+    }
+
+    private fun addFileData(fileData: FileData) {
+        viewModelScope.launch {
+            val productFileData = fileUtils.toDocumentFileData(fileData)
+            docsRepository.updateImagesInProduct(
+                id = viewState.value.id.toLong(),
+                files = listOf(productFileData)
+            )
+
+            val result = _viewState.value.filesUris + productFileData
+            _viewState.update {
+                it.copy(filesUris = result)
+            }
+        }
+    }
+
+    private fun getCameraImageFileUri(): CameraTakePictureData =
+        fileUtils.getFileUriForTakePicture(viewState.value.documentFolderName)
+
+    private fun onDeleteImage(pageIndex: Int) {
+        viewModelScope.launch {
+            val fileData = viewState.value.filesUris[pageIndex]
+            val name = fileData.name
+            val result = dataCleaner.clearProductImage(
+                id = viewState.value.id.toLong(),
+                imageName = name,
+                uriString = fileData.uriString
+            )
+
+            if (result) {
+                _viewState.update { currentState ->
+                    val updatedFilesUris = currentState.filesUris.filterNot { it.name == name }
+                    currentState.copy(filesUris = updatedFilesUris)
+                }
+            }
+        }
+    }
+
+    private fun onDeleteConfirm() {
+        viewModelScope.launch {
+            _viewState.update {
+                it.copy(isLoading = true)
+            }
+
+            val id = viewState.value.id.toLong()
+            val folderName = viewState.value.documentFolderName
+            dataCleaner.clearDocumentData(id, folderName)
+
+            _viewState.update {
+                it.copy(productDeleted = true)
+            }
+        }
+    }
+
+    private fun onShowAlertDialog(show: Boolean) {
+        _viewState.update {
+            it.copy(
+                showAlertDialog = show
+            )
+        }
+    }
+
+    private fun onDeleteDocument() {
+        _viewState.update {
+            it.copy(showAlertDialog = true)
+        }
+    }
+
     private fun toggleEditMode() {
         _viewState.update {
             it.copy(
@@ -47,7 +147,7 @@ class DetailsViewModel @Inject constructor(
                 descriptionToEdit = viewState.value.description,
                 shopToEdit = viewState.value.shop,
                 typeToEdit = viewState.value.type,
-                isEdit = !viewState.value.isEdit
+                isEdit = !viewState.value.isEdit,
             )
         }
     }
@@ -59,7 +159,7 @@ class DetailsViewModel @Inject constructor(
                 name = viewState.value.nameToEdit,
                 description = viewState.value.descriptionToEdit,
                 shop = viewState.value.shopToEdit,
-                type = requireNotNull(viewState.value.typeToEdit)
+                type = requireNotNull(viewState.value.typeToEdit),
             )
         }
         _viewState.update {
@@ -68,7 +168,7 @@ class DetailsViewModel @Inject constructor(
                 description = viewState.value.descriptionToEdit,
                 shop = viewState.value.shopToEdit,
                 type = viewState.value.typeToEdit,
-                isEdit = !viewState.value.isEdit
+                isEdit = !viewState.value.isEdit,
             )
         }
     }
@@ -109,9 +209,10 @@ class DetailsViewModel @Inject constructor(
                     description = docUi.description,
                     shop = docUi.shop,
                     createdDate = docUi.createdDate,
-                    filesUri = docUi.filesUri,
+                    filesUris = docUi.filesUri,
                     isLoading = false,
                     type = docUi.type,
+                    documentFolderName = docUi.documentFolderName,
                 )
             }
         }
