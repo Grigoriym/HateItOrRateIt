@@ -10,8 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.Lifecycle
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -21,6 +19,7 @@ import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.ui.screens.details.DetailsScreen
 import com.grappim.hateitorrateit.ui.screens.details.docimage.DocImageScreen
 import com.grappim.hateitorrateit.ui.screens.rateorhate.RateOrHateScreen
+import com.grappim.hateitorrateit.utils.safeClick
 import com.grappim.ui.theme.HateItOrRateItTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -51,25 +50,37 @@ class MainActivity : ComponentActivity() {
                 navController = navController,
                 startDestination = RootNavDestinations.Home.route,
             ) {
-                composable(RootNavDestinations.Home.route) {
+                composable(RootNavDestinations.Home.route) { navBackStackEntry ->
                     RootMainScreen(
                         rootViewModel = rootViewModel,
                         goToHateOrRate = {
-                            navController.navigate(RootNavDestinations.HateOrRate.route)
+                            navBackStackEntry.safeClick {
+                                navController.navigate(RootNavDestinations.HateOrRate.route)
+                            }
                         },
                         goToDetails = { id ->
-                            navController.navigate(RootNavDestinations.Details.getRouteWithDocId(id))
+                            navBackStackEntry.safeClick {
+                                navController.navigate(
+                                    RootNavDestinations.Details.getRouteWithDocId(
+                                        id
+                                    )
+                                )
+                            }
                         }
                     )
                 }
 
-                composable(RootNavDestinations.HateOrRate.route) {
+                composable(RootNavDestinations.HateOrRate.route) { navBackStackEntry ->
                     RateOrHateScreen(
                         goBack = {
-                            navController.popBackStack()
+                            navBackStackEntry.safeClick {
+                                navController.popBackStack()
+                            }
                         },
                         onDocumentCreated = {
-                            navController.popBackStack()
+                            navBackStackEntry.safeClick {
+                                navController.popBackStack()
+                            }
                         }
                     )
                 }
@@ -81,10 +92,12 @@ class MainActivity : ComponentActivity() {
                 ) { navBackStackEntry ->
                     DetailsScreen(
                         goBack = {
-                            navController.popBackStack()
+                            navBackStackEntry.safeClick {
+                                navController.popBackStack()
+                            }
                         },
                         onDocImageClicked = { docId, index ->
-                            if (navBackStackEntry.lifecycleIsResumed()) {
+                            navBackStackEntry.safeClick {
                                 navController.navigate(
                                     RootNavDestinations.DetailsImage.getRouteWithUri(
                                         docId = docId,
@@ -100,10 +113,12 @@ class MainActivity : ComponentActivity() {
                     arguments = listOf(navArgument(RootNavDestinations.DetailsImage.KEY_INDEX) {
                         type = NavType.IntType
                     })
-                ) {
+                ) { navBackStackEntry ->
                     DocImageScreen(
                         goBack = {
-                            navController.popBackStack()
+                            navBackStackEntry.safeClick {
+                                navController.popBackStack()
+                            }
                         }
                     )
                 }
@@ -111,7 +126,3 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-
-private fun NavBackStackEntry.lifecycleIsResumed(): Boolean =
-    this.lifecycle.currentState == Lifecycle.State.RESUMED
-

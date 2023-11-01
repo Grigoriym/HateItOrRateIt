@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
 import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
 import com.grappim.hateitorrateit.ui.screens.settings.SettingsScreen
+import com.grappim.hateitorrateit.utils.safeClick
 import com.grappim.ui.theme.bottomNavigationBackgroundDark
 import com.grappim.ui.theme.bottomNavigationBackgroundLight
 
@@ -109,15 +110,21 @@ fun RootMainScreen(
                 navController = navController,
                 startDestination = HomeNavDestination.Home.route,
             ) {
-                composable(HomeNavDestination.Home.route) {
+                composable(HomeNavDestination.Home.route) { navBackStackEntry ->
                     HomeScreen(
-                        onDocumentClick = goToDetails
+                        onDocumentClick = { productId: Long ->
+                            navBackStackEntry.safeClick {
+                                goToDetails(productId)
+                            }
+                        }
                     )
                 }
-                composable(HomeNavDestination.Settings.route) {
+                composable(HomeNavDestination.Settings.route) { navBackStackEntry ->
                     SettingsScreen(
                         goBack = {
-                            navController.popBackStack()
+                            navBackStackEntry.safeClick {
+                                navController.popBackStack()
+                            }
                         }
                     )
                 }
