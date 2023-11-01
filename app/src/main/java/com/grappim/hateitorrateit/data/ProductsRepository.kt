@@ -1,22 +1,22 @@
 package com.grappim.hateitorrateit.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
-import com.grappim.domain.Document
 import com.grappim.domain.HateRateType
-import com.grappim.domain.ProductFileData
+import com.grappim.domain.Product
+import com.grappim.domain.ProductImageData
 import com.grappim.hateitorrateit.core.di.IoDispatcher
-import com.grappim.hateitorrateit.data.db.DocumentsDao
-import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
+import com.grappim.hateitorrateit.data.db.ProductsDao
+import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.wrapWithPercentWildcards
 import com.grappim.hateitorrateit.data.db.wrapWithSingleQuotes
-import com.grappim.hateitorrateit.data.mappers.toDocument
 import com.grappim.hateitorrateit.data.mappers.toEntities
 import com.grappim.hateitorrateit.data.mappers.toEntity
-import com.grappim.hateitorrateit.data.mappers.toFileDataEntityList
+import com.grappim.hateitorrateit.data.mappers.toImageDataEntityList
+import com.grappim.hateitorrateit.data.mappers.toProduct
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
-import com.grappim.hateitorrateit.model.CreateDocument
+import com.grappim.hateitorrateit.model.CreateProduct
 import com.grappim.hateitorrateit.utils.DateTimeUtils
-import com.grappim.hateitorrateit.utils.DraftDocument
+import com.grappim.hateitorrateit.utils.DraftProduct
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
@@ -29,54 +29,54 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class DocsRepository @Inject constructor(
+class ProductsRepository @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
-    private val documentsDao: DocumentsDao,
+    private val productsDao: ProductsDao,
     private val localDataStorage: LocalDataStorage,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
-    suspend fun getDocById(id: Long): Document {
-        val entity = documentsDao.getDocById(id)
-        val domain = entity.documentEntity.toDocument(entity.files)
+    suspend fun getProductById(id: Long): Product {
+        val entity = productsDao.getProductById(id)
+        val domain = entity.productEntity.toProduct(entity.files)
         return domain
     }
 
-    suspend fun updateDoc(
+    suspend fun updateProduct(
         id: Long,
         name: String,
         description: String,
         shop: String,
         type: HateRateType,
     ) = withContext(ioDispatcher) {
-        documentsDao.updateDoc(id, name, description, shop, type)
+        productsDao.updateProduct(id, name, description, shop, type)
     }
 
     suspend fun updateImagesInProduct(
         id: Long,
-        files: List<ProductFileData>
+        files: List<ProductImageData>
     ) = withContext(ioDispatcher) {
         val filesEntity = files.toEntities(id)
-        documentsDao.insertFiles(filesEntity)
+        productsDao.insertImages(filesEntity)
     }
 
-    suspend fun addDraftDocument(): DraftDocument = withContext(ioDispatcher) {
+    suspend fun addDraftProduct(): DraftProduct = withContext(ioDispatcher) {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
         val type = localDataStorage.typeFlow.first()
         val folderDate = dateTimeUtils.formatToGDrive(nowDate)
-        val documentEntity = DocumentEntity(
+        val productEntity = ProductEntity(
             name = "",
             createdDate = nowDate,
-            documentFolderName = "",
+            productFolderName = "",
             description = "",
             shop = "",
             type = type,
         )
 
-        val id = documentsDao.insert(documentEntity)
+        val id = productsDao.insertProduct(productEntity)
         val folderName = "${id}_${folderDate}"
-        documentsDao.updateDocFolderName(folderName, id)
-        DraftDocument(
+        productsDao.updateProductFolderName(folderName, id)
+        DraftProduct(
             id = id,
             date = nowDate,
             folderName = folderName,
@@ -84,24 +84,24 @@ class DocsRepository @Inject constructor(
         )
     }
 
-    suspend fun getEmptyFiles() = documentsDao.getEmptyFiles()
+    suspend fun getEmptyFiles() = productsDao.getEmptyFiles()
 
-    suspend fun deleteEmptyFiles() = documentsDao.deleteEmptyFiles()
+    suspend fun deleteEmptyFiles() = productsDao.deleteEmptyFiles()
 
-    suspend fun deleteDocumentImage(id: Long, name: String) =
-        documentsDao.deleteDocumentImage(id, name)
+    suspend fun deleteProductImage(id: Long, name: String) =
+        productsDao.deleteProductImageByIdAndName(id, name)
 
-    fun getAllDocsFlow(
+    fun getProductsFlow(
         query: String,
         type: HateRateType?,
-    ): Flow<List<Document>> = flow {
+    ): Flow<List<Product>> = flow {
         emitAll(if (query.isEmpty() && type == null) {
-            documentsDao.getAllDocsFlow()
+            productsDao.getAllProductsFlow()
         } else {
             val sqLiteQuery = buildSqlQuery(query, type)
-            documentsDao.getAllDocsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
+            productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
         }.mapLatest { list ->
-            list.map { it.toDocument() }
+            list.map { it.toProduct() }
         })
     }
 
@@ -109,7 +109,7 @@ class DocsRepository @Inject constructor(
         query: String,
         type: HateRateType?
     ): String {
-        val sqlQuery = StringBuilder("SELECT * FROM document_table ")
+        val sqlQuery = StringBuilder("SELECT * FROM products_table ")
         if (query.isNotEmpty() || type != null) {
             sqlQuery.append("WHERE ")
         }
@@ -142,15 +142,15 @@ class DocsRepository @Inject constructor(
         return sqlQuery.toString()
     }
 
-    suspend fun removeDocumentById(id: Long) {
-        documentsDao.deleteDocumentWithData(id)
+    suspend fun removeProductById(id: Long) {
+        productsDao.deleteProductAndImagesById(id)
     }
 
-    suspend fun addDocument(document: CreateDocument) = withContext(ioDispatcher) {
-        val entity = document.toEntity()
-        val list = document.toFileDataEntityList()
-        documentsDao.updateDocumentAndFiles(
-            documentEntity = entity,
+    suspend fun addProduct(product: CreateProduct) = withContext(ioDispatcher) {
+        val entity = product.toEntity()
+        val list = product.toImageDataEntityList()
+        productsDao.updateProductAndImages(
+            productEntity = entity,
             list = list
         )
     }

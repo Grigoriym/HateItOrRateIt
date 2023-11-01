@@ -6,14 +6,14 @@ import com.grappim.domain.HateRateType
 import java.time.OffsetDateTime
 
 @Entity(
-    tableName = "document_table"
+    tableName = "products_table"
 )
-data class DocumentEntity(
+data class ProductEntity(
     @PrimaryKey(autoGenerate = true)
-    val documentId: Long = 0,
+    val productId: Long = 0,
     val name: String,
     val createdDate: OffsetDateTime,
-    val documentFolderName: String,
+    val productFolderName: String,
     val description: String,
     val shop: String,
     val type: HateRateType,

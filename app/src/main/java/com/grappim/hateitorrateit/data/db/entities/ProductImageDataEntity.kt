@@ -4,13 +4,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(
-    tableName = "document_file_data_table"
+    tableName = "product_image_data_table"
 )
-data class DocumentFileDataEntity(
+data class ProductImageDataEntity(
     @PrimaryKey(autoGenerate = true)
-    val fileId: Long = 0,
+    val imageId: Long = 0,
 
-    val documentId: Long,
+    val productId: Long,
 
     val name: String,
     val mimeType: String,
@@ -19,5 +19,5 @@ data class DocumentFileDataEntity(
     val uriPath: String,
     val uriString: String,
 
-    val md5: String
+    val md5: String,
 )

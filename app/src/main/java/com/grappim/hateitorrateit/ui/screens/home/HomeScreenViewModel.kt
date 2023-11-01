@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.domain.HateRateType
-import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val docsRepository: DocsRepository,
+    private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class HomeScreenViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        getDocs()
+        getProducts()
     }
 
     private fun onFilterSelected(type: HateRateType) {
@@ -44,20 +44,20 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-    private fun getDocs() {
+    private fun getProducts() {
         viewModelScope.launch {
             viewState.flatMapLatest { state ->
-                docsRepository.getAllDocsFlow(
+                productsRepository.getProductsFlow(
                     query = state.query,
                     type = state.selectedType,
                 ).map {
-                    it.map { document ->
-                        uiModelsMapper.toDocumentUi(document)
+                    it.map { product ->
+                        uiModelsMapper.toProductUi(product)
                     }
-                }.onEach { docs ->
+                }.onEach { products ->
                     _viewState.update {
                         it.copy(
-                            docs = docs
+                            products = products
                         )
                     }
                 }

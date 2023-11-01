@@ -2,7 +2,7 @@
     <string name="app_name">HateItOrRateIt</string>
 
     <string name="add_file">Please add a file</string>
-    <string name="set_name">Please set a name for a document</string>
+    <string name="set_name">Please set a name for a product</string>
     <string name="add_picture_from">Add picture from:</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
@@ -14,7 +14,9 @@
     <string name="save_changes_before_exit">Save the changes before exit?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">Ok</string>
     <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
     <string name="clear_data">Clear All Data</string>
     <string name="default_type">Default Type</string>
     <string name="settings">Settings</string>
@@ -22,4 +24,7 @@
     <string name="search">Search</string>
     <string name="delete_image">Delete Image</string>
     <string name="are_you_sure_to_delete_product">Are you sure you want to delete the product?</string>
+    <string name="if_quit_lose_data">If you quit, you will lose all the data</string>
+    <string name="hate">Hate</string>
+    <string name="rate">Rate</string>
 </resources>

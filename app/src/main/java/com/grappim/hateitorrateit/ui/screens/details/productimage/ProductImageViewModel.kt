@@ -1,14 +1,12 @@
-package com.grappim.hateitorrateit.ui.screens.details.docimage
+package com.grappim.hateitorrateit.ui.screens.details.productimage
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.di.IoDispatcher
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
-import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -16,15 +14,14 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DocImageViewModel @Inject constructor(
-    private val docsRepository: DocsRepository,
+class ProductImageViewModel @Inject constructor(
+    private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val docId = checkNotNull(
-        savedStateHandle.get<String>(RootNavDestinations.DetailsImage.KEY_DOC_ID)
+    private val productId = checkNotNull(
+        savedStateHandle.get<String>(RootNavDestinations.DetailsImage.KEY_PRODUCT_ID)
     )
 
     private val index = checkNotNull(
@@ -32,23 +29,23 @@ class DocImageViewModel @Inject constructor(
     )
 
     private val _viewState = MutableStateFlow(
-        DocImageViewModelState()
+        ImageViewModelState()
     )
     val viewState = _viewState.asStateFlow()
 
     init {
-        getDoc()
+        getProduct()
     }
 
-    private fun getDoc() {
+    private fun getProduct() {
         viewModelScope.launch {
-            val document = docsRepository.getDocById(docId.toLong())
-            val docUi = uiModelsMapper.toDocumentDetailsImageU(document)
-            val uri = docUi.filesUri[index]
+            val product = productsRepository.getProductById(productId.toLong())
+            val productUi = uiModelsMapper.toProductDetailsImageUI(product)
+            val uri = productUi.filesUri[index]
             _viewState.update {
                 it.copy(
                     uri = uri.uriString,
-                    fileUris = docUi.filesUri
+                    images = productUi.filesUri
                 )
             }
         }

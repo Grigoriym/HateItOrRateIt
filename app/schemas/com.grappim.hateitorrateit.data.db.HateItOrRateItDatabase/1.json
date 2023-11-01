@@ -2,15 +2,15 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "25241770bf8a9f45232f5e4dc8e225d0",
+    "identityHash": "6c8671b610c4d4cb084ee07375128b88",
     "entities": [
       {
-        "tableName": "document_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`documentId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `createdDate` TEXT NOT NULL, `documentFolderName` TEXT NOT NULL, `description` TEXT NOT NULL, `shop` TEXT NOT NULL, `type` TEXT NOT NULL, `isCreated` INTEGER NOT NULL)",
+        "tableName": "products_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`productId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `createdDate` TEXT NOT NULL, `productFolderName` TEXT NOT NULL, `description` TEXT NOT NULL, `shop` TEXT NOT NULL, `type` TEXT NOT NULL, `isCreated` INTEGER NOT NULL)",
         "fields": [
           {
-            "fieldPath": "documentId",
-            "columnName": "documentId",
+            "fieldPath": "productId",
+            "columnName": "productId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -27,8 +27,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "documentFolderName",
-            "columnName": "documentFolderName",
+            "fieldPath": "productFolderName",
+            "columnName": "productFolderName",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -60,25 +60,25 @@
         "primaryKey": {
           "autoGenerate": true,
           "columnNames": [
-            "documentId"
+            "productId"
           ]
         },
         "indices": [],
         "foreignKeys": []
       },
       {
-        "tableName": "document_file_data_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`fileId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `documentId` INTEGER NOT NULL, `name` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `size` INTEGER NOT NULL, `uriPath` TEXT NOT NULL, `uriString` TEXT NOT NULL, `md5` TEXT NOT NULL)",
+        "tableName": "product_image_data_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`imageId` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `productId` INTEGER NOT NULL, `name` TEXT NOT NULL, `mimeType` TEXT NOT NULL, `size` INTEGER NOT NULL, `uriPath` TEXT NOT NULL, `uriString` TEXT NOT NULL, `md5` TEXT NOT NULL)",
         "fields": [
           {
-            "fieldPath": "fileId",
-            "columnName": "fileId",
+            "fieldPath": "imageId",
+            "columnName": "imageId",
             "affinity": "INTEGER",
             "notNull": true
           },
           {
-            "fieldPath": "documentId",
-            "columnName": "documentId",
+            "fieldPath": "productId",
+            "columnName": "productId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -122,7 +122,7 @@
         "primaryKey": {
           "autoGenerate": true,
           "columnNames": [
-            "fileId"
+            "imageId"
           ]
         },
         "indices": [],
@@ -132,7 +132,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '25241770bf8a9f45232f5e4dc8e225d0')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6c8671b610c4d4cb084ee07375128b88')"
     ]
   }
 }

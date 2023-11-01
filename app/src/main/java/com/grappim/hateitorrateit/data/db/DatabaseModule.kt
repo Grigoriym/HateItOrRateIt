@@ -28,7 +28,7 @@ class DatabaseModule {
             .build()
 
     @[Provides Singleton]
-    fun provideDocumentsDao(
+    fun provideProductsDao(
         hateItOrRateItDatabase: HateItOrRateItDatabase
-    ): DocumentsDao = hateItOrRateItDatabase.documentsDao()
+    ): ProductsDao = hateItOrRateItDatabase.productsDao()
 }

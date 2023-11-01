@@ -13,18 +13,18 @@ sealed interface RootNavDestinations {
 
     data object Details : RootNavDestinations {
         private const val PREFIX = "details/"
-        const val KEY = "docId"
-        override val route: String = "${PREFIX}docId={$KEY}"
-        fun getRouteWithDocId(docId: Long) = "${PREFIX}docId=$docId"
+        const val KEY = "productId"
+        override val route: String = "${PREFIX}${KEY}={$KEY}"
+        fun getRouteWithProductId(productId: Long) = "${PREFIX}${KEY}=$productId"
     }
 
     data object DetailsImage : RootNavDestinations {
         const val KEY_INDEX = "keyIndex"
-        const val KEY_DOC_ID = "keyDocId"
+        const val KEY_PRODUCT_ID = "keyProductId"
 
         private const val PREFIX = "detailsImage/"
 
-        override val route: String = "${PREFIX}?docId={$KEY_DOC_ID}&index={$KEY_INDEX}"
-        fun getRouteWithUri(docId: String, index: Int) = "${PREFIX}?docId=$docId&index=$index"
+        override val route: String = "${PREFIX}?productId={$KEY_PRODUCT_ID}&index={$KEY_INDEX}"
+        fun getRouteWithUri(productId: String, index: Int) = "${PREFIX}?productId=$productId&index=$index"
     }
 }

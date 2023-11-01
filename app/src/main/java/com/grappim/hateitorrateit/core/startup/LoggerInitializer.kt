@@ -26,7 +26,7 @@ private class DevelopmentTree : Timber.DebugTree() {
     override fun createStackElementTag(element: StackTraceElement): String {
         return String.format(
             Locale.US,
-            "DocsOfMine-${BuildConfig.BUILD_TYPE}:C:%s:%s",
+            "HateItOrRateIt-${BuildConfig.BUILD_TYPE}:C:%s:%s",
             super.createStackElementTag(element),
             element.lineNumber
         )

@@ -112,7 +112,7 @@ fun RootMainScreen(
             ) {
                 composable(HomeNavDestination.Home.route) { navBackStackEntry ->
                     HomeScreen(
-                        onDocumentClick = { productId: Long ->
+                        onProductClick = { productId: Long ->
                             navBackStackEntry.safeClick {
                                 goToDetails(productId)
                             }

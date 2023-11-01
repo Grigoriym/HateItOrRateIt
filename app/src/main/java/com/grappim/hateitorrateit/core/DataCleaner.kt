@@ -1,10 +1,10 @@
 package com.grappim.hateitorrateit.core
 
-import com.grappim.domain.ProductFileData
+import com.grappim.domain.ProductImageData
 import com.grappim.hateitorrateit.core.di.IoDispatcher
-import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
-import com.grappim.hateitorrateit.utils.DraftDocument
+import com.grappim.hateitorrateit.utils.DraftProduct
 import com.grappim.hateitorrateit.utils.FileUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.runBlocking
@@ -18,7 +18,7 @@ import javax.inject.Inject
  */
 class DataCleaner @Inject constructor(
     private val fileUtils: FileUtils,
-    private val documentRepository: DocsRepository,
+    private val productsRepository: ProductsRepository,
     private val hateItOrRateItDatabase: HateItOrRateItDatabase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
@@ -29,7 +29,7 @@ class DataCleaner @Inject constructor(
         uriString: String,
     ): Boolean = withContext(ioDispatcher) {
         if (fileUtils.deleteFile(uriString)) {
-            documentRepository.deleteDocumentImage(id, imageName)
+            productsRepository.deleteProductImage(id, imageName)
             return@withContext true
         }
         false
@@ -37,7 +37,7 @@ class DataCleaner @Inject constructor(
 
     suspend fun deleteProductFileData(
         id: Long,
-        list: List<ProductFileData>
+        list: List<ProductImageData>
     ) = withContext(ioDispatcher) {
         list.forEach {
             clearProductImage(
@@ -48,21 +48,21 @@ class DataCleaner @Inject constructor(
         }
     }
 
-    suspend fun clearDocumentData(
+    suspend fun clearProductData(
         id: Long,
-        documentFolderName: String,
+        productFolderName: String,
     ) = withContext(ioDispatcher) {
         Timber.d("start cleaning")
-        fileUtils.deleteFolder(documentFolderName)
-        documentRepository.removeDocumentById(id)
+        fileUtils.deleteFolder(productFolderName)
+        productsRepository.removeProductById(id)
     }
 
-    suspend fun clearDocumentData(
-        draftDocument: DraftDocument
+    suspend fun clearProductData(
+        draftProduct: DraftProduct
     ) = withContext(ioDispatcher) {
         Timber.d("start cleaning")
-        fileUtils.deleteFolder(draftDocument.folderName)
-        documentRepository.removeDocumentById(draftDocument.id)
+        fileUtils.deleteFolder(draftProduct.folderName)
+        productsRepository.removeProductById(draftProduct.id)
     }
 
     suspend fun clearAllData() = withContext(ioDispatcher) {

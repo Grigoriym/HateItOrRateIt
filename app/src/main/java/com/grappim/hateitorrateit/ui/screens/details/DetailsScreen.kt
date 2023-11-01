@@ -69,13 +69,12 @@ import com.grappim.ui.widgets.PlatoProgressIndicator
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
 fun DetailsScreen(
     viewModel: DetailsViewModel = hiltViewModel(),
     goBack: () -> Unit,
-    onDocImageClicked: (docId: String, index: Int) -> Unit,
+    onImageClicked: (productId: String, index: Int) -> Unit,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
@@ -89,7 +88,7 @@ fun DetailsScreen(
         DetailsScreenContent(
             state = state,
             goBack = goBack,
-            onDocImageClicked = onDocImageClicked,
+            onImageClicked = onImageClicked,
         )
     } else {
         PlatoProgressIndicator(true)
@@ -100,12 +99,12 @@ fun DetailsScreen(
 private fun DetailsScreenContent(
     state: DetailsViewState,
     goBack: () -> Unit,
-    onDocImageClicked: (docId: String, index: Int) -> Unit,
+    onImageClicked: (productId: String, index: Int) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     val pagerState = rememberPagerState {
-        state.filesUris.size
+        state.images.size
     }
 
     var cameraTakePictureData by remember {
@@ -132,11 +131,10 @@ private fun DetailsScreenContent(
 
     var firstRecomposition by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(state.filesUris) {
-        Timber.d("")
+    LaunchedEffect(state.images) {
         coroutineScope.launch {
-            if (!firstRecomposition && state.filesUris.isNotEmpty()) {
-                pagerState.animateScrollToPage(state.filesUris.lastIndex)
+            if (!firstRecomposition && state.images.isNotEmpty()) {
+                pagerState.animateScrollToPage(state.images.lastIndex)
             }
             firstRecomposition = false
         }
@@ -145,6 +143,7 @@ private fun DetailsScreenContent(
     PlatoAlertDialog(
         text = stringResource(id = R.string.are_you_sure_to_delete_product),
         showAlertDialog = state.showAlertDialog,
+        dismissButtonText = stringResource(id = R.string.no),
         onDismissRequest = {
             state.onShowAlertDialog(false)
         },
@@ -168,14 +167,14 @@ private fun DetailsScreenContent(
                 .fillMaxWidth()
                 .weight(1.2f),
         ) {
-            if (state.filesUris.isNotEmpty()) {
+            if (state.images.isNotEmpty()) {
                 HorizontalPager(
                     modifier = Modifier
                         .fillMaxSize()
                         .align(Alignment.TopCenter),
                     state = pagerState,
                 ) { index ->
-                    val file = state.filesUris[index]
+                    val file = state.images[index]
                     PlatoCard(
                         shape = RoundedCornerShape(
                             bottomEnd = 16.dp,
@@ -183,7 +182,7 @@ private fun DetailsScreenContent(
                         ),
                         onClick = {
                             if (state.isEdit.not()) {
-                                onDocImageClicked(
+                                onImageClicked(
                                     state.id,
                                     index
                                 )
@@ -207,7 +206,7 @@ private fun DetailsScreenContent(
                 )
             }
 
-            if (state.filesUris.size > 1) {
+            if (state.images.size > 1) {
                 Row(
                     modifier = Modifier
                         .wrapContentHeight()
@@ -215,7 +214,7 @@ private fun DetailsScreenContent(
                         .align(Alignment.BottomCenter),
                     horizontalArrangement = Arrangement.Center
                 ) {
-                    repeat(state.filesUris.size) { iteration ->
+                    repeat(state.images.size) { iteration ->
                         val color =
                             if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                         Box(
@@ -295,7 +294,7 @@ private fun DetailsScreenContent(
                         Spacer(modifier = Modifier.width(12.dp))
                         PlatoIconButton(
                             icon = Icons.Filled.Delete,
-                            onButtonClick = state.onDeleteDocument
+                            onButtonClick = state.onDeleteProduct
                         )
                     }
                 })

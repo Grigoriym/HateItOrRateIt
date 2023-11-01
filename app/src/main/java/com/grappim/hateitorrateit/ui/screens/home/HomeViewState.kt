@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.home
 
 import com.grappim.domain.HateRateType
-import com.grappim.hateitorrateit.model.DocumentListUI
+import com.grappim.hateitorrateit.model.ProductListUI
 
 data class HomeViewState(
     val query: String = "",
@@ -9,7 +9,7 @@ data class HomeViewState(
     val onSearchQueryChanged: (query: String) -> Unit,
     val onClearQueryClicked: () -> Unit,
 
-    val docs: List<DocumentListUI> = emptyList(),
+    val products: List<ProductListUI> = emptyList(),
 
     val selectedType: HateRateType? = null,
     val onFilterSelected: (HateRateType) -> Unit,

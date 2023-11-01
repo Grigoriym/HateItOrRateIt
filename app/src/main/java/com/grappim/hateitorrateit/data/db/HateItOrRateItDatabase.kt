@@ -3,13 +3,13 @@ package com.grappim.hateitorrateit.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.grappim.hateitorrateit.data.db.entities.DocumentEntity
-import com.grappim.hateitorrateit.data.db.entities.DocumentFileDataEntity
+import com.grappim.hateitorrateit.data.db.entities.ProductEntity
+import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 
 @[Database(
     entities = [
-        DocumentEntity::class,
-        DocumentFileDataEntity::class,
+        ProductEntity::class,
+        ProductImageDataEntity::class,
     ],
     version = 1,
     exportSchema = true,
@@ -20,6 +20,6 @@ TypeConverters(
 )]
 abstract class HateItOrRateItDatabase : RoomDatabase() {
 
-    abstract fun documentsDao(): DocumentsDao
+    abstract fun productsDao(): ProductsDao
     abstract fun databaseDao(): DatabaseDao
 }

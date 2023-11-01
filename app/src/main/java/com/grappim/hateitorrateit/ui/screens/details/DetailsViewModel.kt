@@ -7,10 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
-import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.FileData
+import com.grappim.hateitorrateit.utils.ImageData
 import com.grappim.hateitorrateit.utils.FileUtils
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,14 +21,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    private val docsRepository: DocsRepository,
+    private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
     private val dataCleaner: DataCleaner,
     private val fileUtils: FileUtils,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val docId = checkNotNull(savedStateHandle.get<Long>(RootNavDestinations.Details.KEY))
+    private val productId = checkNotNull(savedStateHandle.get<Long>(RootNavDestinations.Details.KEY))
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(
@@ -38,7 +38,7 @@ class DetailsViewModel @Inject constructor(
             toggleEditMode = ::toggleEditMode,
             onEditSubmit = ::onEditSubmit,
             onTypeChanged = ::setType,
-            onDeleteDocument = ::onDeleteDocument,
+            onDeleteProduct = ::onDeleteProduct,
             onShowAlertDialog = ::onShowAlertDialog,
             onDeleteProductConfirm = ::onDeleteConfirm,
             onDeleteImage = ::onDeleteImage,
@@ -51,7 +51,7 @@ class DetailsViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        getDoc(docId)
+        getProduct(productId)
     }
 
     private fun addCameraPicture(cameraTakePictureData: CameraTakePictureData) {
@@ -67,33 +67,33 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch {
             val fileData = fileUtils.getFileUrisFromGalleryUri(
                 uri = uri,
-                folderName = viewState.value.documentFolderName,
+                folderName = viewState.value.productFolderName,
             )
             addFileData(fileData)
         }
     }
 
-    private fun addFileData(fileData: FileData) {
+    private fun addFileData(imageData: ImageData) {
         viewModelScope.launch {
-            val productFileData = fileUtils.toDocumentFileData(fileData)
-            docsRepository.updateImagesInProduct(
+            val productFileData = fileUtils.toProductImageData(imageData)
+            productsRepository.updateImagesInProduct(
                 id = viewState.value.id.toLong(),
                 files = listOf(productFileData)
             )
 
-            val result = _viewState.value.filesUris + productFileData
+            val result = _viewState.value.images + productFileData
             _viewState.update {
-                it.copy(filesUris = result)
+                it.copy(images = result)
             }
         }
     }
 
     private fun getCameraImageFileUri(): CameraTakePictureData =
-        fileUtils.getFileUriForTakePicture(viewState.value.documentFolderName)
+        fileUtils.getFileUriForTakePicture(viewState.value.productFolderName)
 
     private fun onDeleteImage(pageIndex: Int) {
         viewModelScope.launch {
-            val fileData = viewState.value.filesUris[pageIndex]
+            val fileData = viewState.value.images[pageIndex]
             val name = fileData.name
             val result = dataCleaner.clearProductImage(
                 id = viewState.value.id.toLong(),
@@ -103,8 +103,8 @@ class DetailsViewModel @Inject constructor(
 
             if (result) {
                 _viewState.update { currentState ->
-                    val updatedFilesUris = currentState.filesUris.filterNot { it.name == name }
-                    currentState.copy(filesUris = updatedFilesUris)
+                    val updatedFilesUris = currentState.images.filterNot { it.name == name }
+                    currentState.copy(images = updatedFilesUris)
                 }
             }
         }
@@ -117,8 +117,8 @@ class DetailsViewModel @Inject constructor(
             }
 
             val id = viewState.value.id.toLong()
-            val folderName = viewState.value.documentFolderName
-            dataCleaner.clearDocumentData(id, folderName)
+            val folderName = viewState.value.productFolderName
+            dataCleaner.clearProductData(id, folderName)
 
             _viewState.update {
                 it.copy(productDeleted = true)
@@ -134,7 +134,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onDeleteDocument() {
+    private fun onDeleteProduct() {
         _viewState.update {
             it.copy(showAlertDialog = true)
         }
@@ -154,7 +154,7 @@ class DetailsViewModel @Inject constructor(
 
     private fun onEditSubmit() {
         viewModelScope.launch {
-            docsRepository.updateDoc(
+            productsRepository.updateProduct(
                 id = viewState.value.id.toLong(),
                 name = viewState.value.nameToEdit,
                 description = viewState.value.descriptionToEdit,
@@ -198,21 +198,21 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun getDoc(id: Long) {
+    private fun getProduct(id: Long) {
         viewModelScope.launch {
-            val document = docsRepository.getDocById(id)
-            val docUi = uiModelsMapper.toDocumentDetailsUi(document)
+            val product = productsRepository.getProductById(id)
+            val productDetailsUi = uiModelsMapper.toProductDetailsUi(product)
             _viewState.update {
                 it.copy(
-                    id = docUi.id,
-                    name = docUi.name,
-                    description = docUi.description,
-                    shop = docUi.shop,
-                    createdDate = docUi.createdDate,
-                    filesUris = docUi.filesUri,
+                    id = productDetailsUi.id,
+                    name = productDetailsUi.name,
+                    description = productDetailsUi.description,
+                    shop = productDetailsUi.shop,
+                    createdDate = productDetailsUi.createdDate,
+                    images = productDetailsUi.filesUri,
                     isLoading = false,
-                    type = docUi.type,
-                    documentFolderName = docUi.documentFolderName,
+                    type = productDetailsUi.type,
+                    productFolderName = productDetailsUi.productFolderName,
                 )
             }
         }

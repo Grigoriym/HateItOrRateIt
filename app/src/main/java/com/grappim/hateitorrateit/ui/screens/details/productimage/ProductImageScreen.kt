@@ -1,17 +1,15 @@
-package com.grappim.hateitorrateit.ui.screens.details.docimage
+package com.grappim.hateitorrateit.ui.screens.details.productimage
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.HorizontalPager
@@ -19,10 +17,6 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -35,18 +29,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.ui.widgets.PlatoCard
-import com.grappim.ui.widgets.PlatoIconButton
 import com.grappim.ui.widgets.PlatoTopBar
 
 @Composable
-fun DocImageScreen(
-    viewModel: DocImageViewModel = hiltViewModel(),
+fun ProductImageScreen(
+    viewModel: ProductImageViewModel = hiltViewModel(),
     goBack: () -> Unit
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     if (state.uri.isNotEmpty()) {
-        DocImageContent(
+        ImageContent(
             state = state,
             goBack = goBack,
         )
@@ -54,12 +47,12 @@ fun DocImageScreen(
 }
 
 @Composable
-private fun DocImageContent(
-    state: DocImageViewModelState,
+private fun ImageContent(
+    state: ImageViewModelState,
     goBack: () -> Unit
 ) {
     val pagerState = rememberPagerState {
-        state.fileUris.size
+        state.images.size
     }
 
     Scaffold(
@@ -78,7 +71,7 @@ private fun DocImageContent(
                     .align(Alignment.Center),
                 state = pagerState
             ) { page ->
-                val file = state.fileUris[page]
+                val file = state.images[page]
                 Image(
                     modifier = Modifier
                         .fillMaxSize(),
@@ -96,7 +89,7 @@ private fun DocImageContent(
                 elevation = 0.dp,
             )
 
-            if (state.fileUris.size > 1) {
+            if (state.images.size > 1) {
                 PlatoCard(
                     modifier = Modifier
                         .wrapContentHeight()
@@ -110,7 +103,7 @@ private fun DocImageContent(
                     Row(
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        repeat(state.fileUris.size) { iteration ->
+                        repeat(state.images.size) { iteration ->
                             val color =
                                 if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
                             Box(

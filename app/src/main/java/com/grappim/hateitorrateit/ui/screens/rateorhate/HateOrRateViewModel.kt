@@ -8,11 +8,11 @@ import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.SnackbarStateViewModel
 import com.grappim.hateitorrateit.core.SnackbarStateViewModelImpl
-import com.grappim.hateitorrateit.data.DocsRepository
+import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
-import com.grappim.hateitorrateit.model.CreateDocument
+import com.grappim.hateitorrateit.model.CreateProduct
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.FileData
+import com.grappim.hateitorrateit.utils.ImageData
 import com.grappim.hateitorrateit.utils.FileUtils
 import com.grappim.ui.R
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,7 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class HateOrRateViewModel @Inject constructor(
     private val fileUtils: FileUtils,
-    private val docsRepository: DocsRepository,
+    private val productsRepository: ProductsRepository,
     private val dataCleaner: DataCleaner,
     private val localDataStorage: LocalDataStorage,
 ) : ViewModel(),
@@ -37,12 +37,12 @@ class HateOrRateViewModel @Inject constructor(
             setDescription = ::setDescription,
             setName = ::setName,
             setShop = ::setShop,
-            onRemoveFileTriggered = ::removeFile,
+            onRemoveImageTriggered = ::removeFile,
             onAddImageFromGalleryClicked = ::addImageFromGallery,
             onAddCameraPictureClicked = ::addCameraPicture,
             removeData = ::removeData,
             saveData = ::saveData,
-            createDocument = ::createDocument,
+            createProduct = ::createProduct,
             getCameraImageFileUri = ::getCameraImageFileUri,
             onTypeClicked = ::onTypeClicked,
             onShowAlertDialog = ::onShowAlertDialog,
@@ -60,7 +60,7 @@ class HateOrRateViewModel @Inject constructor(
             }
         }
 
-        addDraftDoc()
+        addDraftProduct()
     }
 
     private fun onForceQuit() {
@@ -84,13 +84,13 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    private fun addDraftDoc() {
+    private fun addDraftProduct() {
         viewModelScope.launch {
-            val draftDoc = docsRepository.addDraftDocument()
+            val draftProduct = productsRepository.addDraftProduct()
             _viewState.update {
                 it.copy(
-                    type = draftDoc.type,
-                    draftDocument = draftDoc,
+                    type = draftProduct.type,
+                    draftProduct = draftProduct,
                 )
             }
         }
@@ -100,16 +100,16 @@ class HateOrRateViewModel @Inject constructor(
         viewModelScope.launch {
             val fileData = fileUtils.getFileUrisFromGalleryUri(
                 uri = uri,
-                folderName = requireNotNull(viewState.value.draftDocument).folderName
+                folderName = requireNotNull(viewState.value.draftProduct).folderName
             )
-            addFileData(fileData)
+            addImageData(fileData)
         }
     }
 
-    private fun addFileData(fileData: FileData) {
-        val result = _viewState.value.filesUris + fileData
+    private fun addImageData(imageData: ImageData) {
+        val result = _viewState.value.images + imageData
         _viewState.update {
-            it.copy(filesUris = result)
+            it.copy(images = result)
         }
     }
 
@@ -118,29 +118,29 @@ class HateOrRateViewModel @Inject constructor(
             val fileData = fileUtils.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData
             )
-            addFileData(fileData)
+            addImageData(fileData)
         }
     }
 
     private fun getCameraImageFileUri(): CameraTakePictureData =
-        fileUtils.getFileUriForTakePicture((requireNotNull(viewState.value.draftDocument)).folderName)
+        fileUtils.getFileUriForTakePicture((requireNotNull(viewState.value.draftProduct)).folderName)
 
     private fun removeData() {
         viewModelScope.launch {
-            val draftDoc = requireNotNull(viewState.value.draftDocument)
-            dataCleaner.clearDocumentData(draftDoc)
+            val draftProduct = requireNotNull(viewState.value.draftProduct)
+            dataCleaner.clearProductData(draftProduct)
         }
     }
 
     private fun saveData() {
         viewModelScope.launch {
-            saveDocument()
+            saveProduct()
         }
     }
 
     private fun setName(name: String) {
         _viewState.update {
-            it.copy(documentName = name)
+            it.copy(productName = name)
         }
     }
 
@@ -156,23 +156,23 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    private fun saveDocument() {
+    private fun saveProduct() {
         viewModelScope.launch {
-            val currentDraft = requireNotNull(viewState.value.draftDocument)
-            val name = _viewState.value.documentName.trim()
+            val currentDraft = requireNotNull(viewState.value.draftProduct)
+            val name = _viewState.value.productName.trim()
             val description = _viewState.value.description.trim()
             val shop = _viewState.value.shop.trim()
             val type = _viewState.value.type
 
-            docsRepository.addDocument(
-                CreateDocument(
+            productsRepository.addProduct(
+                CreateProduct(
                     id = currentDraft.id,
                     name = name,
-                    filesUri = _viewState.value.filesUris.map {
-                        fileUtils.toDocumentFileData(it)
+                    filesUri = _viewState.value.images.map {
+                        fileUtils.toProductImageData(it)
                     },
                     createdDate = currentDraft.date,
-                    documentFolderName = currentDraft.folderName,
+                    productFolderName = currentDraft.folderName,
                     description = description,
                     shop = shop,
                     type = type,
@@ -184,30 +184,30 @@ class HateOrRateViewModel @Inject constructor(
         }
     }
 
-    private fun createDocument() {
+    private fun createProduct() {
         viewModelScope.launch {
             when {
-                _viewState.value.documentName.isBlank() -> {
+                _viewState.value.productName.isBlank() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.set_name))
                 }
 
-                _viewState.value.filesUris.isEmpty() -> {
+                _viewState.value.images.isEmpty() -> {
                     setSnackbarMessageSuspend(NativeText.Resource(R.string.add_file))
                 }
 
                 else -> {
-                    saveDocument()
+                    saveProduct()
                 }
             }
         }
     }
 
-    private fun removeFile(fileData: FileData) {
-        if (fileUtils.deleteFile(fileData.uri)) {
-            Timber.d("file removed: $fileData")
+    private fun removeFile(imageData: ImageData) {
+        if (fileUtils.deleteFile(imageData.uri)) {
+            Timber.d("file removed: $imageData")
             _viewState.update { currentState ->
-                val updatedFilesUris = currentState.filesUris.filterNot { it == fileData }
-                currentState.copy(filesUris = updatedFilesUris)
+                val updatedFilesUris = currentState.images.filterNot { it == imageData }
+                currentState.copy(images = updatedFilesUris)
             }
         }
     }

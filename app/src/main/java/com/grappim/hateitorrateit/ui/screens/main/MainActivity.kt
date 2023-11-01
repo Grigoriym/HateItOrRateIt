@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.ui.screens.details.DetailsScreen
-import com.grappim.hateitorrateit.ui.screens.details.docimage.DocImageScreen
+import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
 import com.grappim.hateitorrateit.ui.screens.rateorhate.RateOrHateScreen
 import com.grappim.hateitorrateit.utils.safeClick
 import com.grappim.ui.theme.HateItOrRateItTheme
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
                         goToDetails = { id ->
                             navBackStackEntry.safeClick {
                                 navController.navigate(
-                                    RootNavDestinations.Details.getRouteWithDocId(
+                                    RootNavDestinations.Details.getRouteWithProductId(
                                         id
                                     )
                                 )
@@ -77,7 +77,7 @@ class MainActivity : ComponentActivity() {
                                 navController.popBackStack()
                             }
                         },
-                        onDocumentCreated = {
+                        onProductCreated = {
                             navBackStackEntry.safeClick {
                                 navController.popBackStack()
                             }
@@ -96,11 +96,11 @@ class MainActivity : ComponentActivity() {
                                 navController.popBackStack()
                             }
                         },
-                        onDocImageClicked = { docId, index ->
+                        onImageClicked = { productId, index ->
                             navBackStackEntry.safeClick {
                                 navController.navigate(
                                     RootNavDestinations.DetailsImage.getRouteWithUri(
-                                        docId = docId,
+                                        productId = productId,
                                         index = index
                                     )
                                 )
@@ -114,7 +114,7 @@ class MainActivity : ComponentActivity() {
                         type = NavType.IntType
                     })
                 ) { navBackStackEntry ->
-                    DocImageScreen(
+                    ProductImageScreen(
                         goBack = {
                             navBackStackEntry.safeClick {
                                 navController.popBackStack()

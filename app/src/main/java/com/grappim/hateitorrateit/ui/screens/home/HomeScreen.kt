@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.domain.HateRateType
-import com.grappim.hateitorrateit.model.DocumentListUI
+import com.grappim.hateitorrateit.model.ProductListUI
 import com.grappim.ui.R
 import com.grappim.ui.color
 import com.grappim.ui.icon
@@ -52,19 +52,19 @@ import com.grappim.ui.widgets.text.TextH5
 @Composable
 fun HomeScreen(
     viewModel: HomeScreenViewModel = hiltViewModel(),
-    onDocumentClick: (id: Long) -> Unit
+    onProductClick: (id: Long) -> Unit
 ) {
     val state by viewModel.viewState.collectAsState()
     HomeScreenContent(
         state = state,
-        onDocumentClick = onDocumentClick,
+        onProductClick = onProductClick,
     )
 }
 
 @Composable
 private fun HomeScreenContent(
     state: HomeViewState,
-    onDocumentClick: (id: Long) -> Unit,
+    onProductClick: (id: Long) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -75,51 +75,16 @@ private fun HomeScreenContent(
         SearchContent(
             state = state,
         )
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            FilterChip(
-                selected = state.selectedType == HateRateType.HATE,
-                onClick = {
-                    state.onFilterSelected(HateRateType.HATE)
-                },
-                leadingIcon = if (state.selectedType == HateRateType.HATE) {
-                    {
-                        Icon(
-                            imageVector = Icons.Filled.Done,
-                            contentDescription = "Done icon",
-                        )
-                    }
-                } else {
-                    null
-                }) {
-                Text("Hate")
-            }
-            FilterChip(
-                selected = state.selectedType == HateRateType.RATE,
-                onClick = {
-                    state.onFilterSelected(HateRateType.RATE)
-                },
-                leadingIcon = if (state.selectedType == HateRateType.RATE) {
-                    {
-                        Icon(
-                            imageVector = Icons.Filled.Done,
-                            contentDescription = "Done icon",
-                        )
-                    }
-                } else {
-                    null
-                }) {
-                Text("Rate")
-            }
-        }
+        FilterChipsContent(
+            state = state,
+        )
         LazyColumn(
             modifier = Modifier
                 .padding(top = 4.dp)
                 .fillMaxSize()
         ) {
-            items(state.docs) { document ->
-                DocItem(document, onDocumentClick)
+            items(state.products) { products ->
+                ProductItem(products, onProductClick)
             }
         }
     }
@@ -170,9 +135,9 @@ private fun SearchContent(
 }
 
 @Composable
-private fun DocItem(
-    document: DocumentListUI,
-    onDocumentClick: (id: Long) -> Unit,
+private fun ProductItem(
+    product: ProductListUI,
+    onProductClick: (id: Long) -> Unit,
 ) {
     PlatoCard(
         modifier = Modifier
@@ -180,11 +145,11 @@ private fun DocItem(
             .fillMaxWidth()
             .height(200.dp),
         onClick = {
-            onDocumentClick(document.id.toLong())
+            onProductClick(product.id.toLong())
         },
     ) {
         Box {
-            if (document.previewUriString.isEmpty()) {
+            if (product.previewUriString.isEmpty()) {
                 PlatoPlaceholderImage(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -195,7 +160,7 @@ private fun DocItem(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
                         .fillMaxSize(),
-                    painter = rememberAsyncImagePainter(model = document.previewUriString),
+                    painter = rememberAsyncImagePainter(model = product.previewUriString),
                     contentScale = ContentScale.Crop,
                     contentDescription = "",
                 )
@@ -224,7 +189,7 @@ private fun DocItem(
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         TextH5(
-                            text = document.name,
+                            text = product.name,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
                         )
@@ -236,13 +201,59 @@ private fun DocItem(
                             .wrapContentWidth()
                     ) {
                         Icon(
-                            imageVector = document.type.icon(),
+                            imageVector = product.type.icon(),
                             contentDescription = "",
-                            tint = document.type.color(),
+                            tint = product.type.color(),
                         )
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun FilterChipsContent(
+    modifier: Modifier = Modifier,
+    state: HomeViewState,
+) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        FilterChip(
+            selected = state.selectedType == HateRateType.HATE,
+            onClick = {
+                state.onFilterSelected(HateRateType.HATE)
+            },
+            leadingIcon = if (state.selectedType == HateRateType.HATE) {
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Done,
+                        contentDescription = "Done icon",
+                    )
+                }
+            } else {
+                null
+            }) {
+            Text(stringResource(id = R.string.hate))
+        }
+        FilterChip(
+            selected = state.selectedType == HateRateType.RATE,
+            onClick = {
+                state.onFilterSelected(HateRateType.RATE)
+            },
+            leadingIcon = if (state.selectedType == HateRateType.RATE) {
+                {
+                    Icon(
+                        imageVector = Icons.Filled.Done,
+                        contentDescription = "Done icon",
+                    )
+                }
+            } else {
+                null
+            }) {
+            Text(stringResource(id = R.string.rate))
         }
     }
 }

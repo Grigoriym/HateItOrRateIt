@@ -57,7 +57,7 @@ import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.FileData
+import com.grappim.hateitorrateit.utils.ImageData
 import com.grappim.ui.R
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoCard
@@ -71,13 +71,13 @@ import kotlin.math.absoluteValue
 fun RateOrHateScreen(
     viewModel: HateOrRateViewModel = hiltViewModel(),
     goBack: () -> Unit,
-    onDocumentCreated: () -> Unit,
+    onProductCreated: () -> Unit,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     LaunchedEffect(state.isCreated) {
         if (state.isCreated) {
-            onDocumentCreated.invoke()
+            onProductCreated.invoke()
         }
     }
 
@@ -92,8 +92,9 @@ fun RateOrHateScreen(
     }
 
     PlatoAlertDialog(
-        text = "If you quit, you will lose all the data",
+        text = stringResource(id = R.string.if_quit_lose_data),
         showAlertDialog = state.showAlertDialog,
+        confirmButtonText = stringResource(id = R.string.ok),
         onDismissRequest = {
             state.onShowAlertDialog(false)
         },
@@ -124,7 +125,7 @@ fun handleBackAction(state: HateOrRateViewState, goBack: () -> Unit) {
         return
     }
 
-    if (state.filesUris.isNotEmpty() || state.documentName.isNotEmpty()) {
+    if (state.images.isNotEmpty() || state.productName.isNotEmpty()) {
         state.onShowAlertDialog(true)
     } else {
         doOnQuit()
@@ -174,10 +175,10 @@ private fun RateOrHateScreenContent(
         if (snackBarMessage.data !is NativeText.Empty) {
             val result = snackbarHostState.showSnackbar(
                 message = snackBarMessage.data.asString(context),
-                actionLabel = "Close",
+                actionLabel = context.getString(R.string.close),
                 duration = SnackbarDuration.Short,
             )
-            if(result == SnackbarResult.ActionPerformed) {
+            if (result == SnackbarResult.ActionPerformed) {
                 snackbarHostState.currentSnackbarData?.dismiss()
             }
         }
@@ -197,21 +198,16 @@ private fun RateOrHateScreenContent(
             })
         },
         bottomBar = {
-            Button(
+            BottomBarButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(
                         top = 12.dp,
                         bottom = 16.dp
                     )
-                    .padding(horizontal = 16.dp)
-                    .height(42.dp),
-                onClick = {
-                    state.createDocument()
-                }
-            ) {
-                Text(text = stringResource(id = R.string.create))
-            }
+                    .padding(horizontal = 16.dp),
+                state = state
+            )
         }
     ) {
         Column(
@@ -221,45 +217,10 @@ private fun RateOrHateScreenContent(
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState()),
         ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth(),
-                    value = state.documentName,
-                    onValueChange = state.setName,
-                    singleLine = true,
-                    label = {
-                        Text(text = stringResource(id = R.string.name_obligatory))
-                    }
-                )
-
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth(),
-                    value = state.description,
-                    onValueChange = state.setDescription,
-                    singleLine = false,
-                    label = {
-                        Text(text = stringResource(id = R.string.description))
-                    }
-                )
-
-                OutlinedTextField(
-                    modifier = Modifier
-                        .padding(top = 8.dp, bottom = 8.dp)
-                        .fillMaxWidth(),
-                    value = state.shop,
-                    onValueChange = state.setShop,
-                    singleLine = true,
-                    label = {
-                        Text(text = stringResource(id = R.string.shop))
-                    }
-                )
-            }
+            TextFieldsContent(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                state = state,
+            )
 
             PlatoHateRateContent(
                 currentType = state.type,
@@ -285,8 +246,8 @@ private fun RateOrHateScreenContent(
 
             FilesList(
                 modifier = Modifier,
-                fileUris = state.filesUris,
-                onFileRemoved = state.onRemoveFileTriggered,
+                fileUris = state.images,
+                onFileRemoved = state.onRemoveImageTriggered,
             )
         }
     }
@@ -324,8 +285,8 @@ private fun AddFromContent(
 @Composable
 private fun FilesList(
     modifier: Modifier = Modifier,
-    fileUris: List<FileData>,
-    onFileRemoved: (fileData: FileData) -> Unit,
+    fileUris: List<ImageData>,
+    onFileRemoved: (imageData: ImageData) -> Unit,
 ) {
     val pagerState = rememberPagerState {
         fileUris.size
@@ -387,5 +348,67 @@ private fun FilesList(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun BottomBarButton(
+    modifier: Modifier = Modifier,
+    state: HateOrRateViewState,
+) {
+    Button(
+        modifier = modifier
+            .height(42.dp),
+        onClick = {
+            state.createProduct()
+        }
+    ) {
+        Text(text = stringResource(id = R.string.create))
+    }
+}
+
+@Composable
+private fun TextFieldsContent(
+    modifier: Modifier = Modifier,
+    state: HateOrRateViewState,
+) {
+    Column(
+        modifier = modifier
+    ) {
+        OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            value = state.productName,
+            onValueChange = state.setName,
+            singleLine = true,
+            label = {
+                Text(text = stringResource(id = R.string.name_obligatory))
+            }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            value = state.description,
+            onValueChange = state.setDescription,
+            singleLine = true,
+            label = {
+                Text(text = stringResource(id = R.string.description))
+            }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 8.dp, bottom = 8.dp)
+                .fillMaxWidth(),
+            value = state.shop,
+            onValueChange = state.setShop,
+            singleLine = true,
+            label = {
+                Text(text = stringResource(id = R.string.shop))
+            }
+        )
     }
 }

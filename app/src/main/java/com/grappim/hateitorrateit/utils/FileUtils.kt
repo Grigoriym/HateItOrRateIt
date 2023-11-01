@@ -7,7 +7,7 @@ import android.provider.OpenableColumns
 import android.text.format.Formatter.formatShortFileSize
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.grappim.domain.ProductFileData
+import com.grappim.domain.ProductImageData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.File
@@ -24,20 +24,20 @@ class FileUtils @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
 ) {
 
-    fun toDocumentFileData(fileData: FileData): ProductFileData =
-        ProductFileData(
-            name = fileData.name,
-            mimeType = fileData.mimeType,
-            uriPath = fileData.uri.path ?: "",
-            uriString = fileData.uri.toString(),
-            size = fileData.size,
-            md5 = fileData.md5,
+    fun toProductImageData(imageData: ImageData): ProductImageData =
+        ProductImageData(
+            name = imageData.name,
+            mimeType = imageData.mimeType,
+            uriPath = imageData.uri.path ?: "",
+            uriString = imageData.uri.toString(),
+            size = imageData.size,
+            md5 = imageData.md5,
         )
 
     fun getFileUrisFromGalleryUri(
         uri: Uri,
         folderName: String,
-    ): FileData {
+    ): ImageData {
         context.contentResolver.takePersistableUriPermission(
             uri,
             Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -48,7 +48,7 @@ class FileUtils @Inject constructor(
         val newUri = getFileUri(newFile)
         val fileSize = getUriFileSize(newUri)
         val mimeType = getMimeType(uri)
-        return FileData(
+        return ImageData(
             uri = newUri,
             name = newFile.name,
             size = fileSize,
@@ -69,8 +69,8 @@ class FileUtils @Inject constructor(
         )
     }
 
-    fun deleteFolder(documentFolderName: String) {
-        val file = getMainFolder(documentFolderName)
+    fun deleteFolder(folderName: String) {
+        val file = getMainFolder(folderName)
         file.deleteRecursively()
     }
 
@@ -86,13 +86,13 @@ class FileUtils @Inject constructor(
 
     fun getFileDataFromCameraPicture(
         cameraTakePictureData: CameraTakePictureData
-    ): FileData {
+    ): ImageData {
         val uri = cameraTakePictureData.uri
         val file = cameraTakePictureData.file
         Timber.d("getFileUrisFromUri, $cameraTakePictureData")
         val fileSize = getUriFileSize(uri)
         val mimeType = getMimeType(uri)
-        return FileData(
+        return ImageData(
             uri = uri,
             name = getUriFileName(uri),
             size = fileSize,
@@ -169,7 +169,7 @@ class FileUtils @Inject constructor(
     fun getMainFolder(
         child: String
     ): File {
-        val folder = File(context.filesDir, "docs/$child")
+        val folder = File(context.filesDir, "products/$child")
         if (folder.exists().not()) {
             folder.mkdirs()
         }
