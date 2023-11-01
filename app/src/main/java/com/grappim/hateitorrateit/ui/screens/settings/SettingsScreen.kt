@@ -10,6 +10,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircleOutline
+import androidx.compose.material.icons.filled.HighlightOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -19,6 +22,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.grappim.ui.R
 import com.grappim.ui.color
 import com.grappim.ui.icon
+import com.grappim.ui.theme.AtomicTangerine
+import com.grappim.ui.theme.Feijoa
 import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoLoadingDialog
 import com.grappim.ui.widgets.PlatoTopBar
@@ -45,7 +50,7 @@ private fun SettingsScreenContent(
             text = stringResource(id = R.string.settings),
             goBack = goBack,
         )
-    }) {
+    }) { padding ->
         PlatoLoadingDialog(state.isLoading)
 
         PlatoAlertDialog(
@@ -62,7 +67,7 @@ private fun SettingsScreenContent(
 
         Column(
             modifier = Modifier
-                .padding(it)
+                .padding(padding)
                 .fillMaxSize()
         ) {
             ListItem(modifier = Modifier.clickable {
@@ -77,6 +82,15 @@ private fun SettingsScreenContent(
             }, trailing = {
                 TypeIcon(state = state)
             })
+            ListItem(modifier = Modifier.clickable {
+                state.onCrashlyticsToggle()
+            }, text = {
+                Text(text = stringResource(id = R.string.toggle_crashlytics))
+            }, trailing = {
+                CrashesIcon(state)
+            }, secondaryText = {
+                Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+            })
         }
     }
 }
@@ -87,14 +101,40 @@ fun TypeIcon(
 ) {
     Crossfade(
         targetState = state.type,
-        label = "custom_switch_label",
+        label = "type_crossfade_icon",
         animationSpec = tween(500),
-    ) {
+    ) { type ->
         Icon(
             modifier = Modifier,
-            imageVector = it.icon(),
+            imageVector = type.icon(),
             contentDescription = null,
-            tint = it.color(),
+            tint = type.color(),
+        )
+    }
+}
+
+@Composable
+fun CrashesIcon(
+    state: SettingsViewState
+) {
+    Crossfade(
+        targetState = state.isCrashesCollectionEnabled,
+        label = "custom_switch_label",
+        animationSpec = tween(500),
+    ) { enabled ->
+        Icon(
+            modifier = Modifier,
+            imageVector = if (enabled) {
+                Icons.Filled.CheckCircleOutline
+            } else {
+                Icons.Filled.HighlightOff
+            },
+            contentDescription = null,
+            tint = if (enabled) {
+                Feijoa
+            } else {
+                AtomicTangerine
+            },
         )
     }
 }

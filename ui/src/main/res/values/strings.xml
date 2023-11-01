@@ -27,4 +27,7 @@
     <string name="if_quit_lose_data">If you quit, you will lose all the data</string>
     <string name="hate">Hate</string>
     <string name="rate">Rate</string>
+
+    <string name="toggle_crashlytics">Is sending app crashes enabled</string>
+    <string name="crashlytics_settings_subtitle">This is needed for me to fix the crash if you have one</string>
 </resources>

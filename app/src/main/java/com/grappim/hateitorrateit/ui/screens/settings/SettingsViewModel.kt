@@ -2,6 +2,8 @@ package com.grappim.hateitorrateit.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import com.grappim.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
@@ -24,17 +26,34 @@ class SettingsViewModel @Inject constructor(
             onClearDataClicked = ::askIfShouldClearData,
             onAlertDialogConfirmButtonClicked = ::clearData,
             onDismissDialog = ::dismissDialog,
+            onCrashlyticsToggle = ::onCrashlyticsToggle
         )
     )
     val viewState = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            localDataStorage.typeFlow.collect { value ->
-                _viewState.update {
-                    it.copy(type = value)
+            launch {
+                localDataStorage.typeFlow.collect { value ->
+                    _viewState.update {
+                        it.copy(type = value)
+                    }
                 }
             }
+            launch {
+                localDataStorage.crashesCollectionEnabled.collect { value ->
+                    Firebase.crashlytics.setCrashlyticsCollectionEnabled(value)
+                    _viewState.update {
+                        it.copy(isCrashesCollectionEnabled = value)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onCrashlyticsToggle() {
+        viewModelScope.launch {
+            localDataStorage.setCrashesCollectionEnabled(viewState.value.isCrashesCollectionEnabled.not())
         }
     }
 
