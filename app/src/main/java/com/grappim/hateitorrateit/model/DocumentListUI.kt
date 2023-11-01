@@ -7,7 +7,7 @@ data class DocumentListUI(
     val name: String,
     val shop: String,
     val createdDate: String,
-    val preview: Any,
+    val previewUriString: String,
     val documentFolderName: String,
     val type: HateRateType,
 )

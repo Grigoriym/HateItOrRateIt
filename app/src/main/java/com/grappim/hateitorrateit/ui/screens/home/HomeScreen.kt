@@ -46,6 +46,7 @@ import com.grappim.ui.R
 import com.grappim.ui.color
 import com.grappim.ui.icon
 import com.grappim.ui.widgets.PlatoCard
+import com.grappim.ui.widgets.PlatoPlaceholderImage
 import com.grappim.ui.widgets.text.TextH5
 
 @Composable
@@ -183,14 +184,22 @@ private fun DocItem(
         },
     ) {
         Box {
-            Image(
-                modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .fillMaxSize(),
-                painter = rememberAsyncImagePainter(model = document.preview),
-                contentScale = ContentScale.Crop,
-                contentDescription = "",
-            )
+            if (document.previewUriString.isEmpty()) {
+                PlatoPlaceholderImage(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxSize()
+                )
+            } else {
+                Image(
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .fillMaxSize(),
+                    painter = rememberAsyncImagePainter(model = document.previewUriString),
+                    contentScale = ContentScale.Crop,
+                    contentDescription = "",
+                )
+            }
 
             PlatoCard(
                 modifier = Modifier

@@ -64,6 +64,7 @@ import com.grappim.ui.widgets.PlatoAlertDialog
 import com.grappim.ui.widgets.PlatoCard
 import com.grappim.ui.widgets.PlatoHateRateContent
 import com.grappim.ui.widgets.PlatoIconButton
+import com.grappim.ui.widgets.PlatoPlaceholderImage
 import com.grappim.ui.widgets.PlatoProgressIndicator
 import com.grappim.ui.widgets.PlatoTopBar
 import com.grappim.ui.widgets.text.TextH4
@@ -167,35 +168,43 @@ private fun DetailsScreenContent(
                 .fillMaxWidth()
                 .weight(1.2f),
         ) {
-            HorizontalPager(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.TopCenter),
-                state = pagerState,
-            ) { index ->
-                val file = state.filesUris[index]
-                PlatoCard(
-                    shape = RoundedCornerShape(
-                        bottomEnd = 16.dp,
-                        bottomStart = 16.dp,
-                    ),
-                    onClick = {
-                        if (state.isEdit.not()) {
-                            onDocImageClicked(
-                                state.id,
-                                index
-                            )
+            if (state.filesUris.isNotEmpty()) {
+                HorizontalPager(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.TopCenter),
+                    state = pagerState,
+                ) { index ->
+                    val file = state.filesUris[index]
+                    PlatoCard(
+                        shape = RoundedCornerShape(
+                            bottomEnd = 16.dp,
+                            bottomStart = 16.dp,
+                        ),
+                        onClick = {
+                            if (state.isEdit.not()) {
+                                onDocImageClicked(
+                                    state.id,
+                                    index
+                                )
+                            }
                         }
+                    ) {
+                        Image(
+                            modifier = Modifier
+                                .fillMaxWidth(),
+                            painter = rememberAsyncImagePainter(file.uriString),
+                            contentDescription = "",
+                            contentScale = ContentScale.Crop
+                        )
                     }
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        painter = rememberAsyncImagePainter(file.uriString),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
-                    )
                 }
+            } else {
+                PlatoPlaceholderImage(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .align(Alignment.TopCenter),
+                )
             }
 
             if (state.filesUris.size > 1) {

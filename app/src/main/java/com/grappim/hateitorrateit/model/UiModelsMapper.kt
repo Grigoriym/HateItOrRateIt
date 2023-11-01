@@ -21,7 +21,7 @@ class UiModelsMapper @Inject constructor(
             id = doc.id.toString(),
             name = doc.name,
             createdDate = formattedCreatedDate,
-            preview = doc.filesUri.firstOrNull()?.uriString ?: "",
+            previewUriString = doc.filesUri.firstOrNull()?.uriString ?: "",
             documentFolderName = doc.documentFolderName,
             shop = doc.shop,
             type = doc.type,
