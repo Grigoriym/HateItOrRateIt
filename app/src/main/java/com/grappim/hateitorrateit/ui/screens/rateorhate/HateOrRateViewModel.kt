@@ -192,7 +192,7 @@ class HateOrRateViewModel @Inject constructor(
                 }
 
                 _viewState.value.images.isEmpty() -> {
-                    setSnackbarMessageSuspend(NativeText.Resource(R.string.add_file))
+                    setSnackbarMessageSuspend(NativeText.Resource(R.string.add_image))
                 }
 
                 else -> {

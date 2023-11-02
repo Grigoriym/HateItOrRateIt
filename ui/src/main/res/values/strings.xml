@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">HateItOrRateIt</string>
+    <string name="app_name">Hate Rate</string>
 
-    <string name="add_file">Please add a file</string>
-    <string name="set_name">Please set a name for a product</string>
+    <string name="add_image">Please add an image</string>
+    <string name="set_name">Please enter a product name</string>
     <string name="add_picture_from">Add picture from:</string>
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
@@ -11,7 +11,7 @@
     <string name="name_obligatory">Name *</string>
     <string name="create">Create</string>
     <string name="hate_or_rate">Hate Or Rate</string>
-    <string name="save_changes_before_exit">Save the changes before exit?</string>
+    <string name="save_changes_before_exit">Save changes before exiting?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">Ok</string>
@@ -20,14 +20,14 @@
     <string name="clear_data">Clear All Data</string>
     <string name="default_type">Default Type</string>
     <string name="settings">Settings</string>
-    <string name="are_you_sure_clear_all_data">Are you sure you want to clear all the data?</string>
+    <string name="are_you_sure_clear_all_data">Confirm data deletion</string>
     <string name="search">Search</string>
     <string name="delete_image">Delete Image</string>
-    <string name="are_you_sure_to_delete_product">Are you sure you want to delete the product?</string>
-    <string name="if_quit_lose_data">If you quit, you will lose all the data</string>
+    <string name="are_you_sure_to_delete_product">Confirm product deletion?</string>
+    <string name="if_quit_lose_data">Warning: Quitting will result in data loss.</string>
     <string name="hate">Hate</string>
     <string name="rate">Rate</string>
 
-    <string name="toggle_crashlytics">Is sending app crashes enabled</string>
-    <string name="crashlytics_settings_subtitle">This is needed for me to fix the crash if you have one</string>
+    <string name="toggle_crashlytics">Do you allow crash reports to be sent?</string>
+    <string name="crashlytics_settings_subtitle">This is needed to diagnose and resolve any crashes</string>
 </resources>
