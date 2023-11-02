@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.home
 
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.ProductListUI
 
 data class HomeViewState(

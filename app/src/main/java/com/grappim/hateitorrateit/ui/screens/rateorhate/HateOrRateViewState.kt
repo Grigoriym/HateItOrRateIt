@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.rateorhate
 
 import android.net.Uri
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.DraftProduct
 import com.grappim.hateitorrateit.utils.ImageData

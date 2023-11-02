@@ -1,4 +1,4 @@
-package com.grappim.ui.widgets.text
+package com.grappim.hateitorrateit.ui.widgets.text
 
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text

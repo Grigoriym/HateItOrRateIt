@@ -1,4 +1,4 @@
-package com.grappim.ui
+package com.grappim.hateitorrateit.ui
 
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.icons.Icons
@@ -6,9 +6,9 @@ import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import com.grappim.domain.HateRateType
-import com.grappim.ui.theme.AtomicTangerine
-import com.grappim.ui.theme.Feijoa
+import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.ui.theme.AtomicTangerine
+import com.grappim.hateitorrateit.ui.theme.Feijoa
 
 @Composable
 fun deactivatedColors() = ButtonDefaults.buttonColors(

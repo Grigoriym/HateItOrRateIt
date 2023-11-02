@@ -20,13 +20,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.grappim.ui.R
-import com.grappim.ui.color
-import com.grappim.ui.icon
-import com.grappim.ui.theme.AtomicTangerine
-import com.grappim.ui.theme.Feijoa
-import com.grappim.ui.widgets.PlatoAlertDialog
-import com.grappim.ui.widgets.PlatoLoadingDialog
-import com.grappim.ui.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.ui.color
+import com.grappim.hateitorrateit.ui.icon
+import com.grappim.hateitorrateit.ui.theme.AtomicTangerine
+import com.grappim.hateitorrateit.ui.theme.Feijoa
+import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
+import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
+import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 
 @Composable
 fun SettingsScreen(

@@ -20,7 +20,7 @@ import com.grappim.hateitorrateit.ui.screens.details.DetailsScreen
 import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
 import com.grappim.hateitorrateit.ui.screens.rateorhate.RateOrHateScreen
 import com.grappim.hateitorrateit.utils.safeClick
-import com.grappim.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.mappers
 
-import com.grappim.domain.Product
-import com.grappim.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.Product
+import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity

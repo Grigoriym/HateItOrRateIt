@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.crashlytics.crashlytics
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.data.storage.local.LocalDataStorage
 import dagger.hilt.android.lifecycle.HiltViewModel

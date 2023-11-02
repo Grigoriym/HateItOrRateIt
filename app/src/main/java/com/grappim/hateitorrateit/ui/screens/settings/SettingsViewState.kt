@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 
 data class SettingsViewState(
     val isLoading: Boolean = false,

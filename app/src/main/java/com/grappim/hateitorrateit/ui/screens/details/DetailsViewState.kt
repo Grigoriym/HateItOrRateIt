@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
 import android.net.Uri
-import com.grappim.domain.ProductImageData
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 
 data class DetailsViewState(

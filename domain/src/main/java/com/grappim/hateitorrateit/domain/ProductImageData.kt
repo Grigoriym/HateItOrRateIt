@@ -1,4 +1,4 @@
-package com.grappim.domain
+package com.grappim.hateitorrateit.domain
 
 data class ProductImageData(
     val name: String,

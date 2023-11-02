@@ -7,7 +7,7 @@ import android.provider.OpenableColumns
 import android.text.format.Formatter.formatShortFileSize
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
-import com.grappim.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImageData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.File

@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.domain.ProductImageData
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.HateRateType
 import java.time.OffsetDateTime
 
 data class CreateProduct(

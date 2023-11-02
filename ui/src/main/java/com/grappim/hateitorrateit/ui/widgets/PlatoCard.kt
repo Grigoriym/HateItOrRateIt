@@ -1,4 +1,4 @@
-package com.grappim.ui.widgets
+package com.grappim.hateitorrateit.ui.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape

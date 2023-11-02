@@ -59,11 +59,11 @@ import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ImageData
 import com.grappim.ui.R
-import com.grappim.ui.widgets.PlatoAlertDialog
-import com.grappim.ui.widgets.PlatoCard
-import com.grappim.ui.widgets.PlatoHateRateContent
-import com.grappim.ui.widgets.PlatoIconButton
-import com.grappim.ui.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
+import com.grappim.hateitorrateit.ui.widgets.PlatoCard
+import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
+import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
+import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 

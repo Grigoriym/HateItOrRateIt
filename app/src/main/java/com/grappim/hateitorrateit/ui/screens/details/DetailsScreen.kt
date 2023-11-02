@@ -53,17 +53,17 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.ui.R
-import com.grappim.ui.color
-import com.grappim.ui.icon
-import com.grappim.ui.widgets.PlatoAlertDialog
-import com.grappim.ui.widgets.PlatoCard
-import com.grappim.ui.widgets.PlatoHateRateContent
-import com.grappim.ui.widgets.PlatoIconButton
-import com.grappim.ui.widgets.PlatoPagerIndicator
-import com.grappim.ui.widgets.PlatoPlaceholderImage
-import com.grappim.ui.widgets.PlatoProgressIndicator
-import com.grappim.ui.widgets.PlatoTopBar
-import com.grappim.ui.widgets.text.TextH4
+import com.grappim.hateitorrateit.ui.color
+import com.grappim.hateitorrateit.ui.icon
+import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
+import com.grappim.hateitorrateit.ui.widgets.PlatoCard
+import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
+import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
+import com.grappim.hateitorrateit.ui.widgets.PlatoPagerIndicator
+import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
+import com.grappim.hateitorrateit.ui.widgets.PlatoProgressIndicator
+import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.ui.widgets.text.TextH4
 import kotlinx.coroutines.launch
 
 @Composable

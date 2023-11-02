@@ -1,4 +1,4 @@
-package com.grappim.ui.widgets
+package com.grappim.hateitorrateit.ui.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -9,19 +9,18 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Card
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.grappim.domain.HateRateType
-import com.grappim.ui.color
-import com.grappim.ui.hateColors
-import com.grappim.ui.hateIcon
-import com.grappim.ui.rateColors
-import com.grappim.ui.rateIcon
+import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.ui.color
+import com.grappim.hateitorrateit.ui.hateColors
+import com.grappim.hateitorrateit.ui.hateIcon
+import com.grappim.hateitorrateit.ui.rateColors
+import com.grappim.hateitorrateit.ui.rateIcon
 
 @Composable
 fun PlatoHateRateContent(

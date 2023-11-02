@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.core
 
-import com.grappim.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.core.di.IoDispatcher
 import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase

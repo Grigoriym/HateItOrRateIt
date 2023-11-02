@@ -33,8 +33,8 @@ import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
 import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
 import com.grappim.hateitorrateit.ui.screens.settings.SettingsScreen
 import com.grappim.hateitorrateit.utils.safeClick
-import com.grappim.ui.theme.bottomNavigationBackgroundDark
-import com.grappim.ui.theme.bottomNavigationBackgroundLight
+import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundDark
+import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundLight
 
 @Composable
 fun RootMainScreen(

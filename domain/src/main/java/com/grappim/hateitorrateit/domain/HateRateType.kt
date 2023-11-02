@@ -1,4 +1,4 @@
-package com.grappim.domain
+package com.grappim.hateitorrateit.domain
 
 enum class HateRateType {
     HATE,

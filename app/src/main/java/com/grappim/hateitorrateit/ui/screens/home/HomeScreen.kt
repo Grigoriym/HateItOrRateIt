@@ -40,14 +40,14 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.ProductListUI
 import com.grappim.ui.R
-import com.grappim.ui.color
-import com.grappim.ui.icon
-import com.grappim.ui.widgets.PlatoCard
-import com.grappim.ui.widgets.PlatoPlaceholderImage
-import com.grappim.ui.widgets.text.TextH5
+import com.grappim.hateitorrateit.ui.color
+import com.grappim.hateitorrateit.ui.icon
+import com.grappim.hateitorrateit.ui.widgets.PlatoCard
+import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
+import com.grappim.hateitorrateit.ui.widgets.text.TextH5
 
 @Composable
 fun HomeScreen(

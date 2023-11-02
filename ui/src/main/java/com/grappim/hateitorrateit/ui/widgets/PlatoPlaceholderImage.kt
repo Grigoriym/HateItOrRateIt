@@ -1,4 +1,4 @@
-package com.grappim.ui.widgets
+package com.grappim.hateitorrateit.ui.widgets
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box

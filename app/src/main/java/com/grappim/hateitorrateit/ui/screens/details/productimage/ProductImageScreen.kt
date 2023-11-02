@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.ui.widgets.PlatoPagerIndicator
-import com.grappim.ui.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.ui.widgets.PlatoPagerIndicator
+import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 
 @Composable
 fun ProductImageScreen(

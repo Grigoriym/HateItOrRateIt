@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 
 data class ProductListUI(
     val id: String,

@@ -1,9 +1,9 @@
 package com.grappim.hateitorrateit.data
 
 import androidx.sqlite.db.SimpleSQLiteQuery
-import com.grappim.domain.HateRateType
-import com.grappim.domain.Product
-import com.grappim.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.domain.Product
+import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.core.di.IoDispatcher
 import com.grappim.hateitorrateit.data.db.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity

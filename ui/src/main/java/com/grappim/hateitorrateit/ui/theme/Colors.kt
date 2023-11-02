@@ -1,4 +1,4 @@
-package com.grappim.ui.theme
+package com.grappim.hateitorrateit.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

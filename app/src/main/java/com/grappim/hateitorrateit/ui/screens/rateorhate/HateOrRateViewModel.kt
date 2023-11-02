@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.rateorhate
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.SnackbarStateViewModel

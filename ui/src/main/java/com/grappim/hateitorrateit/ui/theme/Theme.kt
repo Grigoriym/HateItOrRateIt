@@ -1,4 +1,4 @@
-package com.grappim.ui.theme
+package com.grappim.hateitorrateit.ui.theme
 
 import android.app.Activity
 import androidx.compose.foundation.isSystemInDarkTheme

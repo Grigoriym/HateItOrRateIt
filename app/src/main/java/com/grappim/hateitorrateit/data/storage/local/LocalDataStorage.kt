@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.storage.local
 
-import com.grappim.domain.HateRateType
+import com.grappim.hateitorrateit.domain.HateRateType
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataStorage {

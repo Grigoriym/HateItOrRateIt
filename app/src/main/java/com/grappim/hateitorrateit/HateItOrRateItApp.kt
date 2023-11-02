@@ -17,5 +17,4 @@ class HateItOrRateItApp : Application(), Configuration.Provider {
             .setWorkerFactory(workerFactory)
             .build()
 
-
 }
