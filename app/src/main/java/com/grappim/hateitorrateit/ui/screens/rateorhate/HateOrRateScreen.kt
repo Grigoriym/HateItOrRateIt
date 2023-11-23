@@ -58,7 +58,7 @@ import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ImageData
-import com.grappim.ui.R
+import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent

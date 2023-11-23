@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.data.db
+package com.grappim.hateitorrateit.data.db.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

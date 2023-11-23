@@ -42,7 +42,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.ProductListUI
-import com.grappim.ui.R
+import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard

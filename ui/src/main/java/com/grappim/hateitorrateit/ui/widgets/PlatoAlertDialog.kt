@@ -8,7 +8,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.grappim.ui.R
+import com.grappim.hateitorrateit.ui.R
 
 @Composable
 fun PlatoAlertDialog(

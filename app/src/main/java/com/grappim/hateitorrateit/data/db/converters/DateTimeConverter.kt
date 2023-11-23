@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.data.db
+package com.grappim.hateitorrateit.data.db.converters
 
 import androidx.room.ProvidedTypeConverter
 import androidx.room.TypeConverter

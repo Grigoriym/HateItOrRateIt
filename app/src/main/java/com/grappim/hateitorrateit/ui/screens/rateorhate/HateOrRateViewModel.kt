@@ -14,7 +14,7 @@ import com.grappim.hateitorrateit.model.CreateProduct
 import com.grappim.hateitorrateit.utils.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ImageData
 import com.grappim.hateitorrateit.utils.FileUtils
-import com.grappim.ui.R
+import com.grappim.hateitorrateit.ui.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

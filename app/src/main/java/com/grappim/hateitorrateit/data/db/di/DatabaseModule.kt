@@ -1,8 +1,11 @@
-package com.grappim.hateitorrateit.data.db
+package com.grappim.hateitorrateit.data.db.di
 
 import android.content.Context
 import androidx.room.Room
 import com.grappim.hateitorrateit.BuildConfig
+import com.grappim.hateitorrateit.data.db.converters.DateTimeConverter
+import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
+import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

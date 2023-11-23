@@ -5,7 +5,7 @@ import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.core.di.IoDispatcher
-import com.grappim.hateitorrateit.data.db.ProductsDao
+import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.wrapWithPercentWildcards
 import com.grappim.hateitorrateit.data.db.wrapWithSingleQuotes
