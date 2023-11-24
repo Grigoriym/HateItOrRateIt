@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.details
 import android.net.Uri
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.utils.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 
 data class DetailsViewState(
     val id: String = "",

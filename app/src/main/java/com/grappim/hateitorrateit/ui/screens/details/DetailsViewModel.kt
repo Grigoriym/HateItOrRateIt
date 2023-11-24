@@ -4,14 +4,13 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.core.DataCleaner
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
-import com.grappim.hateitorrateit.data.ProductsRepository
+import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
+import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.UiModelsMapper
-import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.ImageData
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.models.ImageData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,11 +23,12 @@ class DetailsViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
     private val dataCleaner: DataCleaner,
-    private val fileUtils: FileUtils,
+    private val fileUtils: com.grappim.hateitorrateit.utils.FileUtils,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val productId = checkNotNull(savedStateHandle.get<Long>(RootNavDestinations.Details.KEY))
+    private val productId =
+        checkNotNull(savedStateHandle.get<Long>(RootNavDestinations.Details.KEY))
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(

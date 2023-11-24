@@ -2,9 +2,9 @@ package com.grappim.hateitorrateit.ui.screens.rateorhate
 
 import android.net.Uri
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.DraftProduct
-import com.grappim.hateitorrateit.utils.ImageData
+import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
+import com.grappim.hateitorrateit.domain.DraftProduct
+import com.grappim.hateitorrateit.utils.models.ImageData
 
 data class HateOrRateViewState(
     val images: List<ImageData> = emptyList(),

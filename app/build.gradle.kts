@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
     kotlin("kapt")
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.gms.googleServices)
@@ -21,14 +22,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
-        }
-
-        kapt {
-            arguments {
-                arg("room.schemaLocation", "$projectDir/schemas")
-                arg("room.incremental", "true")
-                arg("room.expandProjection", "true")
-            }
         }
     }
 
@@ -77,16 +70,23 @@ kapt {
 dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
+    implementation(project(":utils"))
+    implementation(project(":data:db"))
+    implementation(project(":data:worker-api"))
+    implementation(project(":data:repo-api"))
+    implementation(project(":data:cleaner-api"))
+    implementation(project(":data:local-datastorage-api"))
+    implementation(project(":di"))
+    implementation(project(":commons"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)
-    implementation(libs.androidx.datastore.prefs)
     implementation(libs.androidx.activity.compose)
 
-    implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
-    implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.testing)
+//    implementation(libs.androidx.room.runtime)
+//    ksp(libs.androidx.room.compiler)
+//    implementation(libs.androidx.room.ktx)
+//    implementation(libs.androidx.room.testing)
 
     implementation(libs.androidx.navigation.compose)
 
@@ -115,9 +115,9 @@ dependencies {
     implementation(libs.androidx.viewmodel.compose)
     implementation(libs.androidx.runtime.compose)
 
-    implementation(libs.kotlinx.serialization)
+//    implementation(libs.kotlinx.serialization)
 
-    implementation(libs.androidx.security.crypto)
+//    implementation(libs.androidx.security.crypto)
 
     implementation(libs.coil)
 

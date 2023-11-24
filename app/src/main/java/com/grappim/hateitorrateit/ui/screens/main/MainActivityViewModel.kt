@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.core.navigation.RootNavigator
-import com.grappim.hateitorrateit.data.workers.WorkerController
+import com.grappim.hateitorrateit.data.workerapi.WorkerController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

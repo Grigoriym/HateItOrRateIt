@@ -56,8 +56,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
-import com.grappim.hateitorrateit.utils.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.ImageData
+import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.models.ImageData
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard

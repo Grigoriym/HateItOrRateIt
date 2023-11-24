@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Hate Rate</string>
+
+    <string name="add_image">Bitte füge ein Bild hinzu</string>
+    <string name="set_name">Bitte gib einen Produktnamen ein</string>
+    <string name="add_picture_from">Bild hinzufügen von:</string>
+    <string name="camera">Kamera</string>
+    <string name="gallery">Galerie</string>
+    <string name="shop">Shop</string>
+    <string name="description">Beschreibung</string>
+    <string name="name_obligatory">Name *</string>
+    <string name="create">Erstellen</string>
+    <string name="hate_or_rate">Hate Or Rate</string>
+    <string name="save_changes_before_exit">Änderungen speichern bevor du gehst?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="ok">Ok</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="close">Schließen</string>
+    <string name="clear_data">Alle Daten löschen</string>
+    <string name="default_type">Standard Typ</string>
+    <string name="settings">Einstellungen</string>
+    <string name="are_you_sure_clear_all_data">Bestätige das Löschen aller Daten</string>
+    <string name="search">Suche</string>
+    <string name="delete_image">Bild löschen</string>
+    <string name="are_you_sure_to_delete_product">Bestätige das Löschen des Produkts</string>
+    <string name="if_quit_lose_data">Warnung: Beim Beenden gehen alle Daten verloren.</string>
+    <string name="hate">Hate</string>
+    <string name="rate">Rate</string>
+
+    <string name="toggle_crashlytics">Erlaubst du das Senden von Crash Reports?</string>
+    <string name="crashlytics_settings_subtitle">Dies ist nötig um Abstürze zu diagnostizieren und zu beheben</string>
+</resources>

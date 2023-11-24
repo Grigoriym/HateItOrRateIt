@@ -2,8 +2,8 @@ package com.grappim.hateitorrateit.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.data.ProductsRepository
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
