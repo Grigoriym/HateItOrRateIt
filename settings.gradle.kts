@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google()
         mavenCentral()
@@ -29,3 +30,4 @@ include(":data:local-datastorage-api")
 include(":data:local-datastorage-impl")
 include(":data:cleaner-api")
 include(":data:cleaner-impl")
+include(":testing")

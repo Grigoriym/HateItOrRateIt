@@ -234,6 +234,5 @@ class FileUtils @Inject constructor(
             val file = File(uri.path)
             file.length()
         }
-
     }
 }

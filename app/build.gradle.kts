@@ -2,10 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    kotlin("kapt")
-    alias(libs.plugins.hilt.android)
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
+    alias(libs.plugins.hateitorrateit.android.hilt)
 }
 
 android {
@@ -43,7 +42,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
 
-        freeCompilerArgs += "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
         freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
         freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
         freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
@@ -63,10 +61,6 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
@@ -83,24 +77,17 @@ dependencies {
     implementation(libs.androidx.startup)
     implementation(libs.androidx.activity.compose)
 
-//    implementation(libs.androidx.room.runtime)
-//    ksp(libs.androidx.room.compiler)
-//    implementation(libs.androidx.room.ktx)
-//    implementation(libs.androidx.room.testing)
-
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.timber)
 
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
-    kapt(libs.androidx.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 
-    coreLibraryDesugaring(libs.desugar)
+    coreLibraryDesugaring(libs.android.desugarJdkLibs)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
@@ -115,23 +102,9 @@ dependencies {
     implementation(libs.androidx.viewmodel.compose)
     implementation(libs.androidx.runtime.compose)
 
-//    implementation(libs.kotlinx.serialization)
-
-//    implementation(libs.androidx.security.crypto)
-
     implementation(libs.coil)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    testImplementation(libs.strikt.core)
 }
