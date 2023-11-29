@@ -8,3 +8,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/build-logic/.gradle
+/build-logic/convention/build
