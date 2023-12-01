@@ -71,6 +71,7 @@ dependencies {
     implementation(project(":data:local-datastorage-api"))
     implementation(project(":di"))
     implementation(project(":commons"))
+    implementation(project(":analytics-api"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)

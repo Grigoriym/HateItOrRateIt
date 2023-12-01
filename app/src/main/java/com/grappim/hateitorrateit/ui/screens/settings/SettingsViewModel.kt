@@ -2,8 +2,7 @@ package com.grappim.hateitorrateit.ui.screens.settings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.Firebase
-import com.google.firebase.crashlytics.crashlytics
+import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.domain.HateRateType
@@ -18,6 +17,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val dataCleaner: DataCleaner,
     private val localDataStorage: LocalDataStorage,
+    private val analyticsController: AnalyticsController,
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -42,7 +42,7 @@ class SettingsViewModel @Inject constructor(
             }
             launch {
                 localDataStorage.crashesCollectionEnabled.collect { value ->
-                    Firebase.crashlytics.setCrashlyticsCollectionEnabled(value)
+                    analyticsController.toggleCrashesCollection(value)
                     _viewState.update {
                         it.copy(isCrashesCollectionEnabled = value)
                     }

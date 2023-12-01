@@ -26,4 +26,6 @@ dependencies {
     implementation(project(":data:local-datastorage-impl"))
     implementation(project(":data:cleaner-api"))
     implementation(project(":data:cleaner-impl"))
+    implementation(project(":analytics-api"))
+    implementation(project(":analytics-impl"))
 }
