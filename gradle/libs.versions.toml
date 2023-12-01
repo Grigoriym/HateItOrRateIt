@@ -17,12 +17,12 @@ work = "2.8.1"
 appcompat = "1.6.1"
 core-ktx = "1.12.0"
 startup = "1.1.1"
-striktCore = "0.34.0"
 timber = "5.0.1"
 datastore-prefs = "1.0.0"
 activity-compose = "1.8.0"
 room = "2.6.0"
 sqlite = "2.4.0"
+archCore = "2.2.0"
 
 androidDesugarJdkLibs = "2.0.3"
 crypto = "1.0.0"
@@ -92,6 +92,7 @@ androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-juni
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCore" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
@@ -108,7 +109,6 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 
 junit4 = { module = "junit:junit", version.ref = "junit4" }
-strikt-core = { module = "io.strikt:strikt-core", version.ref = "striktCore" }
 turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbine" }
 
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }

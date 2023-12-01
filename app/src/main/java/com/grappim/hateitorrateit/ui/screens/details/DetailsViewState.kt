@@ -23,14 +23,14 @@ data class DetailsViewState(
     val isLoading: Boolean = true,
     val isEdit: Boolean = false,
 
-    val onSaveName: (name: String) -> Unit,
-    val onSaveDescription: (description: String) -> Unit,
-    val onSaveShop: (shop: String) -> Unit,
+    val onSetName: (name: String) -> Unit,
+    val onSetDescription: (description: String) -> Unit,
+    val onSetShop: (shop: String) -> Unit,
 
-    val toggleEditMode: () -> Unit,
-    val onEditSubmit: () -> Unit,
+    val onToggleEditMode: () -> Unit,
+    val onSubmitChanges: () -> Unit,
 
-    val onTypeChanged: (newType: HateRateType) -> Unit,
+    val onSetType: (newType: HateRateType) -> Unit,
 
     val showAlertDialog: Boolean = false,
     val onShowAlertDialog: (show: Boolean) -> Unit,

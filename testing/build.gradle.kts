@@ -5,11 +5,8 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.testing"
-    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.minSdk.get().toInt()
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -17,13 +14,6 @@ android {
         release {
             isMinifyEnabled = false
         }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
     }
 }
 
@@ -33,9 +23,10 @@ dependencies {
     api(libs.junit4)
     api(libs.kotlinx.coroutines.test)
     api(libs.turbine)
-    api(libs.strikt.core)
     api(libs.mockk)
+    api(libs.mockk.android)
     api(libs.hilt.android.testing)
+    api(libs.androidx.arch.core.testing)
     api(libs.androidx.test.runner)
     api(libs.androidx.test.rules)
     api(libs.androidx.test.espresso.core)

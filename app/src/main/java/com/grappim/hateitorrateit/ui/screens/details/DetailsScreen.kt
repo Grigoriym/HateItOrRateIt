@@ -290,17 +290,17 @@ private fun TopImageBarContent(
                 if (state.isEdit) {
                     PlatoIconButton(
                         icon = Icons.Filled.Done,
-                        onButtonClick = state.onEditSubmit
+                        onButtonClick = state.onSubmitChanges
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     PlatoIconButton(
                         icon = Icons.Filled.Close,
-                        onButtonClick = state.toggleEditMode
+                        onButtonClick = state.onToggleEditMode
                     )
                 } else {
                     PlatoIconButton(
                         icon = Icons.Filled.Edit,
-                        onButtonClick = state.toggleEditMode
+                        onButtonClick = state.onToggleEditMode
                     )
                     Spacer(modifier = Modifier.width(12.dp))
                     PlatoIconButton(
@@ -368,7 +368,7 @@ private fun DetailsEditContent(
         ) {
             OutlinedTextField(
                 value = state.nameToEdit,
-                onValueChange = state.onSaveName,
+                onValueChange = state.onSetName,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 ),
@@ -379,7 +379,7 @@ private fun DetailsEditContent(
 
             OutlinedTextField(
                 value = state.descriptionToEdit,
-                onValueChange = state.onSaveDescription,
+                onValueChange = state.onSetDescription,
                 singleLine = false,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
@@ -391,7 +391,7 @@ private fun DetailsEditContent(
 
             OutlinedTextField(
                 value = state.shopToEdit,
-                onValueChange = state.onSaveShop,
+                onValueChange = state.onSetShop,
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Done
                 ),
@@ -402,7 +402,7 @@ private fun DetailsEditContent(
 
             PlatoHateRateContent(
                 currentType = requireNotNull(state.typeToEdit),
-                onTypeClicked = state.onTypeChanged,
+                onTypeClicked = state.onSetType,
             )
         }
     }

@@ -45,6 +45,7 @@ android {
         freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
         freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
         freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
+        freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
     }
     buildFeatures {
         compose = true
@@ -54,10 +55,8 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.composeKotlinCompiler.get()
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+    testOptions {
+        unitTests.isReturnDefaultValues = true
     }
 }
 
@@ -107,4 +106,9 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+
+    testImplementation(kotlin("test"))
+    androidTestImplementation(kotlin("test"))
+    testImplementation(project(":testing"))
+    androidTestImplementation(project(":testing"))
 }

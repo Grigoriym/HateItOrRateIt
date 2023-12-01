@@ -61,7 +61,7 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun addDraftProduct(): DraftProduct = withContext(ioDispatcher) {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
         val type = localDataStorage.typeFlow.first()
-        val folderDate = dateTimeUtils.formatToGDrive(nowDate)
+        val folderDate = dateTimeUtils.formatToDocumentFolder(nowDate)
         val productEntity = ProductEntity(
             name = "",
             createdDate = nowDate,

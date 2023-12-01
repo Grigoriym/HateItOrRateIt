@@ -6,16 +6,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
+import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.UiModelsMapper
+import com.grappim.hateitorrateit.utils.FileUtils
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +27,7 @@ class DetailsViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
     private val dataCleaner: DataCleaner,
-    private val fileUtils: com.grappim.hateitorrateit.utils.FileUtils,
+    private val fileUtils: FileUtils,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -32,16 +36,16 @@ class DetailsViewModel @Inject constructor(
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(
-            onSaveName = ::setName,
-            onSaveDescription = ::setDescription,
-            onSaveShop = ::setShop,
-            toggleEditMode = ::toggleEditMode,
-            onEditSubmit = ::onEditSubmit,
-            onTypeChanged = ::setType,
-            onDeleteProduct = ::onDeleteProduct,
-            onShowAlertDialog = ::onShowAlertDialog,
-            onDeleteProductConfirm = ::onDeleteConfirm,
-            onDeleteImage = ::onDeleteImage,
+            onSetName = ::setName,
+            onSetDescription = ::setDescription,
+            onSetShop = ::setShop,
+            onToggleEditMode = ::toggleEditMode,
+            onSubmitChanges = ::submitChanges,
+            onSetType = ::setType,
+            onDeleteProduct = ::deeleteProduct,
+            onShowAlertDialog = ::showAlertDialog,
+            onDeleteProductConfirm = ::deleteProductConfirm,
+            onDeleteImage = ::deleteImage,
             onAddImageFromGalleryClicked = ::addImageFromGallery,
             onAddCameraPictureClicked = ::addCameraPicture,
             getCameraImageFileUri = ::getCameraImageFileUri,
@@ -91,7 +95,7 @@ class DetailsViewModel @Inject constructor(
     private fun getCameraImageFileUri(): CameraTakePictureData =
         fileUtils.getFileUriForTakePicture(viewState.value.productFolderName)
 
-    private fun onDeleteImage(pageIndex: Int) {
+    private fun deleteImage(pageIndex: Int) {
         viewModelScope.launch {
             val fileData = viewState.value.images[pageIndex]
             val name = fileData.name
@@ -110,7 +114,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onDeleteConfirm() {
+    private fun deleteProductConfirm() {
         viewModelScope.launch {
             _viewState.update {
                 it.copy(isLoading = true)
@@ -126,7 +130,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onShowAlertDialog(show: Boolean) {
+    private fun showAlertDialog(show: Boolean) {
         _viewState.update {
             it.copy(
                 showAlertDialog = show
@@ -134,7 +138,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onDeleteProduct() {
+    private fun deeleteProduct() {
         _viewState.update {
             it.copy(showAlertDialog = true)
         }
@@ -152,7 +156,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun onEditSubmit() {
+    private fun submitChanges() {
         viewModelScope.launch {
             productsRepository.updateProduct(
                 id = viewState.value.id.toLong(),

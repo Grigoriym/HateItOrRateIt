@@ -16,33 +16,18 @@ class DateTimeUtils @Inject constructor(
     @DtfDocumentFolder private val dtfDocumentFolder: DateTimeFormatter,
 ) {
 
-    fun formatToStore(offsetDateTime: OffsetDateTime): String =
+    fun formatToStoreInDb(offsetDateTime: OffsetDateTime): String =
         dtfToStore.format(offsetDateTime)
 
-    fun parseToStore(string: String): OffsetDateTime =
+    fun parseFromStoringInDb(string: String): OffsetDateTime =
         OffsetDateTime.from(dtfToStore.parse(string))
 
     fun formatToDemonstrate(
         offsetDateTime: OffsetDateTime,
-        inUtc: Boolean = false
-    ): String =
-        if (inUtc) {
-            val createdDateInCurrentOffset = getLocalTimeFromUTC(offsetDateTime)
-            dtfToDemonstrate.format(createdDateInCurrentOffset)
-        } else {
-            dtfToDemonstrate.format(offsetDateTime)
-        }
+    ): String = dtfToDemonstrate.format(offsetDateTime)
 
-    fun formatToGDrive(offsetDateTime: OffsetDateTime): String =
+    fun formatToDocumentFolder(offsetDateTime: OffsetDateTime): String =
         dtfDocumentFolder.format(offsetDateTime)
 
-    fun getDateTimeUTCNow(): OffsetDateTime =
-        OffsetDateTime.now(ZoneOffset.UTC)
-
-    fun getLocalTimeFromUTC(offsetDateTime: OffsetDateTime): OffsetDateTime =
-        offsetDateTime
-            .withOffsetSameInstant(
-                OffsetDateTime.now().offset
-            )
-
+    fun getDateTimeUTCNow(): OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC)
 }

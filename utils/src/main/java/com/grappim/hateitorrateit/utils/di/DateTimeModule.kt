@@ -17,15 +17,15 @@ annotation class DtfToDemonstrate
 @Qualifier
 annotation class DtfDocumentFolder
 
-@Qualifier
-annotation class DtfGDriveRfc3339
-
 @[Module InstallIn(SingletonComponent::class)]
 object DateTimeModule {
 
     private const val UI_PATTERN = "yyyy.MM.dd"
     private const val DOCUMENT_FOLDER = "yyyy-MM-dd_HH-mm-ss"
 
+    /**
+     * 2023-11-23T14:16:37.502Z
+     */
     @[Provides Singleton DtfToStore]
     fun provideDtfToStore(): DateTimeFormatter =
         DateTimeFormatter.ISO_DATE_TIME
@@ -33,10 +33,6 @@ object DateTimeModule {
     @[Provides Singleton DtfToDemonstrate]
     fun provideDtfToDemonstrate(): DateTimeFormatter =
         DateTimeFormatter.ofPattern(UI_PATTERN)
-
-    @[Provides Singleton DtfGDriveRfc3339]
-    fun provideDtfRfc3339(): DateTimeFormatter =
-        DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
     @[Provides Singleton DtfDocumentFolder]
     fun provideDtfDocumentFolder(): DateTimeFormatter =

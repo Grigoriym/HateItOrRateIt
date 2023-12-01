@@ -19,8 +19,8 @@ import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.ui.screens.details.DetailsScreen
 import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
 import com.grappim.hateitorrateit.ui.screens.rateorhate.RateOrHateScreen
-import com.grappim.hateitorrateit.utils.safeClick
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.utils.safeClick
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +40,6 @@ class MainActivity : ComponentActivity() {
         rootViewModel: MainActivityViewModel = hiltViewModel()
     ) {
         val navController = rememberNavController()
-        rootViewModel.setupNavController(navController)
 
         Surface(
             modifier = Modifier.fillMaxSize(),

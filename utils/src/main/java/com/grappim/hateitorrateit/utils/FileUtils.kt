@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.OpenableColumns
-import android.text.format.Formatter.formatShortFileSize
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.domain.ProductImageData
@@ -103,6 +102,16 @@ class FileUtils @Inject constructor(
         )
     }
 
+    fun getMainFolder(
+        child: String
+    ): File {
+        val folder = File(context.filesDir, "products/$child")
+        if (folder.exists().not()) {
+            folder.mkdirs()
+        }
+        return folder
+    }
+
     private fun getUriFileName(
         uri: Uri
     ): String {
@@ -127,10 +136,6 @@ class FileUtils @Inject constructor(
         }
     }
 
-    private fun formatFileSize(
-        fileSize: Long
-    ): String = formatShortFileSize(context, fileSize)
-
     private fun createFileLocally(
         uri: Uri,
         folderName: String
@@ -145,7 +150,7 @@ class FileUtils @Inject constructor(
     private fun getFileName(
         extension: String
     ): String {
-        val date = dateTimeUtils.formatToGDrive(OffsetDateTime.now())
+        val date = dateTimeUtils.formatToDocumentFolder(OffsetDateTime.now())
         val millis = Instant.now().toEpochMilli()
         return "${date}_${millis}.$extension"
     }
@@ -166,16 +171,6 @@ class FileUtils @Inject constructor(
                 output.flush()
             }
         }
-    }
-
-    fun getMainFolder(
-        child: String
-    ): File {
-        val folder = File(context.filesDir, "products/$child")
-        if (folder.exists().not()) {
-            folder.mkdirs()
-        }
-        return folder
     }
 
     private fun getBitmapFileName(

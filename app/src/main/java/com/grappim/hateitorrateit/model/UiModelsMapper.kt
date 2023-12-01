@@ -11,12 +11,12 @@ import javax.inject.Singleton
 @Singleton
 class UiModelsMapper @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
-    @com.grappim.hateitorrateit.commons.IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
     suspend fun toProductUi(product: Product): ProductListUI = withContext(ioDispatcher) {
         val formattedCreatedDate = dateTimeUtils
-            .formatToDemonstrate(product.createdDate, true)
+            .formatToDemonstrate(product.createdDate)
         ProductListUI(
             id = product.id.toString(),
             name = product.name,
@@ -30,7 +30,7 @@ class UiModelsMapper @Inject constructor(
 
     suspend fun toProductDetailsUi(product: Product): ProductDetailsUi = withContext(ioDispatcher) {
         val formattedCreatedDate = dateTimeUtils
-            .formatToDemonstrate(product.createdDate, true)
+            .formatToDemonstrate(product.createdDate)
         ProductDetailsUi(
             id = product.id.toString(),
             name = product.name,
