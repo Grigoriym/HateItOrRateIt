@@ -24,5 +24,5 @@ interface DataCleaner {
         draftProduct: DraftProduct
     )
 
-    suspend fun clearAllData(): Boolean
+    suspend fun clearAllData()
 }

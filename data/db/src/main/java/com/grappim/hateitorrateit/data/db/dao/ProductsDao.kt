@@ -70,10 +70,10 @@ interface ProductsDao {
     @Transaction
     suspend fun updateProductAndImages(
         productEntity: ProductEntity,
-        list: List<ProductImageDataEntity>
+        images: List<ProductImageDataEntity>
     ) {
         updateProduct(productEntity)
-        insertImages(list)
+        insertImages(images)
     }
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

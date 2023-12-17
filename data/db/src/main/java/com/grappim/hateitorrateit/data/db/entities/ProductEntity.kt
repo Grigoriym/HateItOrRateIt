@@ -5,8 +5,20 @@ import androidx.room.PrimaryKey
 import com.grappim.hateitorrateit.domain.HateRateType
 import java.time.OffsetDateTime
 
+const val productsTable = "products_table"
+
+/**
+ * @param productId - id of product in database
+ * @param name - name of product
+ * @param createdDate - date when product was created
+ * @param productFolderName - name of folder where product images are stored
+ * @param description - description of product
+ * @param shop - shop where product was bought
+ * @param type - type of product
+ * @param isCreated - flag that shows if product was created or not. It is needed to show only created products in list
+ */
 @Entity(
-    tableName = "products_table"
+    tableName = productsTable
 )
 data class ProductEntity(
     @PrimaryKey(autoGenerate = true)

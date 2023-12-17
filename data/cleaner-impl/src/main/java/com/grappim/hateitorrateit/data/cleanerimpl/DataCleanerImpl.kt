@@ -66,14 +66,21 @@ class DataCleanerImpl @Inject constructor(
         productsRepository.removeProductById(draftProduct.id)
     }
 
-    override suspend fun clearAllData(): Boolean = withContext(ioDispatcher) {
+    override suspend fun clearAllData() = withContext(ioDispatcher) {
+        clearDatabaseData()
+        clearFileSystemData()
+    }
+
+    private suspend fun clearDatabaseData() {
         hateItOrRateItDatabase.runInTransaction {
             runBlocking {
                 hateItOrRateItDatabase.clearAllTables()
                 hateItOrRateItDatabase.databaseDao().clearPrimaryKeyIndex()
             }
         }
+    }
 
+    private fun clearFileSystemData() {
         fileUtils.getMainFolder("").deleteRecursively()
     }
 }

@@ -4,8 +4,6 @@ import androidx.sqlite.db.SimpleSQLiteQuery
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
-import com.grappim.hateitorrateit.data.db.wrapWithPercentWildcards
-import com.grappim.hateitorrateit.data.db.wrapWithSingleQuotes
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.CreateProduct
@@ -22,7 +20,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.withContext
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -31,13 +28,14 @@ class ProductsRepositoryImpl @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
     private val productsDao: ProductsDao,
     private val localDataStorage: LocalDataStorage,
+    private val productsMapper: ProductMapper,
+    private val sqlQueryBuilder: SqlQueryBuilder,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ProductsRepository {
 
     override suspend fun getProductById(id: Long): Product {
         val entity = productsDao.getProductById(id)
-        val domain = entity.productEntity.toProduct(entity.files)
-        return domain
+        return productsMapper.fromEntityToProduct(entity)
     }
 
     override suspend fun updateProduct(
@@ -54,7 +52,7 @@ class ProductsRepositoryImpl @Inject constructor(
         id: Long,
         files: List<ProductImageData>
     ) = withContext(ioDispatcher) {
-        val filesEntity = files.toEntities(id)
+        val filesEntity = productsMapper.fromProductImageDataListToEntityList(id, files)
         productsDao.insertImages(filesEntity)
     }
 
@@ -83,12 +81,27 @@ class ProductsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getEmptyFiles(): List<EmptyFileData> =
-        productsDao.getEmptyFiles().toEmptyFilesData()
+        productsMapper.fromProductWithImagesToEmptyFilesData(productsDao.getEmptyFiles())
 
     override suspend fun deleteEmptyFiles() = productsDao.deleteEmptyFiles()
 
-    override suspend fun deleteProductImage(id: Long, name: String) =
-        productsDao.deleteProductImageByIdAndName(id, name)
+    override suspend fun deleteProductImage(
+        id: Long,
+        name: String,
+    ) = productsDao.deleteProductImageByIdAndName(id, name)
+
+    override suspend fun removeProductById(id: Long) {
+        productsDao.deleteProductAndImagesById(id)
+    }
+
+    override suspend fun addProduct(product: CreateProduct) = withContext(ioDispatcher) {
+        val productEntity = productsMapper.fromCreateProductToEntity(product)
+        val images = productsMapper.fromCreateProductToProductImageDataEntityList(product)
+        productsDao.updateProductAndImages(
+            productEntity = productEntity,
+            images = images
+        )
+    }
 
     override fun getProductsFlow(
         query: String,
@@ -97,60 +110,15 @@ class ProductsRepositoryImpl @Inject constructor(
         emitAll(if (query.isEmpty() && type == null) {
             productsDao.getAllProductsFlow()
         } else {
-            val sqLiteQuery = buildSqlQuery(query, type)
+            val sqLiteQuery = sqlQueryBuilder.buildSqlQuery(query, type)
             productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
         }.mapLatest { list ->
-            list.map { it.toProduct() }
-        })
-    }
-
-    private fun buildSqlQuery(
-        query: String,
-        type: HateRateType?
-    ): String {
-        val sqlQuery = StringBuilder("SELECT * FROM products_table ")
-        if (query.isNotEmpty() || type != null) {
-            sqlQuery.append("WHERE ")
-        }
-        if (query.isNotEmpty()) {
-            sqlQuery.append(
-                "(name LIKE ${
-                    query.wrapWithPercentWildcards().wrapWithSingleQuotes()
-                } "
-            )
-            sqlQuery.append(
-                "OR shop LIKE ${
-                    query.wrapWithPercentWildcards().wrapWithSingleQuotes()
-                } "
-            )
-            sqlQuery.append(
-                "OR description LIKE ${
-                    query.wrapWithPercentWildcards().wrapWithSingleQuotes()
-                }) "
-            )
-        }
-        if (type != null) {
-            if (query.isNotEmpty()) {
-                sqlQuery.append("AND ")
+            list.map {
+                productsMapper.fromProductEntityToProduct(
+                    productEntity = it.productEntity,
+                    files = it.files
+                )
             }
-            sqlQuery.append("type=${type.name.wrapWithSingleQuotes()} ")
-        }
-        sqlQuery.append("AND isCreated=1 ")
-        sqlQuery.append("ORDER BY createdDate DESC")
-        Timber.d("sqlQuery: $sqlQuery")
-        return sqlQuery.toString()
-    }
-
-    override suspend fun removeProductById(id: Long) {
-        productsDao.deleteProductAndImagesById(id)
-    }
-
-    override suspend fun addProduct(product: CreateProduct) = withContext(ioDispatcher) {
-        val entity = product.toEntity()
-        val list = product.toImageDataEntityList()
-        productsDao.updateProductAndImages(
-            productEntity = entity,
-            list = list
-        )
+        })
     }
 }
