@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
+import androidx.annotation.VisibleForTesting
 import com.grappim.hateitorrateit.data.db.entities.productsTable
 import com.grappim.hateitorrateit.domain.HateRateType
 import timber.log.Timber
@@ -10,11 +11,20 @@ import javax.inject.Singleton
 class SqlQueryBuilder @Inject constructor() {
 
     fun buildSqlQuery(query: String, type: HateRateType?): String {
+        val whereClause = buildWhereClause(query, type)
+        val orderByClause = "ORDER BY createdDate DESC"
+        val resultQuery = "SELECT * FROM $productsTable $whereClause $orderByClause"
+        Timber.d("SQL query: $resultQuery")
+        return resultQuery
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun buildWhereClause(query: String, type: HateRateType?): String {
         val conditions = mutableListOf<String>()
 
         if (query.isNotEmpty()) {
-            val wildcardQuery = query.wrapWithPercentWildcards().wrapWithSingleQuotes()
-            conditions.add("(name LIKE $wildcardQuery OR shop LIKE $wildcardQuery OR description LIKE $wildcardQuery)")
+            val wrappedQuery = query.wrapWithPercentWildcards().wrapWithSingleQuotes()
+            conditions.add("(name LIKE $wrappedQuery OR shop LIKE $wrappedQuery OR description LIKE $wrappedQuery)")
         }
 
         type?.let {
@@ -23,12 +33,7 @@ class SqlQueryBuilder @Inject constructor() {
 
         conditions.add("isCreated=1")
 
-        val whereClause =
-            if (conditions.isNotEmpty()) "WHERE " + conditions.joinToString(" AND ") else ""
-        val orderByClause = "ORDER BY createdDate DESC"
-        val resultQuery = "SELECT * FROM $productsTable $whereClause $orderByClause"
-        Timber.d("SQL query: $resultQuery")
-        return resultQuery
+        return if (conditions.isNotEmpty()) "WHERE ${conditions.joinToString(" AND ")}" else ""
     }
 
     /**
