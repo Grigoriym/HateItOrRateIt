@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
+import androidx.annotation.VisibleForTesting
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
@@ -18,7 +19,7 @@ class ProductMapper @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) {
 
-    suspend fun fromEntityToProduct(
+    suspend fun toProduct(
         productWithImagesEntity: ProductWithImagesEntity,
     ): Product =
         withContext(ioDispatcher) {
@@ -28,14 +29,7 @@ class ProductMapper @Inject constructor(
                 id = entity.productId,
                 name = entity.name,
                 filesUri = files?.map { productImageDataEntity ->
-                    ProductImageData(
-                        name = productImageDataEntity.name,
-                        mimeType = productImageDataEntity.mimeType,
-                        uriPath = productImageDataEntity.uriPath,
-                        uriString = productImageDataEntity.uriString,
-                        size = productImageDataEntity.size,
-                        md5 = productImageDataEntity.md5
-                    )
+                    toProductImageData(productImageDataEntity)
                 } ?: emptyList(),
                 createdDate = entity.createdDate,
                 productFolderName = entity.productFolderName,
@@ -45,20 +39,39 @@ class ProductMapper @Inject constructor(
             )
         }
 
-    suspend fun fromProductImageDataListToEntityList(
+    suspend fun toProduct(
+        productEntity: ProductEntity,
+        files: List<ProductImageDataEntity>?
+    ): Product = withContext(ioDispatcher) {
+        Product(
+            id = productEntity.productId,
+            name = productEntity.name,
+            filesUri = files?.map { productImageDataEntity ->
+                toProductImageData(productImageDataEntity)
+            } ?: emptyList(),
+            createdDate = productEntity.createdDate,
+            productFolderName = productEntity.productFolderName,
+            description = productEntity.description,
+            shop = productEntity.shop,
+            type = productEntity.type
+        )
+    }
+
+    suspend fun toProductImageDataEntityList(
         productId: Long,
         files: List<ProductImageData>
     ): List<ProductImageDataEntity> =
         withContext(ioDispatcher) {
             files.map {
-                fromProductImageDataToEntity(
+                toProductImageDataEntity(
                     productId = productId,
                     productImageData = it
                 )
             }
         }
 
-    suspend fun fromProductImageDataToEntity(
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    suspend fun toProductImageDataEntity(
         productId: Long,
         productImageData: ProductImageData
     ): ProductImageDataEntity = withContext(ioDispatcher) {
@@ -73,7 +86,7 @@ class ProductMapper @Inject constructor(
         )
     }
 
-    suspend fun fromProductWithImagesToEmptyFilesData(
+    suspend fun toEmptyFileDataList(
         list: List<ProductWithImagesEntity>,
     ): List<EmptyFileData> = withContext(ioDispatcher) {
         list.map { productWithImagesEntity ->
@@ -84,7 +97,7 @@ class ProductMapper @Inject constructor(
         }
     }
 
-    suspend fun fromCreateProductToEntity(
+    suspend fun toProductEntity(
         createProduct: CreateProduct
     ): ProductEntity = withContext(ioDispatcher) {
         ProductEntity(
@@ -99,7 +112,7 @@ class ProductMapper @Inject constructor(
         )
     }
 
-    suspend fun fromCreateProductToProductImageDataEntityList(
+    suspend fun toProductImageDataEntityList(
         createProduct: CreateProduct
     ): List<ProductImageDataEntity> = withContext(ioDispatcher) {
         createProduct.filesUri.map {
@@ -115,29 +128,13 @@ class ProductMapper @Inject constructor(
         }
     }
 
-    suspend fun fromProductEntityToProduct(
-        productEntity: ProductEntity,
-        files: List<ProductImageDataEntity>?
-    ): Product = withContext(ioDispatcher) {
-        Product(
-            id = productEntity.productId,
-            name = productEntity.name,
-            filesUri = files?.map { productImageDataEntity ->
-                ProductImageData(
-                    name = productImageDataEntity.name,
-                    mimeType = productImageDataEntity.mimeType,
-                    uriPath = productImageDataEntity.uriPath,
-                    uriString = productImageDataEntity.uriString,
-                    size = productImageDataEntity.size,
-                    md5 = productImageDataEntity.md5
-                )
-            } ?: emptyList(),
-            createdDate = productEntity.createdDate,
-            productFolderName = productEntity.productFolderName,
-            description = productEntity.description,
-            shop = productEntity.shop,
-            type = productEntity.type
+    private fun toProductImageData(productImageDataEntity: ProductImageDataEntity) =
+        ProductImageData(
+            name = productImageDataEntity.name,
+            mimeType = productImageDataEntity.mimeType,
+            uriPath = productImageDataEntity.uriPath,
+            uriString = productImageDataEntity.uriString,
+            size = productImageDataEntity.size,
+            md5 = productImageDataEntity.md5
         )
-    }
-
 }

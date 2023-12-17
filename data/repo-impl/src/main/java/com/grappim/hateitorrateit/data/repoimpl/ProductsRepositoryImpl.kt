@@ -35,7 +35,7 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun getProductById(id: Long): Product {
         val entity = productsDao.getProductById(id)
-        return productsMapper.fromEntityToProduct(entity)
+        return productsMapper.toProduct(entity)
     }
 
     override suspend fun updateProduct(
@@ -52,7 +52,7 @@ class ProductsRepositoryImpl @Inject constructor(
         id: Long,
         files: List<ProductImageData>
     ) = withContext(ioDispatcher) {
-        val filesEntity = productsMapper.fromProductImageDataListToEntityList(id, files)
+        val filesEntity = productsMapper.toProductImageDataEntityList(id, files)
         productsDao.insertImages(filesEntity)
     }
 
@@ -81,7 +81,7 @@ class ProductsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getEmptyFiles(): List<EmptyFileData> =
-        productsMapper.fromProductWithImagesToEmptyFilesData(productsDao.getEmptyFiles())
+        productsMapper.toEmptyFileDataList(productsDao.getEmptyFiles())
 
     override suspend fun deleteEmptyFiles() = productsDao.deleteEmptyFiles()
 
@@ -95,8 +95,8 @@ class ProductsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addProduct(product: CreateProduct) = withContext(ioDispatcher) {
-        val productEntity = productsMapper.fromCreateProductToEntity(product)
-        val images = productsMapper.fromCreateProductToProductImageDataEntityList(product)
+        val productEntity = productsMapper.toProductEntity(product)
+        val images = productsMapper.toProductImageDataEntityList(product)
         productsDao.updateProductAndImages(
             productEntity = productEntity,
             images = images
@@ -114,7 +114,7 @@ class ProductsRepositoryImpl @Inject constructor(
             productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
         }.mapLatest { list ->
             list.map {
-                productsMapper.fromProductEntityToProduct(
+                productsMapper.toProduct(
                     productEntity = it.productEntity,
                     files = it.files
                 )

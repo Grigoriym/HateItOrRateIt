@@ -42,12 +42,12 @@ class ProductsRepositoryImplTest {
         val productWithImagesEntity = getProductWithImagesEntity()
 
         coEvery { productsDao.getProductById(any()) } returns productWithImagesEntity
-        coEvery { productsMapper.fromEntityToProduct(any()) } returns product
+        coEvery { productsMapper.toProduct(any()) } returns product
 
         val actual = repository.getProductById(ID)
 
         coVerify { productsDao.getProductById(ID) }
-        coVerify { productsMapper.fromEntityToProduct(productWithImagesEntity) }
+        coVerify { productsMapper.toProduct(productWithImagesEntity) }
 
         assertEquals(product, actual)
     }
@@ -74,7 +74,7 @@ class ProductsRepositoryImplTest {
 
         coEvery { productsDao.insertImages(any()) } just Runs
         coEvery {
-            productsMapper.fromProductImageDataListToEntityList(
+            productsMapper.toProductImageDataEntityList(
                 any(),
                 any()
             )
@@ -85,13 +85,13 @@ class ProductsRepositoryImplTest {
             files = files
         )
 
-        coVerify { productsMapper.fromProductImageDataListToEntityList(ID, files) }
+        coVerify { productsMapper.toProductImageDataEntityList(ID, files) }
         coVerify { productsDao.insertImages(images) }
     }
 
     @Test
     fun `addDraftProduct should add draft product`() = runTest {
-        val nowDate = getNowDate()
+        val nowDate = nowDate
         val type = HateRateType.HATE
         val folderDate = "2023-12-12_12-12-12"
         val folderName = "${ID}_${folderDate}"
@@ -120,15 +120,15 @@ class ProductsRepositoryImplTest {
 
     @Test
     fun `getEmptyFiles should return empty files`() = runTest {
-        val emptyFiles = getListOfProductWithImagesEntity()
+        val emptyFiles = getProductWithImagesEntityList()
         val emptyFileData = getListOfEmptyFileData()
         coEvery { productsDao.getEmptyFiles() } returns emptyFiles
-        coEvery { productsMapper.fromProductWithImagesToEmptyFilesData(any()) } returns emptyFileData
+        coEvery { productsMapper.toEmptyFileDataList(any()) } returns emptyFileData
 
         val actual = repository.getEmptyFiles()
 
         coVerify { productsDao.getEmptyFiles() }
-        coVerify { productsMapper.fromProductWithImagesToEmptyFilesData(emptyFiles) }
+        coVerify { productsMapper.toEmptyFileDataList(emptyFiles) }
 
         assertEquals(emptyFileData, actual)
     }
@@ -166,14 +166,14 @@ class ProductsRepositoryImplTest {
         val productEntity = getProductEntity()
         val images = getProductImageDataEntityList()
 
-        coEvery { productsMapper.fromCreateProductToEntity(any()) } returns productEntity
-        coEvery { productsMapper.fromCreateProductToProductImageDataEntityList(any()) } returns images
+        coEvery { productsMapper.toProductEntity(any()) } returns productEntity
+        coEvery { productsMapper.toProductImageDataEntityList(any()) } returns images
         coEvery { productsDao.updateProductAndImages(any(), any()) } just Runs
 
         repository.addProduct(createProduct)
 
-        coVerify { productsMapper.fromCreateProductToEntity(createProduct) }
-        coVerify { productsMapper.fromCreateProductToProductImageDataEntityList(createProduct) }
+        coVerify { productsMapper.toProductEntity(createProduct) }
+        coVerify { productsMapper.toProductImageDataEntityList(createProduct) }
         coVerify { productsDao.updateProductAndImages(productEntity, images) }
     }
 
@@ -182,7 +182,7 @@ class ProductsRepositoryImplTest {
         val query = "query"
         val type = HateRateType.RATE
 
-        val productsWithImages = getListOfProductWithImagesEntity()
+        val productsWithImages = getProductWithImagesEntityList()
         val sqlQuery = "sqlQuery"
         val product = getProduct()
 
@@ -190,7 +190,7 @@ class ProductsRepositoryImplTest {
         coEvery { productsDao.getAllProductsByRawQueryFlow(any()) } returns flowOf(
             productsWithImages
         )
-        coEvery { productsMapper.fromProductEntityToProduct(any(), any()) } returns product
+        coEvery { productsMapper.toProduct(any(), any()) } returns product
 
         repository.getProductsFlow(query, type).test {
             assertEquals(listOf(product), awaitItem())
@@ -206,7 +206,7 @@ class ProductsRepositoryImplTest {
         val query = ""
         val type = HateRateType.RATE
 
-        val productsWithImages = getListOfProductWithImagesEntity()
+        val productsWithImages = getProductWithImagesEntityList()
         val sqlQuery = "sqlQuery"
         val product = getProduct()
 
@@ -214,7 +214,7 @@ class ProductsRepositoryImplTest {
         coEvery { productsDao.getAllProductsByRawQueryFlow(any()) } returns flowOf(
             productsWithImages
         )
-        coEvery { productsMapper.fromProductEntityToProduct(any(), any()) } returns product
+        coEvery { productsMapper.toProduct(any(), any()) } returns product
 
         repository.getProductsFlow(query, type).test {
             assertEquals(listOf(product), awaitItem())
@@ -230,7 +230,7 @@ class ProductsRepositoryImplTest {
         val query = "query"
         val type: HateRateType? = null
 
-        val productsWithImages = getListOfProductWithImagesEntity()
+        val productsWithImages = getProductWithImagesEntityList()
         val sqlQuery = "sqlQuery"
         val product = getProduct()
 
@@ -238,7 +238,7 @@ class ProductsRepositoryImplTest {
         coEvery { productsDao.getAllProductsByRawQueryFlow(any()) } returns flowOf(
             productsWithImages
         )
-        coEvery { productsMapper.fromProductEntityToProduct(any(), any()) } returns product
+        coEvery { productsMapper.toProduct(any(), any()) } returns product
 
         repository.getProductsFlow(query, type).test {
             assertEquals(listOf(product), awaitItem())
@@ -261,7 +261,7 @@ class ProductsRepositoryImplTest {
             coEvery { productsDao.getAllProductsFlow() } returns flowOf(
                 listOf(productWithImages)
             )
-            coEvery { productsMapper.fromProductEntityToProduct(any(), any()) } returns product
+            coEvery { productsMapper.toProduct(any(), any()) } returns product
 
             repository.getProductsFlow(query, type).test {
                 assertEquals(listOf(product), awaitItem())
@@ -270,7 +270,7 @@ class ProductsRepositoryImplTest {
                 coVerify(exactly = 0) { sqlQueryBuilder.buildSqlQuery(query, type) }
                 coVerify(exactly = 0) { productsDao.getAllProductsByRawQueryFlow(any()) }
                 coVerify {
-                    productsMapper.fromProductEntityToProduct(
+                    productsMapper.toProduct(
                         productWithImages.productEntity,
                         productWithImages.files,
                     )

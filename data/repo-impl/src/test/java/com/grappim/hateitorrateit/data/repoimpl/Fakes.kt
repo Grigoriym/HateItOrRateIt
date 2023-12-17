@@ -13,6 +13,9 @@ import java.time.OffsetDateTime
 
 const val ID = 1L
 const val NAME = "test_name"
+const val FOLDER_NAME = "folder_name"
+
+val nowDate = OffsetDateTime.now()
 
 fun getProductImageDataEntityList() = listOf(
     getProductImageDataEntity()
@@ -29,7 +32,7 @@ fun getProductImageDataEntity() =
         productId = ID
     )
 
-fun getListOfProductWithImagesEntity() = listOf(
+fun getProductWithImagesEntityList() = listOf(
     getProductWithImagesEntity()
 )
 
@@ -38,8 +41,8 @@ fun getProductWithImagesEntity() =
         productEntity = ProductEntity(
             productId = ID,
             name = NAME,
-            createdDate = OffsetDateTime.now(),
-            productFolderName = "productFolderName",
+            createdDate = nowDate,
+            productFolderName = FOLDER_NAME,
             description = "description",
             shop = "shop",
             type = HateRateType.HATE,
@@ -56,11 +59,11 @@ fun getListOfEmptyFileData() = listOf(
 
 fun getEmptyFileData() = EmptyFileData(
     id = ID,
-    productFolderName = "productFolderName",
+    productFolderName = FOLDER_NAME,
 )
 
 fun getProductImageData() = ProductImageData(
-    name = "name",
+    name = NAME,
     mimeType = "mimeType",
     uriPath = "uriPath",
     uriString = "uriString",
@@ -68,14 +71,18 @@ fun getProductImageData() = ProductImageData(
     md5 = "md5"
 )
 
-fun getProduct(): Product = Product(
+fun getProductImageDataList() = listOf(
+    getProductImageData()
+)
+
+fun getProduct(
+    filesUri: List<ProductImageData> = getProductImageDataList(),
+): Product = Product(
     id = ID,
-    name = "name",
-    filesUri = listOf(
-        getProductImageData()
-    ),
-    createdDate = OffsetDateTime.now(),
-    productFolderName = "productFolderName",
+    name = NAME,
+    filesUri = filesUri,
+    createdDate = nowDate,
+    productFolderName = FOLDER_NAME,
     description = "description",
     shop = "shop",
     type = HateRateType.HATE
@@ -83,9 +90,9 @@ fun getProduct(): Product = Product(
 
 fun getProductEntity(): ProductEntity = ProductEntity(
     productId = ID,
-    name = "name",
-    createdDate = OffsetDateTime.now(),
-    productFolderName = "productFolderName",
+    name = NAME,
+    createdDate = nowDate,
+    productFolderName = FOLDER_NAME,
     description = "description",
     shop = "shop",
     type = HateRateType.HATE,
@@ -94,22 +101,18 @@ fun getProductEntity(): ProductEntity = ProductEntity(
 
 fun getDraftProduct() = DraftProduct(
     id = ID,
-    date = OffsetDateTime.now(),
-    folderName = "folderName",
+    date = nowDate,
+    folderName = FOLDER_NAME,
     type = HateRateType.HATE
 )
 
 fun getCreateProduct() = CreateProduct(
     id = ID,
     name = NAME,
-    filesUri = listOf(
-        getProductImageData()
-    ),
-    createdDate = OffsetDateTime.now(),
-    productFolderName = "productFolderName",
+    filesUri = getProductImageDataList(),
+    createdDate = nowDate,
+    productFolderName = FOLDER_NAME,
     description = "description",
     shop = "shop",
     type = HateRateType.HATE
 )
-
-fun getNowDate() = OffsetDateTime.now()
