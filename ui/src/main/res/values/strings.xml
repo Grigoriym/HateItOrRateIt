@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hate Rate</string>
+    <string name="app_name" translatable="false">Hate Rate</string>
 
     <string name="add_image">Please add an image</string>
     <string name="set_name">Please enter a product name</string>
@@ -14,7 +14,7 @@
     <string name="save_changes_before_exit">Save changes before exiting?</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
     <string name="clear_data">Clear All Data</string>
@@ -27,6 +27,8 @@
     <string name="if_quit_lose_data">Warning: Quitting will result in data loss.</string>
     <string name="hate">Hate</string>
     <string name="rate">Rate</string>
+
+    <string name="content_description_back_button">Going back</string>
 
     <string name="toggle_crashlytics">Do you allow crash reports to be sent?</string>
     <string name="crashlytics_settings_subtitle">This is needed to diagnose and resolve any crashes</string>

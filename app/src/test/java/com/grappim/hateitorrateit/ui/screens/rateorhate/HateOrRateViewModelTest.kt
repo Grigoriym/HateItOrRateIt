@@ -7,9 +7,11 @@ import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
 import com.grappim.hateitorrateit.utils.FileUtils
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
@@ -80,6 +82,8 @@ class HateOrRateViewModelTest {
 
     @Test
     fun `on removeData calls dataCleaner`() {
+        coEvery { dataCleaner.clearProductData(any()) } just Runs
+
         viewModel.viewState.value.removeData()
 
         coVerify { dataCleaner.clearProductData(any()) }
@@ -87,7 +91,7 @@ class HateOrRateViewModelTest {
 
     @Test
     fun `on saveData, product is created`() {
-        coEvery { productsRepository.addProduct(any()) } returns Unit
+        coEvery { productsRepository.addProduct(any()) } just Runs
 
         viewModel.viewState.value.saveData()
 

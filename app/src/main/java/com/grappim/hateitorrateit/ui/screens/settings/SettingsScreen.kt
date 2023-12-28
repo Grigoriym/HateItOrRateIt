@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.HighlightOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -28,12 +29,26 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 
+const val CROSSFADE_TAG = "crossfade_tag"
+const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
+
 @Composable
-fun SettingsScreen(
-    viewModel: SettingsViewModel = hiltViewModel(),
+internal fun SettingsRoute(
     goBack: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    SettingsScreen(
+        state = state,
+        goBack = goBack,
+    )
+}
+
+@Composable
+internal fun SettingsScreen(
+    state: SettingsViewState,
+    goBack: () -> Unit,
+) {
     SettingsScreenContent(
         state = state,
         goBack = goBack,
@@ -45,12 +60,14 @@ private fun SettingsScreenContent(
     state: SettingsViewState,
     goBack: () -> Unit,
 ) {
-    Scaffold(topBar = {
-        PlatoTopBar(
-            text = stringResource(id = R.string.settings),
-            goBack = goBack,
-        )
-    }) { padding ->
+    Scaffold(
+        topBar = {
+            PlatoTopBar(
+                text = stringResource(id = R.string.settings),
+                goBack = goBack,
+            )
+        },
+    ) { padding ->
         PlatoLoadingDialog(state.isLoading)
 
         PlatoAlertDialog(
@@ -84,7 +101,7 @@ private fun SettingsScreenContent(
             })
             ListItem(modifier = Modifier.clickable {
                 state.onCrashlyticsToggle()
-            }, text = {
+            }.testTag(CRASHLYTICS_TILE_TAG), text = {
                 Text(text = stringResource(id = R.string.toggle_crashlytics))
             }, trailing = {
                 CrashesIcon(state)
@@ -105,7 +122,8 @@ fun TypeIcon(
         animationSpec = tween(500),
     ) { type ->
         Icon(
-            modifier = Modifier,
+            modifier = Modifier
+                .testTag(type.icon().name),
             imageVector = type.icon(),
             contentDescription = null,
             tint = type.color(),
@@ -118,17 +136,20 @@ fun CrashesIcon(
     state: SettingsViewState
 ) {
     Crossfade(
+        modifier = Modifier.testTag(CROSSFADE_TAG),
         targetState = state.isCrashesCollectionEnabled,
         label = "custom_switch_label",
         animationSpec = tween(500),
     ) { enabled ->
+        val imageVector = if (enabled) {
+            Icons.Filled.CheckCircleOutline
+        } else {
+            Icons.Filled.HighlightOff
+        }
         Icon(
-            modifier = Modifier,
-            imageVector = if (enabled) {
-                Icons.Filled.CheckCircleOutline
-            } else {
-                Icons.Filled.HighlightOff
-            },
+            modifier = Modifier
+                .testTag(imageVector.name),
+            imageVector = imageVector,
             contentDescription = null,
             tint = if (enabled) {
                 Feijoa

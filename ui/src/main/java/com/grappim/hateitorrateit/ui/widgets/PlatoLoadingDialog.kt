@@ -9,9 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+
+const val PLATO_LOADING_DIALOG_TAG = "plato_loading_dialog_tag"
 
 @Composable
 fun PlatoLoadingDialog(isLoading: Boolean) {
@@ -24,8 +27,10 @@ fun PlatoLoadingDialog(isLoading: Boolean) {
             )
         ) {
             Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .testTag(PLATO_LOADING_DIALOG_TAG),
                 shape = RoundedCornerShape(16.dp),
-                modifier = Modifier.fillMaxSize(),
                 color = Color.Transparent,
             ) {
                 Box(

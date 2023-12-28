@@ -24,6 +24,13 @@ android {
         }
     }
 
+    packaging.resources.excludes.apply {
+        add("META-INF/AL2.0")
+        add("META-INF/LGPL2.1")
+        add("META-INF/LICENSE.md")
+        add("META-INF/LICENSE-notice.md")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -92,6 +99,7 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.util)
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material)

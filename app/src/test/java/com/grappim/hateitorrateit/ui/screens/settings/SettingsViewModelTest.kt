@@ -35,6 +35,8 @@ class SettingsViewModelTest {
         every { localDataStorage.typeFlow } returns flowOf(HateRateType.RATE)
         every { localDataStorage.crashesCollectionEnabled } returns flowOf(false)
         every { analyticsController.toggleCrashesCollection(any()) } just Runs
+        coEvery { localDataStorage.setCrashesCollectionEnabled(any()) } just Runs
+        coEvery { localDataStorage.changeTypeTo(any()) } just Runs
 
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
@@ -57,7 +59,7 @@ class SettingsViewModelTest {
 
     @Test
     fun `onAlertDialogConfirmButtonClicked calls dataCleaner`() = runTest {
-        coEvery { dataCleaner.clearAllData() } returns true
+        coEvery { dataCleaner.clearAllData() } just Runs
 
         viewModel.viewState.value.onAlertDialogConfirmButtonClicked()
 
@@ -66,10 +68,11 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun `onCrashlyticsToggle toggles crashes collection`() {
+    fun `onCrashlyticsToggle toggles crashes collection`() = runTest {
         viewModel.viewState.value.onCrashlyticsToggle()
         coVerify { localDataStorage.setCrashesCollectionEnabled(any()) }
     }
+
     @Test
     fun `onDismissDialog sets dialog state`() {
         viewModel.viewState.value.onDismissDialog()

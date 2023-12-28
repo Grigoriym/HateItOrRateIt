@@ -13,7 +13,12 @@ import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
+import com.grappim.hateitorrateit.ui.R
+
+const val PLATO_TOP_BAR_TAG = "plato_top_bar_tag"
 
 @Composable
 fun PlatoTopBar(
@@ -26,7 +31,8 @@ fun PlatoTopBar(
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     TopAppBar(
-        modifier = modifier,
+        modifier = modifier
+            .testTag(PLATO_TOP_BAR_TAG),
         title = {
             Text(text = text)
         },
@@ -37,7 +43,7 @@ fun PlatoTopBar(
                 IconButton(onClick = goBack) {
                     Icon(
                         imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = "Go Back from Hate It"
+                        contentDescription = stringResource(id = R.string.content_description_back_button)
                     )
                 }
             } else {

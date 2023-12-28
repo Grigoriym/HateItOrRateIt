@@ -31,14 +31,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
 import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
-import com.grappim.hateitorrateit.ui.screens.settings.SettingsScreen
-import com.grappim.hateitorrateit.utils.safeClick
+import com.grappim.hateitorrateit.ui.screens.settings.SettingsRoute
 import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundDark
 import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundLight
+import com.grappim.hateitorrateit.utils.safeClick
 
 @Composable
 fun RootMainScreen(
-    rootViewModel: MainActivityViewModel,
     goToHateOrRate: () -> Unit,
     goToDetails: (id: Long) -> Unit,
 ) {
@@ -120,7 +119,7 @@ fun RootMainScreen(
                     )
                 }
                 composable(HomeNavDestination.Settings.route) { navBackStackEntry ->
-                    SettingsScreen(
+                    SettingsRoute(
                         goBack = {
                             navBackStackEntry.safeClick {
                                 navController.popBackStack()

@@ -36,7 +36,7 @@ class SettingsViewModel @Inject constructor(
             launch {
                 localDataStorage.typeFlow.collect { value ->
                     _viewState.update {
-                        it.copy(type = value)
+                        it.safeCopy(type = value)
                     }
                 }
             }
@@ -44,7 +44,7 @@ class SettingsViewModel @Inject constructor(
                 localDataStorage.crashesCollectionEnabled.collect { value ->
                     analyticsController.toggleCrashesCollection(value)
                     _viewState.update {
-                        it.copy(isCrashesCollectionEnabled = value)
+                        it.safeCopy(isCrashesCollectionEnabled = value)
                     }
                 }
             }
@@ -65,24 +65,24 @@ class SettingsViewModel @Inject constructor(
 
     private fun askIfShouldClearData() {
         _viewState.update {
-            it.copy(showAlertDialog = true)
+            it.safeCopy(showAlertDialog = true)
         }
     }
 
     private fun dismissDialog() {
         _viewState.update {
-            it.copy(showAlertDialog = false)
+            it.safeCopy(showAlertDialog = false)
         }
     }
 
     private fun clearData() {
         viewModelScope.launch {
             _viewState.update {
-                it.copy(isLoading = true, showAlertDialog = false)
+                it.safeCopy(isLoading = true, showAlertDialog = false)
             }
             dataCleaner.clearAllData()
             _viewState.update {
-                it.copy(isLoading = false)
+                it.safeCopy(isLoading = false)
             }
         }
     }
