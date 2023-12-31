@@ -22,10 +22,10 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Run unit tests
-      run: ./graldew test
+      run: ./gradlew test
 
     - name: Check code
       run: ./gradlew check
 
     - name: Build release APK
-      run: ./gralew assembleRelease
+      run: ./gradlew assembleRelease
