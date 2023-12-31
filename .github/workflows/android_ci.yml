@@ -1,0 +1,31 @@
+name: Android CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JSK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        
+    - name: Grant execute permission for gradlew
+      run: chmod +x ./gradlew
+
+    - name: Run unit tests
+      run: ./graldew test
+
+    - name: Check code
+      run: ./gradlew check
+
+    - name: Build release APK
+      run: ./gralew assembleRelease
