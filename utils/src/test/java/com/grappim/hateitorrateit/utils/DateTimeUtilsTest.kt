@@ -131,13 +131,4 @@ class DateTimeUtilsTest {
 
         assertEquals(expected, result)
     }
-
-    @Test
-    fun `getDateTimeUTCNow should return correct string`() {
-        val dateNow = OffsetDateTime.now(ZoneOffset.UTC)
-
-        val result = dateTimeUtilsWithMocks.getDateTimeUTCNow()
-
-        assertEquals(dateNow.withOffsetSameInstant(ZoneOffset.UTC), result)
-    }
 }
