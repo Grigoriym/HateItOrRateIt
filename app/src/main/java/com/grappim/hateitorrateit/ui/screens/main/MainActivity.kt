@@ -9,14 +9,13 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
-import com.grappim.hateitorrateit.ui.screens.details.DetailsScreen
+import com.grappim.hateitorrateit.ui.screens.details.DetailsRoute
 import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
 import com.grappim.hateitorrateit.ui.screens.rateorhate.RateOrHateScreen
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
@@ -36,9 +35,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun MainScreen(
-        rootViewModel: MainActivityViewModel = hiltViewModel()
-    ) {
+    private fun MainScreen() {
         val navController = rememberNavController()
 
         Surface(
@@ -51,7 +48,6 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable(RootNavDestinations.Home.route) { navBackStackEntry ->
                     RootMainScreen(
-                        rootViewModel = rootViewModel,
                         goToHateOrRate = {
                             navBackStackEntry.safeClick {
                                 navController.navigate(RootNavDestinations.HateOrRate.route)
@@ -89,7 +85,7 @@ class MainActivity : ComponentActivity() {
                         type = NavType.LongType
                     })
                 ) { navBackStackEntry ->
-                    DetailsScreen(
+                    DetailsRoute(
                         goBack = {
                             navBackStackEntry.safeClick {
                                 navController.popBackStack()

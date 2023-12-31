@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,22 +18,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Image
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -45,35 +39,56 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
+import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
 import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.ui.widgets.PlatoProgressIndicator
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.ui.widgets.text.TextH4
+import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import kotlinx.coroutines.launch
 
+const val DETAILS_SCREEN_CONTENT_TAG = "details_screen_content_tag"
+const val DETAILS_TOP_APP_BAR_TAG = "details_top_app_bar_tag"
+const val DETAILS_EDIT_CONTENT_TAG = "details_edit_content_tag"
+const val DETAILS_DEMONSTRATION_CONTENT_TAG = "details_demonstration_content_tag"
+
 @Composable
-fun DetailsScreen(
+fun DetailsRoute(
     viewModel: DetailsViewModel = hiltViewModel(),
     goBack: () -> Unit,
     onImageClicked: (productId: String, index: Int) -> Unit,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
+    DetailsScreen(
+        state = state,
+        goBack = goBack,
+        onImageClicked = onImageClicked,
+    )
+}
+
+@Composable
+internal fun DetailsScreen(
+    state: DetailsViewState,
+    goBack: () -> Unit,
+    onImageClicked: (productId: String, index: Int) -> Unit,
+) {
     LaunchedEffect(state.productDeleted) {
         if (state.productDeleted) {
             goBack()
@@ -115,11 +130,12 @@ private fun DetailsScreenContent(
     Column(
         modifier = Modifier
             .statusBarsPadding()
-            .imePadding(),
+            .imePadding()
+            .testTag(DETAILS_SCREEN_CONTENT_TAG),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        TopImageBarContent(
+        TopAppBarContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1.2f),
@@ -147,7 +163,7 @@ private fun DetailsScreenContent(
 }
 
 @Composable
-private fun TopImageBarContent(
+private fun TopAppBarContent(
     modifier: Modifier = Modifier,
     state: DetailsViewState,
     onImageClicked: (productId: String, index: Int) -> Unit,
@@ -193,46 +209,14 @@ private fun TopImageBarContent(
     }
 
     Box(
-        modifier = modifier,
+        modifier = modifier
+            .testTag(DETAILS_TOP_APP_BAR_TAG),
     ) {
-        if (state.images.isNotEmpty()) {
-            HorizontalPager(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.TopCenter),
-                state = pagerState,
-            ) { index ->
-                val file = state.images[index]
-                PlatoCard(
-                    shape = RoundedCornerShape(
-                        bottomEnd = 16.dp,
-                        bottomStart = 16.dp,
-                    ),
-                    onClick = {
-                        if (state.isEdit.not()) {
-                            onImageClicked(
-                                state.id,
-                                index
-                            )
-                        }
-                    }
-                ) {
-                    Image(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        painter = rememberAsyncImagePainter(file.uriString),
-                        contentDescription = "",
-                        contentScale = ContentScale.Crop
-                    )
-                }
-            }
-        } else {
-            PlatoPlaceholderImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.TopCenter),
-            )
-        }
+        AppBarImageContent(
+            state = state,
+            pagerState = pagerState,
+            onImageClicked = onImageClicked,
+        )
 
         PlatoPagerIndicator(
             modifier = Modifier
@@ -248,7 +232,7 @@ private fun TopImageBarContent(
                 .padding(start = 8.dp, bottom = 8.dp)
         ) {
             PlatoIconButton(
-                icon = Icons.Filled.Camera,
+                icon = PlatoIconType.Camera.imageVector,
                 onButtonClick = {
                     keyboardController?.hide()
                     cameraTakePictureData = state.getCameraImageFileUri()
@@ -257,7 +241,7 @@ private fun TopImageBarContent(
             )
             Spacer(modifier = Modifier.width(12.dp))
             PlatoIconButton(
-                icon = Icons.Filled.Image,
+                icon = PlatoIconType.Image.imageVector,
                 onButtonClick = {
                     keyboardController?.hide()
                     galleryLauncher.launch(
@@ -280,35 +264,92 @@ private fun TopImageBarContent(
             Text(text = stringResource(id = R.string.delete_image))
         }
 
-        PlatoTopBar(
-            modifier = Modifier.padding(top = 2.dp),
+        AppBarTopButtonsContent(
+            state = state,
             goBack = goBack,
-            defaultBackButton = false,
-            backgroundColor = Color.Transparent,
-            elevation = 0.dp,
-            actions = {
-                if (state.isEdit) {
-                    PlatoIconButton(
-                        icon = Icons.Filled.Done,
-                        onButtonClick = state.onSubmitChanges
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    PlatoIconButton(
-                        icon = Icons.Filled.Close,
-                        onButtonClick = state.onToggleEditMode
-                    )
-                } else {
-                    PlatoIconButton(
-                        icon = Icons.Filled.Edit,
-                        onButtonClick = state.onToggleEditMode
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    PlatoIconButton(
-                        icon = Icons.Filled.Delete,
-                        onButtonClick = state.onDeleteProduct
-                    )
+        )
+    }
+}
+
+@Composable
+private fun AppBarTopButtonsContent(
+    state: DetailsViewState,
+    goBack: () -> Unit,
+) {
+    PlatoTopBar(
+        modifier = Modifier.padding(top = 2.dp),
+        goBack = goBack,
+        defaultBackButton = false,
+        backgroundColor = Color.Transparent,
+        elevation = 0.dp,
+        actions = {
+            if (state.isEdit) {
+                PlatoIconButton(
+                    icon = PlatoIconType.Done.imageVector,
+                    onButtonClick = state.onSubmitChanges
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                PlatoIconButton(
+                    icon = PlatoIconType.Close.imageVector,
+                    onButtonClick = state.onToggleEditMode
+                )
+            } else {
+                PlatoIconButton(
+                    icon = PlatoIconType.Edit.imageVector,
+                    onButtonClick = state.onToggleEditMode
+                )
+                Spacer(modifier = Modifier.width(12.dp))
+                PlatoIconButton(
+                    icon = PlatoIconType.Delete.imageVector,
+                    onButtonClick = state.onDeleteProduct
+                )
+            }
+        })
+}
+
+@Composable
+private fun BoxScope.AppBarImageContent(
+    state: DetailsViewState,
+    pagerState: PagerState,
+    onImageClicked: (productId: String, index: Int) -> Unit,
+) {
+    if (state.images.isNotEmpty()) {
+        HorizontalPager(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopCenter),
+            state = pagerState,
+        ) { index ->
+            val file = state.images[index]
+            PlatoCard(
+                shape = RoundedCornerShape(
+                    bottomEnd = 16.dp,
+                    bottomStart = 16.dp,
+                ),
+                onClick = {
+                    if (state.isEdit.not()) {
+                        onImageClicked(
+                            state.id,
+                            index
+                        )
+                    }
                 }
-            })
+            ) {
+                Image(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    painter = rememberAsyncImagePainter(file.uriString),
+                    contentDescription = "",
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
+    } else {
+        PlatoPlaceholderImage(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopCenter),
+        )
     }
 }
 
@@ -319,7 +360,8 @@ private fun DetailsDemonstrationContent(
 ) {
     if (state.isEdit.not()) {
         Column(
-            modifier = modifier,
+            modifier = modifier
+                .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {
@@ -346,9 +388,8 @@ private fun DetailsDemonstrationContent(
             }
 
             requireNotNull(state.type)
-            Icon(
+            PlatoIcon(
                 imageVector = state.type.icon(),
-                contentDescription = "",
                 tint = state.type.color(),
             )
         }
@@ -362,7 +403,8 @@ private fun DetailsEditContent(
 ) {
     if (state.isEdit) {
         Column(
-            modifier = modifier,
+            modifier = modifier
+                .testTag(DETAILS_EDIT_CONTENT_TAG),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Top
         ) {

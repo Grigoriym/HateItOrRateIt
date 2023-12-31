@@ -7,7 +7,10 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+
+const val PROGRESS_INDICATOR_TAG = "progress_indicator_tag"
 
 @Composable
 fun PlatoProgressIndicator(
@@ -18,7 +21,8 @@ fun PlatoProgressIndicator(
             CircularProgressIndicator(
                 modifier = Modifier
                     .align(Alignment.Center)
-                    .size(100.dp),
+                    .size(100.dp)
+                    .testTag(PROGRESS_INDICATOR_TAG),
                 strokeWidth = 6.dp
             )
         }

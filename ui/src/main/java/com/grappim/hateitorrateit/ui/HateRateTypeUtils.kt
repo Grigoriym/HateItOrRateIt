@@ -1,14 +1,12 @@
 package com.grappim.hateitorrateit.ui
 
 import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ThumbDown
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.theme.AtomicTangerine
 import com.grappim.hateitorrateit.ui.theme.Feijoa
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 
 @Composable
 fun deactivatedColors() = ButtonDefaults.buttonColors(
@@ -48,7 +46,7 @@ fun HateRateType.icon() = if (this == HateRateType.HATE) {
 }
 
 @Composable
-fun HateRateType.hateIcon() = Icons.Filled.ThumbDown
+fun HateRateType.hateIcon() = PlatoIconType.ThumbDown.imageVector
 
 @Composable
-fun HateRateType.rateIcon() = Icons.Filled.ThumbUp
+fun HateRateType.rateIcon() = PlatoIconType.ThumbUp.imageVector

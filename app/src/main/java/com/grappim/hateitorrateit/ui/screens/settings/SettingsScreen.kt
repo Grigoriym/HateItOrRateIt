@@ -10,9 +10,6 @@ import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircleOutline
-import androidx.compose.material.icons.filled.HighlightOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,6 +22,7 @@ import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
 import com.grappim.hateitorrateit.ui.theme.AtomicTangerine
 import com.grappim.hateitorrateit.ui.theme.Feijoa
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
@@ -142,9 +140,9 @@ fun CrashesIcon(
         animationSpec = tween(500),
     ) { enabled ->
         val imageVector = if (enabled) {
-            Icons.Filled.CheckCircleOutline
+            PlatoIconType.CheckCircleOutline.imageVector
         } else {
-            Icons.Filled.HighlightOff
+            PlatoIconType.HighlightOff.imageVector
         }
         Icon(
             modifier = Modifier

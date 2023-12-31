@@ -13,11 +13,8 @@ import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.FabPosition
 import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -34,6 +31,8 @@ import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
 import com.grappim.hateitorrateit.ui.screens.settings.SettingsRoute
 import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundDark
 import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundLight
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
+import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
 import com.grappim.hateitorrateit.utils.safeClick
 
 @Composable
@@ -55,7 +54,7 @@ fun RootMainScreen(
                 },
                 shape = CircleShape,
             ) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = null)
+                PlatoIcon(imageVector = PlatoIconType.Add.imageVector)
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
@@ -94,7 +93,7 @@ fun RootMainScreen(
                                 restoreState = true
                             }
                         },
-                        icon = { Icon(screen.imageVector, contentDescription = null) },
+                        icon = { PlatoIcon(imageVector = screen.imageVector) },
                     )
                 }
             }

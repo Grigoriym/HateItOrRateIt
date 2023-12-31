@@ -22,10 +22,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -45,7 +41,9 @@ import com.grappim.hateitorrateit.model.ProductListUI
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
+import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
 import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.ui.widgets.text.TextH5
 
@@ -104,7 +102,10 @@ private fun SearchContent(
         onValueChange = state.onSearchQueryChanged,
         shape = RoundedCornerShape(10.dp),
         leadingIcon = {
-            Icon(imageVector = Icons.Filled.Search, contentDescription = "search button")
+            PlatoIcon(
+                imageVector = PlatoIconType.Search.imageVector,
+                contentDescription = "search button",
+            )
         },
         trailingIcon = {
             if (state.query.isNotEmpty()) {
@@ -112,7 +113,10 @@ private fun SearchContent(
                     keyboardController?.hide()
                     state.onClearQueryClicked()
                 }) {
-                    Icon(imageVector = Icons.Filled.Cancel, contentDescription = "cancel button")
+                    PlatoIcon(
+                        imageVector = PlatoIconType.Cancel.imageVector,
+                        contentDescription = "cancel button",
+                    )
                 }
             }
         },
@@ -200,9 +204,8 @@ private fun ProductItem(
                             .padding(start = 10.dp)
                             .wrapContentWidth()
                     ) {
-                        Icon(
+                        PlatoIcon(
                             imageVector = product.type.icon(),
-                            contentDescription = "",
                             tint = product.type.color(),
                         )
                     }
@@ -229,7 +232,7 @@ private fun FilterChipsContent(
             leadingIcon = if (state.selectedType == HateRateType.HATE) {
                 {
                     Icon(
-                        imageVector = Icons.Filled.Done,
+                        imageVector = PlatoIconType.Done.imageVector,
                         contentDescription = "Done icon",
                     )
                 }
@@ -246,7 +249,7 @@ private fun FilterChipsContent(
             leadingIcon = if (state.selectedType == HateRateType.RATE) {
                 {
                     Icon(
-                        imageVector = Icons.Filled.Done,
+                        imageVector = PlatoIconType.Done.imageVector,
                         contentDescription = "Done icon",
                     )
                 }

@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
-import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.UiModelsMapper
@@ -16,10 +15,8 @@ import com.grappim.hateitorrateit.utils.models.ImageData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,7 +39,7 @@ class DetailsViewModel @Inject constructor(
             onToggleEditMode = ::toggleEditMode,
             onSubmitChanges = ::submitChanges,
             onSetType = ::setType,
-            onDeleteProduct = ::deeleteProduct,
+            onDeleteProduct = ::deleteProduct,
             onShowAlertDialog = ::showAlertDialog,
             onDeleteProductConfirm = ::deleteProductConfirm,
             onDeleteImage = ::deleteImage,
@@ -138,7 +135,7 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun deeleteProduct() {
+    private fun deleteProduct() {
         _viewState.update {
             it.copy(showAlertDialog = true)
         }

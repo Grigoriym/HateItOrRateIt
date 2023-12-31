@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -19,7 +20,8 @@ fun PlatoIconButton(
 ) {
     Button(
         modifier = modifier
-            .size(50.dp),
+            .size(50.dp)
+            .testTag(icon.name),
         onClick = onButtonClick,
         shape = CircleShape
     ) {

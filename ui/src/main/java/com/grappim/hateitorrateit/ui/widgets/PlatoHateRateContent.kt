@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.color
@@ -21,6 +21,8 @@ import com.grappim.hateitorrateit.ui.hateColors
 import com.grappim.hateitorrateit.ui.hateIcon
 import com.grappim.hateitorrateit.ui.rateColors
 import com.grappim.hateitorrateit.ui.rateIcon
+
+const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 
 @Composable
 fun PlatoHateRateContent(
@@ -35,7 +37,8 @@ fun PlatoHateRateContent(
         modifier = modifier
             .padding(top = 12.dp, bottom = 12.dp)
             .padding(horizontal = 32.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .testTag(PLATO_HATE_RATE_CONTENT_TAG),
         shape = RoundedCornerShape(24.dp),
         border = BorderStroke(8.dp, currentType.color()),
     ) {
@@ -52,7 +55,7 @@ fun PlatoHateRateContent(
                 shape = CircleShape,
                 colors = hateColors,
             ) {
-                Icon(imageVector = currentType.hateIcon(), contentDescription = "")
+                PlatoIcon(imageVector = currentType.hateIcon())
             }
 
             Text(
@@ -71,7 +74,7 @@ fun PlatoHateRateContent(
                 shape = CircleShape,
                 colors = rateColors,
             ) {
-                Icon(imageVector = currentType.rateIcon(), contentDescription = "")
+                PlatoIcon(imageVector = currentType.rateIcon())
             }
         }
     }

@@ -1,19 +1,14 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
 import androidx.activity.ComponentActivity
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircleOutline
-import androidx.compose.material.icons.filled.HighlightOff
-import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.onRoot
-import androidx.compose.ui.test.printToLog
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PLATO_ALERT_DIALOG_TAG
 import com.grappim.hateitorrateit.ui.widgets.PLATO_LOADING_DIALOG_TAG
 import org.junit.Before
@@ -53,7 +48,6 @@ class SettingsScreenKtTest {
                     state = getState()
                 )
             }
-            onRoot(true).printToLog("debug")
 
             onNodeWithText(settingsTitle).assertIsDisplayed()
             onNodeWithTag(PLATO_LOADING_DIALOG_TAG).assertDoesNotExist()
@@ -66,8 +60,8 @@ class SettingsScreenKtTest {
             onNodeWithText(crashlyticsText).assertIsDisplayed()
             onNodeWithText(crashlyticsSubtitleText).assertIsDisplayed()
 
-            onNodeWithTag(Icons.Filled.HighlightOff.name, useUnmergedTree = true).assertIsDisplayed()
-            onNodeWithTag(Icons.Filled.ThumbUp.name, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(PlatoIconType.HighlightOff.testTag, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(PlatoIconType.ThumbUp.testTag, useUnmergedTree = true).assertIsDisplayed()
         }
     }
 
@@ -109,7 +103,7 @@ class SettingsScreenKtTest {
                 )
             }
             onNodeWithTag(CROSSFADE_TAG, useUnmergedTree = true).assertIsDisplayed()
-            onNodeWithTag(Icons.Filled.CheckCircleOutline.name, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(PlatoIconType.CheckCircleOutline.testTag, useUnmergedTree = true).assertIsDisplayed()
         }
     }
 
@@ -123,7 +117,7 @@ class SettingsScreenKtTest {
                 )
             }
             onNodeWithTag(CROSSFADE_TAG, useUnmergedTree = true).assertIsDisplayed()
-            onNodeWithTag(Icons.Filled.HighlightOff.name, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(PlatoIconType.HighlightOff.testTag, useUnmergedTree = true).assertIsDisplayed()
         }
     }
 

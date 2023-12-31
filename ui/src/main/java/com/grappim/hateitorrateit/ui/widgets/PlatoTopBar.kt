@@ -7,8 +7,6 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -17,6 +15,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 
 const val PLATO_TOP_BAR_TAG = "plato_top_bar_tag"
 
@@ -39,16 +38,21 @@ fun PlatoTopBar(
         elevation = elevation,
         backgroundColor = backgroundColor,
         navigationIcon = {
+            val icon = PlatoIconType.ArrowBack.imageVector
             if (defaultBackButton) {
                 IconButton(onClick = goBack) {
                     Icon(
-                        imageVector = Icons.Filled.ArrowBack,
-                        contentDescription = stringResource(id = R.string.content_description_back_button)
+                        modifier = Modifier
+                            .testTag(icon.name),
+                        imageVector = icon,
+                        contentDescription = stringResource(id = R.string.content_description_back_button),
                     )
                 }
             } else {
                 PlatoIconButton(
-                    icon = Icons.Filled.ArrowBack,
+                    modifier = Modifier
+                        .testTag(icon.name),
+                    icon = icon,
                     onButtonClick = goBack,
                 )
             }

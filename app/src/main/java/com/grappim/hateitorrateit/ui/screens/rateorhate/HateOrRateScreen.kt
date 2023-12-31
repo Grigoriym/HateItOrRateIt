@@ -31,8 +31,6 @@ import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -56,14 +54,15 @@ import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
-import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.models.ImageData
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
 import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.models.ImageData
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -341,7 +340,7 @@ private fun FilesList(
                             top = 8.dp,
                             end = 8.dp,
                         ),
-                    icon = Icons.Filled.Delete,
+                    icon = PlatoIconType.Delete.imageVector,
                     onButtonClick = {
                         onFileRemoved(file)
                     },

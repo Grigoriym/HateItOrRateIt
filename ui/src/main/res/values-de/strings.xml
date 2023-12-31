@@ -29,6 +29,9 @@
     <string name="hate">Hate</string>
     <string name="rate">Rate</string>
 
+    <string name="i_rate_it">Ich bewerte es</string>
+    <string name="i_hate_it">Ich hasse es</string>
+
     <string name="content_description_back_button">Zurückgehen</string>
 
     <string name="toggle_crashlytics">Erlaubst du das Senden von Crash Reports?</string>

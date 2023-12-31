@@ -5,7 +5,7 @@ import androidx.annotation.PluralsRes
 import androidx.annotation.StringRes
 
 sealed class NativeText {
-    object Empty : NativeText()
+    data object Empty : NativeText()
     data class Simple(val text: String) : NativeText()
     data class Resource(@StringRes val id: Int) : NativeText()
     data class Plural(@PluralsRes val id: Int, val number: Int, val args: List<Any>) : NativeText()

@@ -1,9 +1,7 @@
 package com.grappim.hateitorrateit.core.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 
 sealed interface HomeNavDestination {
     val route: String
@@ -13,13 +11,13 @@ sealed interface HomeNavDestination {
     data object Home : HomeNavDestination {
         override val route: String = "home"
         override val title: String = "Home"
-        override val imageVector: ImageVector = Icons.Filled.Home
+        override val imageVector: ImageVector = PlatoIconType.Home.imageVector
     }
 
     data object Settings : HomeNavDestination {
         override val route: String = "settings"
         override val title: String = "Settings"
-        override val imageVector: ImageVector = Icons.Filled.Settings
+        override val imageVector: ImageVector = PlatoIconType.Settings.imageVector
     }
 
 }
