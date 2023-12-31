@@ -17,7 +17,7 @@ import androidx.navigation.navArgument
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.ui.screens.details.DetailsRoute
 import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
-import com.grappim.hateitorrateit.ui.screens.rateorhate.RateOrHateScreen
+import com.grappim.hateitorrateit.ui.screens.rateorhate.HateOrRateRoute
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.utils.safeClick
 import dagger.hilt.android.AndroidEntryPoint
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 composable(RootNavDestinations.HateOrRate.route) { navBackStackEntry ->
-                    RateOrHateScreen(
+                    HateOrRateRoute(
                         goBack = {
                             navBackStackEntry.safeClick {
                                 navController.popBackStack()

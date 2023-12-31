@@ -67,13 +67,33 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @Composable
-fun RateOrHateScreen(
-    viewModel: HateOrRateViewModel = hiltViewModel(),
+internal fun HateOrRateRoute(
     goBack: () -> Unit,
     onProductCreated: () -> Unit,
+    viewModel: HateOrRateViewModel = hiltViewModel(),
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val snackBarMessage by viewModel.snackBarMessage.collectAsState(
+        initial = LaunchedEffectResult(
+            data = NativeText.Empty,
+            timestamp = 0L
+        )
+    )
+    HateOrRateScreen(
+        state = state,
+        goBack = goBack,
+        onProductCreated = onProductCreated,
+        snackBarMessage = snackBarMessage,
+    )
+}
 
+@Composable
+internal fun HateOrRateScreen(
+    state: HateOrRateViewState,
+    goBack: () -> Unit,
+    onProductCreated: () -> Unit,
+    snackBarMessage: LaunchedEffectResult<out NativeText>,
+) {
     LaunchedEffect(state.isCreated) {
         if (state.isCreated) {
             onProductCreated.invoke()
@@ -106,9 +126,9 @@ fun RateOrHateScreen(
     )
 
     RateOrHateScreenContent(
-        viewModel = viewModel,
         state = state,
         goBack = goBack,
+        snackBarMessage = snackBarMessage,
     )
 }
 
@@ -133,9 +153,9 @@ fun handleBackAction(state: HateOrRateViewState, goBack: () -> Unit) {
 
 @Composable
 private fun RateOrHateScreenContent(
-    viewModel: HateOrRateViewModel,
     state: HateOrRateViewState,
     goBack: () -> Unit,
+    snackBarMessage: LaunchedEffectResult<out NativeText>,
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -163,12 +183,6 @@ private fun RateOrHateScreenContent(
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val snackBarMessage by viewModel.snackBarMessage.collectAsState(
-        initial = LaunchedEffectResult(
-            data = NativeText.Empty,
-            timestamp = 0L
-        )
-    )
 
     LaunchedEffect(snackBarMessage) {
         if (snackBarMessage.data !is NativeText.Empty) {
@@ -192,9 +206,12 @@ private fun RateOrHateScreenContent(
             SnackbarHost(snackbarHostState)
         },
         topBar = {
-            PlatoTopBar(text = stringResource(id = R.string.hate_or_rate), goBack = {
-                handleBackAction(state, goBack)
-            })
+            PlatoTopBar(
+                text = stringResource(id = R.string.hate_or_rate),
+                goBack = {
+                    handleBackAction(state, goBack)
+                },
+            )
         },
         bottomBar = {
             BottomBarButton(
