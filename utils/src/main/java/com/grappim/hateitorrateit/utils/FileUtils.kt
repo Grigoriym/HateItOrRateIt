@@ -131,7 +131,8 @@ class FileUtils @Inject constructor(
             }
             name
         } else {
-            val file = File(uri.path)
+            val uriPath = requireNotNull(uri.path)
+            val file = File(uriPath)
             file.name
         }
     }
@@ -190,10 +191,12 @@ class FileUtils @Inject constructor(
         return MimeTypes.formatMimeType(mimeType)
     }
 
-    private fun getMimeType(uri: Uri): String =
-        context.contentResolver.getType(uri)
-            ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(File(uri.path).extension)
+    private fun getMimeType(uri: Uri): String {
+        val uriPath = requireNotNull(uri.path)
+        return context.contentResolver.getType(uri)
+            ?: MimeTypeMap.getSingleton().getMimeTypeFromExtension(File(uriPath).extension)
             ?: error("Cannot get mimeType from $uri")
+    }
 
     private fun getFileUri(
         file: File
@@ -226,7 +229,8 @@ class FileUtils @Inject constructor(
             }
             size
         } else {
-            val file = File(uri.path)
+            val uriPath = requireNotNull(uri.path)
+            val file = File(uriPath)
             file.length()
         }
     }
