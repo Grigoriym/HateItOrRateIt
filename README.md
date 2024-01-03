@@ -13,3 +13,4 @@ This application offers a straightforward way to keep track of products you like
 
 ## Bugs:
 1. ~~Being in details, fast double click on back button -> empty screen~~ | Solved by using safeClick extensions function
+2. In the screen where we add a product, add couple of images, swipe to the first image, change configuration, we are moved to the last image
