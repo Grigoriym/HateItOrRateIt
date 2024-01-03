@@ -29,6 +29,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":utils"))
+    implementation(project(":commons"))
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
