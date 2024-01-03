@@ -102,6 +102,10 @@ class FileUtils @Inject constructor(
         )
     }
 
+    fun clearMainFolder() {
+        getMainFolder("").deleteRecursively()
+    }
+
     fun getMainFolder(
         child: String
     ): File {

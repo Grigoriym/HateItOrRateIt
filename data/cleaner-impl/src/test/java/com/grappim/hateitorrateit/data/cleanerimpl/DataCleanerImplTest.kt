@@ -1,32 +1,42 @@
 package com.grappim.hateitorrateit.data.cleanerimpl
 
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
-import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
+import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
+import com.grappim.hateitorrateit.data.db.utils.TransactionController
+import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.utils.FileUtils
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import java.time.OffsetDateTime
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class DataCleanerImplTest {
 
     private val fileUtils: FileUtils = mockk()
     private val productsRepository: ProductsRepository = mockk()
-    private val hateItOrRateItDatabase: HateItOrRateItDatabase = mockk()
+    private val transactionController: TransactionController = mockk()
+    private val databaseDao: DatabaseDao = mockk()
+    private val databaseWrapper: DatabaseWrapper = mockk()
 
     private val dataCleaner: DataCleaner = DataCleanerImpl(
         fileUtils = fileUtils,
         productsRepository = productsRepository,
-        hateItOrRateItDatabase = hateItOrRateItDatabase,
+        transactionController = transactionController,
+        databaseDao = databaseDao,
+        databaseWrapper = databaseWrapper,
         ioDispatcher = UnconfinedTestDispatcher()
     )
 
@@ -36,12 +46,13 @@ class DataCleanerImplTest {
             every { fileUtils.deleteFile(uriString = any()) } returns true
             coEvery { productsRepository.deleteProductImage(any(), any()) } returns Unit
 
-            dataCleaner.clearProductImage(
+            val actual = dataCleaner.clearProductImage(
                 id = 1L,
                 imageName = "image",
                 uriString = "uri"
             )
 
+            assertTrue(actual)
             verify { fileUtils.deleteFile("uri") }
             coVerify { productsRepository.deleteProductImage(1L, "image") }
         }
@@ -52,12 +63,13 @@ class DataCleanerImplTest {
             every { fileUtils.deleteFile(uriString = any()) } returns false
             coEvery { productsRepository.deleteProductImage(any(), any()) } returns Unit
 
-            dataCleaner.clearProductImage(
+            val actual = dataCleaner.clearProductImage(
                 id = 1L,
                 imageName = "image",
                 uriString = "uri"
             )
 
+            assertFalse(actual)
             verify { fileUtils.deleteFile("uri") }
             coVerify(exactly = 0) { productsRepository.deleteProductImage(1L, "image") }
         }
@@ -135,4 +147,20 @@ class DataCleanerImplTest {
             verify { fileUtils.deleteFolder("folder") }
             coVerify { productsRepository.removeProductById(1L) }
         }
+
+    @Test
+    fun `on clearAllData, should call the needed functions`() = runTest {
+        coEvery { databaseWrapper.clearAllTables() } just Runs
+        coEvery { databaseDao.clearPrimaryKeyIndex() } just Runs
+        coEvery { transactionController.runInTransaction(any()) } coAnswers  {
+            firstArg<suspend () -> Unit>().invoke()
+        }
+        every { fileUtils.clearMainFolder() } just Runs
+
+        dataCleaner.clearAllData()
+
+        coVerify { databaseWrapper.clearAllTables() }
+        coVerify { databaseDao.clearPrimaryKeyIndex() }
+        verify { fileUtils.clearMainFolder() }
+    }
 }

@@ -66,7 +66,7 @@ class FileUtilsTest {
     }
 
     @Test
-    fun `toProductImageData_call_should_return_correct_ProductImageData`() {
+    fun toProductImageData_call_should_return_correct_ProductImageData() {
         val expected = ProductImageData(
             name = NAME,
             mimeType = "png",
@@ -88,7 +88,7 @@ class FileUtilsTest {
     }
 
     @Test
-    fun `getMainFolder_should_return_correct_folder`() {
+    fun getMainFolder_should_return_correct_folder() {
         every {
             context.filesDir
         } returns File(FILES_DIR)

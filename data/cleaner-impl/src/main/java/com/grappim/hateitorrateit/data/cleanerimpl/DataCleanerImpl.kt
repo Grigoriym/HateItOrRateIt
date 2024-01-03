@@ -2,13 +2,14 @@ package com.grappim.hateitorrateit.data.cleanerimpl
 
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
-import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
+import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
+import com.grappim.hateitorrateit.data.db.utils.TransactionController
+import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.utils.FileUtils
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -20,7 +21,9 @@ import javax.inject.Inject
 class DataCleanerImpl @Inject constructor(
     private val fileUtils: FileUtils,
     private val productsRepository: ProductsRepository,
-    private val hateItOrRateItDatabase: HateItOrRateItDatabase,
+    private val transactionController: TransactionController,
+    private val databaseDao: DatabaseDao,
+    private val databaseWrapper: DatabaseWrapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : DataCleaner {
 
@@ -72,15 +75,13 @@ class DataCleanerImpl @Inject constructor(
     }
 
     private suspend fun clearDatabaseData() {
-        hateItOrRateItDatabase.runInTransaction {
-            runBlocking {
-                hateItOrRateItDatabase.clearAllTables()
-                hateItOrRateItDatabase.databaseDao().clearPrimaryKeyIndex()
-            }
+        transactionController.runInTransaction {
+            databaseWrapper.clearAllTables()
+            databaseDao.clearPrimaryKeyIndex()
         }
     }
 
     private fun clearFileSystemData() {
-        fileUtils.getMainFolder("").deleteRecursively()
+        fileUtils.clearMainFolder()
     }
 }
