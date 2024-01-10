@@ -35,6 +35,7 @@ private class DevelopmentTree : Timber.DebugTree() {
 
 private class ProductionTree : Timber.Tree() {
 
+    @Suppress("EmptyFunctionBlock")
     override fun log(
         priority: Int,
         tag: String?,

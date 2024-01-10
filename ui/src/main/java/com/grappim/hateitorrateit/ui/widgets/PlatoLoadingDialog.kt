@@ -15,6 +15,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 
 const val PLATO_LOADING_DIALOG_TAG = "plato_loading_dialog_tag"
+private const val PROGRESS_INDICATOR_FRACTION = 0.3f
 
 @Composable
 fun PlatoLoadingDialog(isLoading: Boolean) {
@@ -39,7 +40,7 @@ fun PlatoLoadingDialog(isLoading: Boolean) {
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .fillMaxSize(0.3f),
+                            .fillMaxSize(PROGRESS_INDICATOR_FRACTION),
                         strokeWidth = 8.dp,
                         color = Color.Blue,
                     )

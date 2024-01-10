@@ -219,7 +219,7 @@ private fun RateOrHateScreenContent(
                     .fillMaxWidth()
                     .padding(
                         top = 12.dp,
-                        bottom = 16.dp
+                        bottom = 16.dp,
                     )
                     .padding(horizontal = 16.dp),
                 state = state

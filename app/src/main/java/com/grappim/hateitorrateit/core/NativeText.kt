@@ -13,6 +13,7 @@ sealed class NativeText {
     data class Multi(val text: List<NativeText>) : NativeText()
 }
 
+@Suppress("SpreadOperator")
 fun NativeText.asString(context: Context): String {
     return when (this) {
         is NativeText.Arguments -> context.getString(id, *args.toTypedArray())

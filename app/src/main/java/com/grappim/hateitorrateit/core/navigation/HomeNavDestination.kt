@@ -19,5 +19,4 @@ sealed interface HomeNavDestination {
         override val title: String = "Settings"
         override val imageVector: ImageVector = PlatoIconType.Settings.imageVector
     }
-
 }

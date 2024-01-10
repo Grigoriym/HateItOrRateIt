@@ -4,6 +4,8 @@ firebase-bom = "32.5.0"
 firebaseCrashlytics = "2.9.9"
 composeKotlinCompiler = "1.5.3"
 
+detekt = "1.23.4"
+
 gms = "4.4.0"
 
 agp = "8.1.1"
@@ -138,6 +140,7 @@ firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "
 gms-googleServices = { id = "com.google.gms.google-services", version.ref = "gms" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 # Plugins definded in the included build-logic
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }

@@ -43,9 +43,9 @@ class UiModelsMapper @Inject constructor(
         )
     }
 
-    suspend fun toProductDetailsImageUI(product: Product): ProcuctDetailsImageUi =
+    suspend fun toProductDetailsImageUI(product: Product): ProductDetailsImageUi =
         withContext(ioDispatcher) {
-            ProcuctDetailsImageUi(
+            ProductDetailsImageUi(
                 filesUri = product.filesUri,
             )
         }

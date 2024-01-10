@@ -18,28 +18,28 @@ class LocalDataStorageImpl @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) : LocalDataStorage {
 
-    private val TYPE_KEY = stringPreferencesKey("type_key")
+    private val typeKey = stringPreferencesKey("type_key")
     override val typeFlow: Flow<HateRateType> = dataStore.data
         .map { preferences ->
-            enumValueOf(preferences[TYPE_KEY] ?: HateRateType.HATE.name)
+            enumValueOf(preferences[typeKey] ?: HateRateType.HATE.name)
         }
 
-    private val CRASHES_KEY = booleanPreferencesKey("crashes_key")
+    private val crashesKey = booleanPreferencesKey("crashes_key")
     override val crashesCollectionEnabled: Flow<Boolean> = dataStore.data
         .map { preferences ->
-            preferences[CRASHES_KEY] ?: true
+            preferences[crashesKey] ?: true
         }
 
     override suspend fun setCrashesCollectionEnabled(isEnabled: Boolean) {
         Timber.d("setCrashesCollectionEnabled: $isEnabled")
         dataStore.edit { settings ->
-            settings[CRASHES_KEY] = isEnabled
+            settings[crashesKey] = isEnabled
         }
     }
 
     override suspend fun changeTypeTo(type: HateRateType) {
         dataStore.edit { settings ->
-            settings[TYPE_KEY] = type.name
+            settings[typeKey] = type.name
         }
     }
 }

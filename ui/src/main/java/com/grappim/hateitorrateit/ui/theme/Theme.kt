@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.grappim.hateitorrateit.ui.theme
 
 import android.app.Activity

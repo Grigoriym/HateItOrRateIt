@@ -6,4 +6,17 @@ plugins {
     alias(libs.plugins.gms.googleServices) apply false
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.detekt)
+}
+
+subprojects {
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+    }
+
+    detekt {
+        parallel = true
+        config.setFrom(rootProject.files("config/detekt/detekt.yml"))
+        allRules = false
+    }
 }

@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
-import com.grappim.hateitorrateit.data.db.entities.productsTable
+import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.domain.HateRateType
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -17,7 +17,7 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildSqlQuery(query, type)
 
         assertEquals(
-            "SELECT * FROM $productsTable " +
+            "SELECT * FROM $PRODUCTS_TABLE " +
                     "WHERE isCreated=1 " +
                     "ORDER BY createdDate DESC", result
         )
@@ -31,7 +31,7 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildSqlQuery(query, type)
 
         assertEquals(
-            "SELECT * FROM $productsTable " +
+            "SELECT * FROM $PRODUCTS_TABLE " +
                     "WHERE type='HATE' AND isCreated=1 " +
                     "ORDER BY createdDate DESC", result
         )
@@ -45,7 +45,7 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildSqlQuery(query, type)
 
         assertEquals(
-            "SELECT * FROM $productsTable " +
+            "SELECT * FROM $PRODUCTS_TABLE " +
                     "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
                     "AND isCreated=1 " +
                     "ORDER BY createdDate DESC", result
@@ -60,7 +60,7 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildSqlQuery(query, type)
 
         assertEquals(
-            "SELECT * FROM $productsTable " +
+            "SELECT * FROM $PRODUCTS_TABLE " +
                     "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
                     "AND type='HATE' AND isCreated=1 " +
                     "ORDER BY createdDate DESC", result
@@ -95,7 +95,8 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildWhereClause(query, type)
 
         assertEquals(
-            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') AND isCreated=1",
+            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
+                    "AND isCreated=1",
             result
         )
     }
@@ -108,7 +109,8 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildWhereClause(query, type)
 
         assertEquals(
-            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') AND type='HATE' AND isCreated=1",
+            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
+                    "AND type='HATE' AND isCreated=1",
             result
         )
     }
