@@ -44,14 +44,12 @@ class ProductsDaoTest {
             context,
             HateItOrRateItDatabase::class.java,
         ).addTypeConverter(
-            DateTimeConverter(
-                dateTimeUtils
-            )
+            DateTimeConverter(dateTimeUtils)
         ).build()
 
         dbWrapper = DatabaseWrapperImpl(
-            db,
-            UnconfinedTestDispatcher()
+            db = db,
+            ioDispatcher = UnconfinedTestDispatcher()
         )
 
         productsDao = dbWrapper.productsDao
