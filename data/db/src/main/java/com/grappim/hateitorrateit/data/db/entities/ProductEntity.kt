@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.grappim.hateitorrateit.domain.HateRateType
 import java.time.OffsetDateTime
 
-const val productsTable = "products_table"
+const val PRODUCTS_TABLE = "products_table"
 
 /**
  * @param productId - id of product in database
@@ -17,10 +17,11 @@ const val productsTable = "products_table"
  * @param type - type of product
  * @param isCreated - flag that shows if product was created or not. It is needed to show only created products in list
  *
- * When we use a primary key of type Int or Long and pass 0 as its value, Room will auto-generate a new value for the primary key colum
+ * When we use a primary key of type Int or Long and pass 0 as its value,
+ * Room will auto-generate a new value for the primary key colum
  */
 @Entity(
-    tableName = productsTable
+    tableName = PRODUCTS_TABLE
 )
 data class ProductEntity(
     @PrimaryKey(autoGenerate = true)

@@ -30,6 +30,8 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 const val CROSSFADE_TAG = "crossfade_tag"
 const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
 
+private const val ANIMATION_DURATION = 500
+
 @Composable
 internal fun SettingsRoute(
     goBack: () -> Unit,
@@ -117,7 +119,7 @@ fun TypeIcon(
     Crossfade(
         targetState = state.type,
         label = "type_crossfade_icon",
-        animationSpec = tween(500),
+        animationSpec = tween(ANIMATION_DURATION),
     ) { type ->
         Icon(
             modifier = Modifier
@@ -137,7 +139,7 @@ fun CrashesIcon(
         modifier = Modifier.testTag(CROSSFADE_TAG),
         targetState = state.isCrashesCollectionEnabled,
         label = "custom_switch_label",
-        animationSpec = tween(500),
+        animationSpec = tween(ANIMATION_DURATION),
     ) { enabled ->
         val imageVector = if (enabled) {
             PlatoIconType.CheckCircleOutline.imageVector

@@ -68,6 +68,8 @@ const val DETAILS_TOP_APP_BAR_TAG = "details_top_app_bar_tag"
 const val DETAILS_EDIT_CONTENT_TAG = "details_edit_content_tag"
 const val DETAILS_DEMONSTRATION_CONTENT_TAG = "details_demonstration_content_tag"
 
+private const val TOP_APP_BAR_WEIGHT = 1.2f
+
 @Composable
 fun DetailsRoute(
     viewModel: DetailsViewModel = hiltViewModel(),
@@ -138,7 +140,7 @@ private fun DetailsScreenContent(
         TopAppBarContent(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1.2f),
+                .weight(TOP_APP_BAR_WEIGHT),
             state = state,
             onImageClicked = onImageClicked,
             goBack = goBack,

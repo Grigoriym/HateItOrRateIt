@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
 import androidx.annotation.VisibleForTesting
-import com.grappim.hateitorrateit.data.db.entities.productsTable
+import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.domain.HateRateType
 import timber.log.Timber
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class SqlQueryBuilder @Inject constructor() {
     fun buildSqlQuery(query: String, type: HateRateType?): String {
         val whereClause = buildWhereClause(query, type)
         val orderByClause = "ORDER BY createdDate DESC"
-        val resultQuery = "SELECT * FROM $productsTable $whereClause $orderByClause"
+        val resultQuery = "SELECT * FROM $PRODUCTS_TABLE $whereClause $orderByClause"
         Timber.d("SQL query: $resultQuery")
         return resultQuery
     }

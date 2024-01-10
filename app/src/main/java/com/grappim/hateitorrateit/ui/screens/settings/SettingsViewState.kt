@@ -14,6 +14,7 @@ data class SettingsViewState(
     val onDismissDialog: () -> Unit,
     val onCrashlyticsToggle: () -> Unit
 ) {
+    @Suppress("LongParameterList")
     fun safeCopy(
         isLoading: Boolean = this.isLoading,
         type: HateRateType = this.type,

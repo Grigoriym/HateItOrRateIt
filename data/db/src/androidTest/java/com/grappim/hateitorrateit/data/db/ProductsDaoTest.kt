@@ -8,7 +8,7 @@ import app.cash.turbine.test
 import com.grappim.hateitorrateit.data.db.converters.DateTimeConverter
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
-import com.grappim.hateitorrateit.data.db.entities.productsTable
+import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapperImpl
 import com.grappim.hateitorrateit.domain.HateRateType
@@ -328,7 +328,7 @@ class ProductsDaoTest {
         productsDao.insert(emptyFile)
 
         val sqLiteQuery = SimpleSQLiteQuery(
-            "SELECT * FROM $productsTable WHERE " +
+            "SELECT * FROM $PRODUCTS_TABLE WHERE " +
                     "isCreated=1"
         )
 

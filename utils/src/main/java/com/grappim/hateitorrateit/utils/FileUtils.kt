@@ -18,6 +18,8 @@ import java.time.OffsetDateTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
+private const val BYTE_ARRAY_BUFFER = 4 * 1024
+
 @Singleton
 class FileUtils @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -160,6 +162,7 @@ class FileUtils @Inject constructor(
         return "${date}_${millis}.$extension"
     }
 
+    @Suppress("NestedBlockDepth")
     private fun writeDataToFile(uri: Uri, newFile: File) {
         val inputStream = context.contentResolver.openInputStream(uri)
             ?: error("can not create inputStream from $uri")
@@ -167,7 +170,7 @@ class FileUtils @Inject constructor(
         inputStream.use { input ->
             val outputStream = FileOutputStream(newFile)
             outputStream.use { output ->
-                val buffer = ByteArray(4 * 1024)
+                val buffer = ByteArray(BYTE_ARRAY_BUFFER)
                 while (true) {
                     val byteCount = input.read(buffer)
                     if (byteCount < 0) break
