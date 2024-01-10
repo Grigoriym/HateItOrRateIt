@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
+import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -24,7 +25,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -42,13 +42,17 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.theme.darkBackgroundColorForPreview
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
@@ -58,6 +62,7 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.ui.widgets.PlatoProgressIndicator
+import com.grappim.hateitorrateit.ui.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.ui.widgets.text.TextH4
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
@@ -199,16 +204,7 @@ private fun TopAppBarContent(
         state.images.size
     }
 
-    var firstRecomposition by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(state.images) {
-        coroutineScope.launch {
-            if (!firstRecomposition && state.images.isNotEmpty()) {
-                pagerState.animateScrollToPage(state.images.lastIndex)
-            }
-            firstRecomposition = false
-        }
-    }
+    ScrollToLastImageOnUpdate(state, pagerState)
 
     Box(
         modifier = modifier
@@ -255,21 +251,44 @@ private fun TopAppBarContent(
             )
         }
 
-        Button(
+        PlatoTextButton(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(end = 8.dp),
+            text = stringResource(id = R.string.delete_image),
             onClick = {
                 state.onDeleteImage(pagerState.currentPage)
             }
-        ) {
-            Text(text = stringResource(id = R.string.delete_image))
-        }
+        )
 
         AppBarTopButtonsContent(
             state = state,
             goBack = goBack,
         )
+    }
+}
+
+
+/**
+ * A fix ensuring that the pagerState updates accurately
+ * whenever an image is added or deleted.
+ * On adding: we move to the last image
+ * On deleting we don't do anything
+ */
+@Composable
+private fun ScrollToLastImageOnUpdate(
+    state: DetailsViewState,
+    pagerState: PagerState
+) {
+    var firstRecomposition by remember { mutableStateOf(true) }
+    val coroutineScope = rememberCoroutineScope()
+    LaunchedEffect(state.images) {
+        coroutineScope.launch {
+            if (!firstRecomposition && state.images.isNotEmpty() && !state.isDeletingImage) {
+                pagerState.animateScrollToPage(state.images.lastIndex)
+            }
+            firstRecomposition = false
+        }
     }
 }
 
@@ -357,7 +376,7 @@ private fun BoxScope.AppBarImageContent(
 
 @Composable
 private fun DetailsDemonstrationContent(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     state: DetailsViewState
 ) {
     if (state.isEdit.not()) {
@@ -451,3 +470,121 @@ private fun DetailsEditContent(
         }
     }
 }
+
+@[Composable Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "Light theme",
+) Preview(
+    showBackground = true,
+    backgroundColor = darkBackgroundColorForPreview,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark theme",
+)]
+private fun DetailsScreenPreview() {
+    HateItOrRateItTheme {
+        DetailsScreen(
+            state = getPreviewState(),
+            goBack = {},
+            onImageClicked = { _, _ -> }
+        )
+    }
+}
+
+@[Composable Preview(showBackground = true)]
+private fun DetailsScreenWithLoadingPreview() {
+    HateItOrRateItTheme {
+        DetailsScreen(
+            state = getPreviewState().copy(isLoading = true),
+            goBack = {},
+            onImageClicked = { _, _ -> }
+        )
+    }
+}
+
+@[Composable Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "Light theme",
+) Preview(
+    showBackground = true,
+    backgroundColor = darkBackgroundColorForPreview,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark theme",
+)]
+private fun TopAppBarContentPreview() {
+    HateItOrRateItTheme {
+        TopAppBarContent(
+            state = getPreviewState(),
+            onImageClicked = { _, _ -> },
+            goBack = {}
+        )
+    }
+}
+
+@[Composable Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "Light theme",
+) Preview(
+    showBackground = true,
+    backgroundColor = darkBackgroundColorForPreview,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark theme",
+)]
+private fun DetailsEditContentPreview() {
+    HateItOrRateItTheme {
+        DetailsEditContent(
+            state = getPreviewState()
+        )
+    }
+}
+
+@[Composable Preview(
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO,
+    name = "Light theme",
+) Preview(
+    showBackground = true,
+    backgroundColor = darkBackgroundColorForPreview,
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    name = "Dark theme",
+)]
+private fun DetailsDemonstrationContentPreview() {
+    HateItOrRateItTheme {
+        DetailsDemonstrationContent(
+            state = getPreviewState().copy(isEdit = false)
+        )
+    }
+}
+
+private fun getPreviewState() = DetailsViewState(
+    id = "accommodare",
+    name = "Darren Stanton",
+    description = "altera",
+    shop = "pulvinar",
+    createdDate = "ornare",
+    productFolderName = "Estelle Duke",
+    images = listOf(),
+    type = HateRateType.HATE,
+    nameToEdit = "Lorenzo Strickland",
+    descriptionToEdit = "disputationi",
+    shopToEdit = "iusto",
+    typeToEdit = HateRateType.HATE,
+    isLoading = false,
+    isEdit = true,
+    onSetName = {},
+    onSetDescription = {},
+    onSetShop = {},
+    onToggleEditMode = {},
+    onSubmitChanges = {},
+    onSetType = {},
+    showAlertDialog = false,
+    onShowAlertDialog = {},
+    onDeleteProduct = {},
+    productDeleted = false,
+    onDeleteProductConfirm = {},
+    onDeleteImage = {},
+    onAddImageFromGalleryClicked = {},
+    onAddCameraPictureClicked = {},
+    getCameraImageFileUri = { CameraTakePictureData.empty() })

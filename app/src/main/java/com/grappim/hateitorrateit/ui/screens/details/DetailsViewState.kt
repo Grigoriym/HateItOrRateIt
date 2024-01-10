@@ -39,6 +39,7 @@ data class DetailsViewState(
     val productDeleted: Boolean = false,
     val onDeleteProductConfirm: () -> Unit,
 
+    val isDeletingImage: Boolean = false,
     val onDeleteImage: (pageIndex: Int) -> Unit,
 
     val onAddImageFromGalleryClicked: (uri: Uri) -> Unit,

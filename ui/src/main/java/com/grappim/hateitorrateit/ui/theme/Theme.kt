@@ -38,6 +38,8 @@ val DarkColorPalette = darkColors(
     onSurface = Color.White
 )
 
+const val darkBackgroundColorForPreview = 3355443L
+
 @Composable
 fun HateItOrRateItTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
