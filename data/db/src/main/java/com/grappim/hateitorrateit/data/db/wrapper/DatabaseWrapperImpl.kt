@@ -4,8 +4,6 @@ import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
-import com.grappim.hateitorrateit.data.db.utils.TransactionController
-import com.grappim.hateitorrateit.data.db.utils.TransactionControllerImpl
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -20,8 +18,6 @@ class DatabaseWrapperImpl @Inject constructor(
     override val productsDao: ProductsDao get() = db.productsDao()
 
     override val databaseDao: DatabaseDao get() = db.databaseDao()
-
-    override val transactionController: TransactionController get() = TransactionControllerImpl(db)
 
     override suspend fun clearAllTables() = withContext(ioDispatcher) {
         db.clearAllTables()
