@@ -28,7 +28,7 @@ import kotlin.test.assertFalse
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
-class ProductsStoreTest {
+class ProductsDaoTest {
 
     private lateinit var productsDao: ProductsDao
     private lateinit var dbWrapper: DatabaseWrapper
