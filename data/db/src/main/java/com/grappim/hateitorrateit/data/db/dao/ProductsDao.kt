@@ -8,17 +8,17 @@ import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
 import androidx.sqlite.db.SupportSQLiteQuery
-import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity
+import com.grappim.hateitorrateit.domain.HateRateType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ProductsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertProduct(productEntity: ProductEntity): Long
+    suspend fun insert(productEntity: ProductEntity): Long
 
     @[Transaction Query("SELECT * FROM products_table WHERE isCreated=1 ORDER BY createdDate DESC")]
     fun getAllProductsFlow(): Flow<List<ProductWithImagesEntity>>
@@ -32,7 +32,7 @@ interface ProductsDao {
     suspend fun getProductById(id: Long): ProductWithImagesEntity
 
     @Query("DELETE FROM products_table WHERE productId = :id")
-    suspend fun deleteProductById(id: Long)
+    suspend fun deleteById(id: Long)
 
     @Transaction
     suspend fun updateProductAndImages(
@@ -61,10 +61,13 @@ interface ProductsDao {
         type: HateRateType,
     )
 
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun updateProduct(productEntity: ProductEntity)
+
     @Transaction
     suspend fun deleteProductAndImagesById(id: Long) {
-        deleteProductById(id)
-        removeImagesByProductId(id)
+        deleteById(id)
+        deleteImagesByProductId(id)
     }
 
     @Transaction
@@ -76,9 +79,6 @@ interface ProductsDao {
         insertImages(images)
     }
 
-    @Update(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun updateProduct(productEntity: ProductEntity)
-
     @Query("UPDATE products_table SET productFolderName=:folder WHERE productId=:id")
     suspend fun updateProductFolderName(folder: String, id: Long)
 
@@ -86,7 +86,7 @@ interface ProductsDao {
     suspend fun insertImages(list: List<ProductImageDataEntity>)
 
     @Query("DELETE FROM product_image_data_table WHERE productId = :id")
-    suspend fun removeImagesByProductId(id: Long)
+    suspend fun deleteImagesByProductId(id: Long)
 
     @Query("DELETE FROM product_image_data_table WHERE productId = :id AND name=:name")
     suspend fun deleteProductImageByIdAndName(id: Long, name: String)

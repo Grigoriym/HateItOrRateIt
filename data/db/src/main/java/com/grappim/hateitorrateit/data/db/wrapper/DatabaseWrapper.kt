@@ -12,4 +12,6 @@ interface DatabaseWrapper {
     val transactionController: TransactionController
 
     suspend fun clearAllTables()
+
+    fun close()
 }

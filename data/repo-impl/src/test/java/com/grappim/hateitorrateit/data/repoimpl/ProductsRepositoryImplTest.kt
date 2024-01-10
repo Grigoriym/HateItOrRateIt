@@ -6,7 +6,7 @@ import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.utils.DateTimeUtils
+import com.grappim.hateitorrateit.utils.DateTimeUtilsImpl
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 
 class ProductsRepositoryImplTest {
 
-    private val dateTimeUtils: DateTimeUtils = mockk()
+    private val dateTimeUtils: DateTimeUtilsImpl = mockk()
 
     private val productsDao: ProductsDao = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
@@ -104,7 +104,7 @@ class ProductsRepositoryImplTest {
 
         coEvery { dateTimeUtils.getDateTimeUTCNow() } returns nowDate
         coEvery { dateTimeUtils.formatToDocumentFolder(any()) } returns folderDate
-        coEvery { productsDao.insertProduct(any()) } returns ID
+        coEvery { productsDao.insert(any()) } returns ID
         coEvery { productsDao.updateProductFolderName(any(), any()) } just Runs
         coEvery { localDataStorage.typeFlow } returns flowOf(type)
 
@@ -112,7 +112,7 @@ class ProductsRepositoryImplTest {
 
         coVerify { dateTimeUtils.getDateTimeUTCNow() }
         coVerify { dateTimeUtils.formatToDocumentFolder(nowDate) }
-        coVerify { productsDao.insertProduct(any()) }
+        coVerify { productsDao.insert(any()) }
         coVerify { productsDao.updateProductFolderName(folderName, ID) }
 
         assertEquals(draftProduct, actual)

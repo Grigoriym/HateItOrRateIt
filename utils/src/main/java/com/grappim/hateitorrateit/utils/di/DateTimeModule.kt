@@ -1,5 +1,8 @@
 package com.grappim.hateitorrateit.utils.di
 
+import com.grappim.hateitorrateit.utils.DateTimeUtils
+import com.grappim.hateitorrateit.utils.DateTimeUtilsImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,4 +40,10 @@ object DateTimeModule {
     @[Provides Singleton DtfDocumentFolder]
     fun provideDtfDocumentFolder(): DateTimeFormatter =
         DateTimeFormatter.ofPattern(DOCUMENT_FOLDER)
+}
+
+@[Module InstallIn(SingletonComponent::class)]
+interface DateTimeBindsModule {
+    @Binds
+    fun bindDateTimeUtils(dateTimeUtilsImpl: DateTimeUtilsImpl): DateTimeUtils
 }

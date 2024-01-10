@@ -7,12 +7,8 @@ import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 import kotlin.test.assertEquals
-
-private val UTC_ZONE = ZoneId.from(ZoneOffset.UTC)
 
 class DateTimeUtilsTest {
 
@@ -20,18 +16,18 @@ class DateTimeUtilsTest {
     private val dtfToDemonstrate: DateTimeFormatter = mockk()
     private val dtfDocumentFolder: DateTimeFormatter = mockk()
 
-    private lateinit var dateTimeUtilsWithMocks: DateTimeUtils
-    private lateinit var dateTimeUtilsWithFakes: DateTimeUtils
+    private lateinit var dateTimeUtilsWithMocks: DateTimeUtilsImpl
+    private lateinit var dateTimeUtilsWithFakes: DateTimeUtilsImpl
 
     @Before
     fun setUp() {
-        dateTimeUtilsWithMocks = DateTimeUtils(
+        dateTimeUtilsWithMocks = DateTimeUtilsImpl(
             dtfToStore,
             dtfToDemonstrate,
             dtfDocumentFolder
         )
 
-        dateTimeUtilsWithFakes = DateTimeUtils(
+        dateTimeUtilsWithFakes = DateTimeUtilsImpl(
             DateTimeModule.provideDtfToStore(),
             DateTimeModule.provideDtfToDemonstrate(),
             DateTimeModule.provideDtfDocumentFolder()
