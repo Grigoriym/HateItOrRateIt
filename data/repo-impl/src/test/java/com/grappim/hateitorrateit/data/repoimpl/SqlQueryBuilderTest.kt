@@ -95,7 +95,8 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildWhereClause(query, type)
 
         assertEquals(
-            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') AND isCreated=1",
+            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
+                    "AND isCreated=1",
             result
         )
     }
@@ -108,7 +109,8 @@ class SqlQueryBuilderTest {
         val result = sqlQueryBuilder.buildWhereClause(query, type)
 
         assertEquals(
-            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') AND type='HATE' AND isCreated=1",
+            "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
+                    "AND type='HATE' AND isCreated=1",
             result
         )
     }

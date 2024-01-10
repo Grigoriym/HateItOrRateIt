@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
+import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.*
 
 import org.junit.Test
 
