@@ -9,7 +9,7 @@ interface DatabaseWrapper {
 
     val databaseDao: DatabaseDao
 
-    val transactionController: TransactionController
-
     suspend fun clearAllTables()
+
+    fun close()
 }

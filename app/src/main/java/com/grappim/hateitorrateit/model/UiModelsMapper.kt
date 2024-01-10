@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.utils.DateTimeUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

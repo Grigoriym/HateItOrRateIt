@@ -69,7 +69,7 @@ class ProductsRepositoryImpl @Inject constructor(
             type = type,
         )
 
-        val id = productsDao.insertProduct(productEntity)
+        val id = productsDao.insert(productEntity)
         val folderName = "${id}_${folderDate}"
         productsDao.updateProductFolderName(folderName, id)
         DraftProduct(
