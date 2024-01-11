@@ -23,7 +23,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Button
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration
@@ -55,14 +54,16 @@ import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
 import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
+import com.grappim.hateitorrateit.ui.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.models.ImageData
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
@@ -260,10 +261,9 @@ private fun RateOrHateScreenContent(
                 }
             )
 
-            FilesList(
+            ImagesList(
                 modifier = Modifier,
-                fileUris = state.images,
-                onFileRemoved = state.onRemoveImageTriggered,
+                state = state,
             )
         }
     }
@@ -288,32 +288,35 @@ private fun AddFromContent(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Button(onClick = onCameraClicked) {
-                Text(text = stringResource(id = R.string.camera))
-            }
-            Button(onClick = onGalleryClicked) {
-                Text(text = stringResource(id = R.string.gallery))
-            }
+            PlatoTextButton(
+                text = stringResource(id = R.string.camera),
+                onClick = onCameraClicked,
+            )
+            PlatoTextButton(
+                text = stringResource(id = R.string.gallery),
+                onClick = onGalleryClicked,
+            )
         }
     }
 }
 
 @Composable
-private fun FilesList(
+private fun ImagesList(
     modifier: Modifier = Modifier,
-    fileUris: List<ImageData>,
-    onFileRemoved: (imageData: ImageData) -> Unit,
+    state: HateOrRateViewState,
 ) {
     val pagerState = rememberPagerState {
-        fileUris.size
+        state.images.size
     }
 
+    var firstRecomposition by remember { mutableStateOf(true) }
     val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(fileUris) {
+    LaunchedEffect(state.images) {
         coroutineScope.launch {
-            if (fileUris.isNotEmpty()) {
-                pagerState.animateScrollToPage(fileUris.lastIndex)
+            if (!firstRecomposition && state.images.isNotEmpty()) {
+                pagerState.animateScrollToPage(state.images.lastIndex)
             }
+            firstRecomposition = false
         }
     }
 
@@ -325,7 +328,7 @@ private fun FilesList(
         contentPadding = PaddingValues(horizontal = 32.dp),
         pageSpacing = 8.dp
     ) { page ->
-        val file = fileUris[page]
+        val file = state.images[page]
         PlatoCard(
             modifier = Modifier
                 .graphicsLayer {
@@ -359,7 +362,7 @@ private fun FilesList(
                         ),
                     icon = PlatoIconType.Delete.imageVector,
                     onButtonClick = {
-                        onFileRemoved(file)
+                        state.onRemoveImageTriggered(file)
                     },
                 )
             }
@@ -372,15 +375,13 @@ private fun BottomBarButton(
     modifier: Modifier = Modifier,
     state: HateOrRateViewState,
 ) {
-    Button(
+
+    PlatoTextButton(
         modifier = modifier
             .height(42.dp),
-        onClick = {
-            state.createProduct()
-        }
-    ) {
-        Text(text = stringResource(id = R.string.create))
-    }
+        text = stringResource(id = R.string.create),
+        onClick = state.createProduct,
+    )
 }
 
 @Composable
@@ -425,6 +426,45 @@ private fun TextFieldsContent(
             label = {
                 Text(text = stringResource(id = R.string.shop))
             }
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun BottomBarButtonPreview() {
+    HateItOrRateItTheme {
+        BottomBarButton(
+            state = HateOrRateViewState.getStateForComposePreview()
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun TextFieldsContentPreview() {
+    HateItOrRateItTheme {
+        TextFieldsContent(
+            state = HateOrRateViewState.getStateForComposePreview()
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun AddFromContentPreview() {
+    HateItOrRateItTheme {
+        AddFromContent(
+            onCameraClicked = {},
+            onGalleryClicked = {}
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun RateOrHateScreenContentPreview() {
+    HateItOrRateItTheme {
+        RateOrHateScreenContent(
+            state = HateOrRateViewState.getStateForComposePreview(),
+            goBack = {},
+            snackBarMessage = LaunchedEffectResult(NativeText.Empty)
         )
     }
 }

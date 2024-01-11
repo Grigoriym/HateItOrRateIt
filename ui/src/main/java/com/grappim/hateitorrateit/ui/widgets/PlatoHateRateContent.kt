@@ -21,6 +21,8 @@ import com.grappim.hateitorrateit.ui.hateColors
 import com.grappim.hateitorrateit.ui.hateIcon
 import com.grappim.hateitorrateit.ui.rateColors
 import com.grappim.hateitorrateit.ui.rateIcon
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 
@@ -77,5 +79,25 @@ fun PlatoHateRateContent(
                 PlatoIcon(imageVector = currentType.rateIcon())
             }
         }
+    }
+}
+
+@[Composable ThemePreviews]
+private fun PlatoHateRateContentHatePreview() {
+    HateItOrRateItTheme {
+        PlatoHateRateContent(
+            currentType = HateRateType.HATE,
+            onTypeClicked = {}
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun PlatoHateRateContentRatePreview() {
+    HateItOrRateItTheme {
+        PlatoHateRateContent(
+            currentType = HateRateType.RATE,
+            onTypeClicked = {}
+        )
     }
 }

@@ -84,7 +84,10 @@ class DetailsViewModel @Inject constructor(
 
             val result = _viewState.value.images + productFileData
             _viewState.update {
-                it.copy(images = result)
+                it.copy(
+                    images = result,
+                    isDeletingImage = false,
+                )
             }
         }
     }
@@ -93,6 +96,7 @@ class DetailsViewModel @Inject constructor(
         fileUtils.getFileUriForTakePicture(viewState.value.productFolderName)
 
     private fun deleteImage(pageIndex: Int) {
+        if (viewState.value.images.isEmpty()) return
         viewModelScope.launch {
             val fileData = viewState.value.images[pageIndex]
             val name = fileData.name
@@ -105,7 +109,10 @@ class DetailsViewModel @Inject constructor(
             if (result) {
                 _viewState.update { currentState ->
                     val updatedFilesUris = currentState.images.filterNot { it.name == name }
-                    currentState.copy(images = updatedFilesUris)
+                    currentState.copy(
+                        images = updatedFilesUris,
+                        isDeletingImage = true,
+                    )
                 }
             }
         }

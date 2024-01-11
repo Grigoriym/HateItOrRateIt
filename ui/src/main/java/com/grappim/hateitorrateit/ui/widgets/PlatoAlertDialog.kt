@@ -11,6 +11,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 const val PLATO_ALERT_DIALOG_TAG = "plato_alert_dialog_tag"
 
@@ -50,6 +52,19 @@ fun PlatoAlertDialog(
                     Text(dismissButtonText)
                 }
             }
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun PlatoAlertDialogPreview() {
+    HateItOrRateItTheme {
+        PlatoAlertDialog(
+            text = "Some text",
+            showAlertDialog = true,
+            onDismissRequest = {},
+            onConfirmButtonClicked = {},
+            onDismissButtonClicked = {}
         )
     }
 }

@@ -9,7 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 const val PLATO_PLACEHOLDER_IMAGE_TAG = "plato_placeholder_image_tag"
 
@@ -30,5 +32,12 @@ fun PlatoPlaceholderImage(
                 .padding(all = 52.dp)
                 .fillMaxSize()
         )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun PlatoPlaceholderImagePreview() {
+    HateItOrRateItTheme {
+        PlatoPlaceholderImage()
     }
 }
