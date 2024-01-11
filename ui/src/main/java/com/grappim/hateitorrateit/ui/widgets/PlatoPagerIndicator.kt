@@ -60,7 +60,7 @@ fun PlatoPagerIndicator(
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable ThemePreviews Suppress("MagicNumber")]
 private fun PlatoPagerIndicatorPreview() {
     val pagerState = rememberPagerState {
         5

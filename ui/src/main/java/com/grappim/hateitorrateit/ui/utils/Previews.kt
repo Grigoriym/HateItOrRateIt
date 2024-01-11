@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package com.grappim.hateitorrateit.ui.utils
 
 import android.content.res.Configuration
