@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -16,6 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 @Composable
 fun PlatoPagerIndicator(
@@ -54,5 +57,19 @@ fun PlatoPagerIndicator(
                 }
             }
         }
+    }
+}
+
+@[Composable ThemePreviews]
+private fun PlatoPagerIndicatorPreview() {
+    val pagerState = rememberPagerState {
+        5
+    }
+    HateItOrRateItTheme {
+        PlatoPagerIndicator(
+            show = true,
+            pagerState = pagerState,
+            size = 5
+        )
     }
 }

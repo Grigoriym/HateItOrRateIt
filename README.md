@@ -7,10 +7,12 @@ This application offers a straightforward way to keep track of products you like
 
 ## TODOs
 1) Create some sort of synchronization
+2) Make the possibility to change the view type in the List (small tiles, big product tile)
 
 ## Learnings
 1. No need to pass data to viewModel by hand. SavedStateHandle can do all the work
 
 ## Bugs:
 1. ~~Being in details, fast double click on back button -> empty screen~~ | Solved by using safeClick extensions function
-2. In the screen where we add a product, add couple of images, swipe to the first image, change configuration, we are moved to the last image
+2. ~~In the screen where we add a product, add couple of images, swipe to the first image, change configuration, we are moved to the last image~~ | Fixed by using firstRecomposition variable.
+3. What happens with the page indicator in Pager if we add many images?

@@ -15,7 +15,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 const val PLATO_TOP_BAR_TAG = "plato_top_bar_tag"
 
@@ -59,4 +61,25 @@ fun PlatoTopBar(
         },
         actions = actions,
     )
+}
+
+@[Composable ThemePreviews]
+private fun PlatoTopBarPreview() {
+    HateItOrRateItTheme {
+        PlatoTopBar(
+            text = "Some text",
+            goBack = {}
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+private fun PlatoTopBarNotDefaultPreview() {
+    HateItOrRateItTheme {
+        PlatoTopBar(
+            text = "Some text",
+            goBack = {},
+            defaultBackButton = false,
+        )
+    }
 }

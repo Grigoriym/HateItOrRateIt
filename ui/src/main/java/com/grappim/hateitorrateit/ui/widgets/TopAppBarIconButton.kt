@@ -5,12 +5,16 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Abc
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 @Composable
 fun PlatoIconButton(
@@ -31,6 +35,16 @@ fun PlatoIconButton(
             imageVector = icon,
             contentDescription = "",
             tint = Color.Black,
+        )
+    }
+}
+
+@[Composable ThemePreviews]
+fun PlatoIconButtonPreview() {
+    HateItOrRateItTheme {
+        PlatoIconButton(
+            icon = Icons.Filled.Abc,
+            onButtonClick = {}
         )
     }
 }

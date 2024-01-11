@@ -5,6 +5,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
+import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 @Composable
 fun TextH4(
@@ -52,4 +54,25 @@ fun TextH6(
         overflow = overflow,
         maxLines = maxLines,
     )
+}
+
+@[Composable ThemePreviews]
+private fun TextH4Preview() {
+    HateItOrRateItTheme {
+        TextH4(text = "Some Text")
+    }
+}
+
+@[Composable ThemePreviews]
+private fun TextH5Preview() {
+    HateItOrRateItTheme {
+        TextH5(text = "Some Text")
+    }
+}
+
+@[Composable ThemePreviews]
+private fun TextH6Preview() {
+    HateItOrRateItTheme {
+        TextH6(text = "Some Text")
+    }
 }

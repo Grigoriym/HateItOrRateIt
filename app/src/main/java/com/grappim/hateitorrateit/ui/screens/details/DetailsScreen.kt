@@ -1,6 +1,5 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
-import android.content.res.Configuration
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -52,8 +51,8 @@ import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.ui.theme.darkBackgroundColorForPreview
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
+import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
@@ -471,16 +470,7 @@ private fun DetailsEditContent(
     }
 }
 
-@[Composable Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "Light theme",
-) Preview(
-    showBackground = true,
-    backgroundColor = darkBackgroundColorForPreview,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark theme",
-)]
+@[Composable ThemePreviews]
 private fun DetailsScreenPreview() {
     HateItOrRateItTheme {
         DetailsScreen(
@@ -502,16 +492,7 @@ private fun DetailsScreenWithLoadingPreview() {
     }
 }
 
-@[Composable Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "Light theme",
-) Preview(
-    showBackground = true,
-    backgroundColor = darkBackgroundColorForPreview,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark theme",
-)]
+@[Composable ThemePreviews]
 private fun TopAppBarContentPreview() {
     HateItOrRateItTheme {
         TopAppBarContent(
@@ -522,16 +503,7 @@ private fun TopAppBarContentPreview() {
     }
 }
 
-@[Composable Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "Light theme",
-) Preview(
-    showBackground = true,
-    backgroundColor = darkBackgroundColorForPreview,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark theme",
-)]
+@[Composable ThemePreviews]
 private fun DetailsEditContentPreview() {
     HateItOrRateItTheme {
         DetailsEditContent(
@@ -540,16 +512,7 @@ private fun DetailsEditContentPreview() {
     }
 }
 
-@[Composable Preview(
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "Light theme",
-) Preview(
-    showBackground = true,
-    backgroundColor = darkBackgroundColorForPreview,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "Dark theme",
-)]
+@[Composable ThemePreviews]
 private fun DetailsDemonstrationContentPreview() {
     HateItOrRateItTheme {
         DetailsDemonstrationContent(
