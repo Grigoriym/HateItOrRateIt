@@ -28,7 +28,7 @@ archCore = "2.2.0"
 
 androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
-coil = "2.4.0"
+coil = "2.5.0"
 
 mockk = "1.13.9"
 
