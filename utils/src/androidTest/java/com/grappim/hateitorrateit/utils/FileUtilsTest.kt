@@ -22,7 +22,6 @@ import kotlin.test.assertEquals
 private const val NAME = "test_name"
 private const val URI =
     "content://media/picker/0/com.android.providers.media.photopicker/media/1001"
-private const val MIME_TYPE = "image/png"
 private const val FILES_DIR = "/data/user/0/com.grappim.hateitorrateit/utils/test"
 private const val FOLDER_NAME = "data/products/test"
 
