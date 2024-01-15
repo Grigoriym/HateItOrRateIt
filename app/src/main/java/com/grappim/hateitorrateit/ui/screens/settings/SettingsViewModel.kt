@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -80,10 +81,21 @@ class SettingsViewModel @Inject constructor(
             _viewState.update {
                 it.safeCopy(isLoading = true, showAlertDialog = false)
             }
-            dataCleaner.clearAllData()
-            _viewState.update {
-                it.safeCopy(isLoading = false)
-            }
+            runCatching {
+                dataCleaner.clearAllData()
+            }.fold(
+                onSuccess = {
+                    _viewState.update {
+                        it.safeCopy(isLoading = false)
+                    }
+                },
+                onFailure = { throwable ->
+                    Timber.e(throwable)
+                    _viewState.update {
+                        it.safeCopy(isLoading = false)
+                    }
+                }
+            )
         }
     }
 }
