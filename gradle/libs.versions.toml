@@ -11,7 +11,7 @@ gms = "4.4.0"
 agp = "8.2.1"
 androidTools = "31.2.1"
 
-hilt = "2.47"
+hilt = "2.50"
 androidx-hilt = "1.1.0"
 navigation = "2.7.6"
 lifecycle = "2.7.0"
