@@ -3,7 +3,6 @@ package com.grappim.hateitorrateit.data.cleanerimpl
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
-import com.grappim.hateitorrateit.data.db.utils.TransactionController
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.DraftProduct
@@ -21,7 +20,6 @@ import javax.inject.Inject
 class DataCleanerImpl @Inject constructor(
     private val fileUtils: FileUtils,
     private val productsRepository: ProductsRepository,
-    private val transactionController: TransactionController,
     private val databaseDao: DatabaseDao,
     private val databaseWrapper: DatabaseWrapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
@@ -69,16 +67,14 @@ class DataCleanerImpl @Inject constructor(
         productsRepository.removeProductById(draftProduct.id)
     }
 
-    override suspend fun clearAllData() = withContext(ioDispatcher) {
+    override suspend fun clearAllData() {
         clearDatabaseData()
         clearFileSystemData()
     }
 
     private suspend fun clearDatabaseData() {
-        transactionController.runInTransaction {
-            databaseWrapper.clearAllTables()
-            databaseDao.clearPrimaryKeyIndex()
-        }
+        databaseWrapper.clearAllTables()
+        databaseDao.clearPrimaryKeyIndex()
     }
 
     private fun clearFileSystemData() {
