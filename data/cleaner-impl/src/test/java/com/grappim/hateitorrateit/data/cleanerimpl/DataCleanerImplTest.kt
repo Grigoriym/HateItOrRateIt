@@ -34,7 +34,6 @@ class DataCleanerImplTest {
     private val dataCleaner: DataCleaner = DataCleanerImpl(
         fileUtils = fileUtils,
         productsRepository = productsRepository,
-        transactionController = transactionController,
         databaseDao = databaseDao,
         databaseWrapper = databaseWrapper,
         ioDispatcher = UnconfinedTestDispatcher()
@@ -152,10 +151,10 @@ class DataCleanerImplTest {
     fun `on clearAllData, should call the needed functions`() = runTest {
         coEvery { databaseWrapper.clearAllTables() } just Runs
         coEvery { databaseDao.clearPrimaryKeyIndex() } just Runs
-        coEvery { transactionController.runInTransaction(any()) } coAnswers  {
+        coEvery { transactionController.runInTransaction(any()) } coAnswers {
             firstArg<suspend () -> Unit>().invoke()
         }
-        every { fileUtils.clearMainFolder() } just Runs
+        every { fileUtils.clearMainFolder() } returns true
 
         dataCleaner.clearAllData()
 
