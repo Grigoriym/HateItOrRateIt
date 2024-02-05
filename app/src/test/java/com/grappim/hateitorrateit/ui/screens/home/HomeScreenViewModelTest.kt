@@ -40,7 +40,7 @@ class HomeScreenViewModelTest {
             type = HateRateType.HATE,
             productFolderName = "productFolderName",
             createdDate = OffsetDateTime.now(),
-            filesUri = emptyList(),
+            images = emptyList(),
         ),
         Product(
             id = 2L,
@@ -50,7 +50,7 @@ class HomeScreenViewModelTest {
             type = HateRateType.RATE,
             productFolderName = "productFolderName2",
             createdDate = OffsetDateTime.now(),
-            filesUri = emptyList(),
+            images = emptyList(),
         ),
     )
 

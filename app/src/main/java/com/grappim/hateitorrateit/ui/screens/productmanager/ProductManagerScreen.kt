@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.ui.screens.rateorhate
+package com.grappim.hateitorrateit.ui.screens.productmanager
 
 import android.net.Uri
 import androidx.activity.compose.BackHandler
@@ -45,6 +45,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,6 +55,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.core.LaunchedEffectResult
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.asString
+import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
@@ -61,6 +64,7 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
 import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
+import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
@@ -68,10 +72,10 @@ import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 
 @Composable
-internal fun HateOrRateRoute(
-    goBack: () -> Unit,
-    onProductCreated: () -> Unit,
-    viewModel: HateOrRateViewModel = hiltViewModel(),
+internal fun ProductManagerRoute(
+    goBack: (isNewProduct: Boolean) -> Unit,
+    onProductDone: (isNewProduct: Boolean) -> Unit,
+    viewModel: ProductManagerViewModel = hiltViewModel(),
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val snackBarMessage by viewModel.snackBarMessage.collectAsState(
@@ -80,39 +84,47 @@ internal fun HateOrRateRoute(
             timestamp = 0L
         )
     )
-    HateOrRateScreen(
+    ProductManagerScreen(
         state = state,
         goBack = goBack,
-        onProductCreated = onProductCreated,
+        onProductCreated = onProductDone,
         snackBarMessage = snackBarMessage,
     )
 }
 
 @Composable
-internal fun HateOrRateScreen(
-    state: HateOrRateViewState,
-    goBack: () -> Unit,
-    onProductCreated: () -> Unit,
+internal fun ProductManagerScreen(
+    state: ProductManagerViewState,
+    goBack: (isNewProduct: Boolean) -> Unit,
+    onProductCreated: (isNewProduct: Boolean) -> Unit,
     snackBarMessage: LaunchedEffectResult<out NativeText>,
 ) {
-    LaunchedEffect(state.isCreated) {
-        if (state.isCreated) {
-            onProductCreated.invoke()
+    LaunchedEffect(state.productSaved) {
+        if (state.productSaved) {
+            onProductCreated.invoke(state.isNewProduct)
         }
     }
 
     BackHandler(enabled = true) {
-        handleBackAction(state, goBack)
+        handleBackAction(state)
     }
 
     LaunchedEffect(state.forceQuit) {
         if (state.forceQuit) {
-            handleBackAction(state, goBack)
+            handleBackAction(state)
         }
     }
 
+    LaunchedEffect(state.quitStatus) {
+        if (state.quitStatus is QuitStatus.Finish) {
+            goBack(state.isNewProduct)
+        }
+    }
+
+    PlatoLoadingDialog(isLoading = state.quitStatus is QuitStatus.InProgress)
+
     PlatoAlertDialog(
-        text = stringResource(id = R.string.if_quit_lose_data),
+        text = state.alertDialogText.asString(context = LocalContext.current),
         showAlertDialog = state.showAlertDialog,
         confirmButtonText = stringResource(id = R.string.ok),
         onDismissRequest = {
@@ -126,18 +138,35 @@ internal fun HateOrRateScreen(
         }
     )
 
-    RateOrHateScreenContent(
+    ProductManagerContent(
         state = state,
-        goBack = goBack,
         snackBarMessage = snackBarMessage,
     )
 }
 
-fun handleBackAction(state: HateOrRateViewState, goBack: () -> Unit) {
+/**
+ * Handles the back action for the HateOrRateScreen.
+ *
+ * This function determines the appropriate action when the back button is pressed
+ * or when a back navigation event is triggered. It uses the current state of the
+ * screen to decide whether to show a confirmation dialog, immediately quit the screen,
+ * or perform other actions.
+ */
+fun handleBackAction(
+    state: ProductManagerViewState,
+) {
+
+    /**
+     * Performs actions associated with quitting the screen.
+     *
+     * This inner function encapsulates the logic for quitting the screen,
+     * including hiding the alert dialog and invoking the onQuit callback
+     * from the screen's state. This function is called when it's determined
+     * that the user can safely exit the screen without additional confirmation.
+     */
     fun doOnQuit() {
         state.onShowAlertDialog(false)
-        state.removeData()
-        goBack()
+        state.onQuit()
     }
 
     if (state.forceQuit) {
@@ -146,6 +175,8 @@ fun handleBackAction(state: HateOrRateViewState, goBack: () -> Unit) {
     }
 
     if (state.images.isNotEmpty() || state.productName.isNotEmpty()) {
+        // If there are unsaved changes (indicated by non-empty product name or images),
+        // prompt the user with an alert dialog to confirm their intent to quit.
         state.onShowAlertDialog(true)
     } else {
         doOnQuit()
@@ -153,9 +184,8 @@ fun handleBackAction(state: HateOrRateViewState, goBack: () -> Unit) {
 }
 
 @Composable
-private fun RateOrHateScreenContent(
-    state: HateOrRateViewState,
-    goBack: () -> Unit,
+private fun ProductManagerContent(
+    state: ProductManagerViewState,
     snackBarMessage: LaunchedEffectResult<out NativeText>,
 ) {
     val context = LocalContext.current
@@ -210,7 +240,7 @@ private fun RateOrHateScreenContent(
             PlatoTopBar(
                 text = stringResource(id = R.string.hate_or_rate),
                 goBack = {
-                    handleBackAction(state, goBack)
+                    handleBackAction(state)
                 },
             )
         },
@@ -303,7 +333,7 @@ private fun AddFromContent(
 @Composable
 private fun ImagesList(
     modifier: Modifier = Modifier,
-    state: HateOrRateViewState,
+    state: ProductManagerViewState,
 ) {
     val pagerState = rememberPagerState {
         state.images.size
@@ -362,7 +392,7 @@ private fun ImagesList(
                         ),
                     icon = PlatoIconType.Delete.imageVector,
                     onButtonClick = {
-                        state.onRemoveImageTriggered(file)
+                        state.onRemoveImageClicked(file)
                     },
                 )
             }
@@ -373,21 +403,20 @@ private fun ImagesList(
 @Composable
 private fun BottomBarButton(
     modifier: Modifier = Modifier,
-    state: HateOrRateViewState,
+    state: ProductManagerViewState,
 ) {
-
     PlatoTextButton(
         modifier = modifier
             .height(42.dp),
-        text = stringResource(id = R.string.create),
-        onClick = state.createProduct,
+        text = state.bottomBarButtonText.asString(LocalContext.current),
+        onClick = state.onProductDone,
     )
 }
 
 @Composable
 private fun TextFieldsContent(
     modifier: Modifier = Modifier,
-    state: HateOrRateViewState,
+    state: ProductManagerViewState,
 ) {
     Column(
         modifier = modifier
@@ -431,19 +460,23 @@ private fun TextFieldsContent(
 }
 
 @[Composable ThemePreviews]
-private fun BottomBarButtonPreview() {
+private fun BottomBarButtonPreview(
+    @PreviewParameter(StateProvider::class) state: ProductManagerViewState,
+) {
     HateItOrRateItTheme {
         BottomBarButton(
-            state = HateOrRateViewState.getStateForComposePreview()
+            state = state
         )
     }
 }
 
 @[Composable ThemePreviews]
-private fun TextFieldsContentPreview() {
+private fun TextFieldsContentPreview(
+    @PreviewParameter(StateProvider::class) state: ProductManagerViewState,
+) {
     HateItOrRateItTheme {
         TextFieldsContent(
-            state = HateOrRateViewState.getStateForComposePreview()
+            state = state
         )
     }
 }
@@ -459,12 +492,44 @@ private fun AddFromContentPreview() {
 }
 
 @[Composable ThemePreviews]
-private fun RateOrHateScreenContentPreview() {
+private fun RateOrHateScreenContentPreview(
+    @PreviewParameter(StateProvider::class) state: ProductManagerViewState,
+) {
     HateItOrRateItTheme {
-        RateOrHateScreenContent(
-            state = HateOrRateViewState.getStateForComposePreview(),
-            goBack = {},
+        ProductManagerContent(
+            state = state,
             snackBarMessage = LaunchedEffectResult(NativeText.Empty)
         )
     }
+}
+
+private class StateProvider : PreviewParameterProvider<ProductManagerViewState> {
+    override val values: Sequence<ProductManagerViewState>
+        get() = sequenceOf(
+            ProductManagerViewState(
+                images = listOf(),
+                productName = "Josefina Guzman",
+                description = "persius",
+                shop = "libris",
+                type = HateRateType.RATE,
+                draftProduct = null,
+                setDescription = {},
+                setName = {},
+                setShop = {},
+                productSaved = false,
+                onRemoveImageClicked = {},
+                onAddImageFromGalleryClicked = {},
+                onAddCameraPictureClicked = {},
+                onQuit = {},
+                onProductDone = {},
+                getCameraImageFileUri = {
+                    CameraTakePictureData.empty()
+                },
+                onTypeClicked = {},
+                forceQuit = false,
+                onForceQuit = {},
+                showAlertDialog = false,
+                onShowAlertDialog = {}
+            )
+        )
 }

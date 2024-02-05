@@ -33,8 +33,8 @@ class ProductsRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ProductsRepository {
 
-    override suspend fun getProductById(id: Long): Product {
-        val entity = productsDao.getProductById(id)
+    override suspend fun getProductById(productId: Long): Product {
+        val entity = productsDao.getProductById(productId)
         return productsMapper.toProduct(entity)
     }
 
@@ -48,12 +48,31 @@ class ProductsRepositoryImpl @Inject constructor(
         productsDao.updateProduct(id, name, description, shop, type)
     }
 
+    override suspend fun updateProduct(product: Product) {
+        productsDao.updateProduct(productsMapper.toProductEntity(product))
+    }
+
+    override suspend fun updateProductWithImages(
+        product: Product,
+        images: List<ProductImageData>,
+    ) {
+        val entity = productsMapper.toProductEntity(product)
+        val imagesEntity = productsMapper.toProductImageDataEntityList(
+            productId = product.id,
+            images = images
+        )
+        productsDao.updateProductAndImages(
+            productEntity = entity,
+            images = imagesEntity,
+        )
+    }
+
     override suspend fun updateImagesInProduct(
         id: Long,
-        files: List<ProductImageData>
+        images: List<ProductImageData>
     ) = withContext(ioDispatcher) {
-        val filesEntity = productsMapper.toProductImageDataEntityList(id, files)
-        productsDao.insertImages(filesEntity)
+        val filesEntity = productsMapper.toProductImageDataEntityList(id, images)
+        productsDao.upsertImages(filesEntity)
     }
 
     override suspend fun addDraftProduct(): DraftProduct = withContext(ioDispatcher) {
@@ -75,7 +94,7 @@ class ProductsRepositoryImpl @Inject constructor(
         DraftProduct(
             id = id,
             date = nowDate,
-            folderName = folderName,
+            productFolderName = folderName,
             type = type,
         )
     }
@@ -86,12 +105,12 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun deleteEmptyFiles() = productsDao.deleteEmptyFiles()
 
     override suspend fun deleteProductImage(
-        id: Long,
-        name: String,
-    ) = productsDao.deleteProductImageByIdAndName(id, name)
+        productId: Long,
+        imageName: String,
+    ) = productsDao.deleteProductImageByIdAndName(productId, imageName)
 
-    override suspend fun removeProductById(id: Long) {
-        productsDao.deleteProductAndImagesById(id)
+    override suspend fun deleteProductById(productId: Long) {
+        productsDao.deleteProductAndImagesById(productId)
     }
 
     override suspend fun addProduct(product: CreateProduct) = withContext(ioDispatcher) {
@@ -116,7 +135,7 @@ class ProductsRepositoryImpl @Inject constructor(
             list.map {
                 productsMapper.toProduct(
                     productEntity = it.productEntity,
-                    files = it.files
+                    images = it.files
                 )
             }
         })

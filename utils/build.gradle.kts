@@ -22,6 +22,7 @@ android {
 
 dependencies {
     implementation(project(":domain"))
+    implementation(project(":commons"))
 
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
 
@@ -29,4 +30,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
 
     implementation(libs.timber)
+
+    testImplementation(libs.robolectric)
 }

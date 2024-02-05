@@ -10,6 +10,7 @@
     <string name="description">Description</string>
     <string name="name_obligatory">Name *</string>
     <string name="create">Create</string>
+    <string name="save">Save</string>
     <string name="hate_or_rate">Hate Or Rate</string>
     <string name="save_changes_before_exit">Save changes before exiting?</string>
     <string name="yes">Yes</string>
@@ -25,6 +26,7 @@
     <string name="delete_image">Delete Image</string>
     <string name="are_you_sure_to_delete_product">Confirm product deletion?</string>
     <string name="if_quit_lose_data">Warning: Quitting will result in data loss.</string>
+    <string name="if_quit_ensure_saved">Warning: Please ensure you saved the data.</string>
     <string name="hate">Hate</string>
     <string name="rate">Rate</string>
 

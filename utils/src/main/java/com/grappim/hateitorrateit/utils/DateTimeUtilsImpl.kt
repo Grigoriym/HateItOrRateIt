@@ -3,6 +3,7 @@ package com.grappim.hateitorrateit.utils
 import com.grappim.hateitorrateit.utils.di.DtfDocumentFolder
 import com.grappim.hateitorrateit.utils.di.DtfToDemonstrate
 import com.grappim.hateitorrateit.utils.di.DtfToStore
+import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -30,4 +31,6 @@ class DateTimeUtilsImpl @Inject constructor(
         dtfDocumentFolder.format(offsetDateTime)
 
     override fun getDateTimeUTCNow(): OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC)
+
+    override fun getInstantNow(): Instant = Instant.now()
 }

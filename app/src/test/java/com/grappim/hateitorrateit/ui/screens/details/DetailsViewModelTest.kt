@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
 import androidx.lifecycle.SavedStateHandle
+import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
@@ -8,11 +9,9 @@ import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.model.ProductDetailsUi
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
-import com.grappim.hateitorrateit.utils.FileUtils
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
-import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import org.junit.Before
@@ -24,6 +23,8 @@ import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 private const val PRODUCT_ID = 1L
+private const val PRODUCT_FOLDER_NAME = "productFolderNameTest"
+private const val PRODUCT_NAME = "productName"
 
 class DetailsViewModelTest {
 
@@ -33,28 +34,27 @@ class DetailsViewModelTest {
     private val productsRepository: ProductsRepository = mockk()
     private val uiModelsMapper: UiModelsMapper = mockk()
     private val dataCleaner: DataCleaner = mockk()
-    private val fileUtils: FileUtils = mockk()
-    private val savedStateHandle: SavedStateHandle = mockk()
+    private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var viewModel: DetailsViewModel
 
     private val product = Product(
         id = PRODUCT_ID,
-        name = "name",
+        name = PRODUCT_NAME,
         description = "description",
         shop = "shop",
         type = HateRateType.HATE,
-        productFolderName = "productFolderName",
+        productFolderName = PRODUCT_FOLDER_NAME,
         createdDate = OffsetDateTime.now(),
-        filesUri = emptyList(),
+        images = emptyList(),
     )
 
     private val productUi = ProductDetailsUi(
         id = PRODUCT_ID.toString(),
-        name = "Cameron Thomas",
+        name = PRODUCT_NAME,
         createdDate = "reque",
         filesUri = listOf(),
-        productFolderName = "Antonio Hopper",
+        productFolderName = PRODUCT_FOLDER_NAME,
         description = "felis",
         shop = "fabellas",
         type = HateRateType.HATE,
@@ -62,9 +62,9 @@ class DetailsViewModelTest {
 
     @Before
     fun setup() {
-        every {
-            savedStateHandle.get<Long>(any())
-        } returns 1L
+        savedStateHandle = SavedStateHandle().apply {
+            this[RootNavDestinations.Details.KEY] = PRODUCT_ID
+        }
         coEvery {
             productsRepository.getProductById(any())
         } returns product
@@ -74,7 +74,6 @@ class DetailsViewModelTest {
             productsRepository = productsRepository,
             uiModelsMapper = uiModelsMapper,
             dataCleaner = dataCleaner,
-            fileUtils = fileUtils,
             savedStateHandle = savedStateHandle
         )
     }
@@ -86,21 +85,25 @@ class DetailsViewModelTest {
         viewModel.viewState.value.onDeleteProductConfirm()
 
         assertTrue(viewModel.viewState.value.isLoading)
-        assertEquals(viewModel.viewState.value.id, PRODUCT_ID.toString())
-        coVerify { dataCleaner.clearProductData(any(), any()) }
+        assertEquals(viewModel.viewState.value.productId, PRODUCT_ID.toString())
+        coVerify {
+            dataCleaner.clearProductData(
+                productId = PRODUCT_ID,
+                productFolderName = PRODUCT_FOLDER_NAME
+            )
+        }
         assertTrue(viewModel.viewState.value.productDeleted)
     }
 
     @Test
-    fun `onShowAlertDialog called showAlertDialog should be true`() {
+    fun `onShowAlertDialog, showAlertDialog should be true`() {
         assertFalse(viewModel.viewState.value.showAlertDialog)
         viewModel.viewState.value.onShowAlertDialog(true)
         assertTrue(viewModel.viewState.value.showAlertDialog)
     }
 
     @Test
-    fun `onDeleteProduct called showAlertDialog should be true`() {
-        viewModel.viewState.value.onShowAlertDialog(false)
+    fun `onDeleteProduct, showAlertDialog should be true`() {
         assertFalse(viewModel.viewState.value.showAlertDialog)
 
         viewModel.viewState.value.onDeleteProduct()
@@ -109,61 +112,21 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `on toggleEditMode, toEdit fields should respectively be as non-toEdit fields, isEdit should be true`() {
-        assertFalse(viewModel.viewState.value.isEdit)
+    fun `on updateProduct should getProduct`() {
+        viewModel.viewState.value.updateProduct()
 
-        viewModel.viewState.value.onToggleEditMode()
-
-        assertTrue(viewModel.viewState.value.isEdit)
-        assertEquals(viewModel.viewState.value.nameToEdit, viewModel.viewState.value.name)
-        assertEquals(
-            viewModel.viewState.value.descriptionToEdit,
-            viewModel.viewState.value.description
-        )
-        assertEquals(viewModel.viewState.value.shopToEdit, viewModel.viewState.value.shop)
-        assertEquals(viewModel.viewState.value.typeToEdit, viewModel.viewState.value.type)
-    }
-
-    @Test
-    fun `onEditSubmit, with typeToEdit being not null, should call updateProduct`() {
-        coEvery { productsRepository.updateProduct(any(), any(), any(), any(), any()) } just Runs
-        viewModel.viewState.value.onToggleEditMode()
-
-        viewModel.viewState.value.onSubmitChanges()
         coVerify {
-            productsRepository.updateProduct(
-                id = PRODUCT_ID,
-                name = viewModel.viewState.value.nameToEdit,
-                description = viewModel.viewState.value.descriptionToEdit,
-                shop = viewModel.viewState.value.shopToEdit,
-                type = viewModel.viewState.value.typeToEdit!!,
-            )
+            productsRepository.getProductById(PRODUCT_ID)
         }
-    }
+        coVerify {
+            uiModelsMapper.toProductDetailsUi(product)
+        }
 
-    @Test
-    fun `setName, should update nameToEdit`() {
-        viewModel.viewState.value.onSetName("newName")
-        assertEquals("newName", viewModel.viewState.value.nameToEdit)
-    }
+        val state = viewModel.viewState.value
 
-    @Test
-    fun `setShop, should update shopToEdit`() {
-        viewModel.viewState.value.onSetShop("newShop")
-        assertEquals("newShop", viewModel.viewState.value.shopToEdit)
-    }
-
-    @Test
-    fun `setDescription, should update descriptionToEdit`() {
-        viewModel.viewState.value.onSetDescription("newDescription")
-        assertEquals("newDescription", viewModel.viewState.value.descriptionToEdit)
-    }
-
-    @Test
-    fun `setType, should update typeToEdit`() {
-        viewModel.viewState.value.onToggleEditMode()
-
-        viewModel.viewState.value.onSetType(HateRateType.HATE)
-        assertEquals(HateRateType.HATE, viewModel.viewState.value.typeToEdit)
+        assertEquals(state.productId, PRODUCT_ID.toString())
+        assertEquals(state.name, PRODUCT_NAME)
+        assertFalse(state.isLoading)
+        assertEquals(state.productFolderName, PRODUCT_FOLDER_NAME)
     }
 }

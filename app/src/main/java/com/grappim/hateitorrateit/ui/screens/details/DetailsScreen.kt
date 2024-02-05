@@ -1,15 +1,10 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
-import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,9 +17,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -37,11 +30,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,21 +48,17 @@ import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
-import com.grappim.hateitorrateit.ui.widgets.PlatoHateRateContent
 import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
 import com.grappim.hateitorrateit.ui.widgets.PlatoIconButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.ui.widgets.PlatoProgressIndicator
-import com.grappim.hateitorrateit.ui.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.ui.widgets.text.TextH4
-import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import kotlinx.coroutines.launch
 
 const val DETAILS_SCREEN_CONTENT_TAG = "details_screen_content_tag"
 const val DETAILS_TOP_APP_BAR_TAG = "details_top_app_bar_tag"
-const val DETAILS_EDIT_CONTENT_TAG = "details_edit_content_tag"
 const val DETAILS_DEMONSTRATION_CONTENT_TAG = "details_demonstration_content_tag"
 
 private const val TOP_APP_BAR_WEIGHT = 1.2f
@@ -79,13 +68,16 @@ fun DetailsRoute(
     viewModel: DetailsViewModel = hiltViewModel(),
     goBack: () -> Unit,
     onImageClicked: (productId: String, index: Int) -> Unit,
+    onEditClicked: (id: Long) -> Unit,
+    isFromEdit: Boolean,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-
     DetailsScreen(
         state = state,
         goBack = goBack,
         onImageClicked = onImageClicked,
+        onEditClicked = onEditClicked,
+        isFromEdit = isFromEdit,
     )
 }
 
@@ -94,10 +86,18 @@ internal fun DetailsScreen(
     state: DetailsViewState,
     goBack: () -> Unit,
     onImageClicked: (productId: String, index: Int) -> Unit,
+    onEditClicked: (id: Long) -> Unit,
+    isFromEdit: Boolean,
 ) {
     LaunchedEffect(state.productDeleted) {
         if (state.productDeleted) {
             goBack()
+        }
+    }
+
+    LaunchedEffect(isFromEdit) {
+        if (isFromEdit) {
+            state.updateProduct()
         }
     }
 
@@ -106,6 +106,7 @@ internal fun DetailsScreen(
             state = state,
             goBack = goBack,
             onImageClicked = onImageClicked,
+            onEditClicked,
         )
     } else {
         PlatoProgressIndicator(true)
@@ -117,6 +118,7 @@ private fun DetailsScreenContent(
     state: DetailsViewState,
     goBack: () -> Unit,
     onImageClicked: (productId: String, index: Int) -> Unit,
+    onEditClicked: (id: Long) -> Unit,
 ) {
     PlatoAlertDialog(
         text = stringResource(id = R.string.are_you_sure_to_delete_product),
@@ -148,6 +150,7 @@ private fun DetailsScreenContent(
             state = state,
             onImageClicked = onImageClicked,
             goBack = goBack,
+            onEditClicked = onEditClicked,
         )
 
         val detailsInfoModifier = Modifier
@@ -160,11 +163,6 @@ private fun DetailsScreenContent(
             modifier = detailsInfoModifier,
             state = state,
         )
-
-        DetailsEditContent(
-            modifier = detailsInfoModifier,
-            state = state
-        )
     }
 }
 
@@ -174,31 +172,8 @@ private fun TopAppBarContent(
     state: DetailsViewState,
     onImageClicked: (productId: String, index: Int) -> Unit,
     goBack: () -> Unit,
+    onEditClicked: (id: Long) -> Unit,
 ) {
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    var cameraTakePictureData by remember {
-        mutableStateOf(CameraTakePictureData.empty())
-    }
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickVisualMedia()
-    ) { uri: Uri? ->
-        keyboardController?.hide()
-        uri?.let {
-            state.onAddImageFromGalleryClicked(uri)
-        }
-    }
-
-    val cameraLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.TakePicture()
-    ) { isSuccess: Boolean ->
-        keyboardController?.hide()
-        if (isSuccess) {
-            state.onAddCameraPictureClicked(cameraTakePictureData)
-        }
-    }
-
     val pagerState = rememberPagerState {
         state.images.size
     }
@@ -223,46 +198,10 @@ private fun TopAppBarContent(
             pagerState = pagerState,
         )
 
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(start = 8.dp, bottom = 8.dp)
-        ) {
-            PlatoIconButton(
-                icon = PlatoIconType.Camera.imageVector,
-                onButtonClick = {
-                    keyboardController?.hide()
-                    cameraTakePictureData = state.getCameraImageFileUri()
-                    cameraLauncher.launch(cameraTakePictureData.uri)
-                }
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            PlatoIconButton(
-                icon = PlatoIconType.Image.imageVector,
-                onButtonClick = {
-                    keyboardController?.hide()
-                    galleryLauncher.launch(
-                        PickVisualMediaRequest(
-                            ActivityResultContracts.PickVisualMedia.ImageOnly
-                        )
-                    )
-                }
-            )
-        }
-
-        PlatoTextButton(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 8.dp),
-            text = stringResource(id = R.string.delete_image),
-            onClick = {
-                state.onDeleteImage(pagerState.currentPage)
-            }
-        )
-
         AppBarTopButtonsContent(
             state = state,
             goBack = goBack,
+            onEditClicked = onEditClicked,
         )
     }
 }
@@ -283,7 +222,7 @@ private fun ScrollToLastImageOnUpdate(
     val coroutineScope = rememberCoroutineScope()
     LaunchedEffect(state.images) {
         coroutineScope.launch {
-            if (!firstRecomposition && state.images.isNotEmpty() && !state.isDeletingImage) {
+            if (!firstRecomposition && state.images.isNotEmpty()) {
                 pagerState.animateScrollToPage(state.images.lastIndex)
             }
             firstRecomposition = false
@@ -295,6 +234,7 @@ private fun ScrollToLastImageOnUpdate(
 private fun AppBarTopButtonsContent(
     state: DetailsViewState,
     goBack: () -> Unit,
+    onEditClicked: (id: Long) -> Unit,
 ) {
     PlatoTopBar(
         modifier = Modifier.padding(top = 2.dp),
@@ -303,27 +243,17 @@ private fun AppBarTopButtonsContent(
         backgroundColor = Color.Transparent,
         elevation = 0.dp,
         actions = {
-            if (state.isEdit) {
-                PlatoIconButton(
-                    icon = PlatoIconType.Done.imageVector,
-                    onButtonClick = state.onSubmitChanges
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                PlatoIconButton(
-                    icon = PlatoIconType.Close.imageVector,
-                    onButtonClick = state.onToggleEditMode
-                )
-            } else {
-                PlatoIconButton(
-                    icon = PlatoIconType.Edit.imageVector,
-                    onButtonClick = state.onToggleEditMode
-                )
-                Spacer(modifier = Modifier.width(12.dp))
-                PlatoIconButton(
-                    icon = PlatoIconType.Delete.imageVector,
-                    onButtonClick = state.onDeleteProduct
-                )
-            }
+            PlatoIconButton(
+                icon = PlatoIconType.Edit.imageVector,
+                onButtonClick = {
+                    onEditClicked(state.productId.toLong())
+                }
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            PlatoIconButton(
+                icon = PlatoIconType.Delete.imageVector,
+                onButtonClick = state.onDeleteProduct
+            )
         })
 }
 
@@ -347,12 +277,10 @@ private fun BoxScope.AppBarImageContent(
                     bottomStart = 16.dp,
                 ),
                 onClick = {
-                    if (state.isEdit.not()) {
-                        onImageClicked(
-                            state.id,
-                            index
-                        )
-                    }
+                    onImageClicked(
+                        state.productId,
+                        index
+                    )
                 }
             ) {
                 Image(
@@ -378,176 +306,116 @@ private fun DetailsDemonstrationContent(
     modifier: Modifier = Modifier,
     state: DetailsViewState
 ) {
-    if (state.isEdit.not()) {
-        Column(
-            modifier = modifier
-                .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            TextH4(text = state.name)
+    Column(
+        modifier = modifier
+            .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        TextH4(text = state.name)
 
-            if (state.description.isNotEmpty()) {
-                Text(
-                    text = state.description,
-                )
-            }
-
-            if (state.shop.isNotEmpty()) {
-                Text(
-                    text = state.shop,
-                )
-            }
-
-            if (state.createdDate.isNotEmpty()) {
-                Text(
-                    modifier = Modifier
-                        .padding(top = 8.dp),
-                    text = state.createdDate
-                )
-            }
-
-            requireNotNull(state.type)
-            PlatoIcon(
-                imageVector = state.type.icon(),
-                tint = state.type.color(),
+        if (state.description.isNotEmpty()) {
+            Text(
+                text = state.description,
             )
         }
-    }
-}
 
-@Composable
-private fun DetailsEditContent(
-    modifier: Modifier = Modifier,
-    state: DetailsViewState
-) {
-    if (state.isEdit) {
-        Column(
-            modifier = modifier
-                .testTag(DETAILS_EDIT_CONTENT_TAG),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            OutlinedTextField(
-                value = state.nameToEdit,
-                onValueChange = state.onSetName,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                label = {
-                    Text(text = stringResource(id = R.string.name_obligatory))
-                },
-            )
-
-            OutlinedTextField(
-                value = state.descriptionToEdit,
-                onValueChange = state.onSetDescription,
-                singleLine = false,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                label = {
-                    Text(text = stringResource(id = R.string.description))
-                },
-            )
-
-            OutlinedTextField(
-                value = state.shopToEdit,
-                onValueChange = state.onSetShop,
-                keyboardOptions = KeyboardOptions.Default.copy(
-                    imeAction = ImeAction.Done
-                ),
-                label = {
-                    Text(text = stringResource(id = R.string.shop))
-                },
-            )
-
-            PlatoHateRateContent(
-                currentType = requireNotNull(state.typeToEdit),
-                onTypeClicked = state.onSetType,
+        if (state.shop.isNotEmpty()) {
+            Text(
+                text = state.shop,
             )
         }
+
+        if (state.createdDate.isNotEmpty()) {
+            Text(
+                modifier = Modifier
+                    .padding(top = 8.dp),
+                text = state.createdDate
+            )
+        }
+
+        requireNotNull(state.type)
+        PlatoIcon(
+            imageVector = state.type.icon(),
+            tint = state.type.color(),
+        )
     }
 }
 
 @[Composable ThemePreviews]
-private fun DetailsScreenPreview() {
+private fun DetailsScreenPreview(
+    @PreviewParameter(StateProvider::class) state: DetailsViewState
+) {
     HateItOrRateItTheme {
         DetailsScreen(
-            state = getPreviewState(),
+            state = state,
             goBack = {},
-            onImageClicked = { _, _ -> }
+            onImageClicked = { _, _ -> },
+            onEditClicked = {},
+            isFromEdit = false,
         )
     }
 }
 
 @[Composable Preview(showBackground = true)]
-private fun DetailsScreenWithLoadingPreview() {
+private fun DetailsScreenWithLoadingPreview(
+    @PreviewParameter(StateProvider::class) state: DetailsViewState
+) {
     HateItOrRateItTheme {
         DetailsScreen(
-            state = getPreviewState().copy(isLoading = true),
+            state = state.copy(isLoading = true),
             goBack = {},
-            onImageClicked = { _, _ -> }
+            onImageClicked = { _, _ -> },
+            onEditClicked = {},
+            isFromEdit = false,
         )
     }
 }
 
 @[Composable ThemePreviews]
-private fun TopAppBarContentPreview() {
+private fun TopAppBarContentPreview(
+    @PreviewParameter(StateProvider::class) state: DetailsViewState
+) {
     HateItOrRateItTheme {
         TopAppBarContent(
-            state = getPreviewState(),
+            state = state,
             onImageClicked = { _, _ -> },
-            goBack = {}
+            goBack = {},
+            onEditClicked = {},
         )
     }
 }
 
 @[Composable ThemePreviews]
-private fun DetailsEditContentPreview() {
-    HateItOrRateItTheme {
-        DetailsEditContent(
-            state = getPreviewState()
-        )
-    }
-}
-
-@[Composable ThemePreviews]
-private fun DetailsDemonstrationContentPreview() {
+private fun DetailsDemonstrationContentPreview(
+    @PreviewParameter(StateProvider::class) state: DetailsViewState
+) {
     HateItOrRateItTheme {
         DetailsDemonstrationContent(
-            state = getPreviewState().copy(isEdit = false)
+            state = state
         )
     }
 }
 
-private fun getPreviewState() = DetailsViewState(
-    id = "accommodare",
-    name = "Darren Stanton",
-    description = "altera",
-    shop = "pulvinar",
-    createdDate = "ornare",
-    productFolderName = "Estelle Duke",
-    images = listOf(),
-    type = HateRateType.HATE,
-    nameToEdit = "Lorenzo Strickland",
-    descriptionToEdit = "disputationi",
-    shopToEdit = "iusto",
-    typeToEdit = HateRateType.HATE,
-    isLoading = false,
-    isEdit = true,
-    onSetName = {},
-    onSetDescription = {},
-    onSetShop = {},
-    onToggleEditMode = {},
-    onSubmitChanges = {},
-    onSetType = {},
-    showAlertDialog = false,
-    onShowAlertDialog = {},
-    onDeleteProduct = {},
-    productDeleted = false,
-    onDeleteProductConfirm = {},
-    onDeleteImage = {},
-    onAddImageFromGalleryClicked = {},
-    onAddCameraPictureClicked = {},
-    getCameraImageFileUri = { CameraTakePictureData.empty() })
+private class StateProvider : PreviewParameterProvider<DetailsViewState>{
+    override val values: Sequence<DetailsViewState>
+        get() = sequenceOf(
+            DetailsViewState(
+                productId = "accommodare",
+                name = "Darren Stanton",
+                description = "altera",
+                shop = "pulvinar",
+                createdDate = "ornare",
+                productFolderName = "Estelle Duke",
+                images = listOf(),
+                type = HateRateType.HATE,
+                isLoading = false,
+                showAlertDialog = false,
+                onShowAlertDialog = {},
+                onDeleteProduct = {},
+                productDeleted = false,
+                onDeleteProductConfirm = {},
+                updateProduct = {},
+            )
+        )
+}

@@ -36,6 +36,13 @@ class DatabaseWrapperImplTest {
     }
 
     @Test
+    fun `backupImagesDao should call db backupImagesDao`() {
+        wrapper.backupImagesDao
+
+        verify { db.backupImagesDao() }
+    }
+
+    @Test
     fun `clearAllTables should call db clearAllTables`() = runTest {
         wrapper.clearAllTables()
 

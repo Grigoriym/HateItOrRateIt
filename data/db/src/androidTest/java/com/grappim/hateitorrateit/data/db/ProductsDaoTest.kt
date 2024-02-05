@@ -98,8 +98,8 @@ class ProductsDaoTest {
     fun getAllProductsFlow_should_not_return_emptyFiles() = runTest {
         val date = prepareDate()
 
-        val nonEmptyFile = getProductEntity().copy(createdDate = date, isCreated = true)
-        val emptyFile = getProductEntity().copy(createdDate = date, isCreated = false)
+        val nonEmptyFile = createProductEntity().copy(createdDate = date, isCreated = true)
+        val emptyFile = createProductEntity().copy(createdDate = date, isCreated = false)
 
         productsDao.insert(nonEmptyFile)
         productsDao.insert(emptyFile)
@@ -184,15 +184,15 @@ class ProductsDaoTest {
     fun on_insert_getAllProductsFlow_emitsCorrectProducts() = runTest {
         val date = prepareDate()
 
-        val productEntity1 = getProductEntity().copy(createdDate = date)
-        val productEntity2 = getProductEntity().copy(
+        val productEntity1 = createProductEntity().copy(createdDate = date)
+        val productEntity2 = createProductEntity().copy(
             createdDate = date,
             name = "name_2",
             productFolderName = "product_2",
             description = "description_2",
             shop = "shop_2"
         )
-        val productEntity3 = getProductEntity().copy(
+        val productEntity3 = createProductEntity().copy(
             createdDate = date,
             name = "name_3",
             productFolderName = "product_3",
@@ -249,10 +249,10 @@ class ProductsDaoTest {
         runTest {
             val date = prepareDate()
 
-            val entity = getProductEntity().copy(createdDate = date)
+            val entity = createProductEntity().copy(createdDate = date)
             val id = productsDao.insert(entity)
             val images = getProductImageList(id)
-            productsDao.insertImages(images)
+            productsDao.upsertImages(images)
 
             productsDao.getAllProductsFlow().test {
                 val initialItem = awaitItem()
@@ -272,7 +272,7 @@ class ProductsDaoTest {
         val newFolderName = "new_folder_name"
 
         val date = prepareDate()
-        val entity = getProductEntity().copy(createdDate = date)
+        val entity = createProductEntity().copy(createdDate = date)
         val id = productsDao.insert(entity)
 
         assertNotNull(productsDao.getProductById(id))
@@ -287,8 +287,8 @@ class ProductsDaoTest {
     @Test
     fun on_getEmptyFiles_should_return_only_emptyFiles() = runTest {
         val date = prepareDate()
-        val nonEmptyFile = getProductEntity().copy(createdDate = date, isCreated = true)
-        val emptyFile = getProductEntity().copy(createdDate = date, isCreated = false)
+        val nonEmptyFile = createProductEntity().copy(createdDate = date, isCreated = true)
+        val emptyFile = createProductEntity().copy(createdDate = date, isCreated = false)
 
         productsDao.insert(nonEmptyFile)
         productsDao.insert(emptyFile)
@@ -302,8 +302,8 @@ class ProductsDaoTest {
     @Test
     fun on_deleteEmptyFiles_should_delete_only_emptyFiles() = runTest {
         val date = prepareDate()
-        val nonEmptyFile = getProductEntity().copy(createdDate = date, isCreated = true)
-        val emptyFile = getProductEntity().copy(createdDate = date, isCreated = false)
+        val nonEmptyFile = createProductEntity().copy(createdDate = date, isCreated = true)
+        val emptyFile = createProductEntity().copy(createdDate = date, isCreated = false)
 
         productsDao.insert(nonEmptyFile)
         productsDao.insert(emptyFile)
@@ -321,8 +321,8 @@ class ProductsDaoTest {
     @Test
     fun on_getAllProductsByRawQueryFlow_should_return_correct_products() = runTest {
         val date = prepareDate()
-        val nonEmptyFile = getProductEntity().copy(createdDate = date, isCreated = true)
-        val emptyFile = getProductEntity().copy(createdDate = date, isCreated = false)
+        val nonEmptyFile = createProductEntity().copy(createdDate = date, isCreated = true)
+        val emptyFile = createProductEntity().copy(createdDate = date, isCreated = false)
 
         productsDao.insert(nonEmptyFile)
         productsDao.insert(emptyFile)
@@ -348,7 +348,7 @@ class ProductsDaoTest {
 
         val (_, id) = prepareEntityAndId(date)
         val images = getProductImageList(id)
-        productsDao.insertImages(images)
+        productsDao.upsertImages(images)
 
         productsDao.getAllProductsFlow().test {
             val initial = awaitItem()
@@ -371,7 +371,7 @@ class ProductsDaoTest {
 
         val (_, id) = prepareEntityAndId(date)
         val images = getProductImageList(id)
-        productsDao.insertImages(images)
+        productsDao.upsertImages(images)
 
         productsDao.getAllProductsFlow().test {
             val initial = awaitItem()
@@ -400,7 +400,7 @@ class ProductsDaoTest {
     }
 
     private suspend fun prepareEntityAndId(date: OffsetDateTime): Pair<ProductEntity, Long> {
-        val entity = getProductEntity().copy(createdDate = date)
+        val entity = createProductEntity().copy(createdDate = date)
         val id = productsDao.insert(entity)
         return Pair(entity, id)
     }

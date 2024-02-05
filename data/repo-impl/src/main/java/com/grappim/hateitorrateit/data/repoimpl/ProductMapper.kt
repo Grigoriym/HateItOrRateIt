@@ -24,11 +24,11 @@ class ProductMapper @Inject constructor(
     ): Product =
         withContext(ioDispatcher) {
             val entity = productWithImagesEntity.productEntity
-            val files = productWithImagesEntity.files
+            val images = productWithImagesEntity.files
             Product(
                 id = entity.productId,
                 name = entity.name,
-                filesUri = files?.map { productImageDataEntity ->
+                images = images?.map { productImageDataEntity ->
                     toProductImageData(productImageDataEntity)
                 } ?: emptyList(),
                 createdDate = entity.createdDate,
@@ -41,12 +41,12 @@ class ProductMapper @Inject constructor(
 
     suspend fun toProduct(
         productEntity: ProductEntity,
-        files: List<ProductImageDataEntity>?
+        images: List<ProductImageDataEntity>?
     ): Product = withContext(ioDispatcher) {
         Product(
             id = productEntity.productId,
             name = productEntity.name,
-            filesUri = files?.map { productImageDataEntity ->
+            images = images?.map { productImageDataEntity ->
                 toProductImageData(productImageDataEntity)
             } ?: emptyList(),
             createdDate = productEntity.createdDate,
@@ -59,10 +59,10 @@ class ProductMapper @Inject constructor(
 
     suspend fun toProductImageDataEntityList(
         productId: Long,
-        files: List<ProductImageData>
+        images: List<ProductImageData>
     ): List<ProductImageDataEntity> =
         withContext(ioDispatcher) {
-            files.map {
+            images.map {
                 toProductImageDataEntity(
                     productId = productId,
                     productImageData = it
@@ -76,6 +76,7 @@ class ProductMapper @Inject constructor(
         productImageData: ProductImageData
     ): ProductImageDataEntity = withContext(ioDispatcher) {
         ProductImageDataEntity(
+            imageId = productImageData.imageId,
             name = productImageData.name,
             mimeType = productImageData.mimeType,
             uriPath = productImageData.uriPath,
@@ -112,10 +113,25 @@ class ProductMapper @Inject constructor(
         )
     }
 
+    suspend fun toProductEntity(
+        product: Product
+    ): ProductEntity = withContext(ioDispatcher) {
+        ProductEntity(
+            productId = product.id,
+            name = product.name,
+            createdDate = product.createdDate,
+            productFolderName = product.productFolderName,
+            description = product.description,
+            shop = product.shop,
+            type = product.type,
+            isCreated = true
+        )
+    }
+
     suspend fun toProductImageDataEntityList(
         createProduct: CreateProduct
     ): List<ProductImageDataEntity> = withContext(ioDispatcher) {
-        createProduct.filesUri.map {
+        createProduct.images.map {
             ProductImageDataEntity(
                 productId = createProduct.id,
                 name = it.name,
@@ -130,6 +146,7 @@ class ProductMapper @Inject constructor(
 
     private fun toProductImageData(productImageDataEntity: ProductImageDataEntity) =
         ProductImageData(
+            imageId = productImageDataEntity.imageId,
             name = productImageDataEntity.name,
             mimeType = productImageDataEntity.mimeType,
             uriPath = productImageDataEntity.uriPath,
