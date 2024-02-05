@@ -4,7 +4,7 @@ firebase-bom = "32.7.1"
 firebaseCrashlytics = "2.9.9"
 composeKotlinCompiler = "1.5.3"
 
-detekt = "1.23.4"
+detekt = "1.23.5"
 
 gms = "4.4.0"
 
