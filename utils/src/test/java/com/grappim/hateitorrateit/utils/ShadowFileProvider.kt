@@ -13,7 +13,7 @@ internal class ShadowFileProvider {
 
     companion object {
 
-        @Suppress("UnusedParameter")
+        @Suppress("UnusedParameter", "UnusedPrivateMember")
         @JvmStatic
         @Implementation
         fun getUriForFile(context: Context, authority: String, file: File): Uri {
