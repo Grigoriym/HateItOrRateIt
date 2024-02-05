@@ -9,7 +9,7 @@ import com.grappim.hateitorrateit.domain.ProductImageData
 import kotlinx.coroutines.flow.Flow
 
 interface ProductsRepository {
-    suspend fun getProductById(id: Long): Product
+    suspend fun getProductById(productId: Long): Product
 
     suspend fun updateProduct(
         id: Long,
@@ -19,9 +19,16 @@ interface ProductsRepository {
         type: HateRateType,
     )
 
+    suspend fun updateProduct(product: Product)
+
     suspend fun updateImagesInProduct(
         id: Long,
-        files: List<ProductImageData>
+        images: List<ProductImageData>,
+    )
+
+    suspend fun updateProductWithImages(
+        product: Product,
+        images: List<ProductImageData>,
     )
 
     suspend fun addDraftProduct(): DraftProduct
@@ -30,7 +37,7 @@ interface ProductsRepository {
 
     suspend fun deleteEmptyFiles()
 
-    suspend fun deleteProductImage(id: Long, name: String)
+    suspend fun deleteProductImage(productId: Long, imageName: String)
 
     fun getProductsFlow(
         query: String,
@@ -39,5 +46,5 @@ interface ProductsRepository {
 
     suspend fun addProduct(product: CreateProduct)
 
-    suspend fun removeProductById(id: Long)
+    suspend fun deleteProductById(productId: Long)
 }

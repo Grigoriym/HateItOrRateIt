@@ -1,13 +1,11 @@
 package com.grappim.hateitorrateit.domain
 
-import com.grappim.hateitorrateit.domain.ProductImageData
-import com.grappim.hateitorrateit.domain.HateRateType
 import java.time.OffsetDateTime
 
 data class CreateProduct(
     val id: Long,
     val name: String,
-    val filesUri: List<ProductImageData>,
+    val images: List<ProductImageData>,
     val createdDate: OffsetDateTime,
     val productFolderName: String,
     val description: String,

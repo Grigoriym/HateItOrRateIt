@@ -4,7 +4,6 @@ import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity
 import com.grappim.hateitorrateit.domain.CreateProduct
-import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.EmptyFileData
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
@@ -80,7 +79,7 @@ fun getProduct(
 ): Product = Product(
     id = ID,
     name = NAME,
-    filesUri = filesUri,
+    images = filesUri,
     createdDate = nowDate,
     productFolderName = FOLDER_NAME,
     description = "description",
@@ -99,17 +98,10 @@ fun getProductEntity(): ProductEntity = ProductEntity(
     isCreated = true
 )
 
-fun getDraftProduct() = DraftProduct(
-    id = ID,
-    date = nowDate,
-    folderName = FOLDER_NAME,
-    type = HateRateType.HATE
-)
-
 fun getCreateProduct() = CreateProduct(
     id = ID,
     name = NAME,
-    filesUri = getProductImageDataList(),
+    images = getProductImageDataList(),
     createdDate = nowDate,
     productFolderName = FOLDER_NAME,
     description = "description",

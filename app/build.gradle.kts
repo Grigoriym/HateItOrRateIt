@@ -63,7 +63,10 @@ android {
         kotlinCompilerExtensionVersion = libs.versions.composeKotlinCompiler.get()
     }
     testOptions {
-        unitTests.isReturnDefaultValues = true
+        unitTests {
+            isReturnDefaultValues = true
+            isIncludeAndroidResources = true
+        }
     }
 }
 
@@ -120,4 +123,6 @@ dependencies {
     androidTestImplementation(kotlin("test"))
     testImplementation(project(":testing"))
     androidTestImplementation(project(":testing"))
+
+    testImplementation(libs.robolectric)
 }

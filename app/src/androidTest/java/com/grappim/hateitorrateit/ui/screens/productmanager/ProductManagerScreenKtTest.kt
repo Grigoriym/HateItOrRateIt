@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.ui.screens.rateorhate
+package com.grappim.hateitorrateit.ui.screens.productmanager
 
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
@@ -19,7 +19,7 @@ private const val PRODUCT_NAME = "product_name_test"
 private const val DESCRIPTION = "description_test"
 private const val SHOP = "shop_test"
 
-class HateOrRateScreenKtTest {
+class ProductManagerScreenKtTest {
 
     @get:Rule
     val composeTestRule = createAndroidComposeRule<ComponentActivity>()
@@ -30,7 +30,8 @@ class HateOrRateScreenKtTest {
     private lateinit var addPictureTitle: String
     private lateinit var cameraButton: String
     private lateinit var galleryButton: String
-    private lateinit var createButton:String
+    private lateinit var draftCreateButton: String
+    private lateinit var editCreateButton: String
 
     @Before
     fun setup() {
@@ -41,19 +42,23 @@ class HateOrRateScreenKtTest {
             addPictureTitle = getString(R.string.add_picture_from)
             cameraButton = getString(R.string.camera)
             galleryButton = getString(R.string.gallery)
-            createButton = getString(R.string.create)
+            draftCreateButton = getString(R.string.create)
+            editCreateButton = getString(R.string.save)
         }
     }
 
     @Test
-    fun verify_initial_state_is_correctly_shown() {
+    fun on_draft_verify_initial_state_is_correctly_shown() {
         composeTestRule.run {
             setContent {
-                HateOrRateScreen(
-                    state = getState(),
+                ProductManagerScreen(
+                    state = getState().copy(
+                        bottomBarButtonText = NativeText.Resource(R.string.create),
+                        alertDialogText = NativeText.Resource(R.string.if_quit_lose_data),
+                    ),
                     goBack = {},
                     onProductCreated = {},
-                    snackBarMessage = LaunchedEffectResult(NativeText.Empty)
+                    snackBarMessage = LaunchedEffectResult(NativeText.Empty),
                 )
             }
 
@@ -68,7 +73,41 @@ class HateOrRateScreenKtTest {
             onNodeWithText(cameraButton).assertIsDisplayed()
             onNodeWithText(galleryButton).assertIsDisplayed()
 
-            onNodeWithText(createButton).assertIsDisplayed()
+            onNodeWithText(draftCreateButton).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun on_edit_verify_initial_state_is_correctly_shown() {
+        composeTestRule.run {
+            setContent {
+                ProductManagerScreen(
+                    state = getState().copy(
+                        bottomBarButtonText = NativeText.Resource(R.string.save),
+                        alertDialogText = NativeText.Resource(R.string.if_quit_ensure_saved),
+                    ),
+                    goBack = {},
+                    onProductCreated = {},
+                    snackBarMessage = LaunchedEffectResult(NativeText.Empty),
+                )
+            }
+
+            onNodeWithText(editNameText).assertIsDisplayed()
+            onNodeWithText(editDescriptionName).assertIsDisplayed()
+            onNodeWithText(editShopName).assertIsDisplayed()
+
+            onNodeWithText(PRODUCT_NAME).assertIsDisplayed()
+            onNodeWithText(DESCRIPTION).assertIsDisplayed()
+            onNodeWithText(SHOP).assertIsDisplayed()
+
+            onNodeWithTag(PLATO_HATE_RATE_CONTENT_TAG).assertIsDisplayed()
+
+            onNodeWithText(addPictureTitle).assertIsDisplayed()
+
+            onNodeWithText(cameraButton).assertIsDisplayed()
+            onNodeWithText(galleryButton).assertIsDisplayed()
+
+            onNodeWithText(editCreateButton).assertIsDisplayed()
         }
     }
 
@@ -76,7 +115,7 @@ class HateOrRateScreenKtTest {
     fun verify_edit_content_is_correctly_filled() {
         composeTestRule.run {
             setContent {
-                HateOrRateScreen(
+                ProductManagerScreen(
                     state = getState().copy(
                         productName = PRODUCT_NAME,
                         description = DESCRIPTION,
@@ -98,23 +137,22 @@ class HateOrRateScreenKtTest {
         }
     }
 
-    private fun getState() = HateOrRateViewState(
+    private fun getState() = ProductManagerViewState(
         images = listOf(),
-        productName = "",
-        description = "",
-        shop = "",
+        productName = PRODUCT_NAME,
+        description = DESCRIPTION,
+        shop = SHOP,
         type = HateRateType.RATE,
         draftProduct = null,
         setDescription = {},
         setName = {},
         setShop = {},
-        isCreated = false,
-        onRemoveImageTriggered = {},
+        productSaved = false,
+        onRemoveImageClicked = {},
         onAddImageFromGalleryClicked = {},
         onAddCameraPictureClicked = {},
-        removeData = {},
-        saveData = {},
-        createProduct = {},
+        onQuit = {},
+        onProductDone = {},
         getCameraImageFileUri = {
             CameraTakePictureData.empty()
         },
