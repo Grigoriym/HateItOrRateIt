@@ -22,7 +22,7 @@ class CleanUnusedDataWorker @AssistedInject constructor(
         emptyFiles.forEach { file ->
             Timber.d("Cleaning unused data: $file")
             dataCleaner.clearProductData(
-                id = file.id,
+                productId = file.id,
                 productFolderName = file.productFolderName,
             )
         }

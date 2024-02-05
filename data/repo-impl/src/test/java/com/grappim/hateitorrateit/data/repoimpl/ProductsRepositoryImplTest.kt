@@ -72,7 +72,7 @@ class ProductsRepositoryImplTest {
         val images = listOf(getProductImageDataEntity())
         val files = listOf(getProductImageData())
 
-        coEvery { productsDao.insertImages(any()) } just Runs
+        coEvery { productsDao.upsertImages(any()) } just Runs
         coEvery {
             productsMapper.toProductImageDataEntityList(
                 any(),
@@ -82,11 +82,11 @@ class ProductsRepositoryImplTest {
 
         repository.updateImagesInProduct(
             id = ID,
-            files = files
+            images = files
         )
 
         coVerify { productsMapper.toProductImageDataEntityList(ID, files) }
-        coVerify { productsDao.insertImages(images) }
+        coVerify { productsDao.upsertImages(images) }
     }
 
     @Test
@@ -98,7 +98,7 @@ class ProductsRepositoryImplTest {
         val draftProduct = DraftProduct(
             id = ID,
             date = nowDate,
-            folderName = folderName,
+            productFolderName = folderName,
             type = type
         )
 
@@ -146,7 +146,7 @@ class ProductsRepositoryImplTest {
     fun `deleteProductImage should delete product image`() = runTest {
         coEvery { productsDao.deleteProductImageByIdAndName(any(), any()) } just Runs
 
-        repository.deleteProductImage(id = ID, name = "name")
+        repository.deleteProductImage(productId = ID, imageName = "name")
 
         coVerify { productsDao.deleteProductImageByIdAndName(ID, "name") }
     }
@@ -155,7 +155,7 @@ class ProductsRepositoryImplTest {
     fun `removeProductById should remove product by id`() = runTest {
         coEvery { productsDao.deleteProductAndImagesById(any()) } just Runs
 
-        repository.removeProductById(ID)
+        repository.deleteProductById(ID)
 
         coVerify { productsDao.deleteProductAndImagesById(ID) }
     }
@@ -166,7 +166,7 @@ class ProductsRepositoryImplTest {
         val productEntity = getProductEntity()
         val images = getProductImageDataEntityList()
 
-        coEvery { productsMapper.toProductEntity(any()) } returns productEntity
+        coEvery { productsMapper.toProductEntity(createProduct = any()) } returns productEntity
         coEvery { productsMapper.toProductImageDataEntityList(any()) } returns images
         coEvery { productsDao.updateProductAndImages(any(), any()) } just Runs
 

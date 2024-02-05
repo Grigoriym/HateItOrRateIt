@@ -7,6 +7,7 @@ import androidx.room.Query
 import androidx.room.RawQuery
 import androidx.room.Transaction
 import androidx.room.Update
+import androidx.room.Upsert
 import androidx.sqlite.db.SupportSQLiteQuery
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
@@ -44,7 +45,7 @@ interface ProductsDao {
         files: List<ProductImageDataEntity>,
     ) {
         updateProduct(id, name, description, shop, type)
-        insertImages(files)
+        upsertImages(files)
     }
 
     @Query(
@@ -65,9 +66,9 @@ interface ProductsDao {
     suspend fun updateProduct(productEntity: ProductEntity)
 
     @Transaction
-    suspend fun deleteProductAndImagesById(id: Long) {
-        deleteById(id)
-        deleteImagesByProductId(id)
+    suspend fun deleteProductAndImagesById(productId: Long) {
+        deleteById(productId)
+        deleteImagesByProductId(productId)
     }
 
     @Transaction
@@ -85,11 +86,14 @@ interface ProductsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertImages(list: List<ProductImageDataEntity>)
 
-    @Query("DELETE FROM product_image_data_table WHERE productId = :id")
-    suspend fun deleteImagesByProductId(id: Long)
+    @Upsert
+    suspend fun upsertImages(list: List<ProductImageDataEntity>)
 
-    @Query("DELETE FROM product_image_data_table WHERE productId = :id AND name=:name")
-    suspend fun deleteProductImageByIdAndName(id: Long, name: String)
+    @Query("DELETE FROM product_image_data_table WHERE productId = :productId")
+    suspend fun deleteImagesByProductId(productId: Long)
+
+    @Query("DELETE FROM product_image_data_table WHERE productId = :productId AND name=:name")
+    suspend fun deleteProductImageByIdAndName(productId: Long, name: String)
 
     @[Transaction Query("SELECT * FROM products_table WHERE isCreated=0")]
     suspend fun getEmptyFiles(): List<ProductWithImagesEntity>

@@ -5,9 +5,9 @@ import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.utils.TransactionController
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.DraftProduct
-import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.testing.getRandomLong
+import com.grappim.hateitorrateit.testing.getRandomString
 import com.grappim.hateitorrateit.utils.FileUtils
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -19,7 +19,6 @@ import io.mockk.verify
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import java.time.OffsetDateTime
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
@@ -42,110 +41,139 @@ class DataCleanerImplTest {
     @Test
     fun `on clearProductImage, with deletable uri, should delete file and remove image from DB`() =
         runTest {
+            val imageName = getRandomString()
+            val uriString = getRandomString()
+            val productId = getRandomLong()
+
             every { fileUtils.deleteFile(uriString = any()) } returns true
-            coEvery { productsRepository.deleteProductImage(any(), any()) } returns Unit
+            coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val actual = dataCleaner.clearProductImage(
-                id = 1L,
-                imageName = "image",
-                uriString = "uri"
+                productId = productId,
+                imageName = imageName,
+                uriString = uriString
             )
 
             assertTrue(actual)
-            verify { fileUtils.deleteFile("uri") }
-            coVerify { productsRepository.deleteProductImage(1L, "image") }
+            verify { fileUtils.deleteFile(uriString) }
+            coVerify { productsRepository.deleteProductImage(productId, imageName) }
         }
 
     @Test
     fun `on clearProductImage, with non-deletable uri, should not delete file and not remove image from DB`() =
         runTest {
+            val imageName = getRandomString()
+            val uriString = getRandomString()
+            val productId = getRandomLong()
+
             every { fileUtils.deleteFile(uriString = any()) } returns false
-            coEvery { productsRepository.deleteProductImage(any(), any()) } returns Unit
+            coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val actual = dataCleaner.clearProductImage(
-                id = 1L,
-                imageName = "image",
-                uriString = "uri"
+                productId = productId,
+                imageName = imageName,
+                uriString = uriString
             )
 
             assertFalse(actual)
-            verify { fileUtils.deleteFile("uri") }
-            coVerify(exactly = 0) { productsRepository.deleteProductImage(1L, "image") }
+            verify { fileUtils.deleteFile(uriString) }
+            coVerify(exactly = 0) { productsRepository.deleteProductImage(productId, imageName) }
         }
 
     @Test
     fun `on deleteProductFileData, should call clearProductImage for each item in list`() =
         runTest {
+            val productId = getRandomLong()
+
             every { fileUtils.deleteFile(uriString = any()) } returns true
-            coEvery { productsRepository.deleteProductImage(any(), any()) } returns Unit
+            coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
+
+            val list = listOf(
+                ProductImageData(
+                    name = getRandomString(),
+                    mimeType = "dicit",
+                    uriPath = "brute",
+                    uriString = getRandomString(),
+                    size = 9221,
+                    md5 = "nullam"
+                ),
+                ProductImageData(
+                    name = getRandomString(),
+                    mimeType = "dicit4",
+                    uriPath = "brute1",
+                    uriString = getRandomString(),
+                    size = 123,
+                    md5 = "nullcam"
+                ),
+                ProductImageData(
+                    name = getRandomString(),
+                    mimeType = "dicit5",
+                    uriPath = "brute2",
+                    uriString = getRandomString(),
+                    size = 9221,
+                    md5 = "nullam1"
+                ),
+            )
 
             dataCleaner.deleteProductFileData(
-                id = 1L,
-                list = listOf(
-                    ProductImageData(
-                        name = "Olive Gordon",
-                        mimeType = "dicit",
-                        uriPath = "brute",
-                        uriString = "luctus",
-                        size = 9221,
-                        md5 = "nullam"
-                    ),
-                    ProductImageData(
-                        name = "Olive Gordon2",
-                        mimeType = "dicit4",
-                        uriPath = "brute1",
-                        uriString = "luctus3",
-                        size = 123,
-                        md5 = "nullcam"
-                    ),
-                    ProductImageData(
-                        name = "Olive Gordon1",
-                        mimeType = "dicit5",
-                        uriPath = "brute2",
-                        uriString = "luctus5",
-                        size = 9221,
-                        md5 = "nullam1"
-                    ),
-                )
+                productId = productId,
+                list = list
             )
 
-            verify(exactly = 3) { fileUtils.deleteFile(uriString = any()) }
-            coVerify(exactly = 3) { productsRepository.deleteProductImage(any(), any()) }
+            list.forEach {
+                verify { fileUtils.deleteFile(uriString = it.uriString) }
+                coVerify {
+                    productsRepository.deleteProductImage(
+                        productId = productId,
+                        imageName = it.name
+                    )
+                }
+            }
         }
 
     @Test
-    fun `on clearProductData with id, should call deleteFolder and removeProductById`() =
+    fun `on clearProductData, should call deleteFolder and removeProductById`() =
         runTest {
-            every { fileUtils.deleteFolder(any()) } returns Unit
-            coEvery { productsRepository.removeProductById(any()) } returns Unit
+            val productId = getRandomLong()
+            val folderName = getRandomString()
+
+            coEvery { fileUtils.deleteFolder(any()) } just Runs
+            coEvery { productsRepository.deleteProductById(any()) } just Runs
 
             dataCleaner.clearProductData(
-                id = 1L,
-                productFolderName = "folder"
+                productId = productId,
+                productFolderName = folderName
             )
 
-            verify { fileUtils.deleteFolder("folder") }
-            coVerify { productsRepository.removeProductById(1L) }
+            coVerify { fileUtils.deleteFolder(folderName) }
+            coVerify { productsRepository.deleteProductById(productId) }
         }
 
     @Test
-    fun `on clearProductData with draftProduct, should call deleteFolder and removeProductById`() =
-        runTest {
-            every { fileUtils.deleteFolder(any()) } returns Unit
-            coEvery { productsRepository.removeProductById(any()) } returns Unit
+    fun `on deleteTempFolder should get correct folder name and remove it`() = runTest {
+        val folderName = getRandomString()
 
-            dataCleaner.clearProductData(
-                draftProduct = DraftProduct(
-                    id = 1L,
-                    date = OffsetDateTime.now(),
-                    folderName = "folder",
-                    type = HateRateType.HATE,
-                )
-            )
+        coEvery { fileUtils.deleteFolder(any()) } just Runs
+        every { fileUtils.getTempFolderName(any()) } returns "${folderName}_temp"
 
-            verify { fileUtils.deleteFolder("folder") }
-            coVerify { productsRepository.removeProductById(1L) }
-        }
+        dataCleaner.deleteTempFolder(folderName)
+
+        verify { fileUtils.getTempFolderName(folderName) }
+        coVerify { fileUtils.deleteFolder("${folderName}_temp") }
+    }
+
+    @Test
+    fun `on deleteBackupFolder should get correct folder name and remove it`() = runTest {
+        val folderName = getRandomString()
+
+        coEvery { fileUtils.deleteFolder(any()) } just Runs
+        every { fileUtils.getBackupFolderName(any()) } returns "${folderName}_backup"
+
+        dataCleaner.deleteBackupFolder(folderName)
+
+        verify { fileUtils.getBackupFolderName(folderName) }
+        coVerify { fileUtils.deleteFolder("${folderName}_backup") }
+    }
 
     @Test
     fun `on clearAllData, should call the needed functions`() = runTest {
@@ -154,12 +182,12 @@ class DataCleanerImplTest {
         coEvery { transactionController.runInTransaction(any()) } coAnswers {
             firstArg<suspend () -> Unit>().invoke()
         }
-        every { fileUtils.clearMainFolder() } returns true
+        coEvery { fileUtils.clearMainFolder() } returns true
 
         dataCleaner.clearAllData()
 
         coVerify { databaseWrapper.clearAllTables() }
         coVerify { databaseDao.clearPrimaryKeyIndex() }
-        verify { fileUtils.clearMainFolder() }
+        coVerify { fileUtils.clearMainFolder() }
     }
 }
