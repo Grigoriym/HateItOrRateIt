@@ -39,7 +39,7 @@ information, enabling you to make informed decisions about future purchases.
    images, e.g., `files/products/1_2024-01-18_15-49-21`
 2. **Backup folder**: the folder where the initial state of images is saved to be
    accessed if we remove original images and want to revert everything
-   `files/products/1_2024-01-18_15-49-21_init`
+   `files/products/1_2024-01-18_15-49-21_backup`
 3. **Temp folder**: the folder where we store newly added images in the product
    being edited, so that we can remove them easily in case of reverting.
    e.g., `files/products/1_2024-01-18_15-49-21_temp`
