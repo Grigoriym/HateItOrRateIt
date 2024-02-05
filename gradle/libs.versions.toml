@@ -51,7 +51,7 @@ minSdk = "24"
 targetSdk = "34"
 material = "1.11.0"
 
-sqlCipher = "4.5.3"
+sqlCipher = "4.5.4"
 
 robolectric = "4.11.1"
 
