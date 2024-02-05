@@ -9,6 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,7 +18,7 @@ import androidx.navigation.navArgument
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.ui.screens.details.DetailsRoute
 import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
-import com.grappim.hateitorrateit.ui.screens.rateorhate.HateOrRateRoute
+import com.grappim.hateitorrateit.ui.screens.productmanager.ProductManagerRoute
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.utils.safeClick
 import dagger.hilt.android.AndroidEntryPoint
@@ -50,13 +51,15 @@ class MainActivity : ComponentActivity() {
                     RootMainScreen(
                         goToHateOrRate = {
                             navBackStackEntry.safeClick {
-                                navController.navigate(RootNavDestinations.HateOrRate.route)
+                                navController.navigate(
+                                    RootNavDestinations.ProductManager.getRouteToNavigate("")
+                                )
                             }
                         },
                         goToDetails = { id ->
                             navBackStackEntry.safeClick {
                                 navController.navigate(
-                                    RootNavDestinations.Details.getRouteWithProductId(
+                                    RootNavDestinations.Details.getRouteToNavigate(
                                         id
                                     )
                                 )
@@ -65,16 +68,34 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                composable(RootNavDestinations.HateOrRate.route) { navBackStackEntry ->
-                    HateOrRateRoute(
-                        goBack = {
+                /**
+                 * We pass productId as String because Long cannot be nullable in safeArgs
+                 */
+                composable(
+                    route = RootNavDestinations.ProductManager.route,
+                    arguments = listOf(navArgument(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID) {
+                        type = NavType.StringType
+                        nullable = true
+                    })
+                ) { navBackStackEntry ->
+                    fun handleBackNavigation(isNewProduct: Boolean) {
+                        if (!isNewProduct) {
+                            navController.previousBackStackEntry
+                                ?.savedStateHandle
+                                ?.set(RootNavDestinations.Details.IS_FROM_EDIT, true)
+                        }
+                        navController.popBackStack()
+                    }
+
+                    ProductManagerRoute(
+                        goBack = { isNewProduct: Boolean ->
                             navBackStackEntry.safeClick {
-                                navController.popBackStack()
+                                handleBackNavigation(isNewProduct)
                             }
                         },
-                        onProductCreated = {
+                        onProductDone = { isNewProduct: Boolean ->
                             navBackStackEntry.safeClick {
-                                navController.popBackStack()
+                                handleBackNavigation(isNewProduct)
                             }
                         }
                     )
@@ -85,6 +106,14 @@ class MainActivity : ComponentActivity() {
                         type = NavType.LongType
                     })
                 ) { navBackStackEntry ->
+                    fun NavBackStackEntry.getIsFromEdit(defaultValue: Boolean = false): Boolean {
+                        val savedStateHandle = this.savedStateHandle
+                        return savedStateHandle.get<Boolean>(RootNavDestinations.Details.IS_FROM_EDIT)
+                            ?: defaultValue
+                    }
+
+                    val isFromEdit = navBackStackEntry.getIsFromEdit(false)
+
                     DetailsRoute(
                         goBack = {
                             navBackStackEntry.safeClick {
@@ -94,13 +123,21 @@ class MainActivity : ComponentActivity() {
                         onImageClicked = { productId, index ->
                             navBackStackEntry.safeClick {
                                 navController.navigate(
-                                    RootNavDestinations.DetailsImage.getRouteWithUri(
+                                    RootNavDestinations.DetailsImage.getRouteToNavigate(
                                         productId = productId,
                                         index = index
                                     )
                                 )
                             }
-                        }
+                        },
+                        onEditClicked = { id: Long ->
+                            navBackStackEntry.safeClick {
+                                navController.navigate(
+                                    RootNavDestinations.ProductManager.getRouteToNavigate(id.toString())
+                                )
+                            }
+                        },
+                        isFromEdit = isFromEdit,
                     )
                 }
                 composable(

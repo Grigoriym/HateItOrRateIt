@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.utils
 
+import java.time.Instant
 import java.time.OffsetDateTime
 
 interface DateTimeUtils {
@@ -14,4 +15,6 @@ interface DateTimeUtils {
     fun formatToDocumentFolder(offsetDateTime: OffsetDateTime): String
 
     fun getDateTimeUTCNow(): OffsetDateTime
+
+    fun getInstantNow(): Instant
 }

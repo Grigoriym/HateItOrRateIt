@@ -10,7 +10,7 @@ const val PRODUCT_IMAGE_NAME_2 = "product_image_name_2"
 
 fun getNowDate(): OffsetDateTime = OffsetDateTime.now()
 
-fun getProductEntity(): ProductEntity =
+fun createProductEntity(): ProductEntity =
     ProductEntity(
         name = "Myles Burke",
         createdDate = getNowDate(),
