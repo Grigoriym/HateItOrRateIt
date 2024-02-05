@@ -11,6 +11,8 @@
     <string name="description">Beschreibung</string>
     <string name="name_obligatory">Name *</string>
     <string name="create">Erstellen</string>
+    <string name="save">Speichern</string>
+    <string name="if_quit_ensure_saved">Warnung: Bitte stellen Sie sicher, dass die Daten gespeichert wurden.</string>
     <string name="hate_or_rate">Hate Or Rate</string>
     <string name="save_changes_before_exit">Änderungen speichern bevor du gehst?</string>
     <string name="yes">Ja</string>

@@ -5,7 +5,6 @@ import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.utils.FileUtils
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,24 +25,24 @@ class DataCleanerImpl @Inject constructor(
 ) : DataCleaner {
 
     override suspend fun clearProductImage(
-        id: Long,
+        productId: Long,
         imageName: String,
         uriString: String,
     ): Boolean = withContext(ioDispatcher) {
         if (fileUtils.deleteFile(uriString)) {
-            productsRepository.deleteProductImage(id, imageName)
+            productsRepository.deleteProductImage(productId = productId, imageName = imageName)
             return@withContext true
         }
         false
     }
 
     override suspend fun deleteProductFileData(
-        id: Long,
+        productId: Long,
         list: List<ProductImageData>
     ) = withContext(ioDispatcher) {
         list.forEach {
             clearProductImage(
-                id = id,
+                productId = productId,
                 imageName = it.name,
                 uriString = it.uriString,
             )
@@ -51,20 +50,23 @@ class DataCleanerImpl @Inject constructor(
     }
 
     override suspend fun clearProductData(
-        id: Long,
+        productId: Long,
         productFolderName: String,
     ) = withContext(ioDispatcher) {
         Timber.d("start cleaning")
         fileUtils.deleteFolder(productFolderName)
-        productsRepository.removeProductById(id)
+        productsRepository.deleteProductById(productId)
     }
 
-    override suspend fun clearProductData(
-        draftProduct: DraftProduct
+    override suspend fun deleteTempFolder(
+        productFolderName: String,
     ) = withContext(ioDispatcher) {
-        Timber.d("start cleaning")
-        fileUtils.deleteFolder(draftProduct.folderName)
-        productsRepository.removeProductById(draftProduct.id)
+        Timber.d("start cleaning temp $productFolderName")
+        fileUtils.deleteFolder(fileUtils.getTempFolderName(productFolderName))
+    }
+
+    override suspend fun deleteBackupFolder(productFolderName: String) {
+        fileUtils.deleteFolder(fileUtils.getBackupFolderName(productFolderName))
     }
 
     override suspend fun clearAllData() {
@@ -77,7 +79,5 @@ class DataCleanerImpl @Inject constructor(
         databaseDao.clearPrimaryKeyIndex()
     }
 
-    private fun clearFileSystemData() {
-        fileUtils.clearMainFolder()
-    }
+    private suspend fun clearFileSystemData() = fileUtils.clearMainFolder()
 }

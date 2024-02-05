@@ -23,7 +23,7 @@ class ProductMapperTest {
     fun `toProductImageDataEntityList should return correct list`() = runTest {
         val actual = productMapper.toProductImageDataEntityList(
             productId = ID,
-            files = getProductImageDataList()
+            images = getProductImageDataList()
         )
         val expected = getProductImageDataEntityList()
         assertEquals(expected, actual)
@@ -61,7 +61,7 @@ class ProductMapperTest {
     fun `toProductImageDataEntityList should return correct list of entities`() = runTest {
         val actual = productMapper.toProductImageDataEntityList(
             productId = ID,
-            files = getProductImageDataList()
+            images = getProductImageDataList()
         )
         val expected = getProductImageDataEntityList()
         assertEquals(expected, actual)
@@ -71,7 +71,7 @@ class ProductMapperTest {
     fun `toProduct should return correct product with null files`() = runTest {
         val actual = productMapper.toProduct(
             productEntity = getProductEntity(),
-            files = null
+            images = null
         )
         val expected = getProduct(
             filesUri = emptyList()
