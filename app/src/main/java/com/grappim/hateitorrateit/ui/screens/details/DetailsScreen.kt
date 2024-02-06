@@ -308,9 +308,10 @@ private fun DetailsDemonstrationContent(
 ) {
     Column(
         modifier = modifier
+            .padding(horizontal = 16.dp)
             .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         TextH4(text = state.name)
 
@@ -402,7 +403,7 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState>{
         get() = sequenceOf(
             DetailsViewState(
                 productId = "accommodare",
-                name = "Darren Stanton",
+                name = "Darren Stanton fn89r qw089h890qwn qw9ej90qw qw90jeqwjn qwe9jqw90e",
                 description = "altera",
                 shop = "pulvinar",
                 createdDate = "ornare",
