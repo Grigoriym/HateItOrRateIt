@@ -13,7 +13,7 @@ androidTools = "31.2.2"
 
 hilt = "2.50"
 androidx-hilt = "1.1.0"
-navigation = "2.7.6"
+navigation = "2.7.7"
 lifecycle = "2.7.0"
 work = "2.9.0"
 appcompat = "1.6.1"
