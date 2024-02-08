@@ -6,7 +6,7 @@ composeKotlinCompiler = "1.5.8"
 
 detekt = "1.23.5"
 
-gms = "4.4.0"
+gms = "4.4.1"
 
 agp = "8.2.2"
 androidTools = "31.2.2"
