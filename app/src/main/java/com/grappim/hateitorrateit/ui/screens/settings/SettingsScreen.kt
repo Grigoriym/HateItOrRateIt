@@ -11,6 +11,7 @@ import androidx.compose.material.ListItem
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -27,8 +28,8 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 
-const val CROSSFADE_TAG = "crossfade_tag"
 const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
+const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
 
 private const val ANIMATION_DURATION = 500
 
@@ -38,6 +39,10 @@ internal fun SettingsRoute(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    DisposableEffect(Unit) {
+        state.trackScreenStart()
+        onDispose { }
+    }
     SettingsScreen(
         state = state,
         goBack = goBack,
@@ -93,20 +98,33 @@ private fun SettingsScreenContent(
                 Text(text = stringResource(id = R.string.clear_data))
             })
             ListItem(modifier = Modifier.clickable {
-                state.setType()
+                state.setNewType()
             }, text = {
                 Text(text = stringResource(id = R.string.default_type))
             }, trailing = {
                 TypeIcon(state = state)
             })
-            ListItem(modifier = Modifier.clickable {
-                state.onCrashlyticsToggle()
-            }.testTag(CRASHLYTICS_TILE_TAG), text = {
+            ListItem(modifier = Modifier
+                .clickable {
+                    state.onCrashlyticsToggle()
+                }
+                .testTag(CRASHLYTICS_TILE_TAG), text = {
                 Text(text = stringResource(id = R.string.toggle_crashlytics))
             }, trailing = {
-                CrashesIcon(state)
+                FeatureEnabledIcon(state.isCrashesCollectionEnabled)
             }, secondaryText = {
                 Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+            })
+            ListItem(modifier = Modifier
+                .clickable {
+                    state.onAnalyticsToggle()
+                }
+                .testTag(ANALYTICS_TILE_TAG), text = {
+                Text(text = stringResource(id = R.string.toggle_analytics))
+            }, trailing = {
+                FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
+            }, secondaryText = {
+                Text(text = stringResource(id = R.string.analytics_settings_subtitle))
             })
         }
     }
@@ -132,12 +150,11 @@ fun TypeIcon(
 }
 
 @Composable
-fun CrashesIcon(
-    state: SettingsViewState
+fun FeatureEnabledIcon(
+    state: Boolean
 ) {
     Crossfade(
-        modifier = Modifier.testTag(CROSSFADE_TAG),
-        targetState = state.isCrashesCollectionEnabled,
+        targetState = state,
         label = "custom_switch_label",
         animationSpec = tween(ANIMATION_DURATION),
     ) { enabled ->

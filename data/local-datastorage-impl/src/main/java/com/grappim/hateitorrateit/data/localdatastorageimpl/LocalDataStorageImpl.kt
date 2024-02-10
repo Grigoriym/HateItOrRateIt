@@ -30,10 +30,23 @@ class LocalDataStorageImpl @Inject constructor(
             preferences[crashesKey] ?: true
         }
 
+    private val analyticsKey = booleanPreferencesKey("analytics_key")
+    override val analyticsCollectionEnabled: Flow<Boolean> = dataStore.data
+        .map { preferences ->
+            preferences[analyticsKey] ?: true
+        }
+
     override suspend fun setCrashesCollectionEnabled(isEnabled: Boolean) {
         Timber.d("setCrashesCollectionEnabled: $isEnabled")
         dataStore.edit { settings ->
             settings[crashesKey] = isEnabled
+        }
+    }
+
+    override suspend fun setAnalyticsCollectionEnabled(isEnabled: Boolean) {
+        Timber.d("setAnalyticsCollectionEnabled: $isEnabled")
+        dataStore.edit { settings ->
+            settings[analyticsKey] = isEnabled
         }
     }
 

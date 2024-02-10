@@ -4,14 +4,15 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.core.SnackbarStateViewModel
 import com.grappim.hateitorrateit.core.SnackbarStateViewModelImpl
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
-import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
+import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.CreateProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
@@ -38,6 +39,7 @@ class ProductManagerViewModel @Inject constructor(
     private val backupImagesRepository: BackupImagesRepository,
     private val productImageManager: ProductImageManager,
     private val imageDataMapper: ImageDataMapper,
+    private val productManagerAnalytics: ProductManagerAnalytics,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
@@ -47,7 +49,7 @@ class ProductManagerViewModel @Inject constructor(
             setDescription = ::setDescription,
             setName = ::setName,
             setShop = ::setShop,
-            onRemoveImageClicked = ::removeImage,
+            onDeleteImageClicked = ::deleteImage,
             onAddImageFromGalleryClicked = ::addImageFromGallery,
             onAddCameraPictureClicked = ::addCameraPicture,
             onQuit = ::onQuit,
@@ -56,6 +58,7 @@ class ProductManagerViewModel @Inject constructor(
             onTypeClicked = ::onTypeClicked,
             onShowAlertDialog = ::onShowAlertDialog,
             onForceQuit = ::onForceQuit,
+            trackOnScreenStart = ::trackOnScreenStart,
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -86,6 +89,14 @@ class ProductManagerViewModel @Inject constructor(
             prepareProductForEdit()
         } else {
             prepareDraftProduct()
+        }
+    }
+
+    private fun trackOnScreenStart() {
+        if (editProductId?.isNotEmpty() == true) {
+            productManagerAnalytics.trackProductManagerProductToEditStart()
+        } else {
+            productManagerAnalytics.trackProductManagerNewProductStart()
         }
     }
 
@@ -155,6 +166,7 @@ class ProductManagerViewModel @Inject constructor(
     }
 
     private fun addImageFromGallery(uri: Uri) {
+        productManagerAnalytics.trackGalleryButtonClicked()
         viewModelScope.launch {
             val imageData = fileUtils.getFileUriFromGalleryUri(
                 uri = uri,
@@ -166,6 +178,7 @@ class ProductManagerViewModel @Inject constructor(
     }
 
     private fun addCameraPicture(cameraTakePictureData: CameraTakePictureData) {
+        productManagerAnalytics.trackCameraButtonClicked()
         viewModelScope.launch {
             val imageData = fileUtils.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
@@ -287,8 +300,10 @@ class ProductManagerViewModel @Inject constructor(
 
                 else -> {
                     if (_viewState.value.isNewProduct) {
+                        productManagerAnalytics.trackCreateButtonClicked()
                         saveNewProduct()
                     } else {
+                        productManagerAnalytics.trackSaveButtonClicked()
                         editProduct()
                     }
                 }
@@ -296,7 +311,8 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
-    private fun removeImage(imageData: ImageData) {
+    private fun deleteImage(imageData: ImageData) {
+        productManagerAnalytics.trackDeleteImageClicked()
         viewModelScope.launch {
             if (fileUtils.deleteFile(uri = imageData.uri)) {
                 Timber.d("file removed: $imageData")

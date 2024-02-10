@@ -103,5 +103,7 @@ class DetailsScreenKtTest {
         productDeleted = false,
         onDeleteProductConfirm = {},
         updateProduct = {},
+        trackScreenStart = {},
+        trackEditButtonClicked = {},
     )
 }

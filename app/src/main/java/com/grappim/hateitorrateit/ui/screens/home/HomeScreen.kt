@@ -23,6 +23,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -53,6 +54,11 @@ fun HomeScreen(
     onProductClick: (id: Long) -> Unit
 ) {
     val state by viewModel.viewState.collectAsState()
+    DisposableEffect(Unit) {
+        state.trackScreenStart()
+        onDispose { }
+    }
+
     HomeScreenContent(
         state = state,
         onProductClick = onProductClick,
@@ -82,7 +88,7 @@ private fun HomeScreenContent(
                 .fillMaxSize()
         ) {
             items(state.products) { products ->
-                ProductItem(products, onProductClick)
+                ProductItem(state, products, onProductClick)
             }
         }
     }
@@ -140,6 +146,7 @@ private fun SearchContent(
 
 @Composable
 private fun ProductItem(
+    state: HomeViewState,
     product: ProductListUI,
     onProductClick: (id: Long) -> Unit,
 ) {
@@ -149,6 +156,7 @@ private fun ProductItem(
             .fillMaxWidth()
             .height(200.dp),
         onClick = {
+            state.trackOnProductClicked()
             onProductClick(product.id.toLong())
         },
     ) {

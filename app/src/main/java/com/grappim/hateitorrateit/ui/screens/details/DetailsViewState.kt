@@ -23,4 +23,7 @@ data class DetailsViewState(
     val onDeleteProductConfirm: () -> Unit,
 
     val updateProduct: () -> Unit,
+
+    val trackScreenStart: () -> Unit,
+    val trackEditButtonClicked: () -> Unit,
 )

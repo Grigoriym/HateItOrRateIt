@@ -31,6 +31,7 @@ import androidx.compose.material.SnackbarHostState
 import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -84,6 +85,11 @@ internal fun ProductManagerRoute(
             timestamp = 0L
         )
     )
+
+    DisposableEffect(Unit) {
+        state.trackOnScreenStart()
+        onDispose {  }
+    }
     ProductManagerScreen(
         state = state,
         goBack = goBack,
@@ -392,7 +398,7 @@ private fun ImagesList(
                         ),
                     icon = PlatoIconType.Delete.imageVector,
                     onButtonClick = {
-                        state.onRemoveImageClicked(file)
+                        state.onDeleteImageClicked(file)
                     },
                 )
             }
@@ -517,7 +523,7 @@ private class StateProvider : PreviewParameterProvider<ProductManagerViewState> 
                 setName = {},
                 setShop = {},
                 productSaved = false,
-                onRemoveImageClicked = {},
+                onDeleteImageClicked = {},
                 onAddImageFromGalleryClicked = {},
                 onAddCameraPictureClicked = {},
                 onQuit = {},
@@ -529,7 +535,8 @@ private class StateProvider : PreviewParameterProvider<ProductManagerViewState> 
                 forceQuit = false,
                 onForceQuit = {},
                 showAlertDialog = false,
-                onShowAlertDialog = {}
+                onShowAlertDialog = {},
+                trackOnScreenStart = {}
             )
         )
 }
