@@ -2,6 +2,7 @@ package com.grappim.hateitorrateit.ui.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.model.UiModelsMapper
@@ -20,6 +21,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
+    private val homeScreenAnalytics: HomeScreenAnalytics,
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -27,6 +29,8 @@ class HomeScreenViewModel @Inject constructor(
             onSearchQueryChanged = ::onSearchQueryChanged,
             onClearQueryClicked = ::clearQuery,
             onFilterSelected = ::onFilterSelected,
+            trackScreenStart = ::trackScreenStart,
+            trackOnProductClicked = ::trackOnProductClicked
         )
     )
 
@@ -34,6 +38,14 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         getProducts()
+    }
+
+    private fun trackOnProductClicked() {
+        homeScreenAnalytics.trackProductClicked()
+    }
+
+    private fun trackScreenStart() {
+        homeScreenAnalytics.trackHomeScreenStart()
     }
 
     private fun onFilterSelected(type: HateRateType) {

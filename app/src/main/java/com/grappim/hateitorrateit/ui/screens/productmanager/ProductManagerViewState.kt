@@ -34,7 +34,7 @@ data class ProductManagerViewState(
 
     val productSaved: Boolean = false,
 
-    val onRemoveImageClicked: (imageData: ImageData) -> Unit,
+    val onDeleteImageClicked: (imageData: ImageData) -> Unit,
     val onAddImageFromGalleryClicked: (uri: Uri) -> Unit,
     val onAddCameraPictureClicked: (cameraTakePictureData: CameraTakePictureData) -> Unit,
     val onQuit: () -> Unit,
@@ -49,4 +49,6 @@ data class ProductManagerViewState(
 
     val showAlertDialog: Boolean = false,
     val onShowAlertDialog: (show: Boolean) -> Unit,
+
+    val trackOnScreenStart: () -> Unit,
 )

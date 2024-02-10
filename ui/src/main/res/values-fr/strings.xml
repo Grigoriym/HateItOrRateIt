@@ -38,4 +38,7 @@
 
     <string name="toggle_crashlytics">Autorisez-vous l\'envoi de crash reports?</string>
     <string name="crashlytics_settings_subtitle">Ceci est nécessaire pour diagnostiquer et résoudre tout crash</string>
+
+    <string name="toggle_analytics">Acceptez-vous la collecte de données analytiques ?</string>
+    <string name="analytics_settings_subtitle">La collecte de données d\'utilisation nous aide à améliorer votre expérience de l\'application.</string>
 </resources>

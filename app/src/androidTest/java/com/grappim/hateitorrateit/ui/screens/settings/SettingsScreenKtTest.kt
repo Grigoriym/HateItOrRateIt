@@ -1,8 +1,10 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertCountEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -60,7 +62,10 @@ class SettingsScreenKtTest {
             onNodeWithText(crashlyticsText).assertIsDisplayed()
             onNodeWithText(crashlyticsSubtitleText).assertIsDisplayed()
 
-            onNodeWithTag(PlatoIconType.HighlightOff.testTag, useUnmergedTree = true).assertIsDisplayed()
+            onAllNodesWithTag(
+                PlatoIconType.HighlightOff.testTag,
+                useUnmergedTree = true
+            ).assertCountEquals(2)
             onNodeWithTag(PlatoIconType.ThumbUp.testTag, useUnmergedTree = true).assertIsDisplayed()
         }
     }
@@ -71,7 +76,7 @@ class SettingsScreenKtTest {
             setContent {
                 SettingsScreen(
                     goBack = {},
-                    state = getState().safeCopy(isLoading = true)
+                    state = getState().copy(isLoading = true)
                 )
             }
 
@@ -85,7 +90,7 @@ class SettingsScreenKtTest {
             setContent {
                 SettingsScreen(
                     goBack = {},
-                    state = getState().safeCopy(showAlertDialog = true)
+                    state = getState().copy(showAlertDialog = true)
                 )
             }
 
@@ -99,11 +104,29 @@ class SettingsScreenKtTest {
             setContent {
                 SettingsScreen(
                     goBack = {},
-                    state = getState().safeCopy(isCrashesCollectionEnabled = true)
+                    state = getState().copy(isCrashesCollectionEnabled = true)
                 )
             }
-            onNodeWithTag(CROSSFADE_TAG, useUnmergedTree = true).assertIsDisplayed()
-            onNodeWithTag(PlatoIconType.CheckCircleOutline.testTag, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(
+                PlatoIconType.CheckCircleOutline.testTag,
+                useUnmergedTree = true
+            ).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun isLoading_false_alert_false_analytics_enabled_verify_that_analytics_toggle_is_checked() {
+        composeTestRule.run {
+            setContent {
+                SettingsScreen(
+                    goBack = {},
+                    state = getState().copy(isAnalyticsCollectionEnabled = true)
+                )
+            }
+            onNodeWithTag(
+                PlatoIconType.CheckCircleOutline.testTag,
+                useUnmergedTree = true
+            ).assertIsDisplayed()
         }
     }
 
@@ -113,11 +136,35 @@ class SettingsScreenKtTest {
             setContent {
                 SettingsScreen(
                     goBack = {},
-                    state = getState().safeCopy(isCrashesCollectionEnabled = false)
+                    state = getState().copy(
+                        isCrashesCollectionEnabled = false,
+                        isAnalyticsCollectionEnabled = true,
+                    )
                 )
             }
-            onNodeWithTag(CROSSFADE_TAG, useUnmergedTree = true).assertIsDisplayed()
-            onNodeWithTag(PlatoIconType.HighlightOff.testTag, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(
+                PlatoIconType.HighlightOff.testTag,
+                useUnmergedTree = true
+            ).assertIsDisplayed()
+        }
+    }
+
+    @Test
+    fun isLoading_false_alert_false_analytics_disabled_verify_that_analytics_toggle_is_unchecked() {
+        composeTestRule.run {
+            setContent {
+                SettingsScreen(
+                    goBack = {},
+                    state = getState().copy(
+                        isCrashesCollectionEnabled = true,
+                        isAnalyticsCollectionEnabled = false,
+                    )
+                )
+            }
+            onNodeWithTag(
+                PlatoIconType.HighlightOff.testTag,
+                useUnmergedTree = true
+            ).assertIsDisplayed()
         }
     }
 
@@ -126,10 +173,13 @@ class SettingsScreenKtTest {
         type = HateRateType.RATE,
         showAlertDialog = false,
         isCrashesCollectionEnabled = false,
-        setType = {},
+        setNewType = {},
         onClearDataClicked = {},
         onAlertDialogConfirmButtonClicked = {},
         onDismissDialog = {},
-        onCrashlyticsToggle = {}
+        onCrashlyticsToggle = {},
+        trackScreenStart = {},
+        isAnalyticsCollectionEnabled = false,
+        onAnalyticsToggle = {},
     )
 }

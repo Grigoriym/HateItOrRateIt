@@ -37,4 +37,7 @@
 
     <string name="toggle_crashlytics">Do you allow crash reports to be sent?</string>
     <string name="crashlytics_settings_subtitle">This is needed to diagnose and resolve any crashes</string>
+
+    <string name="toggle_analytics">Do you consent to analytics data being collected?</string>
+    <string name="analytics_settings_subtitle">Collecting usage data helps us improve your experience with the app.</string>
 </resources>

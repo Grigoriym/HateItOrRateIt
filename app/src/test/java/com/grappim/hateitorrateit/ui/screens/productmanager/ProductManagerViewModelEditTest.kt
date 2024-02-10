@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.productmanager
 
 import androidx.lifecycle.SavedStateHandle
+import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
@@ -10,13 +11,17 @@ import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
 import com.grappim.hateitorrateit.ui.screens.DESCRIPTION
 import com.grappim.hateitorrateit.ui.screens.NAME
+import com.grappim.hateitorrateit.ui.screens.PRODUCT_FOLDER_NAME
 import com.grappim.hateitorrateit.ui.screens.PRODUCT_ID
 import com.grappim.hateitorrateit.ui.screens.SHOP
 import com.grappim.hateitorrateit.ui.screens.TYPE
+import com.grappim.hateitorrateit.ui.screens.createCameraTakePictureData
+import com.grappim.hateitorrateit.ui.screens.createEditProduct
 import com.grappim.hateitorrateit.ui.screens.createImageData
 import com.grappim.hateitorrateit.ui.screens.editProduct
 import com.grappim.hateitorrateit.ui.screens.editProductImages
-import com.grappim.hateitorrateit.ui.screens.createCameraTakePictureData
+import com.grappim.hateitorrateit.ui.screens.imageData
+import com.grappim.hateitorrateit.ui.screens.uri
 import com.grappim.hateitorrateit.utils.FileUtils
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.ImageData
@@ -52,6 +57,7 @@ class ProductManagerViewModelEditTest {
     private val backupImagesRepository: BackupImagesRepository = mockk()
     private val productImageManager: ProductImageManager = mockk()
     private val imageDataMapper: ImageDataMapper = mockk()
+    private val productManagerAnalytics: ProductManagerAnalytics = mockk()
 
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: ProductManagerViewModel
@@ -61,7 +67,8 @@ class ProductManagerViewModelEditTest {
         savedStateHandle = SavedStateHandle()
         every { localDataStorage.typeFlow } returns flowOf(TYPE)
 
-        savedStateHandle[RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID] = PRODUCT_ID.toString()
+        savedStateHandle[RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID] =
+            PRODUCT_ID.toString()
 
         coEvery { productsRepository.getProductById(any()) } returns editProduct
         coEvery { productImageManager.copyToBackupFolder(any()) } just Runs
@@ -76,6 +83,7 @@ class ProductManagerViewModelEditTest {
             backupImagesRepository = backupImagesRepository,
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
+            productManagerAnalytics = productManagerAnalytics,
             savedStateHandle = savedStateHandle,
         )
     }
@@ -83,6 +91,15 @@ class ProductManagerViewModelEditTest {
     @After
     fun clear() {
         savedStateHandle.remove<Long>(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)
+    }
+
+    @Test
+    fun `on trackOnScreenStart, should call correct analytics event`() {
+        every { productManagerAnalytics.trackProductManagerProductToEditStart() } just Runs
+
+        viewModel.viewState.value.trackOnScreenStart()
+
+        verify { productManagerAnalytics.trackProductManagerProductToEditStart() }
     }
 
     @Test
@@ -187,6 +204,8 @@ class ProductManagerViewModelEditTest {
     fun `with editProduct, onRemoveImageClicked with success delete, should delete image`() {
         every { fileUtils.deleteFile(uri = any()) } returns true
         coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
+        every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
+        every { productManagerAnalytics.trackDeleteImageClicked() } just Runs
 
         val firstImage = createImageData()
         val imageToDelete = createImageData()
@@ -194,7 +213,7 @@ class ProductManagerViewModelEditTest {
         prepareImage(firstImage)
         prepareImage(imageToDelete)
 
-        viewModel.viewState.value.onRemoveImageClicked(imageToDelete)
+        viewModel.viewState.value.onDeleteImageClicked(imageToDelete)
 
         verify { fileUtils.deleteFile(imageToDelete.uri) }
         coVerify {
@@ -212,6 +231,7 @@ class ProductManagerViewModelEditTest {
     fun `with editProduct, onAddImageFromGalleryClicked should add image`() {
         val imageData = createImageData()
         every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
 
@@ -229,6 +249,17 @@ class ProductManagerViewModelEditTest {
     }
 
     @Test
+    fun `with editProduct, productManagerAnalytics should call correct event`() {
+        val imageData = createImageData()
+        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
+
+        viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
+
+        verify { productManagerAnalytics.trackGalleryButtonClicked() }
+    }
+
+    @Test
     fun `with editProduct, onAddCameraPictureClicked should add image`() {
         val cameraTakePictureData = createCameraTakePictureData()
         val imageData = createImageData(
@@ -236,6 +267,7 @@ class ProductManagerViewModelEditTest {
         )
 
         every { fileUtils.getFileDataFromCameraPicture(any(), any()) } returns imageData
+        every { productManagerAnalytics.trackCameraButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
 
@@ -249,6 +281,21 @@ class ProductManagerViewModelEditTest {
         }
 
         assertTrue(viewModel.viewState.value.images.size == 1)
+    }
+
+    @Test
+    fun `with editProduct, productManagerAnalytics calls correct event`() {
+        val cameraTakePictureData = createCameraTakePictureData()
+        val imageData = createImageData(
+            newUri = cameraTakePictureData.uri
+        )
+
+        every { fileUtils.getFileDataFromCameraPicture(any(), any()) } returns imageData
+        every { productManagerAnalytics.trackCameraButtonClicked() } just Runs
+
+        viewModel.viewState.value.onAddCameraPictureClicked(cameraTakePictureData)
+
+        verify { productManagerAnalytics.trackCameraButtonClicked() }
     }
 
     @Test
@@ -269,6 +316,64 @@ class ProductManagerViewModelEditTest {
         assertEquals(cameraData, cameraTakePictureData)
     }
 
+    @Test
+    fun `with editProduct, on onProductDone, product is saved`() {
+        val editProduct = createEditProduct(editProductImages)
+        coEvery { productsRepository.getProductById(any()) } returns editProduct
+
+        coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
+        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
+        every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
+        coEvery { fileUtils.prepareEditedImagesToPersist(any()) } returns editProductImages
+
+        coEvery { productImageManager.moveFromTempToOriginalFolder(any()) } just Runs
+        coEvery { dataCleaner.deleteTempFolder(any()) } just Runs
+        coEvery { dataCleaner.deleteBackupFolder(any()) } just Runs
+        coEvery { backupImagesRepository.deleteImagesByProductId(any()) } just Runs
+        coEvery { productsRepository.updateProductWithImages(any(), any()) } just Runs
+
+        viewModel.viewState.value.onAddImageFromGalleryClicked(uri)
+
+        viewModel.viewState.value.onProductDone()
+
+        coVerify { fileUtils.prepareEditedImagesToPersist(listOf(imageData)) }
+        coVerify { productImageManager.moveFromTempToOriginalFolder(PRODUCT_FOLDER_NAME) }
+        coVerify { dataCleaner.deleteTempFolder(PRODUCT_FOLDER_NAME) }
+        coVerify { dataCleaner.deleteBackupFolder(PRODUCT_FOLDER_NAME) }
+        coVerify { backupImagesRepository.deleteImagesByProductId(PRODUCT_ID) }
+        coVerify {
+            productsRepository.updateProductWithImages(
+                product = editProduct,
+                images = editProductImages
+            )
+        }
+
+        assertTrue(viewModel.viewState.value.productSaved)
+    }
+
+    @Test
+    fun `with editProduct, on onProductDone, productManagerAnalytics should call trackSaveButtonClicked`() {
+        coEvery { productsRepository.addProduct(any()) } just Runs
+        coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
+        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
+        every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
+        coEvery { fileUtils.prepareEditedImagesToPersist(any()) } returns editProductImages
+
+        coEvery { productImageManager.moveFromTempToOriginalFolder(any()) } just Runs
+        coEvery { dataCleaner.deleteTempFolder(any()) } just Runs
+        coEvery { dataCleaner.deleteBackupFolder(any()) } just Runs
+        coEvery { backupImagesRepository.deleteImagesByProductId(any()) } just Runs
+        coEvery { productsRepository.updateProductWithImages(any(), any()) } just Runs
+
+        viewModel.viewState.value.onAddImageFromGalleryClicked(uri)
+
+        viewModel.viewState.value.onProductDone()
+
+        verify { productManagerAnalytics.trackSaveButtonClicked() }
+    }
+
     private fun prepareImage(imageData: ImageData) {
         every {
             fileUtils.getFileUriFromGalleryUri(any(), any(), any())
@@ -280,5 +385,6 @@ class ProductManagerViewModelEditTest {
         requireNotNull(viewModel.viewState.value.editProduct).productFolderName
 
     private fun getEditProductId(): Long =
-        savedStateHandle.get<String?>(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)!!.toLong()
+        savedStateHandle.get<String?>(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)!!
+            .toLong()
 }

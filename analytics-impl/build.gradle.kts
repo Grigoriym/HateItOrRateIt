@@ -14,6 +14,7 @@ android {
 
 dependencies {
     implementation(project(":analytics-api"))
+    implementation(project(":domain"))
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
