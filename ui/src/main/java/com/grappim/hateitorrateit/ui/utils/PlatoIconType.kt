@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.ui.utils
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Camera
@@ -33,7 +34,7 @@ enum class PlatoIconType {
 
     val imageVector: ImageVector
         get() = when (this) {
-            ArrowBack -> Icons.Filled.ArrowBack
+            ArrowBack -> Icons.AutoMirrored.Filled.ArrowBack
             Edit -> Icons.Filled.Edit
             Delete -> Icons.Filled.Delete
             Camera -> Icons.Filled.Camera

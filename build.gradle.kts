@@ -20,3 +20,17 @@ subprojects {
         allRules = false
     }
 }
+
+val runAllUnitTests by tasks.creating {
+    group = "verification"
+    description = "Runs all unit tests in all modules."
+    dependsOn(subprojects.map { it.tasks.withType<Test>() })
+}
+
+val runAllAndroidTests by tasks.creating {
+    group = "verification"
+    description = "Runs all Android instrumented tests in all modules."
+    dependsOn(subprojects.flatMap {
+        it.tasks.matching { task -> task.name.startsWith("connected") && task.name.endsWith("AndroidTest") }
+    })
+}
