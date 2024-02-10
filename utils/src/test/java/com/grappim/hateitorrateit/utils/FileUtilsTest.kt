@@ -24,8 +24,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@RunWith(RobolectricTestRunner::class)
-@Config(shadows = [ShadowFileProvider::class])
+@[RunWith(RobolectricTestRunner::class)
+Config(
+    shadows = [ShadowFileProvider::class],
+    manifest = Config.NONE
+)]
 class FileUtilsTest {
 
     private val hashUtils: HashUtils = mockk()
