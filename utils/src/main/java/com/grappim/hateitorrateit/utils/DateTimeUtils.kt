@@ -8,9 +8,7 @@ interface DateTimeUtils {
 
     fun parseFromStoringInDb(string: String): OffsetDateTime
 
-    fun formatToDemonstrate(
-        offsetDateTime: OffsetDateTime,
-    ): String
+    fun formatToDemonstrate(offsetDateTime: OffsetDateTime): String
 
     fun formatToDocumentFolder(offsetDateTime: OffsetDateTime): String
 

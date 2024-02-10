@@ -43,7 +43,7 @@ class HomeScreenViewModelTest {
             type = HateRateType.HATE,
             productFolderName = "productFolderName",
             createdDate = OffsetDateTime.now(),
-            images = emptyList(),
+            images = emptyList()
         ),
         Product(
             id = 2L,
@@ -53,8 +53,8 @@ class HomeScreenViewModelTest {
             type = HateRateType.RATE,
             productFolderName = "productFolderName2",
             createdDate = OffsetDateTime.now(),
-            images = emptyList(),
-        ),
+            images = emptyList()
+        )
     )
 
     @Before
@@ -62,7 +62,7 @@ class HomeScreenViewModelTest {
         every {
             productsRepository.getProductsFlow(
                 query = any(),
-                type = any(),
+                type = any()
             )
         } returns flowOf(productsList)
 
@@ -75,13 +75,13 @@ class HomeScreenViewModelTest {
             createdDate = "praesent",
             previewUriString = "neque",
             productFolderName = "Glenna Murphy",
-            type = HateRateType.HATE,
+            type = HateRateType.HATE
         )
 
         viewModel = HomeScreenViewModel(
             productsRepository = productsRepository,
             homeScreenAnalytics = homeScreenAnalytics,
-            uiModelsMapper = uiModelsMapper,
+            uiModelsMapper = uiModelsMapper
         )
     }
 

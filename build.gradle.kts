@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -10,17 +11,27 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
 }
 
 subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
+        plugin("org.jlleitschuh.gradle.ktlint")
     }
 
     detekt {
         parallel = true
         config.setFrom(rootProject.files("config/detekt/detekt.yml"))
         allRules = false
+    }
+
+    ktlint {
+        android = true
+        ignoreFailures = false
+        reporters {
+            reporter(ReporterType.HTML)
+        }
     }
 
     tasks.withType<Test> {

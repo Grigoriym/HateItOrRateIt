@@ -21,16 +21,15 @@ fun PlatoIcon(
     tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
 ) {
     Icon(
-        modifier = modifier
-            .testTag(imageVector.name),
+        modifier = modifier.testTag(imageVector.name),
         imageVector = imageVector,
         contentDescription = contentDescription,
-        tint = tint,
+        tint = tint
     )
 }
 
 @[Composable ThemePreviews]
-private fun PlatoIconPreview(){
+private fun PlatoIconPreview() {
     HateItOrRateItTheme {
         PlatoIcon(
             imageVector = Icons.Filled.AccessTime

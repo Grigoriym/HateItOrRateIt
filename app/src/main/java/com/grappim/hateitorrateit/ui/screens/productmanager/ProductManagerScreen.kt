@@ -76,7 +76,7 @@ import kotlin.math.absoluteValue
 internal fun ProductManagerRoute(
     goBack: (isNewProduct: Boolean) -> Unit,
     onProductDone: (isNewProduct: Boolean) -> Unit,
-    viewModel: ProductManagerViewModel = hiltViewModel(),
+    viewModel: ProductManagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val snackBarMessage by viewModel.snackBarMessage.collectAsState(
@@ -88,13 +88,13 @@ internal fun ProductManagerRoute(
 
     DisposableEffect(Unit) {
         state.trackOnScreenStart()
-        onDispose {  }
+        onDispose { }
     }
     ProductManagerScreen(
         state = state,
         goBack = goBack,
         onProductCreated = onProductDone,
-        snackBarMessage = snackBarMessage,
+        snackBarMessage = snackBarMessage
     )
 }
 
@@ -103,7 +103,7 @@ internal fun ProductManagerScreen(
     state: ProductManagerViewState,
     goBack: (isNewProduct: Boolean) -> Unit,
     onProductCreated: (isNewProduct: Boolean) -> Unit,
-    snackBarMessage: LaunchedEffectResult<out NativeText>,
+    snackBarMessage: LaunchedEffectResult<out NativeText>
 ) {
     LaunchedEffect(state.productSaved) {
         if (state.productSaved) {
@@ -146,7 +146,7 @@ internal fun ProductManagerScreen(
 
     ProductManagerContent(
         state = state,
-        snackBarMessage = snackBarMessage,
+        snackBarMessage = snackBarMessage
     )
 }
 
@@ -158,10 +158,7 @@ internal fun ProductManagerScreen(
  * screen to decide whether to show a confirmation dialog, immediately quit the screen,
  * or perform other actions.
  */
-fun handleBackAction(
-    state: ProductManagerViewState,
-) {
-
+fun handleBackAction(state: ProductManagerViewState) {
     /**
      * Performs actions associated with quitting the screen.
      *
@@ -192,7 +189,7 @@ fun handleBackAction(
 @Composable
 private fun ProductManagerContent(
     state: ProductManagerViewState,
-    snackBarMessage: LaunchedEffectResult<out NativeText>,
+    snackBarMessage: LaunchedEffectResult<out NativeText>
 ) {
     val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -226,7 +223,7 @@ private fun ProductManagerContent(
             val result = snackbarHostState.showSnackbar(
                 message = snackBarMessage.data.asString(context),
                 actionLabel = context.getString(R.string.close),
-                duration = SnackbarDuration.Short,
+                duration = SnackbarDuration.Short
             )
             if (result == SnackbarResult.ActionPerformed) {
                 snackbarHostState.currentSnackbarData?.dismiss()
@@ -247,7 +244,7 @@ private fun ProductManagerContent(
                 text = stringResource(id = R.string.hate_or_rate),
                 goBack = {
                     handleBackAction(state)
-                },
+                }
             )
         },
         bottomBar = {
@@ -256,7 +253,7 @@ private fun ProductManagerContent(
                     .fillMaxWidth()
                     .padding(
                         top = 12.dp,
-                        bottom = 16.dp,
+                        bottom = 16.dp
                     )
                     .padding(horizontal = 16.dp),
                 state = state
@@ -268,16 +265,16 @@ private fun ProductManagerContent(
                 .padding(it)
                 .padding(horizontal = 4.dp)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState()),
+                .verticalScroll(rememberScrollState())
         ) {
             TextFieldsContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                state = state,
+                state = state
             )
 
             PlatoHateRateContent(
                 currentType = state.type,
-                onTypeClicked = state.onTypeClicked,
+                onTypeClicked = state.onTypeClicked
             )
 
             AddFromContent(
@@ -299,7 +296,7 @@ private fun ProductManagerContent(
 
             ImagesList(
                 modifier = Modifier,
-                state = state,
+                state = state
             )
         }
     }
@@ -309,14 +306,14 @@ private fun ProductManagerContent(
 private fun AddFromContent(
     modifier: Modifier = Modifier,
     onCameraClicked: () -> Unit,
-    onGalleryClicked: () -> Unit,
+    onGalleryClicked: () -> Unit
 ) {
     Column(modifier = modifier) {
         Text(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            text = stringResource(id = R.string.add_picture_from),
+            text = stringResource(id = R.string.add_picture_from)
         )
         Row(
             modifier = Modifier
@@ -326,21 +323,18 @@ private fun AddFromContent(
         ) {
             PlatoTextButton(
                 text = stringResource(id = R.string.camera),
-                onClick = onCameraClicked,
+                onClick = onCameraClicked
             )
             PlatoTextButton(
                 text = stringResource(id = R.string.gallery),
-                onClick = onGalleryClicked,
+                onClick = onGalleryClicked
             )
         }
     }
 }
 
 @Composable
-private fun ImagesList(
-    modifier: Modifier = Modifier,
-    state: ProductManagerViewState,
-) {
+private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewState) {
     val pagerState = rememberPagerState {
         state.images.size
     }
@@ -368,8 +362,10 @@ private fun ImagesList(
         PlatoCard(
             modifier = Modifier
                 .graphicsLayer {
-                    val pageOffset = ((pagerState.currentPage - page)
-                            + pagerState.currentPageOffsetFraction).absoluteValue
+                    val pageOffset = (
+                        (pagerState.currentPage - page) +
+                            pagerState.currentPageOffsetFraction
+                        ).absoluteValue
                     alpha = lerp(
                         start = 0.5f,
                         stop = 1f,
@@ -394,12 +390,12 @@ private fun ImagesList(
                         .align(Alignment.TopEnd)
                         .padding(
                             top = 8.dp,
-                            end = 8.dp,
+                            end = 8.dp
                         ),
                     icon = PlatoIconType.Delete.imageVector,
                     onButtonClick = {
                         state.onDeleteImageClicked(file)
-                    },
+                    }
                 )
             }
         }
@@ -407,23 +403,17 @@ private fun ImagesList(
 }
 
 @Composable
-private fun BottomBarButton(
-    modifier: Modifier = Modifier,
-    state: ProductManagerViewState,
-) {
+private fun BottomBarButton(modifier: Modifier = Modifier, state: ProductManagerViewState) {
     PlatoTextButton(
         modifier = modifier
             .height(42.dp),
         text = state.bottomBarButtonText.asString(LocalContext.current),
-        onClick = state.onProductDone,
+        onClick = state.onProductDone
     )
 }
 
 @Composable
-private fun TextFieldsContent(
-    modifier: Modifier = Modifier,
-    state: ProductManagerViewState,
-) {
+private fun TextFieldsContent(modifier: Modifier = Modifier, state: ProductManagerViewState) {
     Column(
         modifier = modifier
     ) {
@@ -467,7 +457,7 @@ private fun TextFieldsContent(
 
 @[Composable ThemePreviews]
 private fun BottomBarButtonPreview(
-    @PreviewParameter(StateProvider::class) state: ProductManagerViewState,
+    @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
     HateItOrRateItTheme {
         BottomBarButton(
@@ -478,7 +468,7 @@ private fun BottomBarButtonPreview(
 
 @[Composable ThemePreviews]
 private fun TextFieldsContentPreview(
-    @PreviewParameter(StateProvider::class) state: ProductManagerViewState,
+    @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
     HateItOrRateItTheme {
         TextFieldsContent(
@@ -499,7 +489,7 @@ private fun AddFromContentPreview() {
 
 @[Composable ThemePreviews]
 private fun RateOrHateScreenContentPreview(
-    @PreviewParameter(StateProvider::class) state: ProductManagerViewState,
+    @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
     HateItOrRateItTheme {
         ProductManagerContent(

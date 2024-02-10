@@ -3,7 +3,6 @@ package com.grappim.hateitorrateit.data.repoimpl
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-
 import org.junit.Test
 
 class ProductMapperTest {
@@ -13,7 +12,7 @@ class ProductMapperTest {
     )
 
     @Test
-    fun `toProduct should return correct product`() = runTest{
+    fun `toProduct should return correct product`() = runTest {
         val actual = productMapper.toProduct(getProductWithImagesEntity())
         val expected = getProduct()
         assertEquals(expected, actual)

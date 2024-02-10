@@ -10,5 +10,5 @@ data class Product(
     val productFolderName: String,
     val description: String,
     val shop: String,
-    val type: HateRateType,
+    val type: HateRateType
 )

@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 class UiModelsMapper @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
     suspend fun toProductUi(product: Product): ProductListUI = withContext(ioDispatcher) {
@@ -24,7 +24,7 @@ class UiModelsMapper @Inject constructor(
             previewUriString = product.images.firstOrNull()?.uriString ?: "",
             productFolderName = product.productFolderName,
             shop = product.shop,
-            type = product.type,
+            type = product.type
         )
     }
 
@@ -39,14 +39,14 @@ class UiModelsMapper @Inject constructor(
             productFolderName = product.productFolderName,
             description = product.description,
             shop = product.shop,
-            type = product.type,
+            type = product.type
         )
     }
 
     suspend fun toProductDetailsImageUI(product: Product): ProductDetailsImageUi =
         withContext(ioDispatcher) {
             ProductDetailsImageUi(
-                filesUri = product.images,
+                filesUri = product.images
             )
         }
 }

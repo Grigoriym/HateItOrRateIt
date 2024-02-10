@@ -24,37 +24,34 @@ class ImageDataMapperImpl @Inject constructor(
                 uriString = imageData.uri.toString(),
                 size = imageData.size,
                 md5 = imageData.md5,
-                isEdit = imageData.isEdit,
+                isEdit = imageData.isEdit
             )
         }
 
-    override suspend fun toProductImageDataList(
-        list: List<ImageData>
-    ): List<ProductImageData> = withContext(ioDispatcher) {
-        list.map { imageData: ImageData ->
-            toProductImageData(imageData)
+    override suspend fun toProductImageDataList(list: List<ImageData>): List<ProductImageData> =
+        withContext(ioDispatcher) {
+            list.map { imageData: ImageData ->
+                toProductImageData(imageData)
+            }
         }
-    }
 
-    override suspend fun toImageData(
-        productImageData: ProductImageData
-    ): ImageData = withContext(ioDispatcher) {
-        ImageData(
-            imageId = productImageData.imageId,
-            uri = uriParser.parse(productImageData.uriString),
-            name = productImageData.name,
-            size = productImageData.size,
-            mimeType = productImageData.mimeType,
-            md5 = productImageData.md5,
-            isEdit = productImageData.isEdit,
-        )
-    }
-
-    override suspend fun toImageDataList(
-        list: List<ProductImageData>
-    ): List<ImageData> = withContext(ioDispatcher) {
-        list.map { productImageData: ProductImageData ->
-            toImageData(productImageData)
+    override suspend fun toImageData(productImageData: ProductImageData): ImageData =
+        withContext(ioDispatcher) {
+            ImageData(
+                imageId = productImageData.imageId,
+                uri = uriParser.parse(productImageData.uriString),
+                name = productImageData.name,
+                size = productImageData.size,
+                mimeType = productImageData.mimeType,
+                md5 = productImageData.md5,
+                isEdit = productImageData.isEdit
+            )
         }
-    }
+
+    override suspend fun toImageDataList(list: List<ProductImageData>): List<ImageData> =
+        withContext(ioDispatcher) {
+            list.map { productImageData: ProductImageData ->
+                toImageData(productImageData)
+            }
+        }
 }

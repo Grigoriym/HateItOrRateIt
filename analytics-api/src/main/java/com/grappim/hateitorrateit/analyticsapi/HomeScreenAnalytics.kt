@@ -4,5 +4,4 @@ interface HomeScreenAnalytics {
     fun trackHomeScreenStart()
 
     fun trackProductClicked()
-
 }

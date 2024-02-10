@@ -24,7 +24,11 @@ class SqlQueryBuilder @Inject constructor() {
 
         if (query.isNotEmpty()) {
             val wrappedQuery = query.wrapWithPercentWildcards().wrapWithSingleQuotes()
-            conditions.add("(name LIKE $wrappedQuery OR shop LIKE $wrappedQuery OR description LIKE $wrappedQuery)")
+            conditions.add(
+                "(name LIKE $wrappedQuery " +
+                    "OR shop LIKE $wrappedQuery " +
+                    "OR description LIKE $wrappedQuery)"
+            )
         }
 
         type?.let {

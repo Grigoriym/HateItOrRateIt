@@ -2,9 +2,9 @@ package com.grappim.hateitorrateit.data.db.wrapper
 
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
+import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
-import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

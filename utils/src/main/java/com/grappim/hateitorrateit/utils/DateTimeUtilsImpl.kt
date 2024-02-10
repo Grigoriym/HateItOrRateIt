@@ -14,7 +14,7 @@ import javax.inject.Singleton
 class DateTimeUtilsImpl @Inject constructor(
     @DtfToStore private val dtfToStore: DateTimeFormatter,
     @DtfToDemonstrate private val dtfToDemonstrate: DateTimeFormatter,
-    @DtfDocumentFolder private val dtfDocumentFolder: DateTimeFormatter,
+    @DtfDocumentFolder private val dtfDocumentFolder: DateTimeFormatter
 ) : DateTimeUtils {
 
     override fun formatToStoreInDb(offsetDateTime: OffsetDateTime): String =
@@ -23,9 +23,8 @@ class DateTimeUtilsImpl @Inject constructor(
     override fun parseFromStoringInDb(string: String): OffsetDateTime =
         OffsetDateTime.from(dtfToStore.parse(string))
 
-    override fun formatToDemonstrate(
-        offsetDateTime: OffsetDateTime,
-    ): String = dtfToDemonstrate.format(offsetDateTime)
+    override fun formatToDemonstrate(offsetDateTime: OffsetDateTime): String =
+        dtfToDemonstrate.format(offsetDateTime)
 
     override fun formatToDocumentFolder(offsetDateTime: OffsetDateTime): String =
         dtfDocumentFolder.format(offsetDateTime)

@@ -39,7 +39,7 @@ val DarkColorPalette = darkColors(
 )
 
 @Suppress("TopLevelPropertyNaming")
-const val darkBackgroundColorForPreview = 3355443L
+const val DarkBackgroundColorForPreview = 3355443L
 
 @Composable
 fun HateItOrRateItTheme(

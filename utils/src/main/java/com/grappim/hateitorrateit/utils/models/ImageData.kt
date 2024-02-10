@@ -9,5 +9,5 @@ data class ImageData(
     val size: Long,
     val mimeType: String,
     val md5: String,
-    val isEdit: Boolean = false,
+    val isEdit: Boolean = false
 )

@@ -15,5 +15,5 @@ data class SettingsViewState(
     val onDismissDialog: () -> Unit,
     val onCrashlyticsToggle: () -> Unit,
     val onAnalyticsToggle: () -> Unit,
-    val trackScreenStart: () -> Unit,
+    val trackScreenStart: () -> Unit
 )

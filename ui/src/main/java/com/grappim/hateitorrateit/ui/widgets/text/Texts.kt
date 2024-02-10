@@ -38,7 +38,7 @@ fun TextH5(
         text = text,
         style = MaterialTheme.typography.h5,
         overflow = overflow,
-        maxLines = maxLines,
+        maxLines = maxLines
     )
 }
 
@@ -54,7 +54,7 @@ fun TextH6(
         text = text,
         style = MaterialTheme.typography.h6,
         overflow = overflow,
-        maxLines = maxLines,
+        maxLines = maxLines
     )
 }
 

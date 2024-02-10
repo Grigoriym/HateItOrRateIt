@@ -45,7 +45,7 @@ class MainActivity : ComponentActivity() {
         ) {
             NavHost(
                 navController = navController,
-                startDestination = RootNavDestinations.Home.route,
+                startDestination = RootNavDestinations.Home.route
             ) {
                 composable(RootNavDestinations.Home.route) { navBackStackEntry ->
                     RootMainScreen(
@@ -73,10 +73,12 @@ class MainActivity : ComponentActivity() {
                  */
                 composable(
                     route = RootNavDestinations.ProductManager.route,
-                    arguments = listOf(navArgument(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID) {
-                        type = NavType.StringType
-                        nullable = true
-                    })
+                    arguments = listOf(
+                        navArgument(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID) {
+                            type = NavType.StringType
+                            nullable = true
+                        }
+                    )
                 ) { navBackStackEntry ->
                     fun handleBackNavigation(isNewProduct: Boolean) {
                         if (!isNewProduct) {
@@ -102,13 +104,15 @@ class MainActivity : ComponentActivity() {
                 }
                 composable(
                     route = RootNavDestinations.Details.route,
-                    arguments = listOf(navArgument(RootNavDestinations.Details.KEY) {
-                        type = NavType.LongType
-                    })
+                    arguments = listOf(
+                        navArgument(RootNavDestinations.Details.KEY) {
+                            type = NavType.LongType
+                        }
+                    )
                 ) { navBackStackEntry ->
                     fun NavBackStackEntry.getIsFromEdit(defaultValue: Boolean = false): Boolean {
-                        val savedStateHandle = this.savedStateHandle
-                        return savedStateHandle.get<Boolean>(RootNavDestinations.Details.IS_FROM_EDIT)
+                        return this.savedStateHandle
+                            .get<Boolean>(RootNavDestinations.Details.IS_FROM_EDIT)
                             ?: defaultValue
                     }
 
@@ -133,18 +137,22 @@ class MainActivity : ComponentActivity() {
                         onEditClicked = { id: Long ->
                             navBackStackEntry.safeClick {
                                 navController.navigate(
-                                    RootNavDestinations.ProductManager.getRouteToNavigate(id.toString())
+                                    RootNavDestinations.ProductManager.getRouteToNavigate(
+                                        id.toString()
+                                    )
                                 )
                             }
                         },
-                        isFromEdit = isFromEdit,
+                        isFromEdit = isFromEdit
                     )
                 }
                 composable(
                     route = RootNavDestinations.DetailsImage.route,
-                    arguments = listOf(navArgument(RootNavDestinations.DetailsImage.KEY_INDEX) {
-                        type = NavType.IntType
-                    })
+                    arguments = listOf(
+                        navArgument(RootNavDestinations.DetailsImage.KEY_INDEX) {
+                            type = NavType.IntType
+                        }
+                    )
                 ) { navBackStackEntry ->
                     ProductImageScreen(
                         goBack = {

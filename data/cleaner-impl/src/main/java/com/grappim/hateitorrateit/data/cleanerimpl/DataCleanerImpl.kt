@@ -21,13 +21,13 @@ class DataCleanerImpl @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val databaseDao: DatabaseDao,
     private val databaseWrapper: DatabaseWrapper,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DataCleaner {
 
     override suspend fun clearProductImage(
         productId: Long,
         imageName: String,
-        uriString: String,
+        uriString: String
     ): Boolean = withContext(ioDispatcher) {
         if (fileUtils.deleteFile(uriString)) {
             productsRepository.deleteProductImage(productId = productId, imageName = imageName)
@@ -36,31 +36,25 @@ class DataCleanerImpl @Inject constructor(
         false
     }
 
-    override suspend fun deleteProductFileData(
-        productId: Long,
-        list: List<ProductImageData>
-    ) = withContext(ioDispatcher) {
-        list.forEach {
-            clearProductImage(
-                productId = productId,
-                imageName = it.name,
-                uriString = it.uriString,
-            )
+    override suspend fun deleteProductFileData(productId: Long, list: List<ProductImageData>) =
+        withContext(ioDispatcher) {
+            list.forEach {
+                clearProductImage(
+                    productId = productId,
+                    imageName = it.name,
+                    uriString = it.uriString
+                )
+            }
         }
-    }
 
-    override suspend fun clearProductData(
-        productId: Long,
-        productFolderName: String,
-    ) = withContext(ioDispatcher) {
-        Timber.d("start cleaning")
-        fileUtils.deleteFolder(productFolderName)
-        productsRepository.deleteProductById(productId)
-    }
+    override suspend fun clearProductData(productId: Long, productFolderName: String) =
+        withContext(ioDispatcher) {
+            Timber.d("start cleaning")
+            fileUtils.deleteFolder(productFolderName)
+            productsRepository.deleteProductById(productId)
+        }
 
-    override suspend fun deleteTempFolder(
-        productFolderName: String,
-    ) = withContext(ioDispatcher) {
+    override suspend fun deleteTempFolder(productFolderName: String) = withContext(ioDispatcher) {
         Timber.d("start cleaning temp $productFolderName")
         fileUtils.deleteFolder(fileUtils.getTempFolderName(productFolderName))
     }

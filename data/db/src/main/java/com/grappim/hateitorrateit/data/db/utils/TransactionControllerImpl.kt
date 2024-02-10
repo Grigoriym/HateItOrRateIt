@@ -7,12 +7,10 @@ import javax.inject.Singleton
 
 @Singleton
 class TransactionControllerImpl @Inject constructor(
-    private val db: HateItOrRateItDatabase,
+    private val db: HateItOrRateItDatabase
 ) : TransactionController {
 
-    override suspend fun runInTransaction(
-        block: suspend () -> Unit,
-    ) {
+    override suspend fun runInTransaction(block: suspend () -> Unit) {
         db.withTransaction {
             block.invoke()
         }

@@ -49,7 +49,7 @@ class DetailsViewModelTest {
         type = HateRateType.HATE,
         productFolderName = PRODUCT_FOLDER_NAME,
         createdDate = OffsetDateTime.now(),
-        images = emptyList(),
+        images = emptyList()
     )
 
     private val productUi = ProductDetailsUi(
@@ -60,7 +60,7 @@ class DetailsViewModelTest {
         productFolderName = PRODUCT_FOLDER_NAME,
         description = "felis",
         shop = "fabellas",
-        type = HateRateType.HATE,
+        type = HateRateType.HATE
     )
 
     @Before

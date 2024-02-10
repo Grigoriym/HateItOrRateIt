@@ -17,11 +17,7 @@ import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 
 @Composable
-fun PlatoIconButton(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    onButtonClick: () -> Unit
-) {
+fun PlatoIconButton(modifier: Modifier = Modifier, icon: ImageVector, onButtonClick: () -> Unit) {
     Button(
         modifier = modifier
             .size(50.dp)
@@ -34,7 +30,7 @@ fun PlatoIconButton(
                 .fillMaxSize(),
             imageVector = icon,
             contentDescription = "",
-            tint = Color.Black,
+            tint = Color.Black
         )
     }
 }

@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.data.db.wrapper
 
+import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
-import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 
 interface DatabaseWrapper {
     val productsDao: ProductsDao

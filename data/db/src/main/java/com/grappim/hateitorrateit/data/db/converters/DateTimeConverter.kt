@@ -17,6 +17,5 @@ class DateTimeConverter @Inject constructor(
         dateTimeUtils.formatToStoreInDb(offsetDateTime)
 
     @TypeConverter
-    fun toDateTime(string: String): OffsetDateTime =
-        dateTimeUtils.parseFromStoringInDb(string)
+    fun toDateTime(string: String): OffsetDateTime = dateTimeUtils.parseFromStoringInDb(string)
 }

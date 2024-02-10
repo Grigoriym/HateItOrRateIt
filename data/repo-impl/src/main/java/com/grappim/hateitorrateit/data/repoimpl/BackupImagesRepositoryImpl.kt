@@ -11,10 +11,7 @@ import javax.inject.Singleton
 class BackupImagesRepositoryImpl @Inject constructor(
     private val backupImagesDao: BackupImagesDao
 ) : BackupImagesRepository {
-    override suspend fun insertImages(
-        productId: Long,
-        images: List<ProductImageData>
-    ) {
+    override suspend fun insertImages(productId: Long, images: List<ProductImageData>) {
         val entities = images.map {
             BackupProductImageDataEntity(
                 imageId = it.imageId,
@@ -24,7 +21,7 @@ class BackupImagesRepositoryImpl @Inject constructor(
                 size = it.size,
                 uriPath = it.uriPath,
                 uriString = it.uriString,
-                md5 = it.md5,
+                md5 = it.md5
             )
         }
 
@@ -41,7 +38,7 @@ class BackupImagesRepositoryImpl @Inject constructor(
                 size = it.size,
                 uriPath = it.uriPath,
                 uriString = it.uriString,
-                md5 = it.md5,
+                md5 = it.md5
             )
         }
 
@@ -62,7 +59,7 @@ class BackupImagesRepositoryImpl @Inject constructor(
                 size = it.size,
                 uriPath = it.uriPath,
                 uriString = it.uriString,
-                md5 = it.md5,
+                md5 = it.md5
             )
         }
         return mapped

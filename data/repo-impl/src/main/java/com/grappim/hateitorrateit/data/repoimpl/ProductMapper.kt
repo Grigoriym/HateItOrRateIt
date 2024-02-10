@@ -16,12 +16,10 @@ import javax.inject.Singleton
 
 @Singleton
 class ProductMapper @Inject constructor(
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
-    suspend fun toProduct(
-        productWithImagesEntity: ProductWithImagesEntity,
-    ): Product =
+    suspend fun toProduct(productWithImagesEntity: ProductWithImagesEntity): Product =
         withContext(ioDispatcher) {
             val entity = productWithImagesEntity.productEntity
             val images = productWithImagesEntity.files
@@ -60,15 +58,14 @@ class ProductMapper @Inject constructor(
     suspend fun toProductImageDataEntityList(
         productId: Long,
         images: List<ProductImageData>
-    ): List<ProductImageDataEntity> =
-        withContext(ioDispatcher) {
-            images.map {
-                toProductImageDataEntity(
-                    productId = productId,
-                    productImageData = it
-                )
-            }
+    ): List<ProductImageDataEntity> = withContext(ioDispatcher) {
+        images.map {
+            toProductImageDataEntity(
+                productId = productId,
+                productImageData = it
+            )
         }
+    }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     suspend fun toProductImageDataEntity(
@@ -87,35 +84,31 @@ class ProductMapper @Inject constructor(
         )
     }
 
-    suspend fun toEmptyFileDataList(
-        list: List<ProductWithImagesEntity>,
-    ): List<EmptyFileData> = withContext(ioDispatcher) {
-        list.map { productWithImagesEntity ->
-            EmptyFileData(
-                id = productWithImagesEntity.productEntity.productId,
-                productFolderName = productWithImagesEntity.productEntity.productFolderName,
+    suspend fun toEmptyFileDataList(list: List<ProductWithImagesEntity>): List<EmptyFileData> =
+        withContext(ioDispatcher) {
+            list.map { productWithImagesEntity ->
+                EmptyFileData(
+                    id = productWithImagesEntity.productEntity.productId,
+                    productFolderName = productWithImagesEntity.productEntity.productFolderName
+                )
+            }
+        }
+
+    suspend fun toProductEntity(createProduct: CreateProduct): ProductEntity =
+        withContext(ioDispatcher) {
+            ProductEntity(
+                productId = createProduct.id,
+                name = createProduct.name,
+                createdDate = createProduct.createdDate,
+                productFolderName = createProduct.productFolderName,
+                description = createProduct.description,
+                shop = createProduct.shop,
+                type = createProduct.type,
+                isCreated = true
             )
         }
-    }
 
-    suspend fun toProductEntity(
-        createProduct: CreateProduct
-    ): ProductEntity = withContext(ioDispatcher) {
-        ProductEntity(
-            productId = createProduct.id,
-            name = createProduct.name,
-            createdDate = createProduct.createdDate,
-            productFolderName = createProduct.productFolderName,
-            description = createProduct.description,
-            shop = createProduct.shop,
-            type = createProduct.type,
-            isCreated = true,
-        )
-    }
-
-    suspend fun toProductEntity(
-        product: Product
-    ): ProductEntity = withContext(ioDispatcher) {
+    suspend fun toProductEntity(product: Product): ProductEntity = withContext(ioDispatcher) {
         ProductEntity(
             productId = product.id,
             name = product.name,

@@ -25,9 +25,7 @@ interface ProductsDao {
     fun getAllProductsFlow(): Flow<List<ProductWithImagesEntity>>
 
     @[Transaction RawQuery]
-    fun getAllProductsByRawQueryFlow(
-        query: SupportSQLiteQuery
-    ): Flow<List<ProductWithImagesEntity>>
+    fun getAllProductsByRawQueryFlow(query: SupportSQLiteQuery): Flow<List<ProductWithImagesEntity>>
 
     @[Transaction Query("SELECT * FROM products_table WHERE productId = :id LIMIT 1")]
     suspend fun getProductById(id: Long): ProductWithImagesEntity
@@ -42,7 +40,7 @@ interface ProductsDao {
         description: String,
         shop: String,
         type: HateRateType,
-        files: List<ProductImageDataEntity>,
+        files: List<ProductImageDataEntity>
     ) {
         updateProduct(id, name, description, shop, type)
         upsertImages(files)
@@ -50,16 +48,16 @@ interface ProductsDao {
 
     @Query(
         "UPDATE products_table SET name=:name, " +
-                "description=:description, shop=:shop, " +
-                "type=:type " +
-                "WHERE productId=:id"
+            "description=:description, shop=:shop, " +
+            "type=:type " +
+            "WHERE productId=:id"
     )
     suspend fun updateProduct(
         id: Long,
         name: String,
         description: String,
         shop: String,
-        type: HateRateType,
+        type: HateRateType
     )
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

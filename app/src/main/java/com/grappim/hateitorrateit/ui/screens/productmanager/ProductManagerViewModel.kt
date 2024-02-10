@@ -40,7 +40,7 @@ class ProductManagerViewModel @Inject constructor(
     private val productImageManager: ProductImageManager,
     private val imageDataMapper: ImageDataMapper,
     private val productManagerAnalytics: ProductManagerAnalytics,
-    savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
 
@@ -58,7 +58,7 @@ class ProductManagerViewModel @Inject constructor(
             onTypeClicked = ::onTypeClicked,
             onShowAlertDialog = ::onShowAlertDialog,
             onForceQuit = ::onForceQuit,
-            trackOnScreenStart = ::trackOnScreenStart,
+            trackOnScreenStart = ::trackOnScreenStart
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -129,7 +129,7 @@ class ProductManagerViewModel @Inject constructor(
                     type = draftProduct.type,
                     draftProduct = draftProduct,
                     bottomBarButtonText = NativeText.Resource(R.string.create),
-                    alertDialogText = NativeText.Resource(R.string.if_quit_lose_data),
+                    alertDialogText = NativeText.Resource(R.string.if_quit_lose_data)
                 )
             }
         }
@@ -144,7 +144,7 @@ class ProductManagerViewModel @Inject constructor(
             )
             backupImagesRepository.insertImages(
                 productId = editProductIdLong,
-                images = editProduct.images,
+                images = editProduct.images
             )
 
             val images = imageDataMapper.toImageDataList(editProduct.images)
@@ -159,7 +159,7 @@ class ProductManagerViewModel @Inject constructor(
                     isNewProduct = false,
                     bottomBarButtonText = NativeText.Resource(R.string.save),
                     alertDialogText = NativeText.Resource(R.string.if_quit_ensure_saved),
-                    editProduct = editProduct,
+                    editProduct = editProduct
                 )
             }
         }
@@ -171,7 +171,7 @@ class ProductManagerViewModel @Inject constructor(
             val imageData = fileUtils.getFileUriFromGalleryUri(
                 uri = uri,
                 folderName = productFolderName,
-                isEdit = editProductId?.isNotEmpty() == true,
+                isEdit = editProductId?.isNotEmpty() == true
             )
             addImageData(imageData)
         }
@@ -182,7 +182,7 @@ class ProductManagerViewModel @Inject constructor(
         viewModelScope.launch {
             val imageData = fileUtils.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
-                isEdit = editProductId?.isNotEmpty() == true,
+                isEdit = editProductId?.isNotEmpty() == true
             )
             addImageData(imageData)
         }
@@ -195,11 +195,10 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
-    private fun getCameraImageFileUri(): CameraTakePictureData =
-        fileUtils.getFileUriForTakePicture(
-            folderName = productFolderName,
-            isEdit = editProductId?.isNotEmpty() == true,
-        )
+    private fun getCameraImageFileUri(): CameraTakePictureData = fileUtils.getFileUriForTakePicture(
+        folderName = productFolderName,
+        isEdit = editProductId?.isNotEmpty() == true
+    )
 
     private fun setName(name: String) {
         _viewState.update {
@@ -237,7 +236,7 @@ class ProductManagerViewModel @Inject constructor(
                     productFolderName = currentDraft.productFolderName,
                     description = description,
                     shop = shop,
-                    type = type,
+                    type = type
                 )
             )
             _viewState.update {
@@ -263,7 +262,7 @@ class ProductManagerViewModel @Inject constructor(
                 productFolderName = editProduct.productFolderName,
                 description = description,
                 shop = shop,
-                type = type,
+                type = type
             )
 
             productImageManager.moveFromTempToOriginalFolder(productFolderName)
@@ -320,7 +319,7 @@ class ProductManagerViewModel @Inject constructor(
                 if (!_viewState.value.isNewProduct) {
                     productsRepository.deleteProductImage(
                         productId = editProductIdLong,
-                        imageName = imageData.name,
+                        imageName = imageData.name
                     )
                 }
 
@@ -348,7 +347,7 @@ class ProductManagerViewModel @Inject constructor(
                 val initialImages = backupImagesRepository.getAllByProductId(editProductIdLong)
                 productsRepository.updateImagesInProduct(
                     id = editProductIdLong,
-                    images = initialImages,
+                    images = initialImages
                 )
 
                 productImageManager.moveFromBackupToOriginalFolder(productFolderName)

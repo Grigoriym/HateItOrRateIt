@@ -27,7 +27,6 @@ class DetailsScreenKtTest {
     @Before
     fun setup() {
         composeTestRule.activity.apply {
-
         }
     }
 
@@ -56,7 +55,7 @@ class DetailsScreenKtTest {
                 DetailsScreen(
                     state = getState().copy(
                         isLoading = false,
-                        type = HateRateType.HATE,
+                        type = HateRateType.HATE
                     ),
                     goBack = { },
                     onImageClicked = { _, _ -> },
@@ -104,6 +103,6 @@ class DetailsScreenKtTest {
         onDeleteProductConfirm = {},
         updateProduct = {},
         trackScreenStart = {},
-        trackEditButtonClicked = {},
+        trackEditButtonClicked = {}
     )
 }

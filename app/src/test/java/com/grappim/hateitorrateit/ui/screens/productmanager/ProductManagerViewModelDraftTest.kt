@@ -71,7 +71,7 @@ class ProductManagerViewModelDraftTest {
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
             productManagerAnalytics = productManagerAnalytics,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = savedStateHandle
         )
     }
 
@@ -124,7 +124,7 @@ class ProductManagerViewModelDraftTest {
         coVerify {
             dataCleaner.clearProductData(
                 viewModel.viewState.value.draftProduct!!.id,
-                viewModel.viewState.value.draftProduct!!.productFolderName,
+                viewModel.viewState.value.draftProduct!!.productFolderName
             )
         }
     }
@@ -222,7 +222,7 @@ class ProductManagerViewModelDraftTest {
             fileUtils.getFileUriFromGalleryUri(
                 uri = imageData.uri,
                 folderName = getProductFolderName(),
-                isEdit = false,
+                isEdit = false
             )
         }
 
@@ -248,7 +248,7 @@ class ProductManagerViewModelDraftTest {
         verify {
             fileUtils.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
-                isEdit = false,
+                isEdit = false
             )
         }
 
@@ -268,7 +268,7 @@ class ProductManagerViewModelDraftTest {
         verify {
             fileUtils.getFileUriForTakePicture(
                 folderName = getProductFolderName(),
-                isEdit = false,
+                isEdit = false
             )
         }
 

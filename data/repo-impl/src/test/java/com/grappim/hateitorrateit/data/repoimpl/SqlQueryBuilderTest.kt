@@ -18,8 +18,9 @@ class SqlQueryBuilderTest {
 
         assertEquals(
             "SELECT * FROM $PRODUCTS_TABLE " +
-                    "WHERE isCreated=1 " +
-                    "ORDER BY createdDate DESC", result
+                "WHERE isCreated=1 " +
+                "ORDER BY createdDate DESC",
+            result
         )
     }
 
@@ -32,8 +33,9 @@ class SqlQueryBuilderTest {
 
         assertEquals(
             "SELECT * FROM $PRODUCTS_TABLE " +
-                    "WHERE type='HATE' AND isCreated=1 " +
-                    "ORDER BY createdDate DESC", result
+                "WHERE type='HATE' AND isCreated=1 " +
+                "ORDER BY createdDate DESC",
+            result
         )
     }
 
@@ -46,9 +48,10 @@ class SqlQueryBuilderTest {
 
         assertEquals(
             "SELECT * FROM $PRODUCTS_TABLE " +
-                    "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
-                    "AND isCreated=1 " +
-                    "ORDER BY createdDate DESC", result
+                "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
+                "AND isCreated=1 " +
+                "ORDER BY createdDate DESC",
+            result
         )
     }
 
@@ -61,9 +64,11 @@ class SqlQueryBuilderTest {
 
         assertEquals(
             "SELECT * FROM $PRODUCTS_TABLE " +
-                    "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
-                    "AND type='HATE' AND isCreated=1 " +
-                    "ORDER BY createdDate DESC", result
+                "WHERE " +
+                "(name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
+                "AND type='HATE' AND isCreated=1 " +
+                "ORDER BY createdDate DESC",
+            result
         )
     }
 
@@ -96,7 +101,7 @@ class SqlQueryBuilderTest {
 
         assertEquals(
             "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
-                    "AND isCreated=1",
+                "AND isCreated=1",
             result
         )
     }
@@ -110,7 +115,7 @@ class SqlQueryBuilderTest {
 
         assertEquals(
             "WHERE (name LIKE '%query%' OR shop LIKE '%query%' OR description LIKE '%query%') " +
-                    "AND type='HATE' AND isCreated=1",
+                "AND type='HATE' AND isCreated=1",
             result
         )
     }

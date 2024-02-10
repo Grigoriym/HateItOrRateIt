@@ -16,20 +16,14 @@ interface ProductsRepository {
         name: String,
         description: String,
         shop: String,
-        type: HateRateType,
+        type: HateRateType
     )
 
     suspend fun updateProduct(product: Product)
 
-    suspend fun updateImagesInProduct(
-        id: Long,
-        images: List<ProductImageData>,
-    )
+    suspend fun updateImagesInProduct(id: Long, images: List<ProductImageData>)
 
-    suspend fun updateProductWithImages(
-        product: Product,
-        images: List<ProductImageData>,
-    )
+    suspend fun updateProductWithImages(product: Product, images: List<ProductImageData>)
 
     suspend fun addDraftProduct(): DraftProduct
 
@@ -39,10 +33,7 @@ interface ProductsRepository {
 
     suspend fun deleteProductImage(productId: Long, imageName: String)
 
-    fun getProductsFlow(
-        query: String,
-        type: HateRateType?,
-    ): Flow<List<Product>>
+    fun getProductsFlow(query: String, type: HateRateType?): Flow<List<Product>>
 
     suspend fun addProduct(product: CreateProduct)
 

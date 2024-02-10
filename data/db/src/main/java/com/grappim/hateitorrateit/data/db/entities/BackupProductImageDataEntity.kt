@@ -19,5 +19,5 @@ data class BackupProductImageDataEntity(
     val uriPath: String,
     val uriString: String,
 
-    val md5: String,
+    val md5: String
 )

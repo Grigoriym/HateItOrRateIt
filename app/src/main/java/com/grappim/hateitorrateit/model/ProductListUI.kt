@@ -9,5 +9,5 @@ data class ProductListUI(
     val createdDate: String,
     val previewUriString: String,
     val productFolderName: String,
-    val type: HateRateType,
+    val type: HateRateType
 )

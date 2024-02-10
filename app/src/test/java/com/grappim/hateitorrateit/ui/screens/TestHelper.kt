@@ -29,7 +29,7 @@ val draftProduct = DraftProduct(
     id = PRODUCT_ID,
     date = nowDate,
     productFolderName = PRODUCT_FOLDER_NAME,
-    type = TYPE,
+    type = TYPE
 )
 
 val editProductImages = listOf(
@@ -55,9 +55,7 @@ val imageData = ImageData(
     isEdit = false
 )
 
-fun createEditProduct(
-    images: List<ProductImageData> = emptyList()
-): Product = Product(
+fun createEditProduct(images: List<ProductImageData> = emptyList()): Product = Product(
     id = PRODUCT_ID,
     name = NAME,
     images = images,
@@ -97,7 +95,7 @@ fun createImageData(
     size: Long? = null,
     mimeType: String? = null,
     md5: String? = null,
-    isEdit: Boolean? = null,
+    isEdit: Boolean? = null
 ): ImageData = ImageData(
     imageId = imageId ?: getRandomLong(),
     uri = newUri ?: getRandomUri(),

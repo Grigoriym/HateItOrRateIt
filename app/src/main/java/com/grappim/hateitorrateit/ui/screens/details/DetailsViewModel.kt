@@ -34,7 +34,7 @@ class DetailsViewModel @Inject constructor(
             onDeleteProductConfirm = ::deleteProductConfirm,
             updateProduct = ::updateProduct,
             trackScreenStart = ::trackScreenStart,
-            trackEditButtonClicked = ::trackEditClicked,
+            trackEditButtonClicked = ::trackEditClicked
         )
     )
 
@@ -72,12 +72,12 @@ class DetailsViewModel @Inject constructor(
 
             dataCleaner.clearProductData(
                 productId = productId,
-                productFolderName = viewState.value.productFolderName,
+                productFolderName = viewState.value.productFolderName
             )
 
             _viewState.update {
                 it.copy(
-                    productDeleted = true,
+                    productDeleted = true
                 )
             }
         }
@@ -112,7 +112,7 @@ class DetailsViewModel @Inject constructor(
                     images = productDetailsUi.filesUri,
                     isLoading = false,
                     type = productDetailsUi.type,
-                    productFolderName = productDetailsUi.productFolderName,
+                    productFolderName = productDetailsUi.productFolderName
                 )
             }
         }

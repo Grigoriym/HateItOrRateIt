@@ -138,7 +138,7 @@ class SettingsScreenKtTest {
                     goBack = {},
                     state = getState().copy(
                         isCrashesCollectionEnabled = false,
-                        isAnalyticsCollectionEnabled = true,
+                        isAnalyticsCollectionEnabled = true
                     )
                 )
             }
@@ -157,7 +157,7 @@ class SettingsScreenKtTest {
                     goBack = {},
                     state = getState().copy(
                         isCrashesCollectionEnabled = true,
-                        isAnalyticsCollectionEnabled = false,
+                        isAnalyticsCollectionEnabled = false
                     )
                 )
             }
@@ -180,6 +180,6 @@ class SettingsScreenKtTest {
         onCrashlyticsToggle = {},
         trackScreenStart = {},
         isAnalyticsCollectionEnabled = false,
-        onAnalyticsToggle = {},
+        onAnalyticsToggle = {}
     )
 }

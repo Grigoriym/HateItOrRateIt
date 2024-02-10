@@ -112,7 +112,7 @@ class DataCleanerImplTest {
                     uriString = getRandomString(),
                     size = 9221,
                     md5 = "nullam1"
-                ),
+                )
             )
 
             dataCleaner.deleteProductFileData(
@@ -132,22 +132,21 @@ class DataCleanerImplTest {
         }
 
     @Test
-    fun `on clearProductData, should call deleteFolder and removeProductById`() =
-        runTest {
-            val productId = getRandomLong()
-            val folderName = getRandomString()
+    fun `on clearProductData, should call deleteFolder and removeProductById`() = runTest {
+        val productId = getRandomLong()
+        val folderName = getRandomString()
 
-            coEvery { fileUtils.deleteFolder(any()) } just Runs
-            coEvery { productsRepository.deleteProductById(any()) } just Runs
+        coEvery { fileUtils.deleteFolder(any()) } just Runs
+        coEvery { productsRepository.deleteProductById(any()) } just Runs
 
-            dataCleaner.clearProductData(
-                productId = productId,
-                productFolderName = folderName
-            )
+        dataCleaner.clearProductData(
+            productId = productId,
+            productFolderName = folderName
+        )
 
-            coVerify { fileUtils.deleteFolder(folderName) }
-            coVerify { productsRepository.deleteProductById(productId) }
-        }
+        coVerify { fileUtils.deleteFolder(folderName) }
+        coVerify { productsRepository.deleteProductById(productId) }
+    }
 
     @Test
     fun `on deleteTempFolder should get correct folder name and remove it`() = runTest {

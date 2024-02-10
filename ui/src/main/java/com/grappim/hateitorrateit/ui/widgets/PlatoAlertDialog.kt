@@ -25,7 +25,7 @@ fun PlatoAlertDialog(
     dismissButtonText: String = stringResource(id = R.string.cancel),
     onDismissRequest: () -> Unit,
     onConfirmButtonClicked: () -> Unit,
-    onDismissButtonClicked: () -> Unit,
+    onDismissButtonClicked: () -> Unit
 ) {
     if (showAlertDialog) {
         AlertDialog(

@@ -15,7 +15,7 @@ class CleanUnusedDataWorker @AssistedInject constructor(
     @Assisted appContext: Context,
     @Assisted workerParams: WorkerParameters,
     private val productsRepository: ProductsRepository,
-    private val dataCleaner: DataCleaner,
+    private val dataCleaner: DataCleaner
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         val emptyFiles = productsRepository.getEmptyFiles()
@@ -23,7 +23,7 @@ class CleanUnusedDataWorker @AssistedInject constructor(
             Timber.d("Cleaning unused data: $file")
             dataCleaner.clearProductData(
                 productId = file.id,
-                productFolderName = file.productFolderName,
+                productFolderName = file.productFolderName
             )
         }
         return Result.success()

@@ -21,7 +21,7 @@ class ProductImageManagerImplTest {
     @Before
     fun setup() {
         productImageManager = ProductImageManagerImpl(
-            fileUtils = fileUtils,
+            fileUtils = fileUtils
         )
     }
 
