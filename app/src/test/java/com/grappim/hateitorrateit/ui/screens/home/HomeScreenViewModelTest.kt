@@ -1,14 +1,17 @@
 package com.grappim.hateitorrateit.ui.screens.home
 
+import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.model.ProductListUI
 import com.grappim.hateitorrateit.model.UiModelsMapper
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
+import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import kotlinx.coroutines.flow.flowOf
@@ -26,8 +29,8 @@ class HomeScreenViewModelTest {
     val coroutineRule = MainDispatcherRule()
 
     private val productsRepository: ProductsRepository = mockk()
-
     private val uiModelsMapper: UiModelsMapper = mockk()
+    private val homeScreenAnalytics: HomeScreenAnalytics = mockk()
 
     private lateinit var viewModel: HomeScreenViewModel
 
@@ -77,8 +80,27 @@ class HomeScreenViewModelTest {
 
         viewModel = HomeScreenViewModel(
             productsRepository = productsRepository,
+            homeScreenAnalytics = homeScreenAnalytics,
             uiModelsMapper = uiModelsMapper,
         )
+    }
+
+    @Test
+    fun `on trackScreenStart should call trackHomeScreenStart event`() {
+        every { homeScreenAnalytics.trackHomeScreenStart() } just Runs
+
+        viewModel.viewState.value.trackScreenStart()
+
+        verify { homeScreenAnalytics.trackHomeScreenStart() }
+    }
+
+    @Test
+    fun `on trackOnProductClicked should call trackProductClicked event`() {
+        every { homeScreenAnalytics.trackProductClicked() } just Runs
+
+        viewModel.viewState.value.trackOnProductClicked()
+
+        verify { homeScreenAnalytics.trackProductClicked() }
     }
 
     @Test
@@ -90,7 +112,7 @@ class HomeScreenViewModelTest {
         assert(state.query.isEmpty())
         assert(state.selectedType == null)
 
-        verify { productsRepository.getProductsFlow(any(),any()) }
+        verify { productsRepository.getProductsFlow(any(), any()) }
         coVerify { uiModelsMapper.toProductUi(any()) }
     }
 

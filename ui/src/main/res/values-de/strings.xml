@@ -38,4 +38,7 @@
 
     <string name="toggle_crashlytics">Erlaubst du das Senden von Crash Reports?</string>
     <string name="crashlytics_settings_subtitle">Dies ist nötig um Abstürze zu diagnostizieren und zu beheben</string>
+
+    <string name="toggle_analytics">Erlauben Sie das Sammeln von Analyse-Daten?</string>
+    <string name="analytics_settings_subtitle">Das Sammeln von Nutzungsdaten hilft uns, Ihre Erfahrung mit der App zu verbessern.</string>
 </resources>

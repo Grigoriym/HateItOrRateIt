@@ -55,6 +55,19 @@ val imageData = ImageData(
     isEdit = false
 )
 
+fun createEditProduct(
+    images: List<ProductImageData> = emptyList()
+): Product = Product(
+    id = PRODUCT_ID,
+    name = NAME,
+    images = images,
+    createdDate = nowDate,
+    productFolderName = PRODUCT_FOLDER_NAME,
+    description = DESCRIPTION,
+    shop = SHOP,
+    type = TYPE
+)
+
 val editProduct = Product(
     id = PRODUCT_ID,
     name = NAME,

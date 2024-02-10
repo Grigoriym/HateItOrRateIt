@@ -148,7 +148,7 @@ class ProductManagerScreenKtTest {
         setName = {},
         setShop = {},
         productSaved = false,
-        onRemoveImageClicked = {},
+        onDeleteImageClicked = {},
         onAddImageFromGalleryClicked = {},
         onAddCameraPictureClicked = {},
         onQuit = {},
@@ -160,6 +160,7 @@ class ProductManagerScreenKtTest {
         forceQuit = false,
         onForceQuit = {},
         showAlertDialog = false,
-        onShowAlertDialog = {}
+        onShowAlertDialog = {},
+        trackOnScreenStart = {},
     )
 }

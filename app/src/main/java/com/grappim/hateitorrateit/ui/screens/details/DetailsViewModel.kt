@@ -3,6 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.hateitorrateit.analyticsapi.DetailsScreenAnalytics
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
@@ -19,6 +20,7 @@ class DetailsViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
     private val dataCleaner: DataCleaner,
+    private val detailsScreenAnalytics: DetailsScreenAnalytics,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -31,6 +33,8 @@ class DetailsViewModel @Inject constructor(
             onShowAlertDialog = ::showAlertDialog,
             onDeleteProductConfirm = ::deleteProductConfirm,
             updateProduct = ::updateProduct,
+            trackScreenStart = ::trackScreenStart,
+            trackEditButtonClicked = ::trackEditClicked,
         )
     )
 
@@ -38,6 +42,18 @@ class DetailsViewModel @Inject constructor(
 
     init {
         getProduct()
+    }
+
+    private fun trackScreenStart() {
+        detailsScreenAnalytics.trackDetailsScreenStart()
+    }
+
+    private fun trackDeleteProduct() {
+        detailsScreenAnalytics.trackDetailsDeleteProductButtonClicked()
+    }
+
+    private fun trackEditClicked() {
+        detailsScreenAnalytics.trackDetailsEditButtonClicked()
     }
 
     private fun updateProduct() {
@@ -48,6 +64,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun deleteProductConfirm() {
+        detailsScreenAnalytics.trackDetailsDeleteProductConfirmed()
         viewModelScope.launch {
             _viewState.update {
                 it.copy(isLoading = true)
@@ -75,6 +92,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun deleteProduct() {
+        trackDeleteProduct()
         _viewState.update {
             it.copy(showAlertDialog = true)
         }

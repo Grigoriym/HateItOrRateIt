@@ -20,6 +20,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -72,6 +73,10 @@ fun DetailsRoute(
     isFromEdit: Boolean,
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    DisposableEffect(Unit) {
+        state.trackScreenStart
+        onDispose { }
+    }
     DetailsScreen(
         state = state,
         goBack = goBack,
@@ -246,6 +251,7 @@ private fun AppBarTopButtonsContent(
             PlatoIconButton(
                 icon = PlatoIconType.Edit.imageVector,
                 onButtonClick = {
+                    state.trackEditButtonClicked()
                     onEditClicked(state.productId.toLong())
                 }
             )
@@ -398,7 +404,7 @@ private fun DetailsDemonstrationContentPreview(
     }
 }
 
-private class StateProvider : PreviewParameterProvider<DetailsViewState>{
+private class StateProvider : PreviewParameterProvider<DetailsViewState> {
     override val values: Sequence<DetailsViewState>
         get() = sequenceOf(
             DetailsViewState(
@@ -417,6 +423,8 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState>{
                 productDeleted = false,
                 onDeleteProductConfirm = {},
                 updateProduct = {},
+                trackEditButtonClicked = {},
+                trackScreenStart = {}
             )
         )
 }
