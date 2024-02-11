@@ -23,25 +23,19 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 
 @Composable
-fun ProductImageScreen(
-    viewModel: ProductImageViewModel = hiltViewModel(),
-    goBack: () -> Unit
-) {
+fun ProductImageScreen(viewModel: ProductImageViewModel = hiltViewModel(), goBack: () -> Unit) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
 
     if (state.uri.isNotEmpty()) {
         ImageContent(
             state = state,
-            goBack = goBack,
+            goBack = goBack
         )
     }
 }
 
 @Composable
-private fun ImageContent(
-    state: ImageViewModelState,
-    goBack: () -> Unit
-) {
+private fun ImageContent(state: ImageViewModelState, goBack: () -> Unit) {
     val pagerState = rememberPagerState {
         state.images.size
     }
@@ -54,7 +48,7 @@ private fun ImageContent(
         Box(
             modifier = Modifier
                 .padding(it)
-                .fillMaxSize(),
+                .fillMaxSize()
         ) {
             HorizontalPager(
                 modifier = Modifier
@@ -77,7 +71,7 @@ private fun ImageContent(
                 goBack = goBack,
                 defaultBackButton = false,
                 backgroundColor = Color.Transparent,
-                elevation = 0.dp,
+                elevation = 0.dp
             )
 
             PlatoPagerIndicator(
@@ -85,7 +79,7 @@ private fun ImageContent(
                     .align(Alignment.BottomCenter),
                 show = state.images.size > 1,
                 size = state.images.size,
-                pagerState = pagerState,
+                pagerState = pagerState
             )
         }
     }

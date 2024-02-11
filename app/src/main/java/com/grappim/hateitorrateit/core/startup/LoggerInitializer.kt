@@ -17,8 +17,7 @@ class LoggerInitializer : Initializer<Unit> {
         Timber.plant(tree)
     }
 
-    override fun dependencies(): List<Class<out Initializer<*>>> =
-        emptyList()
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
 
 private class DevelopmentTree : Timber.DebugTree() {
@@ -36,11 +35,6 @@ private class DevelopmentTree : Timber.DebugTree() {
 private class ProductionTree : Timber.Tree() {
 
     @Suppress("EmptyFunctionBlock")
-    override fun log(
-        priority: Int,
-        tag: String?,
-        message: String,
-        t: Throwable?
-    ) {
+    override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
     }
 }

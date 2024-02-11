@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Singleton
 class LocalDataStorageImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>,
+    private val dataStore: DataStore<Preferences>
 ) : LocalDataStorage {
 
     private val typeKey = stringPreferencesKey("type_key")

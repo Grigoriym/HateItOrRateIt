@@ -15,11 +15,10 @@ import dagger.hilt.components.SingletonComponent
 class LocalDataStorageModule {
 
     @Provides
-    fun provideDataStore(
-        @ApplicationContext context: Context,
-    ): DataStore<Preferences> = PreferenceDataStoreFactory.create(
-        produceFile = {
-            context.preferencesDataStoreFile("hateitratestore")
-        }
-    )
+    fun provideDataStore(@ApplicationContext context: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
+            produceFile = {
+                context.preferencesDataStoreFile("hateitratestore")
+            }
+        )
 }

@@ -20,7 +20,7 @@ class SettingsViewModel @Inject constructor(
     private val dataCleaner: DataCleaner,
     private val localDataStorage: LocalDataStorage,
     private val analyticsController: AnalyticsController,
-    private val settingsScreenAnalytics: SettingsScreenAnalytics,
+    private val settingsScreenAnalytics: SettingsScreenAnalytics
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -31,7 +31,7 @@ class SettingsViewModel @Inject constructor(
             onDismissDialog = ::dismissDialog,
             onCrashlyticsToggle = ::onCrashlyticsToggle,
             onAnalyticsToggle = ::onAnalyticsToggle,
-            trackScreenStart = ::trackScreenStart,
+            trackScreenStart = ::trackScreenStart
         )
     )
     val viewState = _viewState.asStateFlow()

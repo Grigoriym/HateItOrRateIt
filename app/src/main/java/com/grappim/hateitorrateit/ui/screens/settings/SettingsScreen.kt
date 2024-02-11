@@ -34,10 +34,7 @@ const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
 private const val ANIMATION_DURATION = 500
 
 @Composable
-internal fun SettingsRoute(
-    goBack: () -> Unit,
-    viewModel: SettingsViewModel = hiltViewModel()
-) {
+internal fun SettingsRoute(goBack: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     DisposableEffect(Unit) {
         state.trackScreenStart()
@@ -45,33 +42,27 @@ internal fun SettingsRoute(
     }
     SettingsScreen(
         state = state,
-        goBack = goBack,
+        goBack = goBack
     )
 }
 
 @Composable
-internal fun SettingsScreen(
-    state: SettingsViewState,
-    goBack: () -> Unit,
-) {
+internal fun SettingsScreen(state: SettingsViewState, goBack: () -> Unit) {
     SettingsScreenContent(
         state = state,
-        goBack = goBack,
+        goBack = goBack
     )
 }
 
 @Composable
-private fun SettingsScreenContent(
-    state: SettingsViewState,
-    goBack: () -> Unit,
-) {
+private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) {
     Scaffold(
         topBar = {
             PlatoTopBar(
                 text = stringResource(id = R.string.settings),
-                goBack = goBack,
+                goBack = goBack
             )
-        },
+        }
     ) { padding ->
         PlatoLoadingDialog(state.isLoading)
 
@@ -81,82 +72,98 @@ private fun SettingsScreenContent(
             showAlertDialog = state.showAlertDialog,
             onDismissRequest = {
                 state.onDismissDialog()
-            }, onConfirmButtonClicked = {
+            },
+            onConfirmButtonClicked = {
                 state.onAlertDialogConfirmButtonClicked()
-            }, onDismissButtonClicked = {
+            },
+            onDismissButtonClicked = {
                 state.onDismissDialog()
-            })
+            }
+        )
 
         Column(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
         ) {
-            ListItem(modifier = Modifier.clickable {
-                state.onClearDataClicked()
-            }, text = {
-                Text(text = stringResource(id = R.string.clear_data))
-            })
-            ListItem(modifier = Modifier.clickable {
-                state.setNewType()
-            }, text = {
-                Text(text = stringResource(id = R.string.default_type))
-            }, trailing = {
-                TypeIcon(state = state)
-            })
-            ListItem(modifier = Modifier
-                .clickable {
-                    state.onCrashlyticsToggle()
+            ListItem(
+                modifier = Modifier.clickable {
+                    state.onClearDataClicked()
+                },
+                text = {
+                    Text(text = stringResource(id = R.string.clear_data))
                 }
-                .testTag(CRASHLYTICS_TILE_TAG), text = {
-                Text(text = stringResource(id = R.string.toggle_crashlytics))
-            }, trailing = {
-                FeatureEnabledIcon(state.isCrashesCollectionEnabled)
-            }, secondaryText = {
-                Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
-            })
-            ListItem(modifier = Modifier
-                .clickable {
-                    state.onAnalyticsToggle()
+            )
+            ListItem(
+                modifier = Modifier.clickable {
+                    state.setNewType()
+                },
+                text = {
+                    Text(text = stringResource(id = R.string.default_type))
+                },
+                trailing = {
+                    TypeIcon(state = state)
                 }
-                .testTag(ANALYTICS_TILE_TAG), text = {
-                Text(text = stringResource(id = R.string.toggle_analytics))
-            }, trailing = {
-                FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
-            }, secondaryText = {
-                Text(text = stringResource(id = R.string.analytics_settings_subtitle))
-            })
+            )
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        state.onCrashlyticsToggle()
+                    }
+                    .testTag(CRASHLYTICS_TILE_TAG),
+                text = {
+                    Text(text = stringResource(id = R.string.toggle_crashlytics))
+                },
+                trailing = {
+                    FeatureEnabledIcon(state.isCrashesCollectionEnabled)
+                },
+                secondaryText = {
+                    Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+                }
+            )
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        state.onAnalyticsToggle()
+                    }
+                    .testTag(ANALYTICS_TILE_TAG),
+                text = {
+                    Text(text = stringResource(id = R.string.toggle_analytics))
+                },
+                trailing = {
+                    FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
+                },
+                secondaryText = {
+                    Text(text = stringResource(id = R.string.analytics_settings_subtitle))
+                }
+            )
         }
     }
 }
 
 @Composable
-fun TypeIcon(
-    state: SettingsViewState
-) {
+fun TypeIcon(state: SettingsViewState) {
     Crossfade(
         targetState = state.type,
         label = "type_crossfade_icon",
-        animationSpec = tween(ANIMATION_DURATION),
+        animationSpec = tween(ANIMATION_DURATION)
     ) { type ->
         Icon(
             modifier = Modifier
                 .testTag(type.icon().name),
             imageVector = type.icon(),
             contentDescription = null,
-            tint = type.color(),
+            tint = type.color()
         )
     }
 }
 
 @Composable
-fun FeatureEnabledIcon(
-    state: Boolean
-) {
+fun FeatureEnabledIcon(state: Boolean) {
     Crossfade(
         targetState = state,
         label = "custom_switch_label",
-        animationSpec = tween(ANIMATION_DURATION),
+        animationSpec = tween(ANIMATION_DURATION)
     ) { enabled ->
         val imageVector = if (enabled) {
             PlatoIconType.CheckCircleOutline.imageVector
@@ -172,7 +179,7 @@ fun FeatureEnabledIcon(
                 Feijoa
             } else {
                 AtomicTangerine
-            },
+            }
         )
     }
 }

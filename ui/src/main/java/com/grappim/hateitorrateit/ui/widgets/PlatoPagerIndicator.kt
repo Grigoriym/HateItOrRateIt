@@ -28,7 +28,7 @@ fun PlatoPagerIndicator(
     ),
     show: Boolean,
     size: Int,
-    pagerState: PagerState,
+    pagerState: PagerState
 ) {
     if (show) {
         PlatoCard(

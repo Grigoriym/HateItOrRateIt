@@ -46,18 +46,14 @@ class FileUtils @Inject constructor(
                 val newUriPath = result.uriPath.replace("_temp", "")
                 result.copy(
                     uriString = newUriString,
-                    uriPath = newUriPath,
+                    uriPath = newUriPath
                 )
             } else {
                 imageDataMapper.toProductImageData(image)
             }
         }
 
-    fun getFileUriFromGalleryUri(
-        uri: Uri,
-        folderName: String,
-        isEdit: Boolean = false,
-    ): ImageData {
+    fun getFileUriFromGalleryUri(uri: Uri, folderName: String, isEdit: Boolean = false): ImageData {
         context.contentResolver.takePersistableUriPermission(
             uri,
             Intent.FLAG_GRANT_READ_URI_PERMISSION
@@ -80,7 +76,7 @@ class FileUtils @Inject constructor(
             size = fileSize,
             mimeType = mimeType,
             md5 = hashUtils.md5(newFile),
-            isEdit = isEdit,
+            isEdit = isEdit
         )
     }
 
@@ -99,36 +95,35 @@ class FileUtils @Inject constructor(
             size = fileSize,
             mimeType = mimeType,
             md5 = hashUtils.md5(file),
-            isEdit = isEdit,
+            isEdit = isEdit
         )
     }
 
-    private suspend fun moveFile(
-        sourceFilePath: String,
-        destinationFilePath: String,
-    ) {
+    private suspend fun moveFile(sourceFilePath: String, destinationFilePath: String) {
         copyFile(sourceFilePath, destinationFilePath)
         File(sourceFilePath).delete()
     }
 
-    private suspend fun copyFile(
-        sourceFilePath: String,
-        destinationFilePath: String,
-    ) = withContext(ioDispatcher) {
-        val sourceFile = File(sourceFilePath)
-        val destinationFile = File(destinationFilePath)
-        sourceFile.inputStream().use { inputStream ->
-            destinationFile.outputStream().use { outputStream ->
-                inputStream.copyTo(outputStream)
+    private suspend fun copyFile(sourceFilePath: String, destinationFilePath: String) =
+        withContext(ioDispatcher) {
+            val sourceFile = File(sourceFilePath)
+            val destinationFile = File(destinationFilePath)
+            sourceFile.inputStream().use { inputStream ->
+                destinationFile.outputStream().use { outputStream ->
+                    inputStream.copyTo(outputStream)
+                }
             }
         }
-    }
 
     suspend fun moveSourceFilesToDestinationFolder(
         sourceFolderName: String,
-        destinationFolderName: String,
+        destinationFolderName: String
     ) {
-        Timber.d("moveSourceFilesToDestinationFolder sourceFolderName: $sourceFolderName, destinationFolderName: $destinationFolderName")
+        Timber.d(
+            "moveSourceFilesToDestinationFolder " +
+                "source: $sourceFolderName, " +
+                "destination: $destinationFolderName"
+        )
         processFilesInFolder(sourceFolderName, destinationFolderName) { file, destPath ->
             moveFile(file.path, destPath)
             file.deleteRecursively()
@@ -140,10 +135,17 @@ class FileUtils @Inject constructor(
 
     suspend fun copySourceFilesToDestination(
         sourceFolderName: String,
-        destinationFolderName: String,
+        destinationFolderName: String
     ) {
-        Timber.d("copySourceFilesToDestination sourceFolderName: $sourceFolderName, destinationFolderName: $destinationFolderName")
-        processFilesInFolder(sourceFolderName, destinationFolderName) { file, destPath ->
+        Timber.d(
+            "copySourceFilesToDestination " +
+                "sourceFolderName: $sourceFolderName, " +
+                "destinationFolderName: $destinationFolderName"
+        )
+        processFilesInFolder(
+            sourceFolderName = sourceFolderName,
+            destinationFolderName = destinationFolderName
+        ) { file, destPath ->
             copyFile(file.path, destPath)
         }
     }
@@ -171,7 +173,7 @@ class FileUtils @Inject constructor(
 
     fun getFileUriForTakePicture(
         folderName: String,
-        isEdit: Boolean = false,
+        isEdit: Boolean = false
     ): CameraTakePictureData {
         val folder = if (isEdit) {
             getTempFolderName(folderName)
@@ -190,7 +192,7 @@ class FileUtils @Inject constructor(
 
     suspend fun deleteFolder(folderName: String) {
         val file = getMainFolder(folderName)
-        withContext(ioDispatcher){
+        withContext(ioDispatcher) {
             file.deleteRecursively()
         }
     }
@@ -212,9 +214,7 @@ class FileUtils @Inject constructor(
     /**
      * /data/data/com.grappim.hateitorrateit/files/products/1_2024-01-23_20-04-41/
      */
-    fun getMainFolder(
-        productFolder: String = ""
-    ): File {
+    fun getMainFolder(productFolder: String = ""): File {
         val folder = File(context.filesDir, "products/$productFolder")
         if (folder.exists().not()) {
             folder.mkdirs()
@@ -233,9 +233,7 @@ class FileUtils @Inject constructor(
      */
     fun getBackupFolderName(folder: String): String = "${folder}_backup"
 
-    private fun getUriFileName(
-        uri: Uri
-    ): String {
+    private fun getUriFileName(uri: Uri): String {
         val returnCursor = context.contentResolver.query(
             uri,
             arrayOf(OpenableColumns.DISPLAY_NAME),
@@ -258,10 +256,7 @@ class FileUtils @Inject constructor(
         }
     }
 
-    private fun createFileLocally(
-        uri: Uri,
-        folderName: String
-    ): File {
+    private fun createFileLocally(uri: Uri, folderName: String): File {
         val extension = getUriFileExtension(uri)
         val localFile = File(getMainFolder(folderName), getFileName(extension))
         writeDataToFile(uri, localFile)
@@ -272,12 +267,10 @@ class FileUtils @Inject constructor(
     /**
      * 2024-01-23_21-04-46_1706040286629.jpg
      */
-    private fun getFileName(
-        extension: String
-    ): String {
+    private fun getFileName(extension: String): String {
         val date = dateTimeUtils.formatToDocumentFolder(OffsetDateTime.now())
         val millis = dateTimeUtils.getInstantNow().toEpochMilli()
-        return "${date}_${millis}.$extension"
+        return "${date}_$millis.$extension"
     }
 
     @Suppress("NestedBlockDepth")
@@ -313,9 +306,7 @@ class FileUtils @Inject constructor(
             ?: error("Cannot get mimeType from $uri")
     }
 
-    private fun getFileUri(
-        file: File
-    ): Uri {
+    private fun getFileUri(file: File): Uri {
         val uri = FileProvider.getUriForFile(
             context,
             "${context.packageName}.provider",
@@ -325,9 +316,7 @@ class FileUtils @Inject constructor(
         return uri
     }
 
-    private fun getUriFileSize(
-        uri: Uri
-    ): Long {
+    private fun getUriFileSize(uri: Uri): Long {
         val returnCursor = context.contentResolver.query(
             uri,
             arrayOf(OpenableColumns.SIZE),

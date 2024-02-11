@@ -24,11 +24,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@[RunWith(RobolectricTestRunner::class)
-Config(
+@RunWith(RobolectricTestRunner::class)
+@Config(
     shadows = [ShadowFileProvider::class],
     manifest = Config.NONE
-)]
+)
 class FileUtilsTest {
 
     private val hashUtils: HashUtils = mockk()
@@ -186,7 +186,7 @@ class FileUtilsTest {
         val sourceFolder = File(context.filesDir, "products/folderName")
         assertTrue(sourceFolder.mkdirs())
 
-        val file = File(sourceFolder, "${date}_${millis}.jpg").apply { createNewFile() }
+        val file = File(sourceFolder, "${date}_$millis.jpg").apply { createNewFile() }
         val uri = FileProvider.getUriForFile(
             context,
             "${context.packageName}.provider",
@@ -217,7 +217,7 @@ class FileUtilsTest {
         val sourceFolder = File(context.filesDir, "products/folderName_temp")
         assertTrue(sourceFolder.mkdirs())
 
-        val file = File(sourceFolder, "${date}_${millis}.jpg").apply { createNewFile() }
+        val file = File(sourceFolder, "${date}_$millis.jpg").apply { createNewFile() }
         val uri = FileProvider.getUriForFile(
             context,
             "${context.packageName}.provider",

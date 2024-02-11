@@ -5,9 +5,9 @@ import androidx.room.Room
 import com.grappim.hateitorrateit.data.db.BuildConfig
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
 import com.grappim.hateitorrateit.data.db.converters.DateTimeConverter
+import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
-import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.utils.TransactionController
 import com.grappim.hateitorrateit.data.db.utils.TransactionControllerImpl
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
@@ -36,19 +36,16 @@ class DatabaseModule {
         .build()
 
     @[Provides Singleton]
-    fun provideProductsDao(
-        databaseWrapper: DatabaseWrapper
-    ): ProductsDao = databaseWrapper.productsDao
+    fun provideProductsDao(databaseWrapper: DatabaseWrapper): ProductsDao =
+        databaseWrapper.productsDao
 
     @[Provides Singleton]
-    fun provideDatabaseDao(
-        databaseWrapper: DatabaseWrapper
-    ): DatabaseDao = databaseWrapper.databaseDao
+    fun provideDatabaseDao(databaseWrapper: DatabaseWrapper): DatabaseDao =
+        databaseWrapper.databaseDao
 
     @[Provides Singleton]
-    fun provideTempImagesDao(
-        databaseWrapper: DatabaseWrapper
-    ): BackupImagesDao = databaseWrapper.backupImagesDao
+    fun provideTempImagesDao(databaseWrapper: DatabaseWrapper): BackupImagesDao =
+        databaseWrapper.backupImagesDao
 }
 
 @[Module InstallIn(SingletonComponent::class)]
@@ -57,5 +54,7 @@ interface DatabaseBindsModule {
     fun bindDatabaseWrapper(databaseWrapper: DatabaseWrapperImpl): DatabaseWrapper
 
     @Binds
-    fun bindTransactionController(transactionControllerImpl: TransactionControllerImpl): TransactionController
+    fun bindTransactionController(
+        transactionControllerImpl: TransactionControllerImpl
+    ): TransactionController
 }

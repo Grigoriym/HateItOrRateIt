@@ -84,7 +84,7 @@ class ProductManagerViewModelEditTest {
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
             productManagerAnalytics = productManagerAnalytics,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = savedStateHandle
         )
     }
 
@@ -241,7 +241,7 @@ class ProductManagerViewModelEditTest {
             fileUtils.getFileUriFromGalleryUri(
                 uri = imageData.uri,
                 folderName = getProductFolderName(),
-                isEdit = true,
+                isEdit = true
             )
         }
 
@@ -276,7 +276,7 @@ class ProductManagerViewModelEditTest {
         verify {
             fileUtils.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
-                isEdit = true,
+                isEdit = true
             )
         }
 
@@ -309,7 +309,7 @@ class ProductManagerViewModelEditTest {
         verify {
             fileUtils.getFileUriForTakePicture(
                 folderName = getProductFolderName(),
-                isEdit = true,
+                isEdit = true
             )
         }
 

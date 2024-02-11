@@ -13,30 +13,24 @@ class ProductImageManagerImpl @Inject constructor(
      * Copy the initial state of images so that we can revert them in case they are deleted from
      * the original folder
      */
-    override suspend fun copyToBackupFolder(
-        productFolderName: String
-    ) {
+    override suspend fun copyToBackupFolder(productFolderName: String) {
         fileUtils.copySourceFilesToDestination(
             sourceFolderName = productFolderName,
             destinationFolderName = fileUtils.getBackupFolderName(productFolderName)
         )
     }
 
-    override suspend fun moveFromTempToOriginalFolder(
-        productFolderName: String
-    ) {
+    override suspend fun moveFromTempToOriginalFolder(productFolderName: String) {
         fileUtils.moveSourceFilesToDestinationFolder(
             sourceFolderName = fileUtils.getTempFolderName(productFolderName),
-            destinationFolderName = productFolderName,
+            destinationFolderName = productFolderName
         )
     }
 
-    override suspend fun moveFromBackupToOriginalFolder(
-        productFolderName: String
-    ) {
+    override suspend fun moveFromBackupToOriginalFolder(productFolderName: String) {
         fileUtils.moveSourceFilesToDestinationFolder(
             sourceFolderName = fileUtils.getBackupFolderName(productFolderName),
-            destinationFolderName = productFolderName,
+            destinationFolderName = productFolderName
         )
     }
 }

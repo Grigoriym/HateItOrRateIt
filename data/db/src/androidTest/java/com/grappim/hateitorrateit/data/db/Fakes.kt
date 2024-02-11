@@ -10,16 +10,15 @@ const val PRODUCT_IMAGE_NAME_2 = "product_image_name_2"
 
 fun getNowDate(): OffsetDateTime = OffsetDateTime.now()
 
-fun createProductEntity(): ProductEntity =
-    ProductEntity(
-        name = "Myles Burke",
-        createdDate = getNowDate(),
-        productFolderName = "Sophia House",
-        description = "sale",
-        shop = "quis",
-        type = HateRateType.RATE,
-        isCreated = true
-    )
+fun createProductEntity(): ProductEntity = ProductEntity(
+    name = "Myles Burke",
+    createdDate = getNowDate(),
+    productFolderName = "Sophia House",
+    description = "sale",
+    shop = "quis",
+    type = HateRateType.RATE,
+    isCreated = true
+)
 
 fun getProductImageList(id: Long): List<ProductImageDataEntity> = listOf(
     ProductImageDataEntity(

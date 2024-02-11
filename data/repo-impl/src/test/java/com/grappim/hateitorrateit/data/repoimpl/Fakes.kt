@@ -20,37 +20,35 @@ fun getProductImageDataEntityList() = listOf(
     getProductImageDataEntity()
 )
 
-fun getProductImageDataEntity() =
-    ProductImageDataEntity(
-        name = NAME,
-        mimeType = "mimeType",
-        uriPath = "uriPath",
-        uriString = "uriString",
-        size = 12,
-        md5 = "md5",
-        productId = ID
-    )
+fun getProductImageDataEntity() = ProductImageDataEntity(
+    name = NAME,
+    mimeType = "mimeType",
+    uriPath = "uriPath",
+    uriString = "uriString",
+    size = 12,
+    md5 = "md5",
+    productId = ID
+)
 
 fun getProductWithImagesEntityList() = listOf(
     getProductWithImagesEntity()
 )
 
-fun getProductWithImagesEntity() =
-    ProductWithImagesEntity(
-        productEntity = ProductEntity(
-            productId = ID,
-            name = NAME,
-            createdDate = nowDate,
-            productFolderName = FOLDER_NAME,
-            description = "description",
-            shop = "shop",
-            type = HateRateType.HATE,
-            isCreated = true
-        ),
-        files = listOf(
-            getProductImageDataEntity()
-        )
+fun getProductWithImagesEntity() = ProductWithImagesEntity(
+    productEntity = ProductEntity(
+        productId = ID,
+        name = NAME,
+        createdDate = nowDate,
+        productFolderName = FOLDER_NAME,
+        description = "description",
+        shop = "shop",
+        type = HateRateType.HATE,
+        isCreated = true
+    ),
+    files = listOf(
+        getProductImageDataEntity()
     )
+)
 
 fun getListOfEmptyFileData() = listOf(
     getEmptyFileData()
@@ -58,7 +56,7 @@ fun getListOfEmptyFileData() = listOf(
 
 fun getEmptyFileData() = EmptyFileData(
     id = ID,
-    productFolderName = FOLDER_NAME,
+    productFolderName = FOLDER_NAME
 )
 
 fun getProductImageData() = ProductImageData(
@@ -74,9 +72,7 @@ fun getProductImageDataList() = listOf(
     getProductImageData()
 )
 
-fun getProduct(
-    filesUri: List<ProductImageData> = getProductImageDataList(),
-): Product = Product(
+fun getProduct(filesUri: List<ProductImageData> = getProductImageDataList()): Product = Product(
     id = ID,
     name = NAME,
     images = filesUri,

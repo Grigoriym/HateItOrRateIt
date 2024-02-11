@@ -54,11 +54,11 @@ class ProductManagerScreenKtTest {
                 ProductManagerScreen(
                     state = getState().copy(
                         bottomBarButtonText = NativeText.Resource(R.string.create),
-                        alertDialogText = NativeText.Resource(R.string.if_quit_lose_data),
+                        alertDialogText = NativeText.Resource(R.string.if_quit_lose_data)
                     ),
                     goBack = {},
                     onProductCreated = {},
-                    snackBarMessage = LaunchedEffectResult(NativeText.Empty),
+                    snackBarMessage = LaunchedEffectResult(NativeText.Empty)
                 )
             }
 
@@ -84,11 +84,11 @@ class ProductManagerScreenKtTest {
                 ProductManagerScreen(
                     state = getState().copy(
                         bottomBarButtonText = NativeText.Resource(R.string.save),
-                        alertDialogText = NativeText.Resource(R.string.if_quit_ensure_saved),
+                        alertDialogText = NativeText.Resource(R.string.if_quit_ensure_saved)
                     ),
                     goBack = {},
                     onProductCreated = {},
-                    snackBarMessage = LaunchedEffectResult(NativeText.Empty),
+                    snackBarMessage = LaunchedEffectResult(NativeText.Empty)
                 )
             }
 
@@ -119,7 +119,7 @@ class ProductManagerScreenKtTest {
                     state = getState().copy(
                         productName = PRODUCT_NAME,
                         description = DESCRIPTION,
-                        shop = SHOP,
+                        shop = SHOP
                     ),
                     goBack = {},
                     onProductCreated = {},
@@ -161,6 +161,6 @@ class ProductManagerScreenKtTest {
         onForceQuit = {},
         showAlertDialog = false,
         onShowAlertDialog = {},
-        trackOnScreenStart = {},
+        trackOnScreenStart = {}
     )
 }

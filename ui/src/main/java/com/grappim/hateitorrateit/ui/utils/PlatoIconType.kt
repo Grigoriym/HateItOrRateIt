@@ -3,7 +3,6 @@ package com.grappim.hateitorrateit.ui.utils
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircleOutline
@@ -22,15 +21,23 @@ import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class PlatoIconType {
-    ArrowBack, Edit, Delete, Camera, Image,
-    Done, Close,
-    ThumbDown, ThumbUp,
+    ArrowBack,
+    Edit,
+    Delete,
+    Camera,
+    Image,
+    Done,
+    Close,
+    ThumbDown,
+    ThumbUp,
     ImageNotSupported,
-    HighlightOff, CheckCircleOutline,
+    HighlightOff,
+    CheckCircleOutline,
     Search,
     Cancel,
     Add,
-    Home, Settings;
+    Home,
+    Settings;
 
     val imageVector: ImageVector
         get() = when (this) {

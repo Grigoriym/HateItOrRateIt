@@ -8,10 +8,9 @@ data class CameraTakePictureData(
     val file: File
 ) {
     companion object {
-        fun empty(): CameraTakePictureData =
-            CameraTakePictureData(
-                uri = Uri.EMPTY,
-                file = File("")
-            )
+        fun empty(): CameraTakePictureData = CameraTakePictureData(
+            uri = Uri.EMPTY,
+            file = File("")
+        )
     }
 }

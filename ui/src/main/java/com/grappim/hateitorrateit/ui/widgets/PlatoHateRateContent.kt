@@ -30,7 +30,7 @@ const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 fun PlatoHateRateContent(
     modifier: Modifier = Modifier,
     currentType: HateRateType,
-    onTypeClicked: (HateRateType) -> Unit,
+    onTypeClicked: (HateRateType) -> Unit
 ) {
     val buttonsSize = 80.dp
     val hateColors = currentType.hateColors()
@@ -42,11 +42,11 @@ fun PlatoHateRateContent(
             .fillMaxWidth()
             .testTag(PLATO_HATE_RATE_CONTENT_TAG),
         shape = RoundedCornerShape(24.dp),
-        border = BorderStroke(8.dp, currentType.color()),
+        border = BorderStroke(8.dp, currentType.color())
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Button(
                 modifier = Modifier
@@ -55,7 +55,7 @@ fun PlatoHateRateContent(
                     onTypeClicked(HateRateType.HATE)
                 },
                 shape = CircleShape,
-                colors = hateColors,
+                colors = hateColors
             ) {
                 PlatoIcon(imageVector = currentType.hateIcon())
             }
@@ -74,7 +74,7 @@ fun PlatoHateRateContent(
                     onTypeClicked(HateRateType.RATE)
                 },
                 shape = CircleShape,
-                colors = rateColors,
+                colors = rateColors
             ) {
                 PlatoIcon(imageVector = currentType.rateIcon())
             }

@@ -36,10 +36,7 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
 import com.grappim.hateitorrateit.utils.safeClick
 
 @Composable
-fun RootMainScreen(
-    goToHateOrRate: () -> Unit,
-    goToDetails: (id: Long) -> Unit,
-) {
+fun RootMainScreen(goToHateOrRate: () -> Unit, goToDetails: (id: Long) -> Unit) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -52,7 +49,7 @@ fun RootMainScreen(
                 onClick = {
                     goToHateOrRate()
                 },
-                shape = CircleShape,
+                shape = CircleShape
             ) {
                 PlatoIcon(imageVector = PlatoIconType.Add.imageVector)
             }
@@ -72,15 +69,20 @@ fun RootMainScreen(
                             topEnd = 16.dp
                         )
                     ),
-                backgroundColor = if (isSystemInDarkTheme()) bottomNavigationBackgroundDark
-                else bottomNavigationBackgroundLight
+                backgroundColor = if (isSystemInDarkTheme()) {
+                    bottomNavigationBackgroundDark
+                } else {
+                    bottomNavigationBackgroundLight
+                }
             ) {
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentDestination = navBackStackEntry?.destination
 
                 screens.forEach { screen ->
                     BottomNavigationItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                        selected = currentDestination
+                            ?.hierarchy
+                            ?.any { it.route == screen.route } == true,
                         label = {
                             Text(text = screen.title)
                         },
@@ -93,7 +95,7 @@ fun RootMainScreen(
                                 restoreState = true
                             }
                         },
-                        icon = { PlatoIcon(imageVector = screen.imageVector) },
+                        icon = { PlatoIcon(imageVector = screen.imageVector) }
                     )
                 }
             }
@@ -106,7 +108,7 @@ fun RootMainScreen(
         ) {
             NavHost(
                 navController = navController,
-                startDestination = HomeNavDestination.Home.route,
+                startDestination = HomeNavDestination.Home.route
             ) {
                 composable(HomeNavDestination.Home.route) { navBackStackEntry ->
                     HomeScreen(

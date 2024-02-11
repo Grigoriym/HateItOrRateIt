@@ -61,15 +61,12 @@ fun HomeScreen(
 
     HomeScreenContent(
         state = state,
-        onProductClick = onProductClick,
+        onProductClick = onProductClick
     )
 }
 
 @Composable
-private fun HomeScreenContent(
-    state: HomeViewState,
-    onProductClick: (id: Long) -> Unit,
-) {
+private fun HomeScreenContent(state: HomeViewState, onProductClick: (id: Long) -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,10 +74,10 @@ private fun HomeScreenContent(
             .padding(top = 16.dp, bottom = 8.dp)
     ) {
         SearchContent(
-            state = state,
+            state = state
         )
         FilterChipsContent(
-            state = state,
+            state = state
         )
         LazyColumn(
             modifier = Modifier
@@ -95,10 +92,7 @@ private fun HomeScreenContent(
 }
 
 @Composable
-private fun SearchContent(
-    modifier: Modifier = Modifier,
-    state: HomeViewState,
-) {
+private fun SearchContent(modifier: Modifier = Modifier, state: HomeViewState) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
@@ -110,7 +104,7 @@ private fun SearchContent(
         leadingIcon = {
             PlatoIcon(
                 imageVector = PlatoIconType.Search.imageVector,
-                contentDescription = "search button",
+                contentDescription = "search button"
             )
         },
         trailingIcon = {
@@ -121,7 +115,7 @@ private fun SearchContent(
                 }) {
                     PlatoIcon(
                         imageVector = PlatoIconType.Cancel.imageVector,
-                        contentDescription = "cancel button",
+                        contentDescription = "cancel button"
                     )
                 }
             }
@@ -131,7 +125,7 @@ private fun SearchContent(
         },
         colors = TextFieldDefaults.textFieldColors(
             focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
         ),
         keyboardOptions = KeyboardOptions.Default.copy(
             imeAction = ImeAction.Search
@@ -148,7 +142,7 @@ private fun SearchContent(
 private fun ProductItem(
     state: HomeViewState,
     product: ProductListUI,
-    onProductClick: (id: Long) -> Unit,
+    onProductClick: (id: Long) -> Unit
 ) {
     PlatoCard(
         modifier = Modifier
@@ -158,7 +152,7 @@ private fun ProductItem(
         onClick = {
             state.trackOnProductClicked()
             onProductClick(product.id.toLong())
-        },
+        }
     ) {
         Box {
             if (product.previewUriString.isEmpty()) {
@@ -174,7 +168,7 @@ private fun ProductItem(
                         .fillMaxSize(),
                     painter = rememberAsyncImagePainter(model = product.previewUriString),
                     contentScale = ContentScale.Crop,
-                    contentDescription = "",
+                    contentDescription = ""
                 )
             }
 
@@ -198,12 +192,12 @@ private fun ProductItem(
                         modifier = Modifier
                             .weight(1f),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         TextH5(
                             text = product.name,
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
+                            overflow = TextOverflow.Ellipsis
                         )
                     }
 
@@ -214,7 +208,7 @@ private fun ProductItem(
                     ) {
                         PlatoIcon(
                             imageVector = product.type.icon(),
-                            tint = product.type.color(),
+                            tint = product.type.color()
                         )
                     }
                 }
@@ -224,10 +218,7 @@ private fun ProductItem(
 }
 
 @Composable
-private fun FilterChipsContent(
-    modifier: Modifier = Modifier,
-    state: HomeViewState,
-) {
+private fun FilterChipsContent(modifier: Modifier = Modifier, state: HomeViewState) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
@@ -241,12 +232,13 @@ private fun FilterChipsContent(
                 {
                     Icon(
                         imageVector = PlatoIconType.Done.imageVector,
-                        contentDescription = "Done icon",
+                        contentDescription = "Done icon"
                     )
                 }
             } else {
                 null
-            }) {
+            }
+        ) {
             Text(stringResource(id = R.string.hate))
         }
         FilterChip(
@@ -258,12 +250,13 @@ private fun FilterChipsContent(
                 {
                     Icon(
                         imageVector = PlatoIconType.Done.imageVector,
-                        contentDescription = "Done icon",
+                        contentDescription = "Done icon"
                     )
                 }
             } else {
                 null
-            }) {
+            }
+        ) {
             Text(stringResource(id = R.string.rate))
         }
     }

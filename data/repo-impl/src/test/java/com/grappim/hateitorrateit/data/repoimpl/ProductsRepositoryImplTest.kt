@@ -94,7 +94,7 @@ class ProductsRepositoryImplTest {
         val nowDate = nowDate
         val type = HateRateType.HATE
         val folderDate = "2023-12-12_12-12-12"
-        val folderName = "${ID}_${folderDate}"
+        val folderName = "${ID}_$folderDate"
         val draftProduct = DraftProduct(
             id = ID,
             date = nowDate,
@@ -226,28 +226,29 @@ class ProductsRepositoryImplTest {
     }
 
     @Test
-    fun `getProductsFlow with query and null type should return products flow by query`() = runTest {
-        val query = "query"
-        val type: HateRateType? = null
+    fun `getProductsFlow with query and null type should return products flow by query`() =
+        runTest {
+            val query = "query"
+            val type: HateRateType? = null
 
-        val productsWithImages = getProductWithImagesEntityList()
-        val sqlQuery = "sqlQuery"
-        val product = getProduct()
+            val productsWithImages = getProductWithImagesEntityList()
+            val sqlQuery = "sqlQuery"
+            val product = getProduct()
 
-        coEvery { sqlQueryBuilder.buildSqlQuery(any(), any()) } returns sqlQuery
-        coEvery { productsDao.getAllProductsByRawQueryFlow(any()) } returns flowOf(
-            productsWithImages
-        )
-        coEvery { productsMapper.toProduct(any(), any()) } returns product
+            coEvery { sqlQueryBuilder.buildSqlQuery(any(), any()) } returns sqlQuery
+            coEvery { productsDao.getAllProductsByRawQueryFlow(any()) } returns flowOf(
+                productsWithImages
+            )
+            coEvery { productsMapper.toProduct(any(), any()) } returns product
 
-        repository.getProductsFlow(query, type).test {
-            assertEquals(listOf(product), awaitItem())
+            repository.getProductsFlow(query, type).test {
+                assertEquals(listOf(product), awaitItem())
 
-            coVerify { sqlQueryBuilder.buildSqlQuery(query, type) }
-            coVerify(exactly = 0) { productsDao.getAllProductsFlow() }
-            awaitComplete()
+                coVerify { sqlQueryBuilder.buildSqlQuery(query, type) }
+                coVerify(exactly = 0) { productsDao.getAllProductsFlow() }
+                awaitComplete()
+            }
         }
-    }
 
     @Test
     fun `getProductsFlow with empty query and null type should return all products flow`() =
@@ -271,8 +272,8 @@ class ProductsRepositoryImplTest {
                 coVerify(exactly = 0) { productsDao.getAllProductsByRawQueryFlow(any()) }
                 coVerify {
                     productsMapper.toProduct(
-                        productWithImages.productEntity,
-                        productWithImages.files,
+                        productEntity = productWithImages.productEntity,
+                        images = productWithImages.files
                     )
                 }
                 awaitComplete()

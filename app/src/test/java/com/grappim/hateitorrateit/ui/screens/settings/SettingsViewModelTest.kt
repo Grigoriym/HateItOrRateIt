@@ -51,7 +51,7 @@ class SettingsViewModelTest {
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
             analyticsController = analyticsController,
-            settingsScreenAnalytics = settingsScreenAnalytics,
+            settingsScreenAnalytics = settingsScreenAnalytics
         )
     }
 

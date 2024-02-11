@@ -21,7 +21,7 @@ import javax.inject.Inject
 class HomeScreenViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
-    private val homeScreenAnalytics: HomeScreenAnalytics,
+    private val homeScreenAnalytics: HomeScreenAnalytics
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -51,7 +51,7 @@ class HomeScreenViewModel @Inject constructor(
     private fun onFilterSelected(type: HateRateType) {
         _viewState.update {
             it.copy(
-                selectedType = if (type == viewState.value.selectedType) null else type,
+                selectedType = if (type == viewState.value.selectedType) null else type
             )
         }
     }
@@ -61,7 +61,7 @@ class HomeScreenViewModel @Inject constructor(
             viewState.flatMapLatest { state ->
                 productsRepository.getProductsFlow(
                     query = state.query,
-                    type = state.selectedType,
+                    type = state.selectedType
                 ).map {
                     it.map { product ->
                         uiModelsMapper.toProductUi(product)

@@ -29,7 +29,7 @@ fun PlatoTopBar(
     defaultBackButton: Boolean = true,
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
-    actions: @Composable RowScope.() -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         modifier = modifier
@@ -47,7 +47,9 @@ fun PlatoTopBar(
                         modifier = Modifier
                             .testTag(icon.name),
                         imageVector = icon,
-                        contentDescription = stringResource(id = R.string.content_description_back_button),
+                        contentDescription = stringResource(
+                            id = R.string.content_description_back_button
+                        )
                     )
                 }
             } else {
@@ -55,11 +57,11 @@ fun PlatoTopBar(
                     modifier = Modifier
                         .testTag(icon.name),
                     icon = icon,
-                    onButtonClick = goBack,
+                    onButtonClick = goBack
                 )
             }
         },
-        actions = actions,
+        actions = actions
     )
 }
 
@@ -79,7 +81,7 @@ private fun PlatoTopBarNotDefaultPreview() {
         PlatoTopBar(
             text = "Some text",
             goBack = {},
-            defaultBackButton = false,
+            defaultBackButton = false
         )
     }
 }

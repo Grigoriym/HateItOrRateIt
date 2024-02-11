@@ -25,5 +25,5 @@ data class DetailsViewState(
     val updateProduct: () -> Unit,
 
     val trackScreenStart: () -> Unit,
-    val trackEditButtonClicked: () -> Unit,
+    val trackEditButtonClicked: () -> Unit
 )

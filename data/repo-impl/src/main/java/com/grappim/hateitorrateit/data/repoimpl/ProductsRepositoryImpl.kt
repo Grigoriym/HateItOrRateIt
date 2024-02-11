@@ -30,7 +30,7 @@ class ProductsRepositoryImpl @Inject constructor(
     private val localDataStorage: LocalDataStorage,
     private val productsMapper: ProductMapper,
     private val sqlQueryBuilder: SqlQueryBuilder,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ProductsRepository {
 
     override suspend fun getProductById(productId: Long): Product {
@@ -43,7 +43,7 @@ class ProductsRepositoryImpl @Inject constructor(
         name: String,
         description: String,
         shop: String,
-        type: HateRateType,
+        type: HateRateType
     ) = withContext(ioDispatcher) {
         productsDao.updateProduct(id, name, description, shop, type)
     }
@@ -52,10 +52,7 @@ class ProductsRepositoryImpl @Inject constructor(
         productsDao.updateProduct(productsMapper.toProductEntity(product))
     }
 
-    override suspend fun updateProductWithImages(
-        product: Product,
-        images: List<ProductImageData>,
-    ) {
+    override suspend fun updateProductWithImages(product: Product, images: List<ProductImageData>) {
         val entity = productsMapper.toProductEntity(product)
         val imagesEntity = productsMapper.toProductImageDataEntityList(
             productId = product.id,
@@ -63,17 +60,15 @@ class ProductsRepositoryImpl @Inject constructor(
         )
         productsDao.updateProductAndImages(
             productEntity = entity,
-            images = imagesEntity,
+            images = imagesEntity
         )
     }
 
-    override suspend fun updateImagesInProduct(
-        id: Long,
-        images: List<ProductImageData>
-    ) = withContext(ioDispatcher) {
-        val filesEntity = productsMapper.toProductImageDataEntityList(id, images)
-        productsDao.upsertImages(filesEntity)
-    }
+    override suspend fun updateImagesInProduct(id: Long, images: List<ProductImageData>) =
+        withContext(ioDispatcher) {
+            val filesEntity = productsMapper.toProductImageDataEntityList(id, images)
+            productsDao.upsertImages(filesEntity)
+        }
 
     override suspend fun addDraftProduct(): DraftProduct = withContext(ioDispatcher) {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
@@ -85,17 +80,17 @@ class ProductsRepositoryImpl @Inject constructor(
             productFolderName = "",
             description = "",
             shop = "",
-            type = type,
+            type = type
         )
 
         val id = productsDao.insert(productEntity)
-        val folderName = "${id}_${folderDate}"
+        val folderName = "${id}_$folderDate"
         productsDao.updateProductFolderName(folderName, id)
         DraftProduct(
             id = id,
             date = nowDate,
             productFolderName = folderName,
-            type = type,
+            type = type
         )
     }
 
@@ -104,10 +99,8 @@ class ProductsRepositoryImpl @Inject constructor(
 
     override suspend fun deleteEmptyFiles() = productsDao.deleteEmptyFiles()
 
-    override suspend fun deleteProductImage(
-        productId: Long,
-        imageName: String,
-    ) = productsDao.deleteProductImageByIdAndName(productId, imageName)
+    override suspend fun deleteProductImage(productId: Long, imageName: String) =
+        productsDao.deleteProductImageByIdAndName(productId, imageName)
 
     override suspend fun deleteProductById(productId: Long) {
         productsDao.deleteProductAndImagesById(productId)
@@ -122,22 +115,21 @@ class ProductsRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getProductsFlow(
-        query: String,
-        type: HateRateType?,
-    ): Flow<List<Product>> = flow {
-        emitAll(if (query.isEmpty() && type == null) {
-            productsDao.getAllProductsFlow()
-        } else {
-            val sqLiteQuery = sqlQueryBuilder.buildSqlQuery(query, type)
-            productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
-        }.mapLatest { list ->
-            list.map {
-                productsMapper.toProduct(
-                    productEntity = it.productEntity,
-                    images = it.files
-                )
+    override fun getProductsFlow(query: String, type: HateRateType?): Flow<List<Product>> = flow {
+        emitAll(
+            if (query.isEmpty() && type == null) {
+                productsDao.getAllProductsFlow()
+            } else {
+                val sqLiteQuery = sqlQueryBuilder.buildSqlQuery(query, type)
+                productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
+            }.mapLatest { list ->
+                list.map {
+                    productsMapper.toProduct(
+                        productEntity = it.productEntity,
+                        images = it.files
+                    )
+                }
             }
-        })
+        )
     }
 }

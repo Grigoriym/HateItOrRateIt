@@ -32,17 +32,17 @@ fun PlatoLoadingDialog(isLoading: Boolean) {
                     .fillMaxSize()
                     .testTag(PLATO_LOADING_DIALOG_TAG),
                 shape = RoundedCornerShape(16.dp),
-                color = Color.Transparent,
+                color = Color.Transparent
             ) {
                 Box(
                     modifier = Modifier,
-                    contentAlignment = Alignment.Center,
+                    contentAlignment = Alignment.Center
                 ) {
                     CircularProgressIndicator(
                         modifier = Modifier
                             .fillMaxSize(PROGRESS_INDICATOR_FRACTION),
                         strokeWidth = 8.dp,
-                        color = Color.Blue,
+                        color = Color.Blue
                     )
                 }
             }

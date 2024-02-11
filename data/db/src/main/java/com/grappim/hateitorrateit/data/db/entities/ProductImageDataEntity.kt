@@ -19,5 +19,5 @@ data class ProductImageDataEntity(
     val uriPath: String,
     val uriString: String,
 
-    val md5: String,
+    val md5: String
 )

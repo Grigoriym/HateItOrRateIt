@@ -15,5 +15,5 @@ data class HomeViewState(
     val onFilterSelected: (HateRateType) -> Unit = {},
 
     val trackScreenStart: () -> Unit,
-    val trackOnProductClicked: () -> Unit,
+    val trackOnProductClicked: () -> Unit
 )

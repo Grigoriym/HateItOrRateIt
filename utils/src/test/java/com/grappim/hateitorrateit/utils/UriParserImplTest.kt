@@ -8,10 +8,8 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 
-@[RunWith(RobolectricTestRunner::class)
-Config(
-    manifest = Config.NONE
-)]
+@RunWith(RobolectricTestRunner::class)
+@Config(manifest = Config.NONE)
 class UriParserImplTest {
     private lateinit var uriParser: UriParser
 

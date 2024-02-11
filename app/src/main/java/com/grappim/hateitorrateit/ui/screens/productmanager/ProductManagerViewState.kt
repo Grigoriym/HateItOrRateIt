@@ -50,5 +50,5 @@ data class ProductManagerViewState(
     val showAlertDialog: Boolean = false,
     val onShowAlertDialog: (show: Boolean) -> Unit,
 
-    val trackOnScreenStart: () -> Unit,
+    val trackOnScreenStart: () -> Unit
 )

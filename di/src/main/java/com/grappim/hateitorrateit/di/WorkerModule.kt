@@ -11,7 +11,5 @@ import dagger.hilt.components.SingletonComponent
 interface WorkerModule {
 
     @Binds
-    fun bindWorkerController(
-        workerControllerImpl: WorkerControllerImpl
-    ): WorkerController
+    fun bindWorkerController(workerControllerImpl: WorkerControllerImpl): WorkerController
 }

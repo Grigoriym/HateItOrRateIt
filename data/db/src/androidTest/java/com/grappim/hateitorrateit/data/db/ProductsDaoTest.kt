@@ -7,8 +7,8 @@ import androidx.test.core.app.ApplicationProvider
 import app.cash.turbine.test
 import com.grappim.hateitorrateit.data.db.converters.DateTimeConverter
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
-import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
+import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapperImpl
 import com.grappim.hateitorrateit.domain.HateRateType
@@ -42,7 +42,7 @@ class ProductsDaoTest {
         val context = ApplicationProvider.getApplicationContext<Context>()
         val db = Room.inMemoryDatabaseBuilder(
             context,
-            HateItOrRateItDatabase::class.java,
+            HateItOrRateItDatabase::class.java
         ).addTypeConverter(
             DateTimeConverter(dateTimeUtils)
         ).build()
@@ -329,7 +329,7 @@ class ProductsDaoTest {
 
         val sqLiteQuery = SimpleSQLiteQuery(
             "SELECT * FROM $PRODUCTS_TABLE WHERE " +
-                    "isCreated=1"
+                "isCreated=1"
         )
 
         productsDao.getAllProductsByRawQueryFlow(sqLiteQuery).test {
@@ -413,16 +413,18 @@ class ProductsDaoTest {
 
     private fun assertContainsProduct(
         emittedProducts: List<ProductEntity>,
-        originalProduct: ProductEntity,
+        originalProduct: ProductEntity
     ) {
-        assertTrue(emittedProducts.any {
-            it.name == originalProduct.name &&
+        assertTrue(
+            emittedProducts.any {
+                it.name == originalProduct.name &&
                     it.createdDate == originalProduct.createdDate &&
                     it.productFolderName == originalProduct.productFolderName &&
                     it.description == originalProduct.description &&
                     it.shop == originalProduct.shop &&
                     it.type == originalProduct.type
-        })
+            }
+        )
     }
 
     private suspend fun getAllProducts(): List<ProductEntity> =

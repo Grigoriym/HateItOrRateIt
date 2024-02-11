@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    workerController: WorkerController,
+    workerController: WorkerController
 ) : ViewModel() {
 
     init {

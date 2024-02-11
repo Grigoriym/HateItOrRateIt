@@ -30,16 +30,13 @@ object DateTimeModule {
      * 2023-11-23T14:16:37.502Z
      */
     @[Provides Singleton DtfToStore]
-    fun provideDtfToStore(): DateTimeFormatter =
-        DateTimeFormatter.ISO_DATE_TIME
+    fun provideDtfToStore(): DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
 
     @[Provides Singleton DtfToDemonstrate]
-    fun provideDtfToDemonstrate(): DateTimeFormatter =
-        DateTimeFormatter.ofPattern(UI_PATTERN)
+    fun provideDtfToDemonstrate(): DateTimeFormatter = DateTimeFormatter.ofPattern(UI_PATTERN)
 
     @[Provides Singleton DtfDocumentFolder]
-    fun provideDtfDocumentFolder(): DateTimeFormatter =
-        DateTimeFormatter.ofPattern(DOCUMENT_FOLDER)
+    fun provideDtfDocumentFolder(): DateTimeFormatter = DateTimeFormatter.ofPattern(DOCUMENT_FOLDER)
 }
 
 @[Module InstallIn(SingletonComponent::class)]

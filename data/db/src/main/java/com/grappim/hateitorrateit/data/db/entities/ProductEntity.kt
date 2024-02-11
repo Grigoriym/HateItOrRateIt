@@ -32,5 +32,5 @@ data class ProductEntity(
     val description: String,
     val shop: String,
     val type: HateRateType,
-    val isCreated: Boolean = false,
+    val isCreated: Boolean = false
 )

@@ -27,7 +27,9 @@ class AnalyticsControllerImpl @Inject constructor() : AnalyticsController {
                     is Int -> putInt(key, value)
                     is Long -> putLong(key, value)
                     is Double -> putDouble(key, value)
-                    else -> throw IllegalArgumentException("Unsupported type for analytics property")
+                    else -> throw IllegalArgumentException(
+                        "Unsupported type for analytics property"
+                    )
                 }
             }
         }

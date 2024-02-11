@@ -7,13 +7,12 @@ object MimeTypes {
         Image.JPEG
     )
 
-    fun formatMimeType(mimeType: String): String =
-        when (mimeType) {
-            Image.PNG -> "png"
-            Image.JPEG -> "jpg"
+    fun formatMimeType(mimeType: String): String = when (mimeType) {
+        Image.PNG -> "png"
+        Image.JPEG -> "jpg"
 
-            else -> "unknown"
-        }
+        else -> "unknown"
+    }
 
     object Image {
         const val PREFIX = "image/"

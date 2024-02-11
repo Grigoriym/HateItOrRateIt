@@ -8,5 +8,5 @@ data class ProductImageData(
     val uriString: String,
     val size: Long,
     val md5: String,
-    val isEdit: Boolean = false,
+    val isEdit: Boolean = false
 )

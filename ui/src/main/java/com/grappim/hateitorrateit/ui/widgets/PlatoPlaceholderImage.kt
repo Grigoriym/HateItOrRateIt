@@ -16,14 +16,12 @@ import com.grappim.hateitorrateit.ui.utils.ThemePreviews
 const val PLATO_PLACEHOLDER_IMAGE_TAG = "plato_placeholder_image_tag"
 
 @Composable
-fun PlatoPlaceholderImage(
-    modifier: Modifier = Modifier
-) {
+fun PlatoPlaceholderImage(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .testTag(PLATO_PLACEHOLDER_IMAGE_TAG),
-        contentAlignment = Alignment.Center,
+        contentAlignment = Alignment.Center
     ) {
         Image(
             imageVector = PlatoIconType.ImageNotSupported.imageVector,

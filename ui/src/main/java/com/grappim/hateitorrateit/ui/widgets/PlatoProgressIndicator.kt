@@ -13,10 +13,8 @@ import androidx.compose.ui.unit.dp
 const val PROGRESS_INDICATOR_TAG = "progress_indicator_tag"
 
 @Composable
-fun PlatoProgressIndicator(
-    show: Boolean,
-) {
-    if(show) {
+fun PlatoProgressIndicator(show: Boolean) {
+    if (show) {
         Box(modifier = Modifier.fillMaxSize()) {
             CircularProgressIndicator(
                 modifier = Modifier
