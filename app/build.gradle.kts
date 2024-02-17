@@ -1,3 +1,5 @@
+import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,6 +7,8 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
+    alias(libs.plugins.hateitorrateit.android.application.jacoco)
+    id("jacoco")
 }
 
 android {
@@ -32,7 +36,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            applicationIdSuffix = HateItOrRateItBuildTypes.DEBUG.applicationIdSuffix
+        }
         release {
+            applicationIdSuffix = HateItOrRateItBuildTypes.RELEASE.applicationIdSuffix
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),

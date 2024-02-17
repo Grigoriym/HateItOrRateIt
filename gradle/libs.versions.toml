@@ -6,6 +6,7 @@ composeKotlinCompiler = "1.5.8"
 
 detekt = "1.23.5"
 ktlint = "12.1.0"
+jacoco = "0.8.11"
 
 gms = "4.4.0"
 
@@ -155,3 +156,5 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }
 hateitorrateit-android-library = { id = "hateitorrateit.android.library", version = "unspecified" }
 hateitorrateit-android-library-compose = { id = "hateitorrateit.android.library.compose", version = "unspecified" }
+hateitorrateit-android-library-jacoco = { id = "hateitorrateit.android.library.jacoco", version = "unspecified" }
+hateitorrateit-android-application-jacoco = { id = "hateitorrateit.android.application.jacoco", version = "unspecified" }
