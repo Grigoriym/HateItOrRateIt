@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/Grigoriym/HateItOrRateIt/graph/badge.svg?token=EPFJKZ1EJ7)](https://codecov.io/gh/Grigoriym/HateItOrRateIt)
+
 ## HateItOrRateIt
 
 This application offers a straightforward way to keep track of products you like
