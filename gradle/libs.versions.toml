@@ -8,7 +8,7 @@ detekt = "1.23.5"
 ktlint = "12.1.0"
 jacoco = "0.8.11"
 
-gms = "4.4.0"
+gms = "4.4.1"
 
 agp = "8.2.2"
 androidTools = "31.2.2"
