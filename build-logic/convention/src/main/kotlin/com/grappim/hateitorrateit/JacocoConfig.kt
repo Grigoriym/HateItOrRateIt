@@ -14,7 +14,7 @@ internal fun Project.configureJacoco() {
         toolVersion = libs.findVersion("jacoco").get().toString()
     }
 
-    val jacocoTestReport = tasks.create("jacocoTestReport", JacocoReport::class) {
+    tasks.create("jacocoTestReport", JacocoReport::class) {
         dependsOn("testDebugUnitTest")
 
         reports {
@@ -37,7 +37,6 @@ internal fun Project.configureJacoco() {
         configure<JacocoTaskExtension> {
             // Required for JaCoCo + Robolectric
             // https://github.com/robolectric/robolectric/issues/2230
-            // TODO: Consider removing if not we don't add Robolectric
             isIncludeNoLocationClasses = true
 
             // Required for JDK 11 with the above
