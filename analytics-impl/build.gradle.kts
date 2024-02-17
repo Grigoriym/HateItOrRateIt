@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.hateitorrateit.android.library)
+    alias(libs.plugins.hateitorrateit.android.library.jacoco)
 }
 
 android {
