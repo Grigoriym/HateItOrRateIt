@@ -12,6 +12,9 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+
+    alias(libs.plugins.jacocoAggregationResults)
+    alias(libs.plugins.jacocoAggregationCoverage)
 }
 
 subprojects {
@@ -45,6 +48,46 @@ subprojects {
             exceptionFormat = TestExceptionFormat.FULL
             showExceptions = true
         }
+    }
+}
+
+private val coverageExclusions = listOf(
+    "**/R.class",
+    "**/R\$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+
+    "**/*Module*.*",
+    "**/*Module",
+    "**/*Dagger*.*",
+    "**/*Hilt*.*",
+    "**/*GeneratedInjector",
+    "**/*HiltComponents*",
+    "**/*_HiltModules*",
+    "**/*_Provide*",
+    "**/*_Factory*",
+    "**/*_ComponentTreeDeps",
+
+    "**/*Screen",
+    "**/*Activity",
+    "**/*Screen*",
+    "**/*Application",
+
+    "**/*StateProvider",
+
+    "**/*_Impl",
+    "**/*HateItOrRateItDatabase"
+).flatMap {
+    listOf(
+        "$it.class",
+        "${it}Kt.class",
+        "$it\$*.class"
+    )
+}
+
+testAggregation {
+    coverage {
+        exclude(coverageExclusions)
     }
 }
 

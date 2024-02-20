@@ -5,15 +5,18 @@ import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
 import javax.inject.Inject
 import javax.inject.Singleton
 
+internal const val HOME_SCREEN_START = "home_screen_start"
+internal const val HOME_PRODUCT_CLICKED = "home_product_clicked"
+
 @Singleton
 class HomeScreenAnalyticsImpl @Inject constructor(
     private val analyticsController: AnalyticsController
 ) : HomeScreenAnalytics {
     override fun trackHomeScreenStart() {
-        analyticsController.trackEvent("home_screen_start")
+        analyticsController.trackEvent(HOME_SCREEN_START)
     }
 
     override fun trackProductClicked() {
-        analyticsController.trackEvent("home_product_clicked")
+        analyticsController.trackEvent(HOME_PRODUCT_CLICKED)
     }
 }

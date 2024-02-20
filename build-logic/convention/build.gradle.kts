@@ -40,13 +40,5 @@ gradlePlugin {
             id = "hateitorrateit.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
-        register("androidLibraryJacoco") {
-            id = "hateitorrateit.android.library.jacoco"
-            implementationClass = "AndroidLibraryJacocoConventionPlugin"
-        }
-        register("androidApplicationJacoco") {
-            id = "hateitorrateit.android.application.jacoco"
-            implementationClass = "AndroidApplicationJacocoConventionPlugin"
-        }
     }
 }

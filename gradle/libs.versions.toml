@@ -6,7 +6,7 @@ composeKotlinCompiler = "1.5.8"
 
 detekt = "1.23.5"
 ktlint = "12.1.0"
-jacoco = "0.8.11"
+jacocoAggregation = "2.2.0"
 
 gms = "4.4.1"
 
@@ -151,10 +151,10 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
+jacocoAggregationCoverage = { id = "io.github.gmazzo.test.aggregation.coverage", version.ref = "jacocoAggregation" }
+jacocoAggregationResults = { id = "io.github.gmazzo.test.aggregation.results", version.ref = "jacocoAggregation" }
 
 # Plugins definded in the included build-logic
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }
 hateitorrateit-android-library = { id = "hateitorrateit.android.library", version = "unspecified" }
 hateitorrateit-android-library-compose = { id = "hateitorrateit.android.library.compose", version = "unspecified" }
-hateitorrateit-android-library-jacoco = { id = "hateitorrateit.android.library.jacoco", version = "unspecified" }
-hateitorrateit-android-application-jacoco = { id = "hateitorrateit.android.application.jacoco", version = "unspecified" }
