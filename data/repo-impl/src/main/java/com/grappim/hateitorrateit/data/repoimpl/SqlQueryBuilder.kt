@@ -37,7 +37,7 @@ class SqlQueryBuilder @Inject constructor() {
 
         conditions.add("isCreated=1")
 
-        return if (conditions.isNotEmpty()) "WHERE ${conditions.joinToString(" AND ")}" else ""
+        return "WHERE ${conditions.joinToString(" AND ")}"
     }
 
     /**

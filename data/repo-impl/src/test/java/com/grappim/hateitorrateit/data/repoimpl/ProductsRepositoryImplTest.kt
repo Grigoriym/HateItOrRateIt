@@ -68,6 +68,22 @@ class ProductsRepositoryImplTest {
     }
 
     @Test
+    fun `updateProduct with Product should update product`() = runTest {
+        val product = getProduct()
+        val entity = getProductEntity()
+
+        coEvery { productsDao.updateProduct(productEntity = any()) } just Runs
+        coEvery { productsMapper.toProductEntity(product = any()) } returns entity
+
+        repository.updateProduct(
+            product = product
+        )
+
+        coVerify { productsMapper.toProductEntity(product = product) }
+        coVerify { productsDao.updateProduct(productEntity = entity) }
+    }
+
+    @Test
     fun `updateImagesInProduct should update images in product`() = runTest {
         val images = listOf(getProductImageDataEntity())
         val files = listOf(getProductImageData())
@@ -279,4 +295,42 @@ class ProductsRepositoryImplTest {
                 awaitComplete()
             }
         }
+
+    @Test
+    fun `updateProductWithImages should update the data in dao`() = runTest {
+        val product = getProduct()
+        val images = getProductImageDataList()
+        val productEntity = getProductEntity()
+        val entityImages = getProductImageDataEntityList()
+
+        coEvery { productsMapper.toProductEntity(product = any()) } returns productEntity
+        coEvery {
+            productsMapper.toProductImageDataEntityList(
+                productId = any(),
+                images = any()
+            )
+        } returns entityImages
+        coEvery {
+            productsDao.updateProductAndImages(
+                productEntity = any(),
+                images = any()
+            )
+        } just Runs
+
+        repository.updateProductWithImages(product, images)
+
+        coVerify { productsMapper.toProductEntity(product) }
+        coVerify {
+            productsMapper.toProductImageDataEntityList(
+                productId = product.id,
+                images = images
+            )
+        }
+        coVerify {
+            productsDao.updateProductAndImages(
+                productEntity = productEntity,
+                images = entityImages
+            )
+        }
+    }
 }

@@ -35,7 +35,7 @@ class UiModelsMapper @Inject constructor(
             id = product.id.toString(),
             name = product.name,
             createdDate = formattedCreatedDate,
-            filesUri = product.images,
+            images = product.images,
             productFolderName = product.productFolderName,
             description = product.description,
             shop = product.shop,
@@ -46,7 +46,7 @@ class UiModelsMapper @Inject constructor(
     suspend fun toProductDetailsImageUI(product: Product): ProductDetailsImageUi =
         withContext(ioDispatcher) {
             ProductDetailsImageUi(
-                filesUri = product.images
+                images = product.images
             )
         }
 }

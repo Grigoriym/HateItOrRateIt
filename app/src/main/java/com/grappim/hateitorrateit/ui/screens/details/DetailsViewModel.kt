@@ -109,7 +109,7 @@ class DetailsViewModel @Inject constructor(
                     description = productDetailsUi.description,
                     shop = productDetailsUi.shop,
                     createdDate = productDetailsUi.createdDate,
-                    images = productDetailsUi.filesUri,
+                    images = productDetailsUi.images,
                     isLoading = false,
                     type = productDetailsUi.type,
                     productFolderName = productDetailsUi.productFolderName

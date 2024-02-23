@@ -9,5 +9,5 @@ class HateRateTypeConverter {
     fun toHateRate(value: String): HateRateType = enumValueOf(value)
 
     @TypeConverter
-    fun fromHateRate(value: HateRateType) = value.name
+    fun fromHateRate(value: HateRateType): String = value.name
 }

@@ -1,3 +1,5 @@
+@file:Suppress("TooGenericExceptionCaught")
+
 package com.grappim.hateitorrateit.data.workerimpl
 
 import android.content.Context
@@ -9,6 +11,7 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import timber.log.Timber
+import java.util.concurrent.CancellationException
 
 @HiltWorker
 class CleanUnusedDataWorker @AssistedInject constructor(
@@ -18,13 +21,20 @@ class CleanUnusedDataWorker @AssistedInject constructor(
     private val dataCleaner: DataCleaner
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
-        val emptyFiles = productsRepository.getEmptyFiles()
-        emptyFiles.forEach { file ->
-            Timber.d("Cleaning unused data: $file")
-            dataCleaner.clearProductData(
-                productId = file.id,
-                productFolderName = file.productFolderName
-            )
+        try {
+            val emptyFiles = productsRepository.getEmptyFiles()
+            emptyFiles.forEach { file ->
+                Timber.d("Cleaning unused data: $file")
+                dataCleaner.clearProductData(
+                    productId = file.id,
+                    productFolderName = file.productFolderName
+                )
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Timber.e(e)
+            return Result.failure()
         }
         return Result.success()
     }

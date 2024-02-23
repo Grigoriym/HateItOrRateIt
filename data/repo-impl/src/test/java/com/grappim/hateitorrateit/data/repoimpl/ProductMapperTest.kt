@@ -77,4 +77,11 @@ class ProductMapperTest {
         )
         assertEquals(expected, actual)
     }
+
+    @Test
+    fun `toProductImageData should return correct ProductImageData`() = runTest {
+        val actual = productMapper.toProductImageData(getProductImageDataEntity())
+        val expected = getProductImageData()
+        assertEquals(expected, actual)
+    }
 }

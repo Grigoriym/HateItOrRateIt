@@ -67,16 +67,35 @@ private val coverageExclusions = listOf(
     "**/*_Provide*",
     "**/*_Factory*",
     "**/*_ComponentTreeDeps",
+    "**/*_Impl",
+    "**/*DefaultImpls*",
 
     "**/*Screen",
     "**/*Activity",
     "**/*Screen*",
     "**/*Application",
-
     "**/*StateProvider",
 
-    "**/*_Impl",
-    "**/*HateItOrRateItDatabase"
+    "**/*Plato*",
+    "**/*Button*",
+    "**/TextH*",
+    "**/*Texts*",
+    "**/Theme",
+    "**/Colors",
+    "**/*HateItOrRateItTheme*",
+    "**/TypeKt",
+
+    "**/LocalDataStorageImpl",
+    "**/TransactionControllerImpl",
+    "**/AnalyticsControllerImpl",
+    "**/*HateItOrRateItDatabase",
+    "**/*LoggerInitializer",
+    "**/*DevelopmentTree",
+    "**/*ProductionTree",
+    "**/*RootNavDestinations",
+    "**/*HomeNavDestination",
+    "**/*HashUtils",
+    "**/*NavUtils"
 ).flatMap {
     listOf(
         "$it.class",

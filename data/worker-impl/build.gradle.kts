@@ -31,4 +31,7 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
 
     implementation(libs.timber)
+
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.work.testing)
 }
