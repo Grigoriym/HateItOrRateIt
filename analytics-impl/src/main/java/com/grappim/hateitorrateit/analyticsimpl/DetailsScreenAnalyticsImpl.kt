@@ -5,23 +5,28 @@ import com.grappim.hateitorrateit.analyticsapi.DetailsScreenAnalytics
 import javax.inject.Inject
 import javax.inject.Singleton
 
+internal const val DETAILS_SCREEN_START = "details_screen_start"
+internal const val DETAILS_DELETE_PRODUCT_BUTTON_CLICKED = "details_delete_product_button_clicked"
+internal const val DETAILS_DELETE_PRODUCT_CONFIRMED = "details_delete_product_confirmed"
+internal const val DETAILS_EDIT_BUTTON_CLICKED = "details_edit_button_clicked"
+
 @Singleton
 class DetailsScreenAnalyticsImpl @Inject constructor(
     private val analyticsController: AnalyticsController
 ) : DetailsScreenAnalytics {
     override fun trackDetailsScreenStart() {
-        analyticsController.trackEvent("details_screen_start")
+        analyticsController.trackEvent(DETAILS_SCREEN_START)
     }
 
     override fun trackDetailsDeleteProductButtonClicked() {
-        analyticsController.trackEvent("details_delete_product_button_clicked")
+        analyticsController.trackEvent(DETAILS_DELETE_PRODUCT_BUTTON_CLICKED)
     }
 
     override fun trackDetailsDeleteProductConfirmed() {
-        analyticsController.trackEvent("details_delete_product_confirmed")
+        analyticsController.trackEvent(DETAILS_DELETE_PRODUCT_CONFIRMED)
     }
 
     override fun trackDetailsEditButtonClicked() {
-        analyticsController.trackEvent("details_edit_button_clicked")
+        analyticsController.trackEvent(DETAILS_EDIT_BUTTON_CLICKED)
     }
 }

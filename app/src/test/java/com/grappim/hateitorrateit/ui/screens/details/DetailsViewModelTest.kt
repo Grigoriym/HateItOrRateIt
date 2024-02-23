@@ -56,7 +56,7 @@ class DetailsViewModelTest {
         id = PRODUCT_ID.toString(),
         name = NAME,
         createdDate = "reque",
-        filesUri = listOf(),
+        images = listOf(),
         productFolderName = PRODUCT_FOLDER_NAME,
         description = "felis",
         shop = "fabellas",

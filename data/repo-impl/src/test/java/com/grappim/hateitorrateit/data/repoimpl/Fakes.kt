@@ -14,7 +14,7 @@ const val ID = 1L
 const val NAME = "test_name"
 const val FOLDER_NAME = "folder_name"
 
-val nowDate = OffsetDateTime.now()
+val nowDate: OffsetDateTime = OffsetDateTime.now()
 
 fun getProductImageDataEntityList() = listOf(
     getProductImageDataEntity()

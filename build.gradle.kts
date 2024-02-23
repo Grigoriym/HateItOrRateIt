@@ -12,6 +12,9 @@ plugins {
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
+
+    alias(libs.plugins.jacocoAggregationResults)
+    alias(libs.plugins.jacocoAggregationCoverage)
 }
 
 subprojects {
@@ -45,6 +48,65 @@ subprojects {
             exceptionFormat = TestExceptionFormat.FULL
             showExceptions = true
         }
+    }
+}
+
+private val coverageExclusions = listOf(
+    "**/R.class",
+    "**/R\$*.class",
+    "**/BuildConfig.*",
+    "**/Manifest*.*",
+
+    "**/*Module*.*",
+    "**/*Module",
+    "**/*Dagger*.*",
+    "**/*Hilt*.*",
+    "**/*GeneratedInjector",
+    "**/*HiltComponents*",
+    "**/*_HiltModules*",
+    "**/*_Provide*",
+    "**/*_Factory*",
+    "**/*_ComponentTreeDeps",
+    "**/*_Impl",
+    "**/*DefaultImpls*",
+
+    "**/*Screen",
+    "**/*Activity",
+    "**/*Screen*",
+    "**/*Application",
+    "**/*StateProvider",
+
+    "**/*Plato*",
+    "**/*Button*",
+    "**/TextH*",
+    "**/*Texts*",
+    "**/Theme",
+    "**/Colors",
+    "**/*HateItOrRateItTheme*",
+    "**/TypeKt",
+
+    "**/LocalDataStorageImpl",
+    "**/TransactionControllerImpl",
+    "**/AnalyticsControllerImpl",
+    "**/*HateItOrRateItDatabase",
+    "**/*LoggerInitializer",
+    "**/*DevelopmentTree",
+    "**/*ProductionTree",
+    "**/*RootNavDestinations",
+    "**/*HomeNavDestination",
+    "**/*HashUtils",
+    "**/*NavUtils"
+).flatMap {
+    listOf(
+        "$it.class",
+        "${it}Kt.class",
+        "$it\$*.class"
+    )
+}
+
+testAggregation {
+    coverage {
+        exclude(coverageExclusions)
     }
 }
 

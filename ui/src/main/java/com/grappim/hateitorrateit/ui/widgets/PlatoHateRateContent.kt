@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -33,8 +34,12 @@ fun PlatoHateRateContent(
     onTypeClicked: (HateRateType) -> Unit
 ) {
     val buttonsSize = 80.dp
-    val hateColors = currentType.hateColors()
-    val rateColors = currentType.rateColors()
+    val hateColors = ButtonDefaults.buttonColors(
+        backgroundColor = currentType.hateColors()
+    )
+    val rateColors = ButtonDefaults.buttonColors(
+        backgroundColor = currentType.rateColors()
+    )
     PlatoCard(
         modifier = modifier
             .padding(top = 12.dp, bottom = 12.dp)
@@ -57,7 +62,7 @@ fun PlatoHateRateContent(
                 shape = CircleShape,
                 colors = hateColors
             ) {
-                PlatoIcon(imageVector = currentType.hateIcon())
+                PlatoIcon(imageVector = hateIcon())
             }
 
             Text(
@@ -76,7 +81,7 @@ fun PlatoHateRateContent(
                 shape = CircleShape,
                 colors = rateColors
             ) {
-                PlatoIcon(imageVector = currentType.rateIcon())
+                PlatoIcon(imageVector = rateIcon())
             }
         }
     }

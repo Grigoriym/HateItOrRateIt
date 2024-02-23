@@ -41,11 +41,11 @@ class ProductImageViewModel @Inject constructor(
         viewModelScope.launch {
             val product = productsRepository.getProductById(productId.toLong())
             val productUi = uiModelsMapper.toProductDetailsImageUI(product)
-            val uri = productUi.filesUri[index]
+            val uri = productUi.images[index]
             _viewState.update {
                 it.copy(
                     uri = uri.uriString,
-                    images = productUi.filesUri
+                    images = productUi.images
                 )
             }
         }

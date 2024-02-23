@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.hateitorrateit.android.library)
     alias(libs.plugins.hateitorrateit.android.hilt)
-    alias(libs.plugins.hateitorrateit.android.library.jacoco)
 }
 
 android {
@@ -32,4 +31,7 @@ dependencies {
     ksp(libs.androidx.hilt.compiler)
 
     implementation(libs.timber)
+
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.work.testing)
 }

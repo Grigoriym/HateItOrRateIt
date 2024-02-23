@@ -7,7 +7,7 @@ data class ProductDetailsUi(
     val id: String,
     val name: String,
     val createdDate: String,
-    val filesUri: List<ProductImageData>,
+    val images: List<ProductImageData>,
     val productFolderName: String,
     val description: String,
     val shop: String,

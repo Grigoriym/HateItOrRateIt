@@ -49,10 +49,7 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.ui.widgets.text.TextH5
 
 @Composable
-fun HomeScreen(
-    viewModel: HomeScreenViewModel = hiltViewModel(),
-    onProductClick: (id: Long) -> Unit
-) {
+fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onProductClick: (id: Long) -> Unit) {
     val state by viewModel.viewState.collectAsState()
     DisposableEffect(Unit) {
         state.trackScreenStart()

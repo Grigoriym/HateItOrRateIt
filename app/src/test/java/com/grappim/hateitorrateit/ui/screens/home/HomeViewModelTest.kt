@@ -23,7 +23,7 @@ import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class HomeScreenViewModelTest {
+class HomeViewModelTest {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()
@@ -32,7 +32,7 @@ class HomeScreenViewModelTest {
     private val uiModelsMapper: UiModelsMapper = mockk()
     private val homeScreenAnalytics: HomeScreenAnalytics = mockk()
 
-    private lateinit var viewModel: HomeScreenViewModel
+    private lateinit var viewModel: HomeViewModel
 
     private val productsList = listOf(
         Product(
@@ -78,7 +78,7 @@ class HomeScreenViewModelTest {
             type = HateRateType.HATE
         )
 
-        viewModel = HomeScreenViewModel(
+        viewModel = HomeViewModel(
             productsRepository = productsRepository,
             homeScreenAnalytics = homeScreenAnalytics,
             uiModelsMapper = uiModelsMapper

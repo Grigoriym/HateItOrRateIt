@@ -67,7 +67,6 @@ class ProductMapper @Inject constructor(
         }
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     suspend fun toProductImageDataEntity(
         productId: Long,
         productImageData: ProductImageData
@@ -137,14 +136,14 @@ class ProductMapper @Inject constructor(
         }
     }
 
-    private fun toProductImageData(productImageDataEntity: ProductImageDataEntity) =
-        ProductImageData(
-            imageId = productImageDataEntity.imageId,
-            name = productImageDataEntity.name,
-            mimeType = productImageDataEntity.mimeType,
-            uriPath = productImageDataEntity.uriPath,
-            uriString = productImageDataEntity.uriString,
-            size = productImageDataEntity.size,
-            md5 = productImageDataEntity.md5
-        )
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun toProductImageData(productImageDataEntity: ProductImageDataEntity) = ProductImageData(
+        imageId = productImageDataEntity.imageId,
+        name = productImageDataEntity.name,
+        mimeType = productImageDataEntity.mimeType,
+        uriPath = productImageDataEntity.uriPath,
+        uriString = productImageDataEntity.uriString,
+        size = productImageDataEntity.size,
+        md5 = productImageDataEntity.md5
+    )
 }

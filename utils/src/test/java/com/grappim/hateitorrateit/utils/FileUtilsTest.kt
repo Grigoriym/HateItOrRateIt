@@ -35,6 +35,7 @@ class FileUtilsTest {
     private val dateTimeUtils: DateTimeUtils = mockk()
     private val imageDataMapper: ImageDataMapper = mockk()
     private val uriParser: UriParser = mockk()
+    private val mimeTypes: MimeTypes = mockk()
 
     private lateinit var fileUtils: FileUtils
 
@@ -48,6 +49,7 @@ class FileUtilsTest {
             dateTimeUtils = dateTimeUtils,
             imageDataMapper = imageDataMapper,
             uriParser = uriParser,
+            mimeTypes = mimeTypes,
             ioDispatcher = UnconfinedTestDispatcher()
         )
     }

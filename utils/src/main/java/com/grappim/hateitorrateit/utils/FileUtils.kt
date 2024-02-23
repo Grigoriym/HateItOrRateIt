@@ -31,6 +31,7 @@ class FileUtils @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,
     private val imageDataMapper: ImageDataMapper,
     private val uriParser: UriParser,
+    private val mimeTypes: MimeTypes,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
 
@@ -296,7 +297,7 @@ class FileUtils @Inject constructor(
 
     private fun getUriFileExtension(uri: Uri): String {
         val mimeType = getMimeType(uri)
-        return MimeTypes.formatMimeType(mimeType)
+        return mimeTypes.formatMimeType(mimeType)
     }
 
     private fun getMimeType(uri: Uri): String {

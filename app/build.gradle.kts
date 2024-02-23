@@ -7,8 +7,6 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
-    alias(libs.plugins.hateitorrateit.android.application.jacoco)
-    id("jacoco")
 }
 
 android {

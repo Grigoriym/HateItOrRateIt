@@ -1,23 +1,19 @@
 package com.grappim.hateitorrateit.utils
 
-object MimeTypes {
+import javax.inject.Inject
+import javax.inject.Singleton
 
-    val images = listOf(
-        Image.PNG,
-        Image.JPEG
-    )
+private const val PREFIX = "image/"
+
+private const val JPEG = PREFIX + "jpeg"
+private const val PNG = PREFIX + "png"
+
+@Singleton
+class MimeTypes @Inject constructor() {
 
     fun formatMimeType(mimeType: String): String = when (mimeType) {
-        Image.PNG -> "png"
-        Image.JPEG -> "jpg"
-
+        PNG -> "png"
+        JPEG -> "jpg"
         else -> "unknown"
-    }
-
-    object Image {
-        const val PREFIX = "image/"
-
-        const val JPEG = PREFIX + "jpeg"
-        const val PNG = PREFIX + "png"
     }
 }

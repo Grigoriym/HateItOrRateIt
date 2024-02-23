@@ -28,13 +28,13 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt
 
-      - name: Run tests and generate JaCoCo report
-        run: ./gradlew test jacocoTestReport
+      - name: Run tests and generate Aggregated JaCoCo report
+        run: ./gradlew test jacocoAggregatedReport
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         with:
-          files: ./build/reports/jacoco/test/jacocoTestReport.xml
+          files: ./build/reports/jacoco/jacocoAggregatedReport/jacocoTestReport.xml
           fail_ci_if_error: true

@@ -1,0 +1,54 @@
+package com.grappim.hateitorrateit.analyticsimpl
+
+import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
+import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
+import com.grappim.hateitorrateit.domain.HateRateType
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
+import org.junit.Before
+import org.junit.Test
+
+class SettingsScreenAnalyticsImplTest {
+    private lateinit var sut: SettingsScreenAnalytics
+
+    private val analyticsController: AnalyticsController = mockk()
+
+    @Before
+    fun setup() {
+        sut = SettingsScreenAnalyticsImpl(analyticsController)
+
+        every { analyticsController.trackEvent(any()) } just Runs
+        every { analyticsController.trackEvent(any(), any()) } just Runs
+    }
+
+    @Test
+    fun `on trackSettingsScreenStart should track correct event`() {
+        sut.trackSettingsScreenStart()
+
+        verify { analyticsController.trackEvent(SETTINGS_SCREEN_START) }
+    }
+
+    @Test
+    fun `on trackAllDataClearedConfirm should track correct event`() {
+        sut.trackAllDataClearedConfirm()
+
+        verify { analyticsController.trackEvent(ALL_DATA_CLEAR_CONFIRM) }
+    }
+
+    @Test
+    fun `on trackDefaultTypeChangedTo should track correct event`() {
+        val type = HateRateType.HATE
+
+        sut.trackDefaultTypeChangedTo(type)
+
+        verify {
+            analyticsController.trackEvent(
+                DEFAULT_TYPE_CHANGED_TO,
+                mapOf(TYPE to type.name)
+            )
+        }
+    }
+}
