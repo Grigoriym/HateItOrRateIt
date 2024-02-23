@@ -1,5 +1,6 @@
 import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
 import java.io.FileInputStream
+import java.io.IOException
 import java.util.*
 
 plugins {
@@ -15,7 +16,11 @@ val keystorePropertiesFile = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 try {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-} catch (e: Exception) {
+} catch (e: IOException) {
+    println(e)
+} catch (e: IllegalArgumentException) {
+    println(e)
+} catch (e: NullPointerException) {
     println(e)
 }
 
