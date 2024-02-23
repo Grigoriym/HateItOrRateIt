@@ -1,4 +1,6 @@
 import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
+import java.io.FileInputStream
+import java.util.*
 
 plugins {
     alias(libs.plugins.android.application)
@@ -7,6 +9,14 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
+}
+
+val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystoreProperties = Properties()
+try {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+} catch (e: Exception) {
+    println(e)
 }
 
 android {
@@ -33,9 +43,29 @@ android {
         add("META-INF/LICENSE-notice.md")
     }
 
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file(keystoreProperties["hateitorrateitpathdebug"] as String)
+            keyAlias = keystoreProperties["hateitorrateitkeystorealiasdebug"] as String?
+            keyPassword = keystoreProperties["hateitorrateitkeystorekeypassdebug"] as String?
+            storePassword = keystoreProperties["hateitorrateitkeystorepassdebug"] as String?
+        }
+
+        create("release") {
+            storeFile = file(keystoreProperties["hateitorrateitpath"] as String)
+            keyAlias = keystoreProperties["hateitorrateitkeystorealias"] as String?
+            keyPassword = keystoreProperties["hateitorrateitkeystorekeypass"] as String?
+            storePassword = keystoreProperties["hateitorrateitkeystorepass"] as String?
+            enableV2Signing = true
+            enableV3Signing = true
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix = HateItOrRateItBuildTypes.DEBUG.applicationIdSuffix
+
+            signingConfig = signingConfigs.getByName("debug")
         }
         release {
             applicationIdSuffix = HateItOrRateItBuildTypes.RELEASE.applicationIdSuffix
@@ -45,6 +75,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

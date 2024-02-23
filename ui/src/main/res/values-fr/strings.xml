@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Hate Rate</string>
-
     <string name="add_image">Veuillez ajouter une image</string>
     <string name="set_name">Veuillez entrer un nom de produit</string>
     <string name="add_picture_from">Ajouter une image depuis:</string>

@@ -11,3 +11,6 @@ local.properties
 /build-logic/.gradle
 /build-logic/convention/build
 /data/build/
+/app/release/
+/keystore.properties
+/app/debug/
