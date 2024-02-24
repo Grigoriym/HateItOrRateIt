@@ -27,19 +27,19 @@ jobs:
 
       - name: Decode Release Keystore
         env:
-          HIOR_KEYSTORE_R: ${{ secrets.HIOR_KEYSTORE_R }}
-          DECODED_KEYSTORE_PATH: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
+          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
         run: |
-          echo HIOR_KEYSTORE_R > keystore_base64.txt
-          base64 -d keystore_base64.txt > $DECODED_KEYSTORE_PATH
+          echo $ENCODED_STRING_R > keystore_base64.txt
+          base64 -d keystore_base64.txt > $HIOR_KEYSTORE_PATH_R
 
       - name: Decode Debug Keystore
         env:
-          HIOR_KEYSTORE_D: ${{ secrets.HIOR_KEYSTORE_D }}
-          DECODED_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
+          ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
+          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
         run: |
-          echo HIOR_KEYSTORE_D > keystore_base64_d.txt
-          base64 -d keystore_base64_d.txt > DECODED_KEYSTORE_PATH_D
+          echo $ENCODED_STRING_D > keystore_base64_d.txt
+          base64 -d keystore_base64_d.txt > $HIOR_KEYSTORE_PATH_D
 
       - name: Sign and Build Release Bundle
         env:
