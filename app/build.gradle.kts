@@ -1,7 +1,4 @@
 import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
-import java.io.FileInputStream
-import java.io.IOException
-import java.util.*
 
 plugins {
     alias(libs.plugins.android.application)
@@ -10,18 +7,6 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
-}
-
-val keystorePropertiesFile = rootProject.file("keystore.properties")
-val keystoreProperties = Properties()
-try {
-    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-} catch (e: IOException) {
-    println(e)
-} catch (e: IllegalArgumentException) {
-    println(e)
-} catch (e: NullPointerException) {
-    println(e)
 }
 
 android {
@@ -50,17 +35,19 @@ android {
 
     signingConfigs {
         getByName("debug") {
-            storeFile = file(keystoreProperties["hateitorrateitpathdebug"] as String)
-            keyAlias = keystoreProperties["hateitorrateitkeystorealiasdebug"] as String?
-            keyPassword = keystoreProperties["hateitorrateitkeystorekeypassdebug"] as String?
-            storePassword = keystoreProperties["hateitorrateitkeystorepassdebug"] as String?
+//            storeFile = file(System.getenv("HIOR_PATH_D") ?: "")
+            storeFile = file("keystore_d.jks")
+            keyAlias = System.getenv("HIOR_ALIAS_D")
+            keyPassword = System.getenv("HIOR_KEY_PASS_D")
+            storePassword = System.getenv("HIOR_STORE_PASS_D")
         }
 
         create("release") {
-            storeFile = file(keystoreProperties["hateitorrateitpath"] as String)
-            keyAlias = keystoreProperties["hateitorrateitkeystorealias"] as String?
-            keyPassword = keystoreProperties["hateitorrateitkeystorekeypass"] as String?
-            storePassword = keystoreProperties["hateitorrateitkeystorepass"] as String?
+//            storeFile = file(System.getenv("HIOR_PATH_R") ?: "")
+            storeFile = file("keystore.jks")
+            keyAlias = System.getenv("HIOR_ALIAS_R")
+            keyPassword = System.getenv("HIOR_KEY_PASS_R")
+            storePassword = System.getenv("HIOR_STORE_PASS_R")
             enableV2Signing = true
             enableV3Signing = true
         }

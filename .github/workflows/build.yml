@@ -17,6 +17,36 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Cache Gradle and wrapper
+        uses: actions/cache@v4
+        with:
+          path: |
+              ~/.gradle/caches
+              ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+
+      - name: Decode Keystore
+        env:
+          ENCODED_KEYSTORE: ${{ secrets.HIOR_KEYSTORE_R }}
+          DECODED_KEYSTORE_PATH: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+
+          ENCODED_KEYSTORE_D: ${{ secrets.HIOR_KEYSTORE_D }}
+          DECODED_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
+        run: |
+            echo $ENCODED_KEYSTORE > keystore_base64.txt
+            base64 -d keystore_base64.txt > $DECODED_KEYSTORE_PATH
+            echo ENCODED_KEYSTORE_D > keystore_base64_d.txt
+            base64 -d keystore_base64_d.txt > DECODED_KEYSTORE_PATH_D
+
+      - name: Sign and Build Release Bundle
+        env:
+          KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+          SIGNING_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+          SIGNING_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+          SIGNING_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+        run:
+          ./gradlew bundleRelease
+
       - name: Decode google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
