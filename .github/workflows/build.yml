@@ -25,6 +25,9 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
       - name: Decode Release Keystore
         env:
           ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
@@ -72,9 +75,6 @@ jobs:
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
 
       - name: Build gradle project
         run: ./gradlew build
