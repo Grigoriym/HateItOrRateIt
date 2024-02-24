@@ -47,7 +47,7 @@ jobs:
         run:
           ./gradlew bundleRelease
 
-      - name: Sign and Build Release Bundle
+      - name: Sign and Build Release Apk
         env:
           HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
           HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
@@ -56,7 +56,7 @@ jobs:
         run:
           ./gradlew assembleRelease
 
-      - name: Sign and Build Release Bundle
+      - name: Sign and Build Debug Apk
         env:
           HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
           HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
