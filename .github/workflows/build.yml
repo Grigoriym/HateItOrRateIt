@@ -40,12 +40,30 @@ jobs:
 
       - name: Sign and Build Release Bundle
         env:
-          KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
-          SIGNING_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-          SIGNING_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-          SIGNING_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
         run:
           ./gradlew bundleRelease
+
+      - name: Sign and Build Release Bundle
+        env:
+          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+        run:
+          ./gradlew assembleRelease
+
+      - name: Sign and Build Release Bundle
+        env:
+          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
+          HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
+          HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
+          HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
+        run:
+          ./gradlew assembleDebug
 
       - name: Decode google-services.json
         env:
