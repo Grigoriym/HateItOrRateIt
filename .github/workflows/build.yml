@@ -48,13 +48,13 @@ jobs:
         id: write_release_jks
         uses: timheuer/base64-to-file@v1.2
         with:
-          fileName: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+          fileName: ${{ secrets.HIOR_PATH_R }}
 #          fileDir: './main/folder/subfolder/'
           encodedString: ${{ secrets.HIOR_KEYSTORE_R }}
 
       - name: Sign and Build Release Bundle
         env:
-          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_PATH_R }}
           HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
           HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
           HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
