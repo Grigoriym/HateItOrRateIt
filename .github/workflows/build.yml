@@ -41,13 +41,16 @@ jobs:
           echo $ENCODED_STRING_R > keystore_base64.txt
           base64 -d keystore_base64.txt > $HIOR_KEYSTORE_PATH_R
 
-      - name: Decode Debug Keystore
-        env:
-          ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
-          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
-        run: |
-          echo $ENCODED_STRING_D > keystore_base64_d.txt
-          base64 -d keystore_base64_d.txt > $HIOR_KEYSTORE_PATH_D
+#      - name: Restore playstore.keystore.jks
+#        run: echo $KEYSTORE_FILE | base64 -d > /your_path_to/playstore.keystore.jks
+
+#      - name: Write release jks
+#        id: write_release_jks
+#        uses: timheuer/base64-to-file@v1.2
+#        with:
+#          fileName: 'myTemporaryFile.txt'
+#          fileDir: './main/folder/subfolder/'
+#          encodedString: ${{ secrets.SOME_ENCODED_STRING }}
 
       - name: Sign and Build Release Bundle
         env:
@@ -58,23 +61,31 @@ jobs:
         run:
           ./gradlew bundleRelease
 
-      - name: Sign and Build Release Apk
-        env:
-          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
-          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
-        run:
-          ./gradlew assembleRelease
+      #      - name: Sign and Build Release Apk
+      #        env:
+      #          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+      #          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+      #          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+      #          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+      #        run:
+      #          ./gradlew assembleRelease
 
-      - name: Sign and Build Debug Apk
-        env:
-          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
-          HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
-          HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
-          HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
-        run:
-          ./gradlew assembleDebug
+      #      - name: Decode Debug Keystore
+      #        env:
+      #          ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
+      #          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
+      #        run: |
+      #          echo $ENCODED_STRING_D > keystore_base64_d.txt
+      #          base64 -d keystore_base64_d.txt > $HIOR_KEYSTORE_PATH_D
+      #
+      #      - name: Sign and Build Debug Apk
+      #        env:
+      #          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
+      #          HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
+      #          HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
+      #          HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
+      #        run:
+      #          ./gradlew assembleDebug
 
       - name: Build gradle project
         run: ./gradlew build
