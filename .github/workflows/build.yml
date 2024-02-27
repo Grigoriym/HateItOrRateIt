@@ -41,7 +41,7 @@ jobs:
 
       - name: Debug Environment Variables
         run: |
-          if [ -z "${{ env.HIOR_PATH_R }}" ]; then
+          if [ -z "${{ secrets.HIOR_PATH_R }}" ]; then
             echo "HIOR_PATH_R is not set"
             exit 1
           else
