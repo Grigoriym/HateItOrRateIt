@@ -33,6 +33,11 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Print Environment Variables
+        run: |
+          echo "HIOR_KEYSTORE_PATH_R=$HIOR_KEYSTORE_PATH_R"
+          echo "HIOR_KEYSTORE_R=$HIOR_KEYSTORE_R"
+
       - name: Decode Release Keystore
         env:
           ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
@@ -41,16 +46,16 @@ jobs:
           echo $ENCODED_STRING_R > keystore_base64.txt
           base64 -d keystore_base64.txt > $HIOR_KEYSTORE_PATH_R
 
-#      - name: Restore playstore.keystore.jks
-#        run: echo $KEYSTORE_FILE | base64 -d > /your_path_to/playstore.keystore.jks
+      #      - name: Restore playstore.keystore.jks
+      #        run: echo $KEYSTORE_FILE | base64 -d > /your_path_to/playstore.keystore.jks
 
-#      - name: Write release jks
-#        id: write_release_jks
-#        uses: timheuer/base64-to-file@v1.2
-#        with:
-#          fileName: 'myTemporaryFile.txt'
-#          fileDir: './main/folder/subfolder/'
-#          encodedString: ${{ secrets.SOME_ENCODED_STRING }}
+      #      - name: Write release jks
+      #        id: write_release_jks
+      #        uses: timheuer/base64-to-file@v1.2
+      #        with:
+      #          fileName: 'myTemporaryFile.txt'
+      #          fileDir: './main/folder/subfolder/'
+      #          encodedString: ${{ secrets.SOME_ENCODED_STRING }}
 
       - name: Sign and Build Release Bundle
         env:
