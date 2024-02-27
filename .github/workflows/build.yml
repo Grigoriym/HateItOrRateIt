@@ -39,6 +39,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
+      - name: Debug Environment Variables
+        run: |
+          if [ -z "${{ env.HIOR_PATH_R }}" ]; then
+            echo "HIOR_PATH_R is not set"
+            exit 1
+          else
+            echo "HIOR_PATH_R is set"
+          fi
+
 #      - name: Decode Release Keystore
 #        env:
 #          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
