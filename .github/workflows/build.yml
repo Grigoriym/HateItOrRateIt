@@ -35,8 +35,8 @@ jobs:
 
       - name: Print Environment Variables
         run: |
-          echo "HIOR_KEYSTORE_PATH_R=$HIOR_KEYSTORE_PATH_R"
-          echo "HIOR_KEYSTORE_R=$HIOR_KEYSTORE_R"
+          echo "HIOR_KEYSTORE_PATH_R=${{ secrets.HIOR_KEYSTORE_PATH_R }}"
+          echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}"
 
       - name: Decode Release Keystore
         env:
