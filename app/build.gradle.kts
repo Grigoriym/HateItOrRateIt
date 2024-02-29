@@ -35,14 +35,14 @@ android {
 
     signingConfigs {
         getByName("debug") {
-            storeFile = file("./debug.keystore.jks")
+            storeFile = file("../debug.keystore.jks")
             keyAlias = System.getenv("HIOR_ALIAS_D")
             keyPassword = System.getenv("HIOR_KEY_PASS_D")
             storePassword = System.getenv("HIOR_STORE_PASS_D")
         }
 
         create("release") {
-            storeFile = file("./release.keystore.jks")
+            storeFile = file("../release.keystore.jks")
             keyAlias = System.getenv("HIOR_ALIAS_R")
             keyPassword = System.getenv("HIOR_KEY_PASS_R")
             storePassword = System.getenv("HIOR_STORE_PASS_R")
