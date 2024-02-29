@@ -49,6 +49,7 @@ jobs:
           echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
           mkdir ~/src
           echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
+        shell: bash
 #      - name: Decode Release Keystore
 #        env:
 #          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
