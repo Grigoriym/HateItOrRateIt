@@ -15,6 +15,14 @@ jobs:
       HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
       HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
       ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
+
+      HIOR_PATH_D: ${{ secrets.HIOR_PATH_D }}
+      HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
+      HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
+      HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
+      ENCODED_STRING_D: ${{ secrets.ENCODED_STRING_D }}
+
+      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Java 17
@@ -35,76 +43,16 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
       - name: Decode google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-#      - name: Credential Prep
-#        run: |
-#          echo "ENCODED_STRING_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
-#          echo "HIOR_KEYSTORE_PATH_R=${{ secrets.HIOR_PATH_R }}" >> $GITHUB_ENV
-#          echo "HIOR_KEY_PASS_R=${{ secrets.HIOR_KEY_PASS_R }}" >> $GITHUB_ENV
-#          echo "HIOR_STORE_PASS_R=${{ secrets.HIOR_STORE_PASS_R }}" >> $GITHUB_ENV
-#          echo "HIOR_ALIAS_R=${{ secrets.HIOR_ALIAS_R }}" >> $GITHUB_ENV
-#          echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
-#          echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
-
-#      - name: Decode Release Keystore
-##        env:
-##          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
-##          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
-#        run: |
-#          echo $ENCODED_STRING_R > keystore_base64.txt
-#          base64 -d keystore_base64.txt > $HIOR_KEYSTORE_PATH_R
-
-      - name: Restore keystore.jks
+      - name: Restore release keystore.jks
         run: echo $ENCODED_STRING_R | base64 -d > $HIOR_PATH_R
 
-#      - name: Write release jks
-#        id: write_release_jks
-#        uses: timheuer/base64-to-file@v1.2
-#        with:
-#          fileName: ${{ secrets.HIOR_PATH_R }}
-#          fileDir: './'
-#          encodedString: ${{ secrets.HIOR_KEYSTORE_R }}
-
-#      - name: Sign and Build Release Bundle
-#        env:
-#          HIOR_KEYSTORE_PATH_R: "./src/hateitorrate.jks"
-#          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-#          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-#          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
-#        run:
-#          ./gradlew bundleRelease
-
-      #      - name: Sign and Build Release Apk
-      #        env:
-      #          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
-      #          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-      #          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-      #          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
-      #        run:
-      #          ./gradlew assembleRelease
-
-      #      - name: Decode Debug Keystore
-      #        env:
-      #          ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
-      #          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
-      #        run: |
-      #          echo $ENCODED_STRING_D > keystore_base64_d.txt
-      #          base64 -d keystore_base64_d.txt > $HIOR_KEYSTORE_PATH_D
-      #
-      #      - name: Sign and Build Debug Apk
-      #        env:
-      #          HIOR_KEYSTORE_PATH_D: ${{ secrets.HIOR_KEYSTORE_PATH_D }}
-      #          HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
-      #          HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
-      #          HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
-      #        run:
-      #          ./gradlew assembleDebug
+      - name: Restore debug keystore.jks
+        run: echo $ENCODED_STRING_D | base64 -d > $HIOR_PATH_D
 
       - name: Build gradle project
         run: ./gradlew build
