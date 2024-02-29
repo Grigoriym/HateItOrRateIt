@@ -17,6 +17,9 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v4
+
       - name: Decode google-services.json
         env:
           GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}

@@ -23,6 +23,9 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v4
+
       - name: Cache Gradle and wrapper
         uses: actions/cache@v4
         with:
@@ -39,15 +42,15 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Credential Prep
-        run: |
-          echo "ENCODED_STRING_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
-          echo "HIOR_KEYSTORE_PATH_R=${{ secrets.HIOR_PATH_R }}" >> $GITHUB_ENV
-          echo "HIOR_KEY_PASS_R=${{ secrets.HIOR_KEY_PASS_R }}" >> $GITHUB_ENV
-          echo "HIOR_STORE_PASS_R=${{ secrets.HIOR_STORE_PASS_R }}" >> $GITHUB_ENV
-          echo "HIOR_ALIAS_R=${{ secrets.HIOR_ALIAS_R }}" >> $GITHUB_ENV
-          echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
-          echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
+#      - name: Credential Prep
+#        run: |
+#          echo "ENCODED_STRING_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
+#          echo "HIOR_KEYSTORE_PATH_R=${{ secrets.HIOR_PATH_R }}" >> $GITHUB_ENV
+#          echo "HIOR_KEY_PASS_R=${{ secrets.HIOR_KEY_PASS_R }}" >> $GITHUB_ENV
+#          echo "HIOR_STORE_PASS_R=${{ secrets.HIOR_STORE_PASS_R }}" >> $GITHUB_ENV
+#          echo "HIOR_ALIAS_R=${{ secrets.HIOR_ALIAS_R }}" >> $GITHUB_ENV
+#          echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
+#          echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
 #      - name: Decode Release Keystore
 #        env:
 #          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
@@ -67,14 +70,14 @@ jobs:
 #          fileDir: './'
 #          encodedString: ${{ secrets.HIOR_KEYSTORE_R }}
 
-      - name: Sign and Build Release Bundle
-        env:
-          HIOR_KEYSTORE_PATH_R: "./src/hateitorrate.jks"
-          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
-        run:
-          ./gradlew bundleRelease
+#      - name: Sign and Build Release Bundle
+#        env:
+#          HIOR_KEYSTORE_PATH_R: "./src/hateitorrate.jks"
+#          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+#          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+#          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+#        run:
+#          ./gradlew bundleRelease
 
       #      - name: Sign and Build Release Apk
       #        env:
