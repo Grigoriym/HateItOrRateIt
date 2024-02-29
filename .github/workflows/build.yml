@@ -9,12 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-#    env:
-#      HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_PATH_R }}
-#      HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-#      HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-#      HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
-#      ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
+    env:
+      HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_PATH_R }}
+      HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+      HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+      HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+      ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Java 17
@@ -51,16 +51,17 @@ jobs:
 #          echo "HIOR_ALIAS_R=${{ secrets.HIOR_ALIAS_R }}" >> $GITHUB_ENV
 #          echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
 #          echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
+
 #      - name: Decode Release Keystore
-#        env:
-#          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
-#          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
+##        env:
+##          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
+##          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_KEYSTORE_PATH_R }}
 #        run: |
 #          echo $ENCODED_STRING_R > keystore_base64.txt
 #          base64 -d keystore_base64.txt > $HIOR_KEYSTORE_PATH_R
 
-#      - name: Restore keystore.jks
-#        run: echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
+      - name: Restore keystore.jks
+        run: echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
 
 #      - name: Write release jks
 #        id: write_release_jks
