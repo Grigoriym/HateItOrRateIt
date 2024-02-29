@@ -9,12 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_PATH_R }}
-      HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-      HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-      HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
-      ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
+#    env:
+#      HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_PATH_R }}
+#      HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+#      HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+#      HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+#      ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Java 17
@@ -39,15 +39,16 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
-      - name: Debug Environment Variables
+      - name: Credential Prep
         run: |
-          if [ -z "${{ secrets.HIOR_PATH_R }}" ]; then
-            echo "HIOR_PATH_R is not set"
-            exit 1
-          else
-            echo "HIOR_PATH_R is set"
-          fi
-
+          echo "ENCODED_STRING_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
+          echo "HIOR_KEYSTORE_PATH_R=${{ secrets.HIOR_PATH_R }}" >> $GITHUB_ENV
+          echo "HIOR_KEY_PASS_R=${{ secrets.HIOR_KEY_PASS_R }}" >> $GITHUB_ENV
+          echo "HIOR_STORE_PASS_R=${{ secrets.HIOR_STORE_PASS_R }}" >> $GITHUB_ENV
+          echo "HIOR_ALIAS_R=${{ secrets.HIOR_ALIAS_R }}" >> $GITHUB_ENV
+          echo "HIOR_KEYSTORE_R=${{ secrets.HIOR_KEYSTORE_R }}" >> $GITHUB_ENV
+          mkdir ~/src
+          echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
 #      - name: Decode Release Keystore
 #        env:
 #          ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
@@ -56,23 +57,23 @@ jobs:
 #          echo $ENCODED_STRING_R > keystore_base64.txt
 #          base64 -d keystore_base64.txt > $HIOR_KEYSTORE_PATH_R
 
-      - name: Restore keystore.jks
-        run: echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
+#      - name: Restore keystore.jks
+#        run: echo $ENCODED_STRING_R | base64 -d > $HIOR_KEYSTORE_PATH_R
 
 #      - name: Write release jks
 #        id: write_release_jks
 #        uses: timheuer/base64-to-file@v1.2
 #        with:
 #          fileName: ${{ secrets.HIOR_PATH_R }}
-##          fileDir: './main/folder/subfolder/'
+#          fileDir: './'
 #          encodedString: ${{ secrets.HIOR_KEYSTORE_R }}
 
       - name: Sign and Build Release Bundle
-#        env:
-#          HIOR_KEYSTORE_PATH_R: ${{ secrets.HIOR_PATH_R }}
-#          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
-#          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
-#          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+        env:
+          HIOR_KEYSTORE_PATH_R: "./src/hateitorrate.jks"
+          HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+          HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+          HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
         run:
           ./gradlew bundleRelease
 
