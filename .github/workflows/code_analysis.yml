@@ -41,10 +41,10 @@ jobs:
         run: chmod +x ./gradlew
 
       - name: Restore release keystore.jks
-        run: echo $ENCODED_STRING_R | base64 -d > $HIOR_PATH_R
+        run: echo $ENCODED_STRING_R | base64 -d > ./release.keystore.jks
 
       - name: Restore debug keystore.jks
-        run: echo $ENCODED_STRING_D | base64 -d > $HIOR_PATH_D
+        run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
       - name: Run Detekt
         run: ./gradlew detekt
