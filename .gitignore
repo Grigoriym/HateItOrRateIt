@@ -14,5 +14,5 @@ local.properties
 /app/release/
 /keystore.properties
 /app/debug/
-/keystore.jks
-/keystore_d.jks
+/release.keystore.jks
+/debug.keystore.jks
