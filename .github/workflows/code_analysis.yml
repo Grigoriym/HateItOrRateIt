@@ -20,7 +20,7 @@ jobs:
       HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
       HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
       HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
-      ENCODED_STRING_D: ${{ secrets.ENCODED_STRING_D }}
+      ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
 
       GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
     steps:
