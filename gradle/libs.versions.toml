@@ -11,7 +11,7 @@ jacocoAggregation = "2.2.0"
 gms = "4.4.1"
 
 agp = "8.2.2"
-androidTools = "31.2.2"
+androidTools = "31.3.0"
 
 hilt = "2.50"
 androidx-hilt = "1.2.0"
