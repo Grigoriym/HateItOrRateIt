@@ -4,6 +4,7 @@ import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
 import io.mockk.Runs
@@ -46,6 +47,9 @@ class SettingsViewModelTest {
         every { localDataStorage.crashesCollectionEnabled } returns flowOf(false)
         every { analyticsController.toggleCrashesCollection(any()) } just Runs
         coEvery { localDataStorage.setCrashesCollectionEnabled(any()) } just Runs
+
+        every { localDataStorage.darkThemeConfig } returns flowOf(DarkThemeConfig.default())
+        coEvery { localDataStorage.setDarkThemeConfig(any()) } just Runs
 
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
@@ -123,5 +127,13 @@ class SettingsViewModelTest {
         viewModel.viewState.value.trackScreenStart()
 
         verify { settingsScreenAnalytics.trackSettingsScreenStart() }
+    }
+
+    @Test
+    fun `onDarkThemeConfigClicked should set config in localDataStorage`() = runTest {
+        val config = DarkThemeConfig.DARK
+        viewModel.viewState.value.onDarkThemeConfigClicked(config)
+
+        coVerify { localDataStorage.setDarkThemeConfig(config) }
     }
 }

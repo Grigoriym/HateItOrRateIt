@@ -39,4 +39,10 @@
 
     <string name="toggle_analytics">Acceptez-vous la collecte de données analytiques ?</string>
     <string name="analytics_settings_subtitle">La collecte de données d\'utilisation nous aide à améliorer votre expérience de l\'application.</string>
+
+    <string name="dark_mode_preferences">Préférences du mode sombre</string>
+    <string name="system_default">Défaut du système</string>
+    <string name="light">Clair</string>
+    <string name="dark">Sombre</string>
+
 </resources>

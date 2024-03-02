@@ -17,6 +17,10 @@ information, enabling you to make informed decisions about future purchases.
 2. Make the possibility to change the view type in the List (small tiles, big
    product tile)
 3. Kotest?
+4. Privacy Policy
+5. Day night theme selector
+6. Languages selector
+7. Stubs for debug analytics
 
 ## Learnings
 

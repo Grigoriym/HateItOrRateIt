@@ -6,6 +6,7 @@ import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,7 +32,8 @@ class SettingsViewModel @Inject constructor(
             onDismissDialog = ::dismissDialog,
             onCrashlyticsToggle = ::onCrashlyticsToggle,
             onAnalyticsToggle = ::onAnalyticsToggle,
-            trackScreenStart = ::trackScreenStart
+            trackScreenStart = ::trackScreenStart,
+            onDarkThemeConfigClicked = ::onDarkThemeConfigClicked
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -61,6 +63,19 @@ class SettingsViewModel @Inject constructor(
                     }
                 }
             }
+            launch {
+                localDataStorage.darkThemeConfig.collect { value ->
+                    _viewState.update {
+                        it.copy(darkThemeConfig = value)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onDarkThemeConfigClicked(darkThemeConfig: DarkThemeConfig) {
+        viewModelScope.launch {
+            localDataStorage.setDarkThemeConfig(darkThemeConfig)
         }
     }
 

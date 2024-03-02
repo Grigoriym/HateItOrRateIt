@@ -4,20 +4,33 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
+import androidx.compose.material.RadioButton
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.grappim.hateitorrateit.domain.DarkThemeConfig
+import com.grappim.hateitorrateit.domain.isDark
+import com.grappim.hateitorrateit.domain.isLight
+import com.grappim.hateitorrateit.domain.isSystemDefault
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.color
 import com.grappim.hateitorrateit.ui.icon
@@ -25,8 +38,10 @@ import com.grappim.hateitorrateit.ui.theme.AtomicTangerine
 import com.grappim.hateitorrateit.ui.theme.Feijoa
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
+import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.ui.widgets.text.TextH5
 
 const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
 const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
@@ -85,6 +100,7 @@ private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) 
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .verticalScroll(rememberScrollState())
         ) {
             ListItem(
                 modifier = Modifier.clickable {
@@ -137,7 +153,55 @@ private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) 
                     Text(text = stringResource(id = R.string.analytics_settings_subtitle))
                 }
             )
+
+            Spacer(modifier = Modifier.height(16.dp))
+            PlatoCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 8.dp)
+            ) {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    TextH5(
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                        text = stringResource(id = R.string.dark_mode_preferences)
+                    )
+                    PlatoRadioButton(
+                        selected = state.darkThemeConfig.isSystemDefault(),
+                        onClick = {
+                            state.onDarkThemeConfigClicked(DarkThemeConfig.FOLLOW_SYSTEM)
+                        },
+                        text = stringResource(id = R.string.system_default)
+                    )
+                    PlatoRadioButton(
+                        selected = state.darkThemeConfig.isLight(),
+                        onClick = {
+                            state.onDarkThemeConfigClicked(DarkThemeConfig.LIGHT)
+                        },
+                        text = stringResource(id = R.string.light)
+                    )
+                    PlatoRadioButton(
+                        selected = state.darkThemeConfig.isDark(),
+                        onClick = {
+                            state.onDarkThemeConfigClicked(DarkThemeConfig.DARK)
+                        },
+                        text = stringResource(id = R.string.dark)
+                    )
+                }
+            }
         }
+    }
+}
+
+@Composable
+private fun PlatoRadioButton(selected: Boolean, onClick: () -> Unit, text: String) {
+    Row(
+        modifier = Modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        RadioButton(selected = selected, onClick = onClick)
+        Text(text = text)
     }
 }
 

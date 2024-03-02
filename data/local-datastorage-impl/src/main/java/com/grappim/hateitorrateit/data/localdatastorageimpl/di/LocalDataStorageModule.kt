@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.data.localdatastorageimpl
+package com.grappim.hateitorrateit.data.localdatastorageimpl.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

@@ -180,6 +180,7 @@ class SettingsScreenKtTest {
         onCrashlyticsToggle = {},
         trackScreenStart = {},
         isAnalyticsCollectionEnabled = false,
-        onAnalyticsToggle = {}
+        onAnalyticsToggle = {},
+        onDarkThemeConfigClicked = {}
     )
 }
