@@ -1,11 +1,9 @@
 package com.grappim.hateitorrateit.di
 
-import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.DetailsScreenAnalytics
 import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
 import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
-import com.grappim.hateitorrateit.analyticsimpl.AnalyticsControllerImpl
 import com.grappim.hateitorrateit.analyticsimpl.DetailsScreenAnalyticsImpl
 import com.grappim.hateitorrateit.analyticsimpl.HomeScreenAnalyticsImpl
 import com.grappim.hateitorrateit.analyticsimpl.ProductManagerAnalyticsImpl
@@ -16,12 +14,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @[Module InstallIn(SingletonComponent::class)]
-interface AnalyticsModule {
-
-    @Binds
-    fun bindAnalyticsController(
-        analyticsControllerImpl: AnalyticsControllerImpl
-    ): AnalyticsController
+interface ScreenAnalyticsModule {
 
     @Binds
     fun bindDetailsScreenAnalytics(

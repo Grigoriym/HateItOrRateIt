@@ -16,3 +16,4 @@ local.properties
 /app/debug/
 /release.keystore.jks
 /debug.keystore.jks
+*.hprof
