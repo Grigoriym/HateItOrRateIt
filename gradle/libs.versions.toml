@@ -32,7 +32,7 @@ androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
 coil = "2.6.0"
 
-mockk = "1.13.9"
+mockk = "1.13.10"
 
 kotlin = "1.9.22"
 kotlin-serialization = "1.6.3"
