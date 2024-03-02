@@ -10,7 +10,7 @@ jacocoAggregation = "2.2.0"
 
 gms = "4.4.1"
 
-agp = "8.2.2"
+agp = "8.3.0"
 androidTools = "31.3.0"
 
 hilt = "2.51"
