@@ -1,6 +1,6 @@
 [versions]
 compose-bom = "2024.02.01"
-firebase-bom = "32.7.2"
+firebase-bom = "32.7.3"
 firebaseCrashlytics = "2.9.9"
 composeKotlinCompiler = "1.5.8"
 
@@ -11,9 +11,9 @@ jacocoAggregation = "2.2.0"
 gms = "4.4.1"
 
 agp = "8.2.2"
-androidTools = "31.2.2"
+androidTools = "31.3.0"
 
-hilt = "2.50"
+hilt = "2.51"
 androidx-hilt = "1.2.0"
 navigation = "2.7.7"
 lifecycle = "2.7.0"
@@ -30,9 +30,9 @@ archCore = "2.2.0"
 
 androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
-coil = "2.5.0"
+coil = "2.6.0"
 
-mockk = "1.13.9"
+mockk = "1.13.10"
 
 kotlin = "1.9.22"
 kotlin-serialization = "1.6.3"
