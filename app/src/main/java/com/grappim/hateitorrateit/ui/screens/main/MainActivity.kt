@@ -3,12 +3,16 @@ package com.grappim.hateitorrateit.ui.screens.main
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.core.view.WindowCompat
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -16,6 +20,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
+import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.ui.screens.details.DetailsRoute
 import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
 import com.grappim.hateitorrateit.ui.screens.productmanager.ProductManagerRoute
@@ -25,18 +30,26 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
+
         setContent {
-            HateItOrRateItTheme {
-                MainScreen()
+            val state by viewModel.viewState.collectAsStateWithLifecycle()
+            val darkTheme = shouldUseDarkTheme(mainActivityViewState = state)
+            HateItOrRateItTheme(
+                darkTheme = darkTheme
+            ) {
+                MainScreen(darkTheme)
             }
         }
     }
 
     @Composable
-    private fun MainScreen() {
+    private fun MainScreen(darkTheme: Boolean) {
         val navController = rememberNavController()
 
         Surface(
@@ -49,6 +62,7 @@ class MainActivity : ComponentActivity() {
             ) {
                 composable(RootNavDestinations.Home.route) { navBackStackEntry ->
                     RootMainScreen(
+                        darkTheme = darkTheme,
                         goToHateOrRate = {
                             navBackStackEntry.safeClick {
                                 navController.navigate(
@@ -166,3 +180,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
+@Composable
+private fun shouldUseDarkTheme(mainActivityViewState: MainActivityViewState): Boolean =
+    when (mainActivityViewState.darkThemeConfig) {
+        DarkThemeConfig.LIGHT -> false
+        DarkThemeConfig.DARK -> true
+        DarkThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme()
+    }

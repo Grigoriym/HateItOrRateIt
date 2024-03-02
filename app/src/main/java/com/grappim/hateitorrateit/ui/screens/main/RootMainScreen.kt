@@ -1,6 +1,5 @@
 package com.grappim.hateitorrateit.ui.screens.main
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
@@ -36,7 +35,11 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
 import com.grappim.hateitorrateit.utils.safeClick
 
 @Composable
-fun RootMainScreen(goToHateOrRate: () -> Unit, goToDetails: (id: Long) -> Unit) {
+fun RootMainScreen(
+    goToHateOrRate: () -> Unit,
+    goToDetails: (id: Long) -> Unit,
+    darkTheme: Boolean
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -69,7 +72,7 @@ fun RootMainScreen(goToHateOrRate: () -> Unit, goToDetails: (id: Long) -> Unit) 
                             topEnd = 16.dp
                         )
                     ),
-                backgroundColor = if (isSystemInDarkTheme()) {
+                backgroundColor = if (darkTheme) {
                     bottomNavigationBackgroundDark
                 } else {
                     bottomNavigationBackgroundLight

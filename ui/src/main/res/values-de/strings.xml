@@ -39,4 +39,10 @@
 
     <string name="toggle_analytics">Erlauben Sie das Sammeln von Analyse-Daten?</string>
     <string name="analytics_settings_subtitle">Das Sammeln von Nutzungsdaten hilft uns, Ihre Erfahrung mit der App zu verbessern.</string>
+
+    <string name="dark_mode_preferences">Dunkelmodus-Einstellungen</string>
+    <string name="system_default">Systemstandard</string>
+    <string name="light">Hell</string>
+    <string name="dark">Dunkel</string>
+
 </resources>

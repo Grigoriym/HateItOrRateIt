@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -36,6 +37,19 @@ class LocalDataStorageImpl @Inject constructor(
             preferences[analyticsKey] ?: true
         }
 
+    private val darkThemeKey = stringPreferencesKey("dark_theme_key")
+    override val darkThemeConfig: Flow<DarkThemeConfig> = dataStore.data
+        .map { preferences ->
+            DarkThemeConfig.fromValue(preferences[darkThemeKey]) ?: DarkThemeConfig.default()
+        }
+
+    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        Timber.d("setDarkThemeConfig: $darkThemeConfig")
+        dataStore.edit { settings ->
+            settings[darkThemeKey] = darkThemeConfig.value
+        }
+    }
+
     override suspend fun setCrashesCollectionEnabled(isEnabled: Boolean) {
         Timber.d("setCrashesCollectionEnabled: $isEnabled")
         dataStore.edit { settings ->
@@ -51,6 +65,7 @@ class LocalDataStorageImpl @Inject constructor(
     }
 
     override suspend fun changeTypeTo(type: HateRateType) {
+        Timber.d("changeTypeTo: $type")
         dataStore.edit { settings ->
             settings[typeKey] = type.name
         }

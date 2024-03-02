@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
+import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 
 data class SettingsViewState(
@@ -15,5 +16,8 @@ data class SettingsViewState(
     val onDismissDialog: () -> Unit,
     val onCrashlyticsToggle: () -> Unit,
     val onAnalyticsToggle: () -> Unit,
-    val trackScreenStart: () -> Unit
+    val trackScreenStart: () -> Unit,
+
+    val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.default(),
+    val onDarkThemeConfigClicked: (DarkThemeConfig) -> Unit
 )
