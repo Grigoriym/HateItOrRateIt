@@ -9,6 +9,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      HIOR_PATH_R: ${{ secrets.HIOR_PATH_R }}
+      HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
+      HIOR_STORE_PASS_R: ${{ secrets.HIOR_STORE_PASS_R }}
+      HIOR_ALIAS_R: ${{ secrets.HIOR_ALIAS_R }}
+      ENCODED_STRING_R: ${{ secrets.HIOR_KEYSTORE_R }}
+
+      HIOR_PATH_D: ${{ secrets.HIOR_PATH_D }}
+      HIOR_KEY_PASS_D: ${{ secrets.HIOR_KEY_PASS_D }}
+      HIOR_STORE_PASS_D: ${{ secrets.HIOR_STORE_PASS_D }}
+      HIOR_ALIAS_D: ${{ secrets.HIOR_ALIAS_D }}
+      ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
+
+      GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Java 17
@@ -17,13 +31,20 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v2
+
       - name: Decode google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
+
+      - name: Restore release keystore.jks
+        run: echo $ENCODED_STRING_R | base64 -d > ./release.keystore.jks
+
+      - name: Restore debug keystore.jks
+        run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
       - name: Run Unit Tests
         run: ./gradlew test
