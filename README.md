@@ -16,11 +16,11 @@ information, enabling you to make informed decisions about future purchases.
 1. Create some sort of synchronization
 2. Make the possibility to change the view type in the List (small tiles, big
    product tile)
-3. Kotest?
+3. ~~Kotest?~~ Jacoco is just fine
 4. Privacy Policy
-5. Day night theme selector
+5. ~~Day night theme selector~~
 6. Languages selector
-7. Stubs for debug analytics
+7. ~~Stubs for debug analytics~~
 
 ## Learnings
 
