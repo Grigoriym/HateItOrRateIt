@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.hateitorrateit.android.library)
+    alias(libs.plugins.hateitorrateit.android.hilt)
 }
 
 android {
@@ -16,7 +17,9 @@ dependencies {
     implementation(project(":analytics-api"))
     implementation(project(":domain"))
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.analytics)
+    releaseImplementation(platform(libs.firebase.bom))
+    releaseImplementation(libs.firebase.crashlytics)
+    releaseImplementation(libs.firebase.analytics)
+
+    debugImplementation(libs.timber)
 }

@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.home
 
-import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.HomeAnalytics
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
@@ -30,7 +30,7 @@ class HomeViewModelTest {
 
     private val productsRepository: ProductsRepository = mockk()
     private val uiModelsMapper: UiModelsMapper = mockk()
-    private val homeScreenAnalytics: HomeScreenAnalytics = mockk()
+    private val homeAnalytics: HomeAnalytics = mockk()
 
     private lateinit var viewModel: HomeViewModel
 
@@ -80,27 +80,27 @@ class HomeViewModelTest {
 
         viewModel = HomeViewModel(
             productsRepository = productsRepository,
-            homeScreenAnalytics = homeScreenAnalytics,
+            homeAnalytics = homeAnalytics,
             uiModelsMapper = uiModelsMapper
         )
     }
 
     @Test
     fun `on trackScreenStart should call trackHomeScreenStart event`() {
-        every { homeScreenAnalytics.trackHomeScreenStart() } just Runs
+        every { homeAnalytics.trackHomeScreenStart() } just Runs
 
         viewModel.viewState.value.trackScreenStart()
 
-        verify { homeScreenAnalytics.trackHomeScreenStart() }
+        verify { homeAnalytics.trackHomeScreenStart() }
     }
 
     @Test
     fun `on trackOnProductClicked should call trackProductClicked event`() {
-        every { homeScreenAnalytics.trackProductClicked() } just Runs
+        every { homeAnalytics.trackProductClicked() } just Runs
 
         viewModel.viewState.value.trackOnProductClicked()
 
-        verify { homeScreenAnalytics.trackProductClicked() }
+        verify { homeAnalytics.trackProductClicked() }
     }
 
     @Test

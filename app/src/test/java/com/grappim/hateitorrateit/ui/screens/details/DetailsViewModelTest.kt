@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
 import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.analyticsapi.DetailsScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
@@ -36,7 +36,7 @@ class DetailsViewModelTest {
     private val productsRepository: ProductsRepository = mockk()
     private val uiModelsMapper: UiModelsMapper = mockk()
     private val dataCleaner: DataCleaner = mockk()
-    private val detailsScreenAnalytics: DetailsScreenAnalytics = mockk()
+    private val detailsAnalytics: DetailsAnalytics = mockk()
     private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var viewModel: DetailsViewModel
@@ -77,33 +77,33 @@ class DetailsViewModelTest {
             productsRepository = productsRepository,
             uiModelsMapper = uiModelsMapper,
             dataCleaner = dataCleaner,
-            detailsScreenAnalytics = detailsScreenAnalytics,
+            detailsAnalytics = detailsAnalytics,
             savedStateHandle = savedStateHandle
         )
     }
 
     @Test
     fun `on trackScreenStart should call trackScreenStart event`() {
-        every { detailsScreenAnalytics.trackDetailsScreenStart() } just Runs
+        every { detailsAnalytics.trackDetailsScreenStart() } just Runs
 
         viewModel.viewState.value.trackScreenStart()
 
-        verify { detailsScreenAnalytics.trackDetailsScreenStart() }
+        verify { detailsAnalytics.trackDetailsScreenStart() }
     }
 
     @Test
     fun `on trackEditButtonClicked should call trackDetailsEditButtonClicked event`() {
-        every { detailsScreenAnalytics.trackDetailsEditButtonClicked() } just Runs
+        every { detailsAnalytics.trackDetailsEditButtonClicked() } just Runs
 
         viewModel.viewState.value.trackEditButtonClicked()
 
-        verify { detailsScreenAnalytics.trackDetailsEditButtonClicked() }
+        verify { detailsAnalytics.trackDetailsEditButtonClicked() }
     }
 
     @Test
     fun `on onDeleteProductConfirm, clearProductData should be called and productDeleted is true`() {
         coEvery { dataCleaner.clearProductData(any(), any()) } just Runs
-        every { detailsScreenAnalytics.trackDetailsDeleteProductConfirmed() } just Runs
+        every { detailsAnalytics.trackDetailsDeleteProductConfirmed() } just Runs
 
         viewModel.viewState.value.onDeleteProductConfirm()
 
@@ -117,7 +117,7 @@ class DetailsViewModelTest {
         }
         assertTrue(viewModel.viewState.value.productDeleted)
 
-        verify { detailsScreenAnalytics.trackDetailsDeleteProductConfirmed() }
+        verify { detailsAnalytics.trackDetailsDeleteProductConfirmed() }
     }
 
     @Test
@@ -129,14 +129,14 @@ class DetailsViewModelTest {
 
     @Test
     fun `onDeleteProduct, showAlertDialog should be true`() {
-        every { detailsScreenAnalytics.trackDetailsDeleteProductButtonClicked() } just Runs
+        every { detailsAnalytics.trackDetailsDeleteProductButtonClicked() } just Runs
         assertFalse(viewModel.viewState.value.showAlertDialog)
 
         viewModel.viewState.value.onDeleteProduct()
 
         assertTrue(viewModel.viewState.value.showAlertDialog)
 
-        verify { detailsScreenAnalytics.trackDetailsDeleteProductButtonClicked() }
+        verify { detailsAnalytics.trackDetailsDeleteProductButtonClicked() }
     }
 
     @Test

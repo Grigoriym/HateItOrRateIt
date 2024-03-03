@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.analyticsimpl
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
-import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.domain.HateRateType
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,9 +12,9 @@ internal const val DEFAULT_TYPE_CHANGED_TO = "default_type_changed_to"
 internal const val TYPE = "type"
 
 @Singleton
-class SettingsScreenAnalyticsImpl @Inject constructor(
+class SettingsAnalyticsImpl @Inject constructor(
     private val analyticsController: AnalyticsController
-) : SettingsScreenAnalytics {
+) : SettingsAnalytics {
     override fun trackSettingsScreenStart() {
         analyticsController.trackEvent(SETTINGS_SCREEN_START)
     }

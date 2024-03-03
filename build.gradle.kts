@@ -67,7 +67,7 @@ private val coverageExclusions = listOf(
     "**/*_Provide*",
     "**/*_Factory*",
     "**/*_ComponentTreeDeps",
-    "**/*_Impl",
+    "**/*_Impl*",
     "**/*DefaultImpls*",
 
     "**/*Screen",
@@ -95,7 +95,8 @@ private val coverageExclusions = listOf(
     "**/*RootNavDestinations",
     "**/*HomeNavDestination",
     "**/*HashUtils",
-    "**/*NavUtils"
+    "**/*NavUtils",
+    "**/DebugAnalyticsControllerImpl"
 ).flatMap {
     listOf(
         "$it.class",

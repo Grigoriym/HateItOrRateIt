@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.analyticsapi
 
-interface DetailsScreenAnalytics {
+interface DetailsAnalytics {
     fun trackDetailsScreenStart()
 
     fun trackDetailsDeleteProductButtonClicked()

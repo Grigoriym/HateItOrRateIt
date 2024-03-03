@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.analyticsapi
 
-interface HomeScreenAnalytics {
+interface HomeAnalytics {
     fun trackHomeScreenStart()
 
     fun trackProductClicked()

@@ -9,7 +9,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class AnalyticsControllerImpl @Inject constructor() : AnalyticsController {
+class FirebaseAnalyticsControllerImpl @Inject constructor() : AnalyticsController {
 
     override fun toggleCrashesCollection(isTurnedOn: Boolean) {
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(isTurnedOn)
