@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
-import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
@@ -31,7 +31,7 @@ class SettingsViewModelTest {
     private val dataCleaner: DataCleaner = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
     private val analyticsController: AnalyticsController = mockk()
-    private val settingsScreenAnalytics: SettingsScreenAnalytics = mockk()
+    private val settingsAnalytics: SettingsAnalytics = mockk()
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -55,7 +55,7 @@ class SettingsViewModelTest {
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
             analyticsController = analyticsController,
-            settingsScreenAnalytics = settingsScreenAnalytics
+            settingsAnalytics = settingsAnalytics
         )
     }
 
@@ -65,13 +65,13 @@ class SettingsViewModelTest {
 
         assertEquals(viewModel.viewState.value.type, HateRateType.RATE)
 
-        every { settingsScreenAnalytics.trackDefaultTypeChangedTo(any()) } just Runs
+        every { settingsAnalytics.trackDefaultTypeChangedTo(any()) } just Runs
         every { localDataStorage.typeFlow } returns flowOf(newType)
 
         viewModel.viewState.value.setNewType()
 
         coVerify { localDataStorage.changeTypeTo(newType) }
-        verify { settingsScreenAnalytics.trackDefaultTypeChangedTo(newType) }
+        verify { settingsAnalytics.trackDefaultTypeChangedTo(newType) }
     }
 
     @Test
@@ -85,12 +85,12 @@ class SettingsViewModelTest {
 
     @Test
     fun `onAlertDialogConfirmButtonClicked should call dataCleaner`() = runTest {
-        every { settingsScreenAnalytics.trackAllDataClearedConfirm() } just Runs
+        every { settingsAnalytics.trackAllDataClearedConfirm() } just Runs
         coEvery { dataCleaner.clearAllData() } just Runs
 
         viewModel.viewState.value.onAlertDialogConfirmButtonClicked()
 
-        verify { settingsScreenAnalytics.trackAllDataClearedConfirm() }
+        verify { settingsAnalytics.trackAllDataClearedConfirm() }
         coVerify { dataCleaner.clearAllData() }
         assertFalse(viewModel.viewState.value.isLoading)
     }
@@ -122,11 +122,11 @@ class SettingsViewModelTest {
 
     @Test
     fun `on trackScreenStart should call trackSettingsScreenStart event`() {
-        every { settingsScreenAnalytics.trackSettingsScreenStart() } just Runs
+        every { settingsAnalytics.trackSettingsScreenStart() } just Runs
 
         viewModel.viewState.value.trackScreenStart()
 
-        verify { settingsScreenAnalytics.trackSettingsScreenStart() }
+        verify { settingsAnalytics.trackSettingsScreenStart() }
     }
 
     @Test

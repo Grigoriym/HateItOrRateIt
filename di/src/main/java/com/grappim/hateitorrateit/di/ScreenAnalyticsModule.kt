@@ -1,13 +1,13 @@
 package com.grappim.hateitorrateit.di
 
-import com.grappim.hateitorrateit.analyticsapi.DetailsScreenAnalytics
-import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
+import com.grappim.hateitorrateit.analyticsapi.HomeAnalytics
 import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
-import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
-import com.grappim.hateitorrateit.analyticsimpl.DetailsScreenAnalyticsImpl
-import com.grappim.hateitorrateit.analyticsimpl.HomeScreenAnalyticsImpl
+import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
+import com.grappim.hateitorrateit.analyticsimpl.DetailsAnalyticsImpl
+import com.grappim.hateitorrateit.analyticsimpl.HomeAnalyticsImpl
 import com.grappim.hateitorrateit.analyticsimpl.ProductManagerAnalyticsImpl
-import com.grappim.hateitorrateit.analyticsimpl.SettingsScreenAnalyticsImpl
+import com.grappim.hateitorrateit.analyticsimpl.SettingsAnalyticsImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,19 +17,13 @@ import dagger.hilt.components.SingletonComponent
 interface ScreenAnalyticsModule {
 
     @Binds
-    fun bindDetailsScreenAnalytics(
-        detailsScreenAnalyticsImpl: DetailsScreenAnalyticsImpl
-    ): DetailsScreenAnalytics
+    fun bindDetailsScreenAnalytics(detailsAnalyticsImpl: DetailsAnalyticsImpl): DetailsAnalytics
 
     @Binds
-    fun bindSettingsScreenAnalytics(
-        settingsScreenAnalyticsImpl: SettingsScreenAnalyticsImpl
-    ): SettingsScreenAnalytics
+    fun bindSettingsScreenAnalytics(settingsAnalyticsImpl: SettingsAnalyticsImpl): SettingsAnalytics
 
     @Binds
-    fun bindHomeScreeAnalytics(
-        homeScreenAnalyticsImpl: HomeScreenAnalyticsImpl
-    ): HomeScreenAnalytics
+    fun bindHomeScreeAnalytics(homeAnalyticsImpl: HomeAnalyticsImpl): HomeAnalytics
 
     @Binds
     fun bindProductManagerAnalytics(

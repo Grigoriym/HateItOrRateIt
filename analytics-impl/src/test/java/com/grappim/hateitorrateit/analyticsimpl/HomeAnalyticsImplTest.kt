@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.analyticsimpl
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
-import com.grappim.hateitorrateit.analyticsapi.HomeScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.HomeAnalytics
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -10,14 +10,14 @@ import io.mockk.verify
 import org.junit.Before
 import org.junit.Test
 
-class HomeScreenAnalyticsImplTest {
-    private lateinit var sut: HomeScreenAnalytics
+class HomeAnalyticsImplTest {
+    private lateinit var sut: HomeAnalytics
 
     private val analyticsController: AnalyticsController = mockk()
 
     @Before
     fun setup() {
-        sut = HomeScreenAnalyticsImpl(analyticsController)
+        sut = HomeAnalyticsImpl(analyticsController)
 
         every { analyticsController.trackEvent(any()) } just Runs
     }

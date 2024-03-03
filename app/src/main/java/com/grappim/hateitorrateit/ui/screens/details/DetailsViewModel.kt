@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.details
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.analyticsapi.DetailsScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
@@ -20,7 +20,7 @@ class DetailsViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val uiModelsMapper: UiModelsMapper,
     private val dataCleaner: DataCleaner,
-    private val detailsScreenAnalytics: DetailsScreenAnalytics,
+    private val detailsAnalytics: DetailsAnalytics,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -45,15 +45,15 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun trackScreenStart() {
-        detailsScreenAnalytics.trackDetailsScreenStart()
+        detailsAnalytics.trackDetailsScreenStart()
     }
 
     private fun trackDeleteProduct() {
-        detailsScreenAnalytics.trackDetailsDeleteProductButtonClicked()
+        detailsAnalytics.trackDetailsDeleteProductButtonClicked()
     }
 
     private fun trackEditClicked() {
-        detailsScreenAnalytics.trackDetailsEditButtonClicked()
+        detailsAnalytics.trackDetailsEditButtonClicked()
     }
 
     private fun updateProduct() {
@@ -64,7 +64,7 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun deleteProductConfirm() {
-        detailsScreenAnalytics.trackDetailsDeleteProductConfirmed()
+        detailsAnalytics.trackDetailsDeleteProductConfirmed()
         viewModelScope.launch {
             _viewState.update {
                 it.copy(isLoading = true)

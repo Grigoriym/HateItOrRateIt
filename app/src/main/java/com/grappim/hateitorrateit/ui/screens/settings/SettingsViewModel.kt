@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.ui.screens.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
-import com.grappim.hateitorrateit.analyticsapi.SettingsScreenAnalytics
+import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
@@ -21,7 +21,7 @@ class SettingsViewModel @Inject constructor(
     private val dataCleaner: DataCleaner,
     private val localDataStorage: LocalDataStorage,
     private val analyticsController: AnalyticsController,
-    private val settingsScreenAnalytics: SettingsScreenAnalytics
+    private val settingsAnalytics: SettingsAnalytics
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -88,7 +88,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun trackScreenStart() {
-        settingsScreenAnalytics.trackSettingsScreenStart()
+        settingsAnalytics.trackSettingsScreenStart()
     }
 
     private fun onCrashlyticsToggle() {
@@ -101,7 +101,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun setNewType() {
         val newType = HateRateType.changeType(_viewState.value.type)
-        settingsScreenAnalytics.trackDefaultTypeChangedTo(newType)
+        settingsAnalytics.trackDefaultTypeChangedTo(newType)
         viewModelScope.launch {
             localDataStorage.changeTypeTo(newType)
         }
@@ -120,7 +120,7 @@ class SettingsViewModel @Inject constructor(
     }
 
     private fun clearData() {
-        settingsScreenAnalytics.trackAllDataClearedConfirm()
+        settingsAnalytics.trackAllDataClearedConfirm()
 
         viewModelScope.launch {
             _viewState.update {
