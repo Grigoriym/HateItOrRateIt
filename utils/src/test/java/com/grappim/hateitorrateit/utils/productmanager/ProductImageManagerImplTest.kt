@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.utils.productmanager
 
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.FileTransferOperations
+import com.grappim.hateitorrateit.utils.file.FolderPathManager
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -14,14 +15,16 @@ import org.junit.Test
 
 class ProductImageManagerImplTest {
 
-    private val fileUtils: FileUtils = mockk()
+    private val folderPathManager: FolderPathManager = mockk()
+    private val fileTransferOperations: FileTransferOperations = mockk()
 
     private lateinit var productImageManager: ProductImageManager
 
     @Before
     fun setup() {
         productImageManager = ProductImageManagerImpl(
-            fileUtils = fileUtils
+            folderPathManager = folderPathManager,
+            fileTransferOperations = fileTransferOperations
         )
     }
 
@@ -29,19 +32,19 @@ class ProductImageManagerImplTest {
     fun `copyToBackupFolder should call correct methods`() = runTest {
         val source = "source"
         val destination = "source_backup"
-        coEvery { fileUtils.copySourceFilesToDestination(any(), any()) } just Runs
-        every { fileUtils.getBackupFolderName(any()) } returns destination
+        coEvery { fileTransferOperations.copySourceFilesToDestination(any(), any()) } just Runs
+        every { folderPathManager.getBackupFolderName(any()) } returns destination
 
         productImageManager.copyToBackupFolder(source)
 
         coVerify {
-            fileUtils.copySourceFilesToDestination(
+            fileTransferOperations.copySourceFilesToDestination(
                 sourceFolderName = source,
                 destinationFolderName = destination
             )
         }
         verify {
-            fileUtils.getBackupFolderName(source)
+            folderPathManager.getBackupFolderName(source)
         }
     }
 
@@ -49,19 +52,24 @@ class ProductImageManagerImplTest {
     fun `moveFromTempToOriginalFolder should call correct methods`() = runTest {
         val source = "folderName_temp"
         val folderName = "folderName"
-        coEvery { fileUtils.moveSourceFilesToDestinationFolder(any(), any()) } just Runs
-        every { fileUtils.getTempFolderName(any()) } returns source
+        coEvery {
+            fileTransferOperations.moveSourceFilesToDestinationFolder(
+                any(),
+                any()
+            )
+        } just Runs
+        every { folderPathManager.getTempFolderName(any()) } returns source
 
         productImageManager.moveFromTempToOriginalFolder(folderName)
 
         coVerify {
-            fileUtils.moveSourceFilesToDestinationFolder(
+            fileTransferOperations.moveSourceFilesToDestinationFolder(
                 sourceFolderName = source,
                 destinationFolderName = folderName
             )
         }
         verify {
-            fileUtils.getTempFolderName(folderName)
+            folderPathManager.getTempFolderName(folderName)
         }
     }
 
@@ -69,19 +77,24 @@ class ProductImageManagerImplTest {
     fun `moveFromBackupToOriginalFolder should call correct methods`() = runTest {
         val source = "folderName_backup"
         val folderName = "folderName"
-        coEvery { fileUtils.moveSourceFilesToDestinationFolder(any(), any()) } just Runs
-        every { fileUtils.getBackupFolderName(any()) } returns source
+        coEvery {
+            fileTransferOperations.moveSourceFilesToDestinationFolder(
+                any(),
+                any()
+            )
+        } just Runs
+        every { folderPathManager.getBackupFolderName(any()) } returns source
 
         productImageManager.moveFromBackupToOriginalFolder(folderName)
 
         coVerify {
-            fileUtils.moveSourceFilesToDestinationFolder(
+            fileTransferOperations.moveSourceFilesToDestinationFolder(
                 sourceFolderName = source,
                 destinationFolderName = folderName
             )
         }
         verify {
-            fileUtils.getBackupFolderName(folderName)
+            folderPathManager.getBackupFolderName(folderName)
         }
     }
 }

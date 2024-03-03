@@ -1,12 +1,14 @@
 package com.grappim.hateitorrateit.utils.productmanager
 
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.FileTransferOperations
+import com.grappim.hateitorrateit.utils.file.FolderPathManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class ProductImageManagerImpl @Inject constructor(
-    private val fileUtils: FileUtils
+    private val folderPathManager: FolderPathManager,
+    private val fileTransferOperations: FileTransferOperations
 ) : ProductImageManager {
 
     /**
@@ -14,22 +16,22 @@ class ProductImageManagerImpl @Inject constructor(
      * the original folder
      */
     override suspend fun copyToBackupFolder(productFolderName: String) {
-        fileUtils.copySourceFilesToDestination(
+        fileTransferOperations.copySourceFilesToDestination(
             sourceFolderName = productFolderName,
-            destinationFolderName = fileUtils.getBackupFolderName(productFolderName)
+            destinationFolderName = folderPathManager.getBackupFolderName(productFolderName)
         )
     }
 
     override suspend fun moveFromTempToOriginalFolder(productFolderName: String) {
-        fileUtils.moveSourceFilesToDestinationFolder(
-            sourceFolderName = fileUtils.getTempFolderName(productFolderName),
+        fileTransferOperations.moveSourceFilesToDestinationFolder(
+            sourceFolderName = folderPathManager.getTempFolderName(productFolderName),
             destinationFolderName = productFolderName
         )
     }
 
     override suspend fun moveFromBackupToOriginalFolder(productFolderName: String) {
-        fileUtils.moveSourceFilesToDestinationFolder(
-            sourceFolderName = fileUtils.getBackupFolderName(productFolderName),
+        fileTransferOperations.moveSourceFilesToDestinationFolder(
+            sourceFolderName = folderPathManager.getBackupFolderName(productFolderName),
             destinationFolderName = productFolderName
         )
     }

@@ -17,7 +17,9 @@ import com.grappim.hateitorrateit.domain.CreateProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.ui.R
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.FileUriManager
+import com.grappim.hateitorrateit.utils.file.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
@@ -32,7 +34,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductManagerViewModel @Inject constructor(
-    private val fileUtils: FileUtils,
     private val productsRepository: ProductsRepository,
     private val dataCleaner: DataCleaner,
     private val localDataStorage: LocalDataStorage,
@@ -40,6 +41,9 @@ class ProductManagerViewModel @Inject constructor(
     private val productImageManager: ProductImageManager,
     private val imageDataMapper: ImageDataMapper,
     private val productManagerAnalytics: ProductManagerAnalytics,
+    private val fileDeletionUtils: FileDeletionUtils,
+    private val fileUriManager: FileUriManager,
+    private val imagePersistenceManager: ImagePersistenceManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
@@ -168,7 +172,7 @@ class ProductManagerViewModel @Inject constructor(
     private fun addImageFromGallery(uri: Uri) {
         productManagerAnalytics.trackGalleryButtonClicked()
         viewModelScope.launch {
-            val imageData = fileUtils.getFileUriFromGalleryUri(
+            val imageData = fileUriManager.getFileUriFromGalleryUri(
                 uri = uri,
                 folderName = productFolderName,
                 isEdit = editProductId?.isNotEmpty() == true
@@ -180,7 +184,7 @@ class ProductManagerViewModel @Inject constructor(
     private fun addCameraPicture(cameraTakePictureData: CameraTakePictureData) {
         productManagerAnalytics.trackCameraButtonClicked()
         viewModelScope.launch {
-            val imageData = fileUtils.getFileDataFromCameraPicture(
+            val imageData = fileUriManager.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
                 isEdit = editProductId?.isNotEmpty() == true
             )
@@ -195,10 +199,11 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
-    private fun getCameraImageFileUri(): CameraTakePictureData = fileUtils.getFileUriForTakePicture(
-        folderName = productFolderName,
-        isEdit = editProductId?.isNotEmpty() == true
-    )
+    private fun getCameraImageFileUri(): CameraTakePictureData =
+        fileUriManager.getFileUriForTakePicture(
+            folderName = productFolderName,
+            isEdit = editProductId?.isNotEmpty() == true
+        )
 
     private fun setName(name: String) {
         _viewState.update {
@@ -251,7 +256,8 @@ class ProductManagerViewModel @Inject constructor(
             val description = _viewState.value.description.trim()
             val shop = _viewState.value.shop.trim()
             val type = _viewState.value.type
-            val editedImages = fileUtils.prepareEditedImagesToPersist(_viewState.value.images)
+            val editedImages =
+                imagePersistenceManager.prepareEditedImagesToPersist(_viewState.value.images)
 
             val editProduct = requireNotNull(_viewState.value.editProduct)
             val product = Product(
@@ -313,7 +319,7 @@ class ProductManagerViewModel @Inject constructor(
     private fun deleteImage(imageData: ImageData) {
         productManagerAnalytics.trackDeleteImageClicked()
         viewModelScope.launch {
-            if (fileUtils.deleteFile(uri = imageData.uri)) {
+            if (fileDeletionUtils.deleteFile(uri = imageData.uri)) {
                 Timber.d("file removed: $imageData")
 
                 if (!_viewState.value.isNewProduct) {

@@ -22,7 +22,9 @@ import com.grappim.hateitorrateit.ui.screens.editProduct
 import com.grappim.hateitorrateit.ui.screens.editProductImages
 import com.grappim.hateitorrateit.ui.screens.imageData
 import com.grappim.hateitorrateit.ui.screens.uri
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.FileUriManager
+import com.grappim.hateitorrateit.utils.file.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.ImageData
 import com.grappim.hateitorrateit.utils.productmanager.ProductImageManager
@@ -50,7 +52,6 @@ class ProductManagerViewModelEditTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
-    private val fileUtils: FileUtils = mockk()
     private val productsRepository: ProductsRepository = mockk()
     private val dataCleaner: DataCleaner = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
@@ -58,6 +59,9 @@ class ProductManagerViewModelEditTest {
     private val productImageManager: ProductImageManager = mockk()
     private val imageDataMapper: ImageDataMapper = mockk()
     private val productManagerAnalytics: ProductManagerAnalytics = mockk()
+    private val imagePersistenceManager: ImagePersistenceManager = mockk()
+    private val fileDeletionUtils: FileDeletionUtils = mockk()
+    private val fileUriManager: FileUriManager = mockk()
 
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: ProductManagerViewModel
@@ -76,7 +80,6 @@ class ProductManagerViewModelEditTest {
         coEvery { imageDataMapper.toImageDataList(any()) } returns emptyList()
 
         viewModel = ProductManagerViewModel(
-            fileUtils = fileUtils,
             productsRepository = productsRepository,
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
@@ -84,7 +87,10 @@ class ProductManagerViewModelEditTest {
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
             productManagerAnalytics = productManagerAnalytics,
-            savedStateHandle = savedStateHandle
+            savedStateHandle = savedStateHandle,
+            imagePersistenceManager = imagePersistenceManager,
+            fileDeletionUtils = fileDeletionUtils,
+            fileUriManager = fileUriManager
         )
     }
 
@@ -202,7 +208,7 @@ class ProductManagerViewModelEditTest {
 
     @Test
     fun `with editProduct, onRemoveImageClicked with success delete, should delete image`() {
-        every { fileUtils.deleteFile(uri = any()) } returns true
+        every { fileDeletionUtils.deleteFile(uri = any()) } returns true
         coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         every { productManagerAnalytics.trackDeleteImageClicked() } just Runs
@@ -215,7 +221,7 @@ class ProductManagerViewModelEditTest {
 
         viewModel.viewState.value.onDeleteImageClicked(imageToDelete)
 
-        verify { fileUtils.deleteFile(imageToDelete.uri) }
+        verify { fileDeletionUtils.deleteFile(imageToDelete.uri) }
         coVerify {
             productsRepository.deleteProductImage(
                 productId = getEditProductId(),
@@ -230,7 +236,7 @@ class ProductManagerViewModelEditTest {
     @Test
     fun `with editProduct, onAddImageFromGalleryClicked should add image`() {
         val imageData = createImageData()
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
@@ -238,7 +244,7 @@ class ProductManagerViewModelEditTest {
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
 
         verify {
-            fileUtils.getFileUriFromGalleryUri(
+            fileUriManager.getFileUriFromGalleryUri(
                 uri = imageData.uri,
                 folderName = getProductFolderName(),
                 isEdit = true
@@ -251,7 +257,7 @@ class ProductManagerViewModelEditTest {
     @Test
     fun `with editProduct, productManagerAnalytics should call correct event`() {
         val imageData = createImageData()
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
@@ -266,7 +272,7 @@ class ProductManagerViewModelEditTest {
             newUri = cameraTakePictureData.uri
         )
 
-        every { fileUtils.getFileDataFromCameraPicture(any(), any()) } returns imageData
+        every { fileUriManager.getFileDataFromCameraPicture(any(), any()) } returns imageData
         every { productManagerAnalytics.trackCameraButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
@@ -274,7 +280,7 @@ class ProductManagerViewModelEditTest {
         viewModel.viewState.value.onAddCameraPictureClicked(cameraTakePictureData)
 
         verify {
-            fileUtils.getFileDataFromCameraPicture(
+            fileUriManager.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
                 isEdit = true
             )
@@ -290,7 +296,7 @@ class ProductManagerViewModelEditTest {
             newUri = cameraTakePictureData.uri
         )
 
-        every { fileUtils.getFileDataFromCameraPicture(any(), any()) } returns imageData
+        every { fileUriManager.getFileDataFromCameraPicture(any(), any()) } returns imageData
         every { productManagerAnalytics.trackCameraButtonClicked() } just Runs
 
         viewModel.viewState.value.onAddCameraPictureClicked(cameraTakePictureData)
@@ -302,12 +308,14 @@ class ProductManagerViewModelEditTest {
     fun `with editProduct, getCameraImageFileUri should return correct CameraTakePictureData`() {
         val cameraTakePictureData = createCameraTakePictureData()
 
-        every { fileUtils.getFileUriForTakePicture(any(), any()) } returns cameraTakePictureData
+        every {
+            fileUriManager.getFileUriForTakePicture(any(), any())
+        } returns cameraTakePictureData
 
         val cameraData = viewModel.viewState.value.getCameraImageFileUri.invoke()
 
         verify {
-            fileUtils.getFileUriForTakePicture(
+            fileUriManager.getFileUriForTakePicture(
                 folderName = getProductFolderName(),
                 isEdit = true
             )
@@ -322,10 +330,12 @@ class ProductManagerViewModelEditTest {
         coEvery { productsRepository.getProductById(any()) } returns editProduct
 
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
-        coEvery { fileUtils.prepareEditedImagesToPersist(any()) } returns editProductImages
+        coEvery {
+            imagePersistenceManager.prepareEditedImagesToPersist(any())
+        } returns editProductImages
 
         coEvery { productImageManager.moveFromTempToOriginalFolder(any()) } just Runs
         coEvery { dataCleaner.deleteTempFolder(any()) } just Runs
@@ -337,7 +347,7 @@ class ProductManagerViewModelEditTest {
 
         viewModel.viewState.value.onProductDone()
 
-        coVerify { fileUtils.prepareEditedImagesToPersist(listOf(imageData)) }
+        coVerify { imagePersistenceManager.prepareEditedImagesToPersist(listOf(imageData)) }
         coVerify { productImageManager.moveFromTempToOriginalFolder(PRODUCT_FOLDER_NAME) }
         coVerify { dataCleaner.deleteTempFolder(PRODUCT_FOLDER_NAME) }
         coVerify { dataCleaner.deleteBackupFolder(PRODUCT_FOLDER_NAME) }
@@ -356,10 +366,12 @@ class ProductManagerViewModelEditTest {
     fun `with editProduct, on onProductDone, productManagerAnalytics should call trackSaveButtonClicked`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
-        coEvery { fileUtils.prepareEditedImagesToPersist(any()) } returns editProductImages
+        coEvery {
+            imagePersistenceManager.prepareEditedImagesToPersist(any())
+        } returns editProductImages
 
         coEvery { productImageManager.moveFromTempToOriginalFolder(any()) } just Runs
         coEvery { dataCleaner.deleteTempFolder(any()) } just Runs
@@ -376,7 +388,7 @@ class ProductManagerViewModelEditTest {
 
     private fun prepareImage(imageData: ImageData) {
         every {
-            fileUtils.getFileUriFromGalleryUri(any(), any(), any())
+            fileUriManager.getFileUriFromGalleryUri(any(), any(), any())
         } returns imageData
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
     }

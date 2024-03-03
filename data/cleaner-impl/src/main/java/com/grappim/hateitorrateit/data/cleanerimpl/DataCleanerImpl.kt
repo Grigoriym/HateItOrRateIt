@@ -6,7 +6,8 @@ import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.ProductImageData
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.FolderPathManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -17,10 +18,11 @@ import javax.inject.Inject
  * from the app storage
  */
 class DataCleanerImpl @Inject constructor(
-    private val fileUtils: FileUtils,
+    private val fileDeletionUtils: FileDeletionUtils,
     private val productsRepository: ProductsRepository,
     private val databaseDao: DatabaseDao,
     private val databaseWrapper: DatabaseWrapper,
+    private val folderPathManager: FolderPathManager,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DataCleaner {
 
@@ -29,7 +31,7 @@ class DataCleanerImpl @Inject constructor(
         imageName: String,
         uriString: String
     ): Boolean = withContext(ioDispatcher) {
-        if (fileUtils.deleteFile(uriString)) {
+        if (fileDeletionUtils.deleteFile(uriString)) {
             productsRepository.deleteProductImage(productId = productId, imageName = imageName)
             return@withContext true
         }
@@ -50,17 +52,17 @@ class DataCleanerImpl @Inject constructor(
     override suspend fun clearProductData(productId: Long, productFolderName: String) =
         withContext(ioDispatcher) {
             Timber.d("start cleaning")
-            fileUtils.deleteFolder(productFolderName)
+            fileDeletionUtils.deleteFolder(productFolderName)
             productsRepository.deleteProductById(productId)
         }
 
     override suspend fun deleteTempFolder(productFolderName: String) = withContext(ioDispatcher) {
         Timber.d("start cleaning temp $productFolderName")
-        fileUtils.deleteFolder(fileUtils.getTempFolderName(productFolderName))
+        fileDeletionUtils.deleteFolder(folderPathManager.getTempFolderName(productFolderName))
     }
 
     override suspend fun deleteBackupFolder(productFolderName: String) {
-        fileUtils.deleteFolder(fileUtils.getBackupFolderName(productFolderName))
+        fileDeletionUtils.deleteFolder(folderPathManager.getBackupFolderName(productFolderName))
     }
 
     override suspend fun clearAllData() {
@@ -73,5 +75,5 @@ class DataCleanerImpl @Inject constructor(
         databaseDao.clearPrimaryKeyIndex()
     }
 
-    private suspend fun clearFileSystemData() = fileUtils.clearMainFolder()
+    private suspend fun clearFileSystemData() = fileDeletionUtils.clearMainFolder()
 }
