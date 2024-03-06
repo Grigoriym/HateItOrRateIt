@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.utils.HashUtils
 import com.grappim.hateitorrateit.utils.file.creation.FileCreationUtils
-import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.file.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
