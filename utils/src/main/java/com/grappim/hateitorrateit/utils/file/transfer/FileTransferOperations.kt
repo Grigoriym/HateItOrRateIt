@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.transfer
 
 interface FileTransferOperations {
     suspend fun moveSourceFilesToDestinationFolder(

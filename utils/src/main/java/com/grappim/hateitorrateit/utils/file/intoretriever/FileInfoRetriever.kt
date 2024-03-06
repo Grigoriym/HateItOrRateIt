@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.intoretriever
 
 import android.net.Uri
 

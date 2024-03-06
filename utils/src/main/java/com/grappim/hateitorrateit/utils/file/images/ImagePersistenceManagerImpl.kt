@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.images
 
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper

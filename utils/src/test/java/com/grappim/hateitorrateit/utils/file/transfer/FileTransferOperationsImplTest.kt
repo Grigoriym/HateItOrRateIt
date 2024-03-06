@@ -1,5 +1,6 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.transfer
 
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

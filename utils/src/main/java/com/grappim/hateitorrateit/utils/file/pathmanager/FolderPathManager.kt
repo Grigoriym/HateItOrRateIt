@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.pathmanager
 
 import java.io.File
 

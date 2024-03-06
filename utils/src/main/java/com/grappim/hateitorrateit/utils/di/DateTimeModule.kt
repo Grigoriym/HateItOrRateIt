@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.utils.di
 
-import com.grappim.hateitorrateit.utils.DateTimeUtils
-import com.grappim.hateitorrateit.utils.DateTimeUtilsImpl
+import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
+import com.grappim.hateitorrateit.utils.datetime.DateTimeUtilsImpl
 import dagger.Binds
 import dagger.Module
 import dagger.Provides

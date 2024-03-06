@@ -12,7 +12,7 @@ import com.grappim.hateitorrateit.domain.EmptyFileData
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.domain.ProductImageData
-import com.grappim.hateitorrateit.utils.DateTimeUtils
+import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll

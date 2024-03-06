@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.creation
 
 import android.net.Uri
 import java.io.File

@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.utils.productmanager
 
-import com.grappim.hateitorrateit.utils.file.FileTransferOperations
-import com.grappim.hateitorrateit.utils.file.FolderPathManager
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
+import com.grappim.hateitorrateit.utils.file.transfer.FileTransferOperations
 import javax.inject.Inject
 import javax.inject.Singleton
 

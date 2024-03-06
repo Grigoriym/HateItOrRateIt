@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils
+package com.grappim.hateitorrateit.utils.datetime
 
 import java.time.Instant
 import java.time.OffsetDateTime

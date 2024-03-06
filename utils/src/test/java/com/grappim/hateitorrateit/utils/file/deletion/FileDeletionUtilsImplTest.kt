@@ -1,6 +1,9 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.deletion
 
+import androidx.core.content.FileProvider
+import com.grappim.hateitorrateit.utils.ShadowFileProvider
 import com.grappim.hateitorrateit.utils.UriParser
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -18,6 +21,7 @@ import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 @Config(
+    shadows = [ShadowFileProvider::class],
     manifest = Config.NONE
 )
 class FileDeletionUtilsImplTest {
@@ -38,6 +42,40 @@ class FileDeletionUtilsImplTest {
         )
 
         every { folderPathManager.getMainFolder(any()) } returns File(context.filesDir, "products")
+    }
+
+    @Test
+    fun `on deleteFile by uri should correctly return true`() = runTest {
+        val fileName = "testimage.jpg"
+        val file = File(context.filesDir, "products/folder/$fileName")
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            file
+        )
+
+        val actual = fileDeletionUtils.deleteFile(uri)
+
+        assertTrue(actual)
+    }
+
+    @Test
+    fun `on deleteFile by uri string should correctly return true`() = runTest {
+        val fileName = "testimage.jpg"
+        val file = File(context.filesDir, "products/folder/$fileName")
+        val uri = FileProvider.getUriForFile(
+            context,
+            "${context.packageName}.provider",
+            file
+        )
+
+        every { uriParser.parse(any()) } returns uri
+
+        val actual = fileDeletionUtils.deleteFile(uri.toString())
+
+        verify { uriParser.parse(uri.toString()) }
+
+        assertTrue(actual)
     }
 
     @Test

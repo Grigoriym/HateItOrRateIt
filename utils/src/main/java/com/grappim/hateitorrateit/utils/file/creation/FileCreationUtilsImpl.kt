@@ -1,15 +1,15 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.creation
 
 import android.content.Context
 import android.net.Uri
+import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import javax.inject.Inject
 import javax.inject.Singleton
-
-private const val BYTE_ARRAY_BUFFER = 4 * 1024
 
 @Singleton
 class FileCreationUtilsImpl @Inject constructor(
@@ -37,13 +37,7 @@ class FileCreationUtilsImpl @Inject constructor(
         inputStream.use { input ->
             val outputStream = FileOutputStream(newFile)
             outputStream.use { output ->
-                val buffer = ByteArray(BYTE_ARRAY_BUFFER)
-                while (true) {
-                    val byteCount = input.read(buffer)
-                    if (byteCount < 0) break
-                    output.write(buffer, 0, byteCount)
-                }
-                output.flush()
+                input.copyTo(output)
             }
         }
     }

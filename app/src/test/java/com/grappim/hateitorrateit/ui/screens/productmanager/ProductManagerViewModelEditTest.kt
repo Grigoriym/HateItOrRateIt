@@ -22,9 +22,9 @@ import com.grappim.hateitorrateit.ui.screens.editProduct
 import com.grappim.hateitorrateit.ui.screens.editProductImages
 import com.grappim.hateitorrateit.ui.screens.imageData
 import com.grappim.hateitorrateit.ui.screens.uri
-import com.grappim.hateitorrateit.utils.file.FileDeletionUtils
-import com.grappim.hateitorrateit.utils.file.FileUriManager
-import com.grappim.hateitorrateit.utils.file.ImagePersistenceManager
+import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManager
+import com.grappim.hateitorrateit.utils.file.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.ImageData
 import com.grappim.hateitorrateit.utils.productmanager.ProductImageManager
@@ -208,7 +208,7 @@ class ProductManagerViewModelEditTest {
 
     @Test
     fun `with editProduct, onRemoveImageClicked with success delete, should delete image`() {
-        every { fileDeletionUtils.deleteFile(uri = any()) } returns true
+        coEvery { fileDeletionUtils.deleteFile(uri = any()) } returns true
         coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         every { productManagerAnalytics.trackDeleteImageClicked() } just Runs
@@ -221,7 +221,7 @@ class ProductManagerViewModelEditTest {
 
         viewModel.viewState.value.onDeleteImageClicked(imageToDelete)
 
-        verify { fileDeletionUtils.deleteFile(imageToDelete.uri) }
+        coVerify { fileDeletionUtils.deleteFile(imageToDelete.uri) }
         coVerify {
             productsRepository.deleteProductImage(
                 productId = getEditProductId(),

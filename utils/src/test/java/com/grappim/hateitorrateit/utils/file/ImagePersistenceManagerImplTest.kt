@@ -2,6 +2,8 @@ package com.grappim.hateitorrateit.utils.file
 
 import android.net.Uri
 import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManager
+import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManagerImpl
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.ImageData
 import io.mockk.coEvery

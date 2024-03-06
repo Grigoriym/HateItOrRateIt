@@ -1,10 +1,13 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.urimanager
 
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.utils.HashUtils
+import com.grappim.hateitorrateit.utils.file.creation.FileCreationUtils
+import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
 import dagger.hilt.android.qualifiers.ApplicationContext

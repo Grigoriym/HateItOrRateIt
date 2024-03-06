@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.urimanager
 
 import android.net.Uri
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData

@@ -8,8 +8,8 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
-import com.grappim.hateitorrateit.utils.file.FileDeletionUtils
-import com.grappim.hateitorrateit.utils.file.FolderPathManager
+import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -48,7 +48,7 @@ class DataCleanerImplTest {
             val uriString = getRandomString()
             val productId = getRandomLong()
 
-            every { fileDeletionUtils.deleteFile(uriString = any()) } returns true
+            coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns true
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val actual = dataCleaner.clearProductImage(
@@ -58,7 +58,7 @@ class DataCleanerImplTest {
             )
 
             assertTrue(actual)
-            verify { fileDeletionUtils.deleteFile(uriString) }
+            coVerify { fileDeletionUtils.deleteFile(uriString) }
             coVerify { productsRepository.deleteProductImage(productId, imageName) }
         }
 
@@ -69,7 +69,7 @@ class DataCleanerImplTest {
             val uriString = getRandomString()
             val productId = getRandomLong()
 
-            every { fileDeletionUtils.deleteFile(uriString = any()) } returns false
+            coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns false
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val actual = dataCleaner.clearProductImage(
@@ -79,7 +79,7 @@ class DataCleanerImplTest {
             )
 
             assertFalse(actual)
-            verify { fileDeletionUtils.deleteFile(uriString) }
+            coVerify { fileDeletionUtils.deleteFile(uriString) }
             coVerify(exactly = 0) { productsRepository.deleteProductImage(productId, imageName) }
         }
 
@@ -88,7 +88,7 @@ class DataCleanerImplTest {
         runTest {
             val productId = getRandomLong()
 
-            every { fileDeletionUtils.deleteFile(uriString = any()) } returns true
+            coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns true
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val list = listOf(
@@ -124,7 +124,7 @@ class DataCleanerImplTest {
             )
 
             list.forEach {
-                verify { fileDeletionUtils.deleteFile(uriString = it.uriString) }
+                coVerify { fileDeletionUtils.deleteFile(uriString = it.uriString) }
                 coVerify {
                     productsRepository.deleteProductImage(
                         productId = productId,

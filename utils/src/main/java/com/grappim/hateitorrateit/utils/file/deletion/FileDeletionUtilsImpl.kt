@@ -1,9 +1,10 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.deletion
 
 import android.content.Context
 import android.net.Uri
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.utils.UriParser
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -24,12 +25,12 @@ class FileDeletionUtilsImpl @Inject constructor(
         }
     }
 
-    override fun deleteFile(uriString: String): Boolean {
+    override suspend fun deleteFile(uriString: String): Boolean {
         val uri = uriParser.parse(uriString)
         return deleteFile(uri)
     }
 
-    override fun deleteFile(uri: Uri): Boolean {
+    override suspend fun deleteFile(uri: Uri): Boolean {
         val deletedRows = context.contentResolver.delete(uri, null, null)
         return deletedRows > 0
     }

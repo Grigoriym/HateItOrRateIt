@@ -1,5 +1,7 @@
 package com.grappim.hateitorrateit.utils.file
 
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManagerImpl
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

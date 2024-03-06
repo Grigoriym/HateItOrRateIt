@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.hateitorrateit.utils.DateTimeUtils
+import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.UnconfinedTestDispatcher

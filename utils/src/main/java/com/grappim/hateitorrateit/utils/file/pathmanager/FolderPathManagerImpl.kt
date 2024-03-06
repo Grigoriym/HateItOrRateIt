@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.pathmanager
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext

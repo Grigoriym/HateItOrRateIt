@@ -17,9 +17,9 @@ import com.grappim.hateitorrateit.domain.CreateProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.ui.R
-import com.grappim.hateitorrateit.utils.file.FileDeletionUtils
-import com.grappim.hateitorrateit.utils.file.FileUriManager
-import com.grappim.hateitorrateit.utils.file.ImagePersistenceManager
+import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManager
+import com.grappim.hateitorrateit.utils.file.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData

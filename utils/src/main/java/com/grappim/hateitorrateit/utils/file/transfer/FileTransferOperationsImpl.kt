@@ -1,6 +1,7 @@
-package com.grappim.hateitorrateit.utils.file
+package com.grappim.hateitorrateit.utils.file.transfer
 
 import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
