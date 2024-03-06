@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.utils.file.creation
 
 import android.content.Context
 import android.net.Uri
-import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.file.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber

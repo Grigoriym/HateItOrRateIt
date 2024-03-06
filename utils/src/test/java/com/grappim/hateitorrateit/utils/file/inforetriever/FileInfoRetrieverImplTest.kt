@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.file.intoretriever
+package com.grappim.hateitorrateit.utils.file.inforetriever
 
 import android.net.Uri
 import android.webkit.MimeTypeMap

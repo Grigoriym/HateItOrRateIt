@@ -4,7 +4,7 @@ import android.content.ContentResolver
 import com.grappim.hateitorrateit.testing.getRandomString
 import com.grappim.hateitorrateit.testing.getRandomUri
 import com.grappim.hateitorrateit.utils.ShadowFileProvider
-import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.file.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import io.mockk.every
 import io.mockk.mockk

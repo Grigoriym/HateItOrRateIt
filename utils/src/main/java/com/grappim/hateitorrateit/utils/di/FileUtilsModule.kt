@@ -6,8 +6,8 @@ import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtilsImpl
 import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManagerImpl
-import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetriever
-import com.grappim.hateitorrateit.utils.file.intoretriever.FileInfoRetrieverImpl
+import com.grappim.hateitorrateit.utils.file.inforetriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.file.inforetriever.FileInfoRetrieverImpl
 import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManagerImpl
 import com.grappim.hateitorrateit.utils.file.transfer.FileTransferOperations
