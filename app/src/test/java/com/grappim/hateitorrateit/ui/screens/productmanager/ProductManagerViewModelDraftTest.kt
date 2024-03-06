@@ -19,7 +19,9 @@ import com.grappim.hateitorrateit.ui.screens.draftProduct
 import com.grappim.hateitorrateit.ui.screens.editProductImages
 import com.grappim.hateitorrateit.ui.screens.imageData
 import com.grappim.hateitorrateit.ui.screens.uri
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.images.ImagePersistenceManager
+import com.grappim.hateitorrateit.utils.file.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.ImageData
 import com.grappim.hateitorrateit.utils.productmanager.ProductImageManager
@@ -44,7 +46,6 @@ class ProductManagerViewModelDraftTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
-    private val fileUtils: FileUtils = mockk()
     private val productsRepository: ProductsRepository = mockk()
     private val dataCleaner: DataCleaner = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
@@ -52,6 +53,9 @@ class ProductManagerViewModelDraftTest {
     private val productImageManager: ProductImageManager = mockk()
     private val imageDataMapper: ImageDataMapper = mockk()
     private val productManagerAnalytics: ProductManagerAnalytics = mockk()
+    private val fileUriManager: FileUriManager = mockk()
+    private val fileDeletionUtils: FileDeletionUtils = mockk()
+    private val imagePersistenceManager: ImagePersistenceManager = mockk()
 
     private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: ProductManagerViewModel
@@ -63,7 +67,6 @@ class ProductManagerViewModelDraftTest {
         every { localDataStorage.typeFlow } returns flowOf(TYPE)
 
         viewModel = ProductManagerViewModel(
-            fileUtils = fileUtils,
             productsRepository = productsRepository,
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
@@ -71,7 +74,10 @@ class ProductManagerViewModelDraftTest {
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
             productManagerAnalytics = productManagerAnalytics,
-            savedStateHandle = savedStateHandle
+            savedStateHandle = savedStateHandle,
+            fileUriManager = fileUriManager,
+            fileDeletionUtils = fileDeletionUtils,
+            imagePersistenceManager = imagePersistenceManager
         )
     }
 
@@ -133,7 +139,7 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, on onProductDone, new product is created`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackCreateButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
@@ -153,7 +159,7 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, on onProductDone, productManagerAnalytics should call trackCreateButtonClicked`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackCreateButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
@@ -190,7 +196,7 @@ class ProductManagerViewModelDraftTest {
 
     @Test
     fun `with draftProduct, onRemoveImageClicked with success delete, should delete image`() {
-        every { fileUtils.deleteFile(uri = any()) } returns true
+        coEvery { fileDeletionUtils.deleteFile(uri = any()) } returns true
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         every { productManagerAnalytics.trackDeleteImageClicked() } just Runs
 
@@ -202,7 +208,7 @@ class ProductManagerViewModelDraftTest {
 
         viewModel.viewState.value.onDeleteImageClicked(imageToDelete)
 
-        verify { fileUtils.deleteFile(imageToDelete.uri) }
+        coVerify { fileDeletionUtils.deleteFile(imageToDelete.uri) }
 
         assertTrue(viewModel.viewState.value.images.size == 1)
         assertEquals(viewModel.viewState.value.images.first(), firstImage)
@@ -211,7 +217,7 @@ class ProductManagerViewModelDraftTest {
     @Test
     fun `with draftProduct, onAddImageFromGalleryClicked should add image`() {
         val imageData = createImageData()
-        every { fileUtils.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
@@ -219,7 +225,7 @@ class ProductManagerViewModelDraftTest {
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
 
         verify {
-            fileUtils.getFileUriFromGalleryUri(
+            fileUriManager.getFileUriFromGalleryUri(
                 uri = imageData.uri,
                 folderName = getProductFolderName(),
                 isEdit = false
@@ -238,7 +244,7 @@ class ProductManagerViewModelDraftTest {
             newUri = cameraTakePictureData.uri
         )
 
-        every { fileUtils.getFileDataFromCameraPicture(any(), any()) } returns imageData
+        every { fileUriManager.getFileDataFromCameraPicture(any(), any()) } returns imageData
         every { productManagerAnalytics.trackCameraButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
@@ -246,7 +252,7 @@ class ProductManagerViewModelDraftTest {
         viewModel.viewState.value.onAddCameraPictureClicked(cameraTakePictureData)
 
         verify {
-            fileUtils.getFileDataFromCameraPicture(
+            fileUriManager.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
                 isEdit = false
             )
@@ -261,12 +267,17 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, getCameraImageFileUri should return correct CameraTakePictureData`() {
         val cameraTakePictureData = createCameraTakePictureData()
 
-        every { fileUtils.getFileUriForTakePicture(any(), any()) } returns cameraTakePictureData
+        every {
+            fileUriManager.getFileUriForTakePicture(
+                any(),
+                any()
+            )
+        } returns cameraTakePictureData
 
         val cameraData = viewModel.viewState.value.getCameraImageFileUri.invoke()
 
         verify {
-            fileUtils.getFileUriForTakePicture(
+            fileUriManager.getFileUriForTakePicture(
                 folderName = getProductFolderName(),
                 isEdit = false
             )
@@ -277,7 +288,7 @@ class ProductManagerViewModelDraftTest {
 
     private fun prepareImage(imageData: ImageData) {
         every {
-            fileUtils.getFileUriFromGalleryUri(any(), any(), any())
+            fileUriManager.getFileUriFromGalleryUri(any(), any(), any())
         } returns imageData
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
     }

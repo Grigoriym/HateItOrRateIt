@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils
+package com.grappim.hateitorrateit.utils.datetime
 
 import com.grappim.hateitorrateit.utils.di.DtfDocumentFolder
 import com.grappim.hateitorrateit.utils.di.DtfToDemonstrate

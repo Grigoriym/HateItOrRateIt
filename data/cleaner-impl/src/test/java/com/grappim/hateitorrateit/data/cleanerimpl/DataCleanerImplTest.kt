@@ -8,7 +8,8 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
-import com.grappim.hateitorrateit.utils.FileUtils
+import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -24,18 +25,20 @@ import kotlin.test.assertTrue
 
 class DataCleanerImplTest {
 
-    private val fileUtils: FileUtils = mockk()
     private val productsRepository: ProductsRepository = mockk()
     private val transactionController: TransactionController = mockk()
     private val databaseDao: DatabaseDao = mockk()
     private val databaseWrapper: DatabaseWrapper = mockk()
+    private val fileDeletionUtils: FileDeletionUtils = mockk()
+    private val folderPathManager: FolderPathManager = mockk()
 
     private val dataCleaner: DataCleaner = DataCleanerImpl(
-        fileUtils = fileUtils,
+        fileDeletionUtils = fileDeletionUtils,
         productsRepository = productsRepository,
         databaseDao = databaseDao,
         databaseWrapper = databaseWrapper,
-        ioDispatcher = UnconfinedTestDispatcher()
+        ioDispatcher = UnconfinedTestDispatcher(),
+        folderPathManager = folderPathManager
     )
 
     @Test
@@ -45,7 +48,7 @@ class DataCleanerImplTest {
             val uriString = getRandomString()
             val productId = getRandomLong()
 
-            every { fileUtils.deleteFile(uriString = any()) } returns true
+            coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns true
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val actual = dataCleaner.clearProductImage(
@@ -55,7 +58,7 @@ class DataCleanerImplTest {
             )
 
             assertTrue(actual)
-            verify { fileUtils.deleteFile(uriString) }
+            coVerify { fileDeletionUtils.deleteFile(uriString) }
             coVerify { productsRepository.deleteProductImage(productId, imageName) }
         }
 
@@ -66,7 +69,7 @@ class DataCleanerImplTest {
             val uriString = getRandomString()
             val productId = getRandomLong()
 
-            every { fileUtils.deleteFile(uriString = any()) } returns false
+            coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns false
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val actual = dataCleaner.clearProductImage(
@@ -76,7 +79,7 @@ class DataCleanerImplTest {
             )
 
             assertFalse(actual)
-            verify { fileUtils.deleteFile(uriString) }
+            coVerify { fileDeletionUtils.deleteFile(uriString) }
             coVerify(exactly = 0) { productsRepository.deleteProductImage(productId, imageName) }
         }
 
@@ -85,7 +88,7 @@ class DataCleanerImplTest {
         runTest {
             val productId = getRandomLong()
 
-            every { fileUtils.deleteFile(uriString = any()) } returns true
+            coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns true
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val list = listOf(
@@ -121,7 +124,7 @@ class DataCleanerImplTest {
             )
 
             list.forEach {
-                verify { fileUtils.deleteFile(uriString = it.uriString) }
+                coVerify { fileDeletionUtils.deleteFile(uriString = it.uriString) }
                 coVerify {
                     productsRepository.deleteProductImage(
                         productId = productId,
@@ -136,7 +139,7 @@ class DataCleanerImplTest {
         val productId = getRandomLong()
         val folderName = getRandomString()
 
-        coEvery { fileUtils.deleteFolder(any()) } just Runs
+        coEvery { fileDeletionUtils.deleteFolder(any()) } just Runs
         coEvery { productsRepository.deleteProductById(any()) } just Runs
 
         dataCleaner.clearProductData(
@@ -144,7 +147,7 @@ class DataCleanerImplTest {
             productFolderName = folderName
         )
 
-        coVerify { fileUtils.deleteFolder(folderName) }
+        coVerify { fileDeletionUtils.deleteFolder(folderName) }
         coVerify { productsRepository.deleteProductById(productId) }
     }
 
@@ -152,26 +155,26 @@ class DataCleanerImplTest {
     fun `on deleteTempFolder should get correct folder name and remove it`() = runTest {
         val folderName = getRandomString()
 
-        coEvery { fileUtils.deleteFolder(any()) } just Runs
-        every { fileUtils.getTempFolderName(any()) } returns "${folderName}_temp"
+        coEvery { fileDeletionUtils.deleteFolder(any()) } just Runs
+        every { folderPathManager.getTempFolderName(any()) } returns "${folderName}_temp"
 
         dataCleaner.deleteTempFolder(folderName)
 
-        verify { fileUtils.getTempFolderName(folderName) }
-        coVerify { fileUtils.deleteFolder("${folderName}_temp") }
+        verify { folderPathManager.getTempFolderName(folderName) }
+        coVerify { fileDeletionUtils.deleteFolder("${folderName}_temp") }
     }
 
     @Test
     fun `on deleteBackupFolder should get correct folder name and remove it`() = runTest {
         val folderName = getRandomString()
 
-        coEvery { fileUtils.deleteFolder(any()) } just Runs
-        every { fileUtils.getBackupFolderName(any()) } returns "${folderName}_backup"
+        coEvery { fileDeletionUtils.deleteFolder(any()) } just Runs
+        every { folderPathManager.getBackupFolderName(any()) } returns "${folderName}_backup"
 
         dataCleaner.deleteBackupFolder(folderName)
 
-        verify { fileUtils.getBackupFolderName(folderName) }
-        coVerify { fileUtils.deleteFolder("${folderName}_backup") }
+        verify { folderPathManager.getBackupFolderName(folderName) }
+        coVerify { fileDeletionUtils.deleteFolder("${folderName}_backup") }
     }
 
     @Test
@@ -181,12 +184,12 @@ class DataCleanerImplTest {
         coEvery { transactionController.runInTransaction(any()) } coAnswers {
             firstArg<suspend () -> Unit>().invoke()
         }
-        coEvery { fileUtils.clearMainFolder() } returns true
+        coEvery { fileDeletionUtils.clearMainFolder() } returns true
 
         dataCleaner.clearAllData()
 
         coVerify { databaseWrapper.clearAllTables() }
         coVerify { databaseDao.clearPrimaryKeyIndex() }
-        coVerify { fileUtils.clearMainFolder() }
+        coVerify { fileDeletionUtils.clearMainFolder() }
     }
 }
