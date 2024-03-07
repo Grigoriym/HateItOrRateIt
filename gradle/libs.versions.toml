@@ -38,7 +38,7 @@ coil = "2.6.0"
 
 mockk = "1.13.10"
 
-kotlin = "1.9.22"
+kotlin = "1.9.23"
 kotlin-serialization = "1.6.3"
 coroutines = "1.8.0"
 ksp = "1.9.22-1.0.18"
