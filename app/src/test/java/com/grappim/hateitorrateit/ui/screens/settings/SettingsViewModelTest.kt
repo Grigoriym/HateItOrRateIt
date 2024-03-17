@@ -8,6 +8,7 @@ import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.testException
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -96,6 +97,23 @@ class SettingsViewModelTest {
         viewModel.viewState.value.onClearDataClicked()
 
         assertTrue(viewModel.viewState.value.showAlertDialog)
+    }
+
+    @Test
+    fun `on onAlertDialogConfirmButtonClicked with clearAllData failure should show set isLoading as false`() {
+        every { settingsAnalytics.trackAllDataClearedConfirm() } just Runs
+        coEvery { dataCleaner.clearAllData() } throws testException
+
+        assertFalse(viewModel.viewState.value.showAlertDialog)
+        assertFalse(viewModel.viewState.value.isLoading)
+
+        viewModel.viewState.value.onAlertDialogConfirmButtonClicked()
+
+        verify { settingsAnalytics.trackAllDataClearedConfirm() }
+        coVerify { dataCleaner.clearAllData() }
+
+        assertFalse(viewModel.viewState.value.showAlertDialog)
+        assertFalse(viewModel.viewState.value.isLoading)
     }
 
     @Test
