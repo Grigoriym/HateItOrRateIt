@@ -66,6 +66,15 @@ class SettingsViewModelTest {
     }
 
     @Test
+    fun `clearRemoteConfigs should close remoteConfigs`() {
+        every { remoteConfigsListener.onClose() } just Runs
+
+        viewModel.clearRemoteConfigs()
+
+        verify { remoteConfigsListener.onClose() }
+    }
+
+    @Test
     fun `on setNewType should change previous state to a new one`() {
         val newType = HateRateType.HATE
 

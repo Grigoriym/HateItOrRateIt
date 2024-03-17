@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
@@ -89,9 +90,14 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun clearRemoteConfigs() {
+        remoteConfigsListener.onClose()
+    }
+
     override fun onCleared() {
         super.onCleared()
-        remoteConfigsListener.onClose()
+        clearRemoteConfigs()
     }
 
     private fun onDarkThemeConfigClicked(darkThemeConfig: DarkThemeConfig) {
