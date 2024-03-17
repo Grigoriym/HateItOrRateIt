@@ -17,10 +17,11 @@ information, enabling you to make informed decisions about future purchases.
 2. Make the possibility to change the view type in the List (small tiles, big
    product tile)
 3. ~~Kotest?~~ Jacoco is just fine
-4. Privacy Policy
+4. ~~Privacy Policy~~
 5. ~~Day night theme selector~~
 6. Languages selector
 7. ~~Stubs for debug analytics~~
+8. Bottom Nav Bar has some (8.dp) line at the top
 
 ## Learnings
 
