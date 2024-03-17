@@ -4,14 +4,12 @@ import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.domain.HateRateType
 import javax.inject.Inject
-import javax.inject.Singleton
 
 internal const val SETTINGS_SCREEN_START = "settings_screen_start"
 internal const val ALL_DATA_CLEAR_CONFIRM = "all_data_clear_confirm"
 internal const val DEFAULT_TYPE_CHANGED_TO = "default_type_changed_to"
 internal const val TYPE = "type"
 
-@Singleton
 class SettingsAnalyticsImpl @Inject constructor(
     private val analyticsController: AnalyticsController
 ) : SettingsAnalytics {

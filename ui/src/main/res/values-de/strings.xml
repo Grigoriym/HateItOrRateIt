@@ -45,4 +45,6 @@
     <string name="light">Hell</string>
     <string name="dark">Dunkel</string>
 
+    <string name="github_repo_link">GitHub-Link</string>
+    <string name="privacy_policy_link">Datenschutzrichtlinie</string>
 </resources>

@@ -17,10 +17,11 @@ information, enabling you to make informed decisions about future purchases.
 2. Make the possibility to change the view type in the List (small tiles, big
    product tile)
 3. ~~Kotest?~~ Jacoco is just fine
-4. Privacy Policy
+4. ~~Privacy Policy~~
 5. ~~Day night theme selector~~
 6. Languages selector
 7. ~~Stubs for debug analytics~~
+8. Bottom Nav Bar has some (8.dp) line at the top
 
 ## Learnings
 
@@ -38,6 +39,10 @@ information, enabling you to make informed decisions about future purchases.
 3. What happens with the page indicator in Pager if we add many images?
 4. In add/details screen, click any textField, close keyboard, add image from
    gallery -> why the keyboard is shown?
+
+## Useful Gradle commands
+1. ./gradlew check
+2. ./gradlew jacocoAggregatedReport
 
 ## Definitions
 
