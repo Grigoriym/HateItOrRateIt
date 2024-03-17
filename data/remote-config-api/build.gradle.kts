@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.grappim.hateitorrateit.data.workerapi"
+    namespace = "com.grappim.hateitorrateit.data.remoteconfigapi"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -14,4 +14,8 @@ android {
             isMinifyEnabled = false
         }
     }
+}
+
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
 }

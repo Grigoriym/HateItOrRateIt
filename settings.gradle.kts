@@ -14,6 +14,9 @@ dependencyResolutionManagement {
     }
 }
 
+// https://issuetracker.google.com/issues/315023802#comment18
+gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
+
 rootProject.name = "HateItOrRateIt"
 include(":app")
 include(":ui")
@@ -33,3 +36,5 @@ include(":data:cleaner-impl")
 include(":testing")
 include(":analytics-impl")
 include(":analytics-api")
+include(":data:remote-config-impl")
+include(":data:remote-config-api")

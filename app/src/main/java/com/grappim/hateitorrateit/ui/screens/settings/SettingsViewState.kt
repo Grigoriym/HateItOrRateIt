@@ -19,5 +19,8 @@ data class SettingsViewState(
     val trackScreenStart: () -> Unit,
 
     val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.default(),
-    val onDarkThemeConfigClicked: (DarkThemeConfig) -> Unit
+    val onDarkThemeConfigClicked: (DarkThemeConfig) -> Unit,
+
+    val githubRepoLink: String = "",
+    val privacyPolicyLink: String = ""
 )

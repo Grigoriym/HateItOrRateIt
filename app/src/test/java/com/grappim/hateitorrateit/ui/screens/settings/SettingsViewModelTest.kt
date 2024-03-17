@@ -4,9 +4,11 @@ import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.testException
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -32,6 +34,7 @@ class SettingsViewModelTest {
     private val localDataStorage: LocalDataStorage = mockk()
     private val analyticsController: AnalyticsController = mockk()
     private val settingsAnalytics: SettingsAnalytics = mockk()
+    private val remoteConfigsListener: RemoteConfigsListener = mockk()
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -51,12 +54,25 @@ class SettingsViewModelTest {
         every { localDataStorage.darkThemeConfig } returns flowOf(DarkThemeConfig.default())
         coEvery { localDataStorage.setDarkThemeConfig(any()) } just Runs
 
+        every { remoteConfigsListener.githubRepoLink } returns flowOf("github")
+        every { remoteConfigsListener.privacyPolicy } returns flowOf("privacy policy")
+
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
             analyticsController = analyticsController,
-            settingsAnalytics = settingsAnalytics
+            settingsAnalytics = settingsAnalytics,
+            remoteConfigsListener = remoteConfigsListener
         )
+    }
+
+    @Test
+    fun `clearRemoteConfigs should close remoteConfigs`() {
+        every { remoteConfigsListener.onClose() } just Runs
+
+        viewModel.clearRemoteConfigs()
+
+        verify { remoteConfigsListener.onClose() }
     }
 
     @Test
@@ -81,6 +97,23 @@ class SettingsViewModelTest {
         viewModel.viewState.value.onClearDataClicked()
 
         assertTrue(viewModel.viewState.value.showAlertDialog)
+    }
+
+    @Test
+    fun `on onAlertDialogConfirmButtonClicked with clearAllData failure should show set isLoading as false`() {
+        every { settingsAnalytics.trackAllDataClearedConfirm() } just Runs
+        coEvery { dataCleaner.clearAllData() } throws testException
+
+        assertFalse(viewModel.viewState.value.showAlertDialog)
+        assertFalse(viewModel.viewState.value.isLoading)
+
+        viewModel.viewState.value.onAlertDialogConfirmButtonClicked()
+
+        verify { settingsAnalytics.trackAllDataClearedConfirm() }
+        coVerify { dataCleaner.clearAllData() }
+
+        assertFalse(viewModel.viewState.value.showAlertDialog)
+        assertFalse(viewModel.viewState.value.isLoading)
     }
 
     @Test

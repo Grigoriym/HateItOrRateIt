@@ -1,11 +1,13 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +23,8 @@ class SettingsViewModel @Inject constructor(
     private val dataCleaner: DataCleaner,
     private val localDataStorage: LocalDataStorage,
     private val analyticsController: AnalyticsController,
-    private val settingsAnalytics: SettingsAnalytics
+    private val settingsAnalytics: SettingsAnalytics,
+    private val remoteConfigsListener: RemoteConfigsListener
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -70,7 +73,31 @@ class SettingsViewModel @Inject constructor(
                     }
                 }
             }
+            launch {
+                remoteConfigsListener.githubRepoLink.collect { value ->
+                    _viewState.update {
+                        it.copy(githubRepoLink = value)
+                    }
+                }
+            }
+            launch {
+                remoteConfigsListener.privacyPolicy.collect { value ->
+                    _viewState.update {
+                        it.copy(privacyPolicyLink = value)
+                    }
+                }
+            }
         }
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    fun clearRemoteConfigs() {
+        remoteConfigsListener.onClose()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        clearRemoteConfigs()
     }
 
     private fun onDarkThemeConfigClicked(darkThemeConfig: DarkThemeConfig) {

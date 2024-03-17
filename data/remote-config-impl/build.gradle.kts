@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "com.grappim.hateitorrateit.utils"
+    namespace = "com.grappim.hateitorrateit.data.remoteconfigimpl"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -15,21 +15,15 @@ android {
             isMinifyEnabled = false
         }
     }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
 }
 
 dependencies {
-    implementation(project(":domain"))
+    implementation(project(":data:remote-config-api"))
     implementation(project(":commons"))
 
-    coreLibraryDesugaring(libs.android.desugarJdkLibs)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.config)
+    implementation(libs.firebase.analytics)
 
     implementation(libs.timber)
-
-    testImplementation(libs.robolectric)
 }

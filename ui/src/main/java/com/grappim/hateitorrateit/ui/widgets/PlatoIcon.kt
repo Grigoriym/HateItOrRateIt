@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
@@ -23,6 +24,22 @@ fun PlatoIcon(
     Icon(
         modifier = modifier.testTag(imageVector.name),
         imageVector = imageVector,
+        contentDescription = contentDescription,
+        tint = tint
+    )
+}
+
+@Composable
+fun PlatoIcon(
+    modifier: Modifier = Modifier,
+    painter: Painter,
+    contentDescription: String = "",
+    tint: Color = LocalContentColor.current.copy(alpha = LocalContentAlpha.current)
+) {
+    Icon(
+        modifier = modifier
+            .testTag(painter.toString()),
+        painter = painter,
         contentDescription = contentDescription,
         tint = tint
     )

@@ -39,6 +39,10 @@ information, enabling you to make informed decisions about future purchases.
 4. In add/details screen, click any textField, close keyboard, add image from
    gallery -> why the keyboard is shown?
 
+## Useful Gradle commands
+1. ./gradlew check
+2. ./gradlew jacocoAggregatedReport
+
 ## Definitions
 
 1. **Original folder**: the folder that is created upon creating the Product with
