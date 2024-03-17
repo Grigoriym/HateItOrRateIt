@@ -4,6 +4,7 @@ import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
@@ -32,6 +33,7 @@ class SettingsViewModelTest {
     private val localDataStorage: LocalDataStorage = mockk()
     private val analyticsController: AnalyticsController = mockk()
     private val settingsAnalytics: SettingsAnalytics = mockk()
+    private val remoteConfigsListener: RemoteConfigsListener = mockk()
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -51,11 +53,15 @@ class SettingsViewModelTest {
         every { localDataStorage.darkThemeConfig } returns flowOf(DarkThemeConfig.default())
         coEvery { localDataStorage.setDarkThemeConfig(any()) } just Runs
 
+        every { remoteConfigsListener.githubRepoLink } returns flowOf("github")
+        every { remoteConfigsListener.privacyPolicy } returns flowOf("privacy policy")
+
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
             analyticsController = analyticsController,
-            settingsAnalytics = settingsAnalytics
+            settingsAnalytics = settingsAnalytics,
+            remoteConfigsListener = remoteConfigsListener
         )
     }
 

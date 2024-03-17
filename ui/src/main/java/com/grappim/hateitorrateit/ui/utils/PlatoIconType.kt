@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageNotSupported
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
@@ -37,7 +38,8 @@ enum class PlatoIconType {
     Cancel,
     Add,
     Home,
-    Settings;
+    Settings,
+    PrivacyPolicy;
 
     val imageVector: ImageVector
         get() = when (this) {
@@ -58,6 +60,7 @@ enum class PlatoIconType {
             Add -> Icons.Filled.Add
             Home -> Icons.Filled.Home
             Settings -> Icons.Filled.Settings
+            PrivacyPolicy -> Icons.Filled.Security
         }
 
     val testTag: String

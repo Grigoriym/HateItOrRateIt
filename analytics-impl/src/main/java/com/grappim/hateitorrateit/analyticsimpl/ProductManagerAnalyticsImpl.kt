@@ -3,7 +3,6 @@ package com.grappim.hateitorrateit.analyticsimpl
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
 import javax.inject.Inject
-import javax.inject.Singleton
 
 internal const val CAMERA_BUTTON_CLICKED = "camera_button_clicked"
 internal const val GALLERY_BUTTON_CLICKED = "gallery_button_clicked"
@@ -13,7 +12,6 @@ internal const val CREATE_BUTTON_CLICKED = "create_button_clicked"
 internal const val PRODUCT_MANAGER_NEW_PRODUCT_START = "product_manager_new_product_start"
 internal const val PRODUCT_MANAGER_PRODUCT_TO_EDIT_START = "product_manager_product_to_edit_start"
 
-@Singleton
 class ProductManagerAnalyticsImpl @Inject constructor(
     private val analyticsController: AnalyticsController
 ) : ProductManagerAnalytics {

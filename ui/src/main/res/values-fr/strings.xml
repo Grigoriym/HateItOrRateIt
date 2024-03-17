@@ -45,4 +45,6 @@
     <string name="light">Clair</string>
     <string name="dark">Sombre</string>
 
+    <string name="github_repo_link">Lien GitHub</string>
+    <string name="privacy_policy_link">Politique de confidentialité</string>
 </resources>

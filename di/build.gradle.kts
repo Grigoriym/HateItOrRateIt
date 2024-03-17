@@ -28,4 +28,6 @@ dependencies {
     implementation(project(":data:cleaner-impl"))
     implementation(project(":analytics-api"))
     implementation(project(":analytics-impl"))
+    implementation(project(":data:remote-config-api"))
+    implementation(project(":data:remote-config-impl"))
 }
