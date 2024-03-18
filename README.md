@@ -21,7 +21,7 @@ information, enabling you to make informed decisions about future purchases.
 5. ~~Day night theme selector~~
 6. Languages selector
 7. ~~Stubs for debug analytics~~
-8. Bottom Nav Bar has some (8.dp) line at the top
+8. ~~Bottom Nav Bar has some (8.dp) line at the top~~
 
 ## Learnings
 

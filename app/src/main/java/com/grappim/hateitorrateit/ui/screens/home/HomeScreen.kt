@@ -68,7 +68,7 @@ private fun HomeScreenContent(state: HomeViewState, onProductClick: (id: Long) -
         modifier = Modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
-            .padding(top = 16.dp, bottom = 8.dp)
+            .padding(top = 16.dp)
     ) {
         SearchContent(
             state = state
