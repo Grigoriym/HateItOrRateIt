@@ -21,7 +21,7 @@ information, enabling you to make informed decisions about future purchases.
 5. ~~Day night theme selector~~
 6. Languages selector
 7. ~~Stubs for debug analytics~~
-8. ~~Bottom Nav Bar has some (8.dp) line at the top~~
+8. Check for app updates
 
 ## Learnings
 
@@ -39,6 +39,7 @@ information, enabling you to make informed decisions about future purchases.
 3. What happens with the page indicator in Pager if we add many images?
 4. In add/details screen, click any textField, close keyboard, add image from
    gallery -> why the keyboard is shown?
+5. ~~Bottom Nav Bar has some (8.dp) line at the top~~
 
 ## Useful Gradle commands
 1. ./gradlew check

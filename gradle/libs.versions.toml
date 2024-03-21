@@ -1,5 +1,5 @@
 [versions]
-compose-bom = "2024.02.02"
+compose-bom = "2024.03.00"
 firebase-bom = "32.7.4"
 firebaseCrashlytics = "2.9.9"
 composeKotlinCompiler = "1.5.8"
