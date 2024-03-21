@@ -1,6 +1,6 @@
 [versions]
-compose-bom = "2024.02.02"
-firebase-bom = "32.7.3"
+compose-bom = "2024.03.00"
+firebase-bom = "32.7.4"
 firebaseCrashlytics = "2.9.9"
 composeKotlinCompiler = "1.5.8"
 
@@ -14,8 +14,8 @@ jacocoAggregation = "2.2.0"
 
 gms = "4.4.1"
 
-agp = "8.2.2"
-androidTools = "31.3.0"
+agp = "8.3.1"
+androidTools = "31.3.1"
 
 hilt = "2.51"
 androidx-hilt = "1.2.0"
@@ -41,7 +41,7 @@ mockk = "1.13.10"
 kotlin = "1.9.23"
 kotlin-serialization = "1.6.3"
 coroutines = "1.8.0"
-ksp = "1.9.22-1.0.18"
+ksp = "1.9.23-1.0.19"
 
 androidxEspresso = "3.5.1"
 junit4 = "4.13.2"
@@ -128,6 +128,7 @@ mockk-android = { module = "io.mockk:mockk-android", version.ref = "mockk" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-config = { module = "com.google.firebase:firebase-config" }
 
 kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }

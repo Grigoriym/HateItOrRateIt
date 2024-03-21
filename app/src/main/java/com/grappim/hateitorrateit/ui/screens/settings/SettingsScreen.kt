@@ -5,13 +5,10 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.RadioButton
@@ -22,7 +19,9 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,7 +38,10 @@ import com.grappim.hateitorrateit.ui.theme.Feijoa
 import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
+import com.grappim.hateitorrateit.ui.widgets.PlatoHeightSpacer16
+import com.grappim.hateitorrateit.ui.widgets.PlatoHeightSpacer8
 import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
+import com.grappim.hateitorrateit.ui.widgets.PlatoOutlinedButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.ui.widgets.text.TextH5
 
@@ -96,100 +98,152 @@ private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) 
             }
         )
 
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
         ) {
-            ListItem(
-                modifier = Modifier.clickable {
-                    state.onClearDataClicked()
-                },
-                text = {
-                    Text(text = stringResource(id = R.string.clear_data))
-                }
-            )
-            ListItem(
-                modifier = Modifier.clickable {
-                    state.setNewType()
-                },
-                text = {
-                    Text(text = stringResource(id = R.string.default_type))
-                },
-                trailing = {
-                    TypeIcon(state = state)
-                }
-            )
-            ListItem(
-                modifier = Modifier
-                    .clickable {
-                        state.onCrashlyticsToggle()
+            item {
+                ListItem(
+                    modifier = Modifier.clickable {
+                        state.onClearDataClicked()
+                    },
+                    text = {
+                        Text(text = stringResource(id = R.string.clear_data))
                     }
-                    .testTag(CRASHLYTICS_TILE_TAG),
-                text = {
-                    Text(text = stringResource(id = R.string.toggle_crashlytics))
-                },
-                trailing = {
-                    FeatureEnabledIcon(state.isCrashesCollectionEnabled)
-                },
-                secondaryText = {
-                    Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
-                }
-            )
-            ListItem(
-                modifier = Modifier
-                    .clickable {
-                        state.onAnalyticsToggle()
-                    }
-                    .testTag(ANALYTICS_TILE_TAG),
-                text = {
-                    Text(text = stringResource(id = R.string.toggle_analytics))
-                },
-                trailing = {
-                    FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
-                },
-                secondaryText = {
-                    Text(text = stringResource(id = R.string.analytics_settings_subtitle))
-                }
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-            PlatoCard(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-            ) {
-                Column {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextH5(
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally),
-                        text = stringResource(id = R.string.dark_mode_preferences)
-                    )
-                    PlatoRadioButton(
-                        selected = state.darkThemeConfig.isSystemDefault(),
-                        onClick = {
-                            state.onDarkThemeConfigClicked(DarkThemeConfig.FOLLOW_SYSTEM)
-                        },
-                        text = stringResource(id = R.string.system_default)
-                    )
-                    PlatoRadioButton(
-                        selected = state.darkThemeConfig.isLight(),
-                        onClick = {
-                            state.onDarkThemeConfigClicked(DarkThemeConfig.LIGHT)
-                        },
-                        text = stringResource(id = R.string.light)
-                    )
-                    PlatoRadioButton(
-                        selected = state.darkThemeConfig.isDark(),
-                        onClick = {
-                            state.onDarkThemeConfigClicked(DarkThemeConfig.DARK)
-                        },
-                        text = stringResource(id = R.string.dark)
-                    )
-                }
+                )
             }
+            item {
+                ListItem(
+                    modifier = Modifier.clickable {
+                        state.setNewType()
+                    },
+                    text = {
+                        Text(text = stringResource(id = R.string.default_type))
+                    },
+                    trailing = {
+                        TypeIcon(state = state)
+                    }
+                )
+            }
+            item {
+                ListItem(
+                    modifier = Modifier
+                        .clickable {
+                            state.onCrashlyticsToggle()
+                        }
+                        .testTag(CRASHLYTICS_TILE_TAG),
+                    text = {
+                        Text(text = stringResource(id = R.string.toggle_crashlytics))
+                    },
+                    trailing = {
+                        FeatureEnabledIcon(state.isCrashesCollectionEnabled)
+                    },
+                    secondaryText = {
+                        Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+                    }
+                )
+            }
+            item {
+                ListItem(
+                    modifier = Modifier
+                        .clickable {
+                            state.onAnalyticsToggle()
+                        }
+                        .testTag(ANALYTICS_TILE_TAG),
+                    text = {
+                        Text(text = stringResource(id = R.string.toggle_analytics))
+                    },
+                    trailing = {
+                        FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
+                    },
+                    secondaryText = {
+                        Text(text = stringResource(id = R.string.analytics_settings_subtitle))
+                    }
+                )
+            }
+
+            item {
+                PlatoHeightSpacer16()
+                DarkModePreferencesContent(state = state)
+            }
+
+            item {
+                GithubRepoContent(state = state)
+            }
+
+            item {
+                PrivacyPolicyContent(state = state)
+            }
+
+            item {
+                PlatoHeightSpacer8()
+            }
+        }
+    }
+}
+
+@Composable
+private fun GithubRepoContent(state: SettingsViewState) {
+    if (state.githubRepoLink.isNotEmpty()) {
+        val uriHandler = LocalUriHandler.current
+        PlatoHeightSpacer16()
+        PlatoOutlinedButton(
+            painter = painterResource(id = R.drawable.github_mark),
+            text = stringResource(id = R.string.github_repo_link),
+            onClicked = { uriHandler.openUri(state.githubRepoLink) }
+        )
+    }
+}
+
+@Composable
+private fun PrivacyPolicyContent(state: SettingsViewState) {
+    if (state.privacyPolicyLink.isNotEmpty()) {
+        val uriHandler = LocalUriHandler.current
+        PlatoHeightSpacer16()
+        PlatoOutlinedButton(
+            imageVector = PlatoIconType.PrivacyPolicy.imageVector,
+            text = stringResource(id = R.string.privacy_policy_link),
+            onClicked = { uriHandler.openUri(state.privacyPolicyLink) }
+        )
+    }
+}
+
+@Composable
+private fun DarkModePreferencesContent(state: SettingsViewState) {
+    PlatoCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp)
+    ) {
+        Column {
+            PlatoHeightSpacer8()
+            TextH5(
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally),
+                text = stringResource(id = R.string.dark_mode_preferences)
+            )
+            PlatoRadioButton(
+                selected = state.darkThemeConfig.isSystemDefault(),
+                onClick = {
+                    state.onDarkThemeConfigClicked(DarkThemeConfig.FOLLOW_SYSTEM)
+                },
+                text = stringResource(id = R.string.system_default)
+            )
+            PlatoRadioButton(
+                selected = state.darkThemeConfig.isLight(),
+                onClick = {
+                    state.onDarkThemeConfigClicked(DarkThemeConfig.LIGHT)
+                },
+                text = stringResource(id = R.string.light)
+            )
+            PlatoRadioButton(
+                selected = state.darkThemeConfig.isDark(),
+                onClick = {
+                    state.onDarkThemeConfigClicked(DarkThemeConfig.DARK)
+                },
+                text = stringResource(id = R.string.dark)
+            )
         }
     }
 }

@@ -7,7 +7,7 @@ android {
     namespace = "com.grappim.hateitorrateit.utils"
 
     defaultConfig {
-        testInstrumentationRunner = "com.grappim.hateitorrateit.testing.HioriTestRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {

@@ -96,7 +96,9 @@ private val coverageExclusions = listOf(
     "**/*HomeNavDestination",
     "**/*HashUtils",
     "**/*NavUtils",
-    "**/DebugAnalyticsControllerImpl"
+    "**/DebugAnalyticsControllerImpl",
+    "**/RemoteConfigsListenerImpl",
+    "**/RemoteConfigManagerImpl"
 ).flatMap {
     listOf(
         "$it.class",

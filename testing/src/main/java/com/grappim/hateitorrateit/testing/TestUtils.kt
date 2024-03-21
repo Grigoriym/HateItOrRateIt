@@ -19,3 +19,5 @@ fun getRandomUri(): Uri {
     val uriString = "https://grappim.com/$randomString"
     return Uri.parse(uriString)
 }
+
+val testException = IllegalStateException("error")
