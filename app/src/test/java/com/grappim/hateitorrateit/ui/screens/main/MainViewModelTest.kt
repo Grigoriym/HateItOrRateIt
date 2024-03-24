@@ -30,6 +30,7 @@ class MainViewModelTest {
     fun setup() {
         every { workerController.startCleaning() } just Runs
         every { localDataStorage.darkThemeConfig } returns flowOf(DarkThemeConfig.default())
+        every { remoteConfigsListener.inAppUpdateEnabled } returns flowOf(true)
 
         mainViewModel = MainViewModel(
             workerController = workerController,
