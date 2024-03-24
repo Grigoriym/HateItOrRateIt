@@ -148,6 +148,10 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
+    implementation(libs.google.inAppUpdate)
+    implementation(libs.google.inAppUpdateKtx)
+    implementation(libs.google.material)
+
     testImplementation(kotlin("test"))
     androidTestImplementation(kotlin("test"))
     testImplementation(project(":testing"))

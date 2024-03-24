@@ -47,4 +47,7 @@
 
     <string name="github_repo_link">Lien GitHub</string>
     <string name="privacy_policy_link">Politique de confidentialité</string>
+
+    <string name="app_update_downloaded">Une mise à jour vient d\'être téléchargée</string>
+    <string name="restart">Redémarrer</string>
 </resources>

@@ -49,4 +49,7 @@
 
     <string name="github_repo_link">Github Link</string>
     <string name="privacy_policy_link">Privacy Policy</string>
+
+    <string name="app_update_downloaded">An update has just been downloaded</string>
+    <string name="restart">Restart</string>
 </resources>
