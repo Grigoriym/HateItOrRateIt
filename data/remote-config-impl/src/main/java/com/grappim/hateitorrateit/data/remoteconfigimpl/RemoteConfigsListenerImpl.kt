@@ -48,6 +48,18 @@ class RemoteConfigsListenerImpl @Inject constructor(
             },
             defaultValue = getPrivacyPolicyUrlValue()
         )
+    override val inAppUpdateEnabled: Flow<Boolean>
+        get() = createRemoteConfigStateFlow(
+            key = IN_APP_UPDATE_ENABLED,
+            value = {
+                getInAppUpdateValue()
+            },
+            defaultValue = getInAppUpdateValue()
+        )
+
+    override fun onClose() {
+        scope.cancel()
+    }
 
     private fun <T> createRemoteConfigStateFlow(
         key: String,
@@ -65,7 +77,6 @@ class RemoteConfigsListenerImpl @Inject constructor(
     private fun getGithubRepoUrlValue() = firebaseRemoteConfig[GITHUB_REPO_URL_KEY].asString()
 
     private fun getPrivacyPolicyUrlValue() = firebaseRemoteConfig[PRIVACY_POLICY_URL_KEY].asString()
-    override fun onClose() {
-        scope.cancel()
-    }
+
+    private fun getInAppUpdateValue() = firebaseRemoteConfig[IN_APP_UPDATE_ENABLED].asBoolean()
 }

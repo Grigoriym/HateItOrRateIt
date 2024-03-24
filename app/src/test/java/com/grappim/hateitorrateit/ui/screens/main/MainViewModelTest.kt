@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.main
 
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.data.workerapi.WorkerController
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
@@ -21,6 +22,7 @@ class MainViewModelTest {
 
     private val workerController: WorkerController = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
+    private val remoteConfigsListener: RemoteConfigsListener = mockk()
 
     private lateinit var mainViewModel: MainViewModel
 
@@ -28,8 +30,13 @@ class MainViewModelTest {
     fun setup() {
         every { workerController.startCleaning() } just Runs
         every { localDataStorage.darkThemeConfig } returns flowOf(DarkThemeConfig.default())
+        every { remoteConfigsListener.inAppUpdateEnabled } returns flowOf(true)
 
-        mainViewModel = MainViewModel(workerController, localDataStorage)
+        mainViewModel = MainViewModel(
+            workerController = workerController,
+            localDataStorage = localDataStorage,
+            remoteConfigsListener = remoteConfigsListener
+        )
     }
 
     @Test
