@@ -64,6 +64,9 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun checkForAppUpdates() {
+        if (viewModel.inAppUpdateEnabled.value.not()) {
+            return
+        }
         val appUpdateManager: AppUpdateManager = AppUpdateManagerFactory.create(this)
         appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             Timber.d("appUpdateInfo: $info")
