@@ -21,7 +21,7 @@ information, enabling you to make informed decisions about future purchases.
 5. ~~Day night theme selector~~
 6. Languages selector
 7. ~~Stubs for debug analytics~~
-8. Check for app updates
+8. ~~Check for app updates~~
 
 ## Learnings
 
