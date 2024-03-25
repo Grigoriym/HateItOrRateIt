@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="language">Français</string>
+
     <string name="add_image">Veuillez ajouter une image</string>
     <string name="set_name">Veuillez entrer un nom de produit</string>
     <string name="add_picture_from">Ajouter une image depuis:</string>
