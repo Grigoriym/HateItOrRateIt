@@ -96,6 +96,14 @@ android {
             isIncludeAndroidResources = true
         }
     }
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    androidResources {
+        generateLocaleConfig = true
+    }
 }
 
 dependencies {

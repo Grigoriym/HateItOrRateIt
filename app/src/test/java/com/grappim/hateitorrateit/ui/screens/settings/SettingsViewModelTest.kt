@@ -35,6 +35,7 @@ class SettingsViewModelTest {
     private val analyticsController: AnalyticsController = mockk()
     private val settingsAnalytics: SettingsAnalytics = mockk()
     private val remoteConfigsListener: RemoteConfigsListener = mockk()
+    private val localeOptionsGenerator: LocaleOptionsGenerator = mockk()
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -56,13 +57,15 @@ class SettingsViewModelTest {
 
         every { remoteConfigsListener.githubRepoLink } returns flowOf("github")
         every { remoteConfigsListener.privacyPolicy } returns flowOf("privacy policy")
+        every { localeOptionsGenerator.getLocaleOptions() } returns mapOf()
 
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
             analyticsController = analyticsController,
             settingsAnalytics = settingsAnalytics,
-            remoteConfigsListener = remoteConfigsListener
+            remoteConfigsListener = remoteConfigsListener,
+            localeOptionsGenerator = localeOptionsGenerator
         )
     }
 

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="language">Deutsch</string>
+
     <string name="add_image">Bitte füge ein Bild hinzu</string>
     <string name="set_name">Bitte gib einen Produktnamen ein</string>
     <string name="add_picture_from">Bild hinzufügen von:</string>

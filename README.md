@@ -22,6 +22,8 @@ information, enabling you to make informed decisions about future purchases.
 6. Languages selector
 7. ~~Stubs for debug analytics~~
 8. ~~Check for app updates~~
+9. StrictMode
+10. DarkMode Preferences click area
 
 ## Learnings
 
