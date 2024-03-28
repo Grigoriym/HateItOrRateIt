@@ -6,10 +6,17 @@ This application offers a straightforward way to keep track of products you like
 or dislike. It allows you to easily upload photos, names, descriptions, and store
 information, enabling you to make informed decisions about future purchases.
 
+|  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/049be3a0-86b8-4d62-b798-e40efafd7f0d" alt="drawing" width="400" height="800"/> | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/69d6a136-459e-4fdf-b368-a0829d846e38" alt="drawing" width="400" height="800"/>  |
+|---|---|
+| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/593edc54-f1fb-468a-a574-e972182640ac" alt="drawing" width="400" height="800"/>  |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/cf787dc6-89ff-4c6d-ac5c-830819eebb5d" alt="drawing" width="400" height="800"/> |
+| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/d74bf10f-a1f3-4200-89ec-8d4616e40052" alt="drawing" width="400" height="800"/>  | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/5e34b4f2-1a6c-4bd2-95cf-6535ecd271a6" alt="drawing" width="400" height="800"/>  |
+
+
 ## This app offers
 
 1. Day/Night theme
-2. On/off crashlytics
+2. Language change: en, de, fr
+3. On/off crashlytics, analytics
 
 ## TODOs
 
@@ -19,11 +26,10 @@ information, enabling you to make informed decisions about future purchases.
 3. ~~Kotest?~~ Jacoco is just fine
 4. ~~Privacy Policy~~
 5. ~~Day night theme selector~~
-6. Languages selector
+6. ~~Languages selector~~
 7. ~~Stubs for debug analytics~~
 8. ~~Check for app updates~~
 9. StrictMode
-10. DarkMode Preferences click area
 
 ## Learnings
 
@@ -42,7 +48,4 @@ information, enabling you to make informed decisions about future purchases.
 4. In add/details screen, click any textField, close keyboard, add image from
    gallery -> why the keyboard is shown?
 5. ~~Bottom Nav Bar has some (8.dp) line at the top~~
-
-## Useful Gradle commands
-1. ./gradlew check
-2. ./gradlew jacocoAggregatedReport
+6. DarkMode Preferences click area
