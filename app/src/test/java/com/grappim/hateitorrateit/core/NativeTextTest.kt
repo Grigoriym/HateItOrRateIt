@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.core
 
+import com.grappim.hateitorrateit.ui.R
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -37,5 +38,13 @@ class NativeTextTest {
         )
 
         assertEquals(multi.asString(context), "simpletext")
+    }
+
+    @Test
+    fun `resource NativeText should return provided text`() {
+        val idRes = R.string.add_picture_from
+        val simple = NativeText.Resource(idRes)
+
+        assertEquals(simple.asString(context), context.getString(idRes))
     }
 }

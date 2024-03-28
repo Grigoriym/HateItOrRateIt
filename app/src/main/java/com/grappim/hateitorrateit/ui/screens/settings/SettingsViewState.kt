@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
+import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
 
@@ -22,5 +23,7 @@ data class SettingsViewState(
     val onDarkThemeConfigClicked: (DarkThemeConfig) -> Unit,
 
     val githubRepoLink: String = "",
-    val privacyPolicyLink: String = ""
+    val privacyPolicyLink: String = "",
+
+    val localeOptions: Map<NativeText, String>
 )

@@ -8,11 +8,12 @@ compileSdk = "34"
 minSdk = "24"
 targetSdk = "34"
 
-detekt = "1.23.5"
+detekt = "1.23.6"
 ktlint = "12.1.0"
 jacocoAggregation = "2.2.0"
 
 gms = "4.4.1"
+inAppUpdate = "2.1.0"
 
 agp = "8.3.1"
 androidTools = "31.3.1"
@@ -115,6 +116,8 @@ hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.re
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+google-inAppUpdate = { module = "com.google.android.play:app-update", version.ref = "inAppUpdate" }
+google-inAppUpdateKtx = { module = "com.google.android.play:app-update-ktx", version.ref = "inAppUpdate" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }

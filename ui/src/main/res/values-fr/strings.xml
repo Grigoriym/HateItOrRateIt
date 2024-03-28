@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="language">Français</string>
+
     <string name="add_image">Veuillez ajouter une image</string>
     <string name="set_name">Veuillez entrer un nom de produit</string>
     <string name="add_picture_from">Ajouter une image depuis:</string>
@@ -47,4 +49,7 @@
 
     <string name="github_repo_link">Lien GitHub</string>
     <string name="privacy_policy_link">Politique de confidentialité</string>
+
+    <string name="app_update_downloaded">Une mise à jour vient d\'être téléchargée</string>
+    <string name="restart">Redémarrer</string>
 </resources>

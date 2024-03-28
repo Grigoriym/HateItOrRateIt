@@ -96,6 +96,14 @@ android {
             isIncludeAndroidResources = true
         }
     }
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    androidResources {
+        generateLocaleConfig = true
+    }
 }
 
 dependencies {
@@ -147,6 +155,10 @@ dependencies {
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
+
+    implementation(libs.google.inAppUpdate)
+    implementation(libs.google.inAppUpdateKtx)
+    implementation(libs.google.material)
 
     testImplementation(kotlin("test"))
     androidTestImplementation(kotlin("test"))

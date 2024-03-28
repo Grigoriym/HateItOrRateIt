@@ -24,7 +24,8 @@ class SettingsViewModel @Inject constructor(
     private val localDataStorage: LocalDataStorage,
     private val analyticsController: AnalyticsController,
     private val settingsAnalytics: SettingsAnalytics,
-    private val remoteConfigsListener: RemoteConfigsListener
+    private val remoteConfigsListener: RemoteConfigsListener,
+    localeOptionsGenerator: LocaleOptionsGenerator
 ) : ViewModel() {
 
     private val _viewState = MutableStateFlow(
@@ -36,7 +37,8 @@ class SettingsViewModel @Inject constructor(
             onCrashlyticsToggle = ::onCrashlyticsToggle,
             onAnalyticsToggle = ::onAnalyticsToggle,
             trackScreenStart = ::trackScreenStart,
-            onDarkThemeConfigClicked = ::onDarkThemeConfigClicked
+            onDarkThemeConfigClicked = ::onDarkThemeConfigClicked,
+            localeOptions = localeOptionsGenerator.getLocaleOptions()
         )
     )
     val viewState = _viewState.asStateFlow()
