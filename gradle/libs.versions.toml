@@ -1,5 +1,5 @@
 [versions]
-compose-bom = "2024.03.00"
+compose-bom = "2024.04.00"
 firebase-bom = "32.8.0"
 firebaseCrashlytics = "2.9.9"
 composeKotlinCompiler = "1.5.8"
@@ -18,7 +18,7 @@ inAppUpdate = "2.1.0"
 agp = "8.3.1"
 androidTools = "31.3.1"
 
-hilt = "2.51"
+hilt = "2.51.1"
 androidx-hilt = "1.2.0"
 navigation = "2.7.7"
 lifecycle = "2.7.0"
@@ -42,7 +42,7 @@ mockk = "1.13.10"
 kotlin = "1.9.23"
 kotlin-serialization = "1.6.3"
 coroutines = "1.8.0"
-ksp = "1.9.23-1.0.19"
+ksp = "1.9.23-1.0.20"
 
 androidxEspresso = "3.5.1"
 junit4 = "4.13.2"
@@ -57,7 +57,7 @@ material = "1.11.0"
 
 sqlCipher = "4.5.4"
 
-robolectric = "4.11.1"
+robolectric = "4.12.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
