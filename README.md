@@ -33,6 +33,7 @@ https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/de24f8f3-ed42-4944-a
 7. ~~Stubs for debug analytics~~
 8. ~~Check for app updates~~
 9. StrictMode
+10. Add version in settings
 
 ## Learnings
 
