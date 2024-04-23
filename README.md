@@ -6,10 +6,17 @@ This application offers a straightforward way to keep track of products you like
 or dislike. It allows you to easily upload photos, names, descriptions, and store
 information, enabling you to make informed decisions about future purchases.
 
-|  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/049be3a0-86b8-4d62-b798-e40efafd7f0d" alt="drawing" width="400" height="800"/> | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/69d6a136-459e-4fdf-b368-a0829d846e38" alt="drawing" width="400" height="800"/>  |
+## Why This App Can Be Helpful
+
+There are times when you purchase a product that you either like or dislike, only to realize later that you can't remember its name. This is particularly true for items like cheese, ham, etc., where there are countless variations and it's challenging to keep up with all the names. This app aims to solve that problem, enabling you to recall the exact product the next time you need it.
+
+https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/de24f8f3-ed42-4944-af75-548de1988259
+
+
+|  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/d745e722-9e59-4a81-a5ba-bdb1b614ab02" alt="drawing" width="400" height="900"/> | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/902d61c4-ab54-43dc-a51c-1d8b87a6ac56" alt="drawing" width="400" height="900"/>  |
 |---|---|
-| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/593edc54-f1fb-468a-a574-e972182640ac" alt="drawing" width="400" height="800"/>  |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/cf787dc6-89ff-4c6d-ac5c-830819eebb5d" alt="drawing" width="400" height="800"/> |
-| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/d74bf10f-a1f3-4200-89ec-8d4616e40052" alt="drawing" width="400" height="800"/>  | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/5e34b4f2-1a6c-4bd2-95cf-6535ecd271a6" alt="drawing" width="400" height="800"/>  |
+| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3e79ad35-7b87-43d0-b7fe-8adb5bcdd212" alt="drawing" width="400" height="900"/>  |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/ec249ed8-fa86-4aac-9c72-70bdc9e862f5" alt="drawing" width="400" height="900"/> |
+| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/c8acad80-5211-4d1f-94ff-2fba5bfdff1e" alt="drawing" width="400" height="900"/>  | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3a76cb2c-1a87-4492-9d4f-930efe0d840e" alt="drawing" width="400" height="900"/>  |
 
 
 ## This app offers
@@ -30,6 +37,7 @@ information, enabling you to make informed decisions about future purchases.
 7. ~~Stubs for debug analytics~~
 8. ~~Check for app updates~~
 9. StrictMode
+10. Add version in settings
 
 ## Learnings
 

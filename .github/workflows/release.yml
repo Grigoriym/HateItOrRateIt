@@ -1,12 +1,16 @@
-name: Build Project
+name: Release
 
 on:
-  pull_request:
+  push:
     branches: [ "master" ]
+    tags:
+      - v*
 
 jobs:
   build:
+    permissions: write-all
     runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
     env:
       HIOR_PATH_R: ${{ secrets.HIOR_PATH_R }}
       HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
@@ -21,6 +25,8 @@ jobs:
       ENCODED_STRING_D: ${{ secrets.HIOR_KEYSTORE_D }}
 
       GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up Java 17
@@ -40,9 +46,6 @@ jobs:
             ~/.gradle/wrapper
           key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
-
       - name: Decode google-services.json
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
@@ -55,8 +58,24 @@ jobs:
       - name: Restore debug keystore.jks
         run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
-      - name: List directory contents
-        run: ls -la
+      - name: Build Release apk
+        run: ./gradlew assembleRelease
 
-      - name: Build gradle project
-        run: ./gradlew build
+      - name: Build Release bundle
+        run: ./gradlew bundleRelease
+
+      - name: Upload Release Build To Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts
+          path: |
+            app/build/outputs/apl/release/
+            app/build/outputs/bundle/release/
+
+      - name: Create Github release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            app/build/outputs/apk/release/app-release.apk
+            app/build/outputs/bundle/release/app-release.aab
