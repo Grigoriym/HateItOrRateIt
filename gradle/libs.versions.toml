@@ -55,8 +55,6 @@ androidxTestRules = "1.5.0"
 
 material = "1.11.0"
 
-sqlCipher = "4.5.4"
-
 robolectric = "4.12.1"
 
 [libraries]
@@ -137,7 +135,6 @@ kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
-sqlCipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlCipher" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 # Dependencies of the included build-logic

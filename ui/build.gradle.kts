@@ -19,9 +19,6 @@ android {
         freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
         freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
     }
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {
