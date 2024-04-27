@@ -5,12 +5,6 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.analyticsimpl"
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-        }
-    }
 }
 
 dependencies {

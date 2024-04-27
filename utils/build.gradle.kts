@@ -5,19 +5,6 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.utils"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-        }
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
 }
 
 dependencies {

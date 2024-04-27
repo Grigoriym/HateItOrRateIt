@@ -55,8 +55,6 @@ androidxTestRules = "1.5.0"
 
 material = "1.11.0"
 
-sqlCipher = "4.5.4"
-
 robolectric = "4.12.1"
 
 [libraries]
@@ -73,8 +71,6 @@ androidx-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-comp
 androidx-datastore-prefs = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-prefs" }
 
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
-
-androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "crypto" }
 
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -137,7 +133,6 @@ kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
-sqlCipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlCipher" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
 # Dependencies of the included build-logic

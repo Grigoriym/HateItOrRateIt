@@ -6,21 +6,9 @@ plugins {
 android {
     namespace = "com.grappim.hateitorrateit.ui"
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-        }
-    }
     kotlinOptions {
         freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
         freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
-    }
-    buildFeatures {
-        buildConfig = true
     }
 }
 
@@ -33,6 +21,4 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material.icons.extended)
-
-    debugImplementation(libs.androidx.compose.ui.tooling)
 }

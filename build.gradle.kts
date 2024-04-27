@@ -17,6 +17,17 @@ plugins {
     alias(libs.plugins.jacocoAggregationCoverage)
 }
 
+allprojects {
+    tasks.withType<Test> {
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+            showCauses = true
+            showExceptions = true
+            showStackTraces = true
+        }
+    }
+}
+
 subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
@@ -112,18 +123,4 @@ testAggregation {
     coverage {
         exclude(coverageExclusions)
     }
-}
-
-val runAllUnitTests by tasks.creating {
-    group = "verification"
-    description = "Runs all unit tests in all modules."
-
-    dependsOn(subprojects.map { it.tasks.withType<Test>() })
-}
-
-val runAndroidTests by tasks.creating {
-    group = "verification"
-    description = "Runs Android instrumented tests only in :app and data:db modules."
-
-    dependsOn(":app:connectedAndroidTest", ":data:db:connectedAndroidTest")
 }

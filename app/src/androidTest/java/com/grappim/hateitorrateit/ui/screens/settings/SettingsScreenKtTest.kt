@@ -181,6 +181,7 @@ class SettingsScreenKtTest {
         trackScreenStart = {},
         isAnalyticsCollectionEnabled = false,
         onAnalyticsToggle = {},
-        onDarkThemeConfigClicked = {}
+        onDarkThemeConfigClicked = {},
+        localeOptions = mutableMapOf()
     )
 }

@@ -15,12 +15,6 @@ android {
             arg("room.expandProjection", "true")
         }
     }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-        }
-    }
     buildFeatures {
         buildConfig = true
     }

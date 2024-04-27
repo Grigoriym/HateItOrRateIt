@@ -7,18 +7,7 @@ android {
     namespace = "com.grappim.hateitorrateit.data.workerimpl"
 
     defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 
