@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.data.remoteconfigapi"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 dependencies {

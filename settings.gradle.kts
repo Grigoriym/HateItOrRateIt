@@ -22,19 +22,34 @@ include(":app")
 include(":ui")
 include(":domain")
 include(":utils")
-include(":data:db")
-include(":data:worker-api")
-include(":data:worker-impl")
-include(":data:repo-api")
-include(":data:repo-impl")
 include(":di")
 include(":commons")
-include(":data:local-datastorage-api")
-include(":data:local-datastorage-impl")
-include(":data:cleaner-api")
-include(":data:cleaner-impl")
 include(":testing")
-include(":analytics-impl")
-include(":analytics-api")
-include(":data:remote-config-impl")
-include(":data:remote-config-api")
+
+include(
+    ":data:local-datastorage-api",
+    ":data:local-datastorage-impl"
+)
+
+include(
+    ":data:cleaner-api",
+    ":data:cleaner-impl"
+)
+
+include(
+    ":analytics-impl",
+    ":analytics-api"
+)
+
+include(
+    ":data:remote-config-impl",
+    ":data:remote-config-api"
+)
+
+include(
+    ":data:db",
+    ":data:worker-api",
+    ":data:worker-impl",
+    ":data:repo-api",
+    ":data:repo-impl"
+)

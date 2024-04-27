@@ -5,10 +5,6 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.di"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 dependencies {

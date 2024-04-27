@@ -5,10 +5,6 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.testing"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 dependencies {
@@ -19,7 +15,6 @@ dependencies {
     api(libs.turbine)
     api(libs.mockk)
     api(libs.mockk.android)
-    api(libs.hilt.android.testing)
     api(libs.androidx.arch.core.testing)
     api(libs.androidx.test.runner)
     api(libs.androidx.test.rules)

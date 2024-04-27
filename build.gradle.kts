@@ -17,6 +17,17 @@ plugins {
     alias(libs.plugins.jacocoAggregationCoverage)
 }
 
+allprojects {
+    tasks.withType<Test> {
+        testLogging {
+            exceptionFormat = TestExceptionFormat.FULL
+            showCauses = true
+            showExceptions = true
+            showStackTraces = true
+        }
+    }
+}
+
 subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")

@@ -72,8 +72,6 @@ androidx-datastore-prefs = { module = "androidx.datastore:datastore-preferences"
 
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
-androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "crypto" }
-
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }

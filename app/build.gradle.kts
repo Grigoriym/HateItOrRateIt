@@ -15,6 +15,8 @@ android {
 
     defaultConfig {
         applicationId = "com.grappim.hateitorrateit"
+        testApplicationId = "com.grappim.hateitorrateit.tests"
+
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 6
@@ -100,6 +102,10 @@ android {
     }
     bundle {
         language {
+            // Specifies that the app bundle should not support
+            // configuration APKs for language resources. These
+            // resources are instead packaged with each base and
+            // dynamic feature APK.
             enableSplit = false
         }
     }
@@ -125,16 +131,19 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.activity.compose)
-
     implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.timber)
-
     implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(libs.androidx.lifecycle.runtime)
+    implementation(libs.androidx.viewmodel.compose)
+    implementation(libs.androidx.runtime.compose)
 
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
+
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
 
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
 
@@ -147,12 +156,6 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
-
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.viewmodel.compose)
-    implementation(libs.androidx.runtime.compose)
-
-    implementation(libs.coil)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
@@ -168,4 +171,7 @@ dependencies {
     androidTestImplementation(project(":testing"))
 
     testImplementation(libs.robolectric)
+
+    implementation(libs.coil)
+    implementation(libs.timber)
 }
