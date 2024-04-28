@@ -3,9 +3,9 @@ package com.grappim.hateitorrateit.utils.file.inforetriever
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.grappim.hateitorrateit.datetime.DateTimeUtils
 import com.grappim.hateitorrateit.utils.MimeTypes
 import com.grappim.hateitorrateit.utils.ShadowFileProvider
-import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Assert.assertEquals

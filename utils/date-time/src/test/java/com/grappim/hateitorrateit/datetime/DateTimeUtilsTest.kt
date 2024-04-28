@@ -1,7 +1,5 @@
-package com.grappim.hateitorrateit.utils
+package com.grappim.hateitorrateit.datetime
 
-import com.grappim.hateitorrateit.utils.datetime.DateTimeUtilsImpl
-import com.grappim.hateitorrateit.utils.di.DateTimeModule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

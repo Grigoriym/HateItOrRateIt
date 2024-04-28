@@ -1,8 +1,5 @@
-package com.grappim.hateitorrateit.utils.datetime
+package com.grappim.hateitorrateit.datetime
 
-import com.grappim.hateitorrateit.utils.di.DtfDocumentFolder
-import com.grappim.hateitorrateit.utils.di.DtfToDemonstrate
-import com.grappim.hateitorrateit.utils.di.DtfToStore
 import java.time.Instant
 import java.time.OffsetDateTime
 import java.time.ZoneOffset

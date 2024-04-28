@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.model
 
-import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
+import com.grappim.hateitorrateit.datetime.DateTimeUtils
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -11,7 +11,7 @@ import kotlin.test.assertEquals
 
 class UiModelsMapperTest {
 
-    private val dateTimeUtils: DateTimeUtils = mockk()
+    private val dateTimeUtils: com.grappim.hateitorrateit.datetime.DateTimeUtils = mockk()
 
     private lateinit var uiModelsMapper: UiModelsMapper
 

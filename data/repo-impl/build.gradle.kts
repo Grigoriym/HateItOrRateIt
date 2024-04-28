@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":utils"))
+    implementation(project(":utils:date-time"))
     implementation(project(":commons"))
     implementation(project(":data:repo-api"))
     implementation(project(":data:db"))
