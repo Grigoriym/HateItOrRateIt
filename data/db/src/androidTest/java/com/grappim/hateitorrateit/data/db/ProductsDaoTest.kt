@@ -11,9 +11,9 @@ import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapperImpl
+import com.grappim.hateitorrateit.datetime.DateTimeModule
+import com.grappim.hateitorrateit.datetime.DateTimeUtils
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
-import com.grappim.hateitorrateit.utils.di.DateTimeModule
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.firstOrNull

@@ -4,13 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "com.grappim.hateitorrateit.utils"
+    namespace = "com.grappim.hateitorrateit.utils.datetime"
 }
 
 dependencies {
     implementation(project(":domain"))
     implementation(project(":commons"))
-    implementation(project(":utils:date-time"))
 
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
 

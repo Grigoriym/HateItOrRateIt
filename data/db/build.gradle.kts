@@ -23,6 +23,7 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":utils"))
+    implementation(project(":utils:date-time"))
     implementation(project(":commons"))
 
     implementation(libs.androidx.room.runtime)

@@ -4,8 +4,8 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import com.grappim.hateitorrateit.datetime.DateTimeUtils
 import com.grappim.hateitorrateit.utils.MimeTypes
-import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
 import java.time.OffsetDateTime

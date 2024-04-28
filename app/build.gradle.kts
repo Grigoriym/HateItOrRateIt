@@ -118,6 +118,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":utils"))
+    implementation(project(":utils:date-time"))
     implementation(project(":data:db"))
     implementation(project(":data:worker-api"))
     implementation(project(":data:repo-api"))

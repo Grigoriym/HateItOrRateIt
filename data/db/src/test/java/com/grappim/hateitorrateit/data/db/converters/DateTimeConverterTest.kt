@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.db.converters
 
-import com.grappim.hateitorrateit.utils.datetime.DateTimeUtils
+import com.grappim.hateitorrateit.datetime.DateTimeUtils
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
