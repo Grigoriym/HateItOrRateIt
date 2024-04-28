@@ -10,13 +10,4 @@ android {
 dependencies {
     implementation(project(":domain"))
     implementation(project(":commons"))
-
-    coreLibraryDesugaring(libs.android.desugarJdkLibs)
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-
-    implementation(libs.timber)
-
-    testImplementation(libs.robolectric)
 }

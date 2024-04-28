@@ -47,6 +47,9 @@ jobs:
       - name: Run Detekt
         run: ./gradlew detekt
 
+      - name: Run Ktlint
+        run: ./gradlew ktlintCheck
+
       - name: Run tests and generate Aggregated JaCoCo report
         run: ./gradlew test jacocoAggregatedReport
 
