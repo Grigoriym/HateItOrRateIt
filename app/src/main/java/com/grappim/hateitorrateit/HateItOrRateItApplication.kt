@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit
 
 import android.app.Application
+import android.os.StrictMode
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigManager
@@ -26,9 +27,27 @@ class HateItOrRateItApplication : Application(), Configuration.Provider {
             .build()
 
     override fun onCreate() {
+        setupStrictMode()
         super.onCreate()
         applicationScope.launch {
             remoteConfigManager.fetchRemoteConfig()
+        }
+    }
+
+    private fun setupStrictMode() {
+        if (BuildConfig.DEBUG) {
+            StrictMode.setThreadPolicy(
+                StrictMode.ThreadPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
+            StrictMode.setVmPolicy(
+                StrictMode.VmPolicy.Builder()
+                    .detectAll()
+                    .penaltyLog()
+                    .build()
+            )
         }
     }
 }
