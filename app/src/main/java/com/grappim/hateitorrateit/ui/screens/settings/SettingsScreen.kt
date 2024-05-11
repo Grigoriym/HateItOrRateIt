@@ -314,7 +314,9 @@ private fun DarkModePreferencesContent(state: SettingsViewState) {
 @Composable
 private fun PlatoRadioButton(selected: Boolean, onClick: () -> Unit, text: String) {
     Row(
-        modifier = Modifier,
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onClick.invoke() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         RadioButton(selected = selected, onClick = onClick)
