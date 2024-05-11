@@ -54,3 +54,4 @@ include(
     ":data:repo-impl"
 )
 include(":utils:date-time")
+include(":core:appinfo-api")

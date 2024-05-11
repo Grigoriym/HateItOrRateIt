@@ -128,6 +128,7 @@ dependencies {
     implementation(project(":commons"))
     implementation(project(":analytics-api"))
     implementation(project(":data:remote-config-api"))
+    implementation(project(":core:appinfo-api"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)

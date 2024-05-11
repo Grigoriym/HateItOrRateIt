@@ -25,5 +25,7 @@ data class SettingsViewState(
     val githubRepoLink: String = "",
     val privacyPolicyLink: String = "",
 
-    val localeOptions: Map<NativeText, String>
+    val localeOptions: Map<NativeText, String>,
+
+    val appInfo: String
 )

@@ -51,6 +51,7 @@ import com.grappim.hateitorrateit.ui.utils.PlatoIconType
 import com.grappim.hateitorrateit.ui.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoCard
 import com.grappim.hateitorrateit.ui.widgets.PlatoHeightSpacer16
+import com.grappim.hateitorrateit.ui.widgets.PlatoHeightSpacer32
 import com.grappim.hateitorrateit.ui.widgets.PlatoHeightSpacer8
 import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoOutlinedButton
@@ -201,9 +202,25 @@ private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) 
             }
 
             item {
-                PlatoHeightSpacer8()
+                PlatoHeightSpacer16()
+                VersionContent(state = state)
+            }
+
+            item {
+                PlatoHeightSpacer32()
             }
         }
+    }
+}
+
+@Composable
+private fun VersionContent(state: SettingsViewState) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth(),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = state.appInfo)
     }
 }
 
