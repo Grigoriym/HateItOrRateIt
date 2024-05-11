@@ -182,6 +182,7 @@ class SettingsScreenKtTest {
         isAnalyticsCollectionEnabled = false,
         onAnalyticsToggle = {},
         onDarkThemeConfigClicked = {},
-        localeOptions = mutableMapOf()
+        localeOptions = mutableMapOf(),
+        appInfo = "asd"
     )
 }

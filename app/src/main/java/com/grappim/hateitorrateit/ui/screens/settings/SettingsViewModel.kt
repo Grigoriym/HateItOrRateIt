@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
+import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
@@ -25,6 +26,7 @@ class SettingsViewModel @Inject constructor(
     private val analyticsController: AnalyticsController,
     private val settingsAnalytics: SettingsAnalytics,
     private val remoteConfigsListener: RemoteConfigsListener,
+    appInfoProvider: AppInfoProvider,
     localeOptionsGenerator: LocaleOptionsGenerator
 ) : ViewModel() {
 
@@ -38,7 +40,8 @@ class SettingsViewModel @Inject constructor(
             onAnalyticsToggle = ::onAnalyticsToggle,
             trackScreenStart = ::trackScreenStart,
             onDarkThemeConfigClicked = ::onDarkThemeConfigClicked,
-            localeOptions = localeOptionsGenerator.getLocaleOptions()
+            localeOptions = localeOptionsGenerator.getLocaleOptions(),
+            appInfo = appInfoProvider.getAppInfo()
         )
     )
     val viewState = _viewState.asStateFlow()

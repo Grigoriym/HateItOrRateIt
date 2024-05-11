@@ -7,6 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
+fun PlatoHeightSpacer32() {
+    Spacer(modifier = Modifier.height(32.dp))
+}
+
+@Composable
 fun PlatoHeightSpacer16() {
     Spacer(modifier = Modifier.height(16.dp))
 }
