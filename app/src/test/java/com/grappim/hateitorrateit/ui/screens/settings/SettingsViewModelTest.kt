@@ -2,6 +2,7 @@ package com.grappim.hateitorrateit.ui.screens.settings
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
+import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
@@ -36,6 +37,7 @@ class SettingsViewModelTest {
     private val settingsAnalytics: SettingsAnalytics = mockk()
     private val remoteConfigsListener: RemoteConfigsListener = mockk()
     private val localeOptionsGenerator: LocaleOptionsGenerator = mockk()
+    private val appInfoProvider: AppInfoProvider = mockk()
 
     private lateinit var viewModel: SettingsViewModel
 
@@ -59,13 +61,16 @@ class SettingsViewModelTest {
         every { remoteConfigsListener.privacyPolicy } returns flowOf("privacy policy")
         every { localeOptionsGenerator.getLocaleOptions() } returns mapOf()
 
+        every { appInfoProvider.getAppInfo() } returns "appInfo"
+
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,
             analyticsController = analyticsController,
             settingsAnalytics = settingsAnalytics,
             remoteConfigsListener = remoteConfigsListener,
-            localeOptionsGenerator = localeOptionsGenerator
+            localeOptionsGenerator = localeOptionsGenerator,
+            appInfoProvider = appInfoProvider
         )
     }
 
