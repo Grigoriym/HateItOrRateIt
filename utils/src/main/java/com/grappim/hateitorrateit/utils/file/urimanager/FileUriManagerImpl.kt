@@ -1,7 +1,6 @@
 package com.grappim.hateitorrateit.utils.file.urimanager
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.utils.HashUtils
@@ -30,11 +29,6 @@ class FileUriManagerImpl @Inject constructor(
         folderName: String,
         isEdit: Boolean
     ): ImageData {
-        context.contentResolver.takePersistableUriPermission(
-            uri,
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-        )
-
         val folder = if (isEdit) {
             folderPathManager.getTempFolderName(folderName)
         } else {
