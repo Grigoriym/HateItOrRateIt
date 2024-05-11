@@ -39,7 +39,7 @@ class FileUriManagerImpl @Inject constructor(
         val newFile = fileCreationUtils.createFileLocally(uri, folder)
         val newUri = getFileUri(newFile)
         val fileSize = fileInfoRetriever.getFileSize(newUri)
-        val mimeType = fileInfoRetriever.getMimeType(uri)
+        val mimeType = fileInfoRetriever.getMimeType(newUri)
         return ImageData(
             uri = newUri,
             name = newFile.name,
