@@ -9,7 +9,7 @@ android {
 
 dependencies {
     implementation(project(":data:cleaner-api"))
-    implementation(project(":utils"))
+    implementation(project(":utils:files-api"))
     implementation(project(":data:repo-api"))
     implementation(project(":commons"))
     implementation(project(":domain"))

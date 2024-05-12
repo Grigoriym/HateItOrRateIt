@@ -11,9 +11,8 @@ import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapperImpl
-import com.grappim.hateitorrateit.datetime.DateTimeModule
-import com.grappim.hateitorrateit.datetime.DateTimeUtils
 import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.firstOrNull
@@ -34,8 +33,6 @@ class ProductsDaoTest {
     private lateinit var dbWrapper: DatabaseWrapper
 
     private val dateTimeUtils = mockk<DateTimeUtils>(relaxed = true)
-
-    private val dateTimeFormatter = DateTimeModule.provideDtfToStore()
 
     @Before
     fun setup() = runTest {
@@ -433,7 +430,7 @@ class ProductsDaoTest {
         }.orEmpty()
 
     private fun setupFormatter(date: OffsetDateTime) {
-        every { dateTimeUtils.formatToStoreInDb(any()) } returns dateTimeFormatter.format(date)
+        every { dateTimeUtils.formatToStoreInDb(any()) } returns "dateTimeFormatter.format(date)"
         every { dateTimeUtils.parseFromStoringInDb(any()) } returns date
     }
 }

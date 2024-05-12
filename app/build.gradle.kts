@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
+
+    id("com.jraska.module.graph.assertion") version "2.5.0"
 }
 
 android {
@@ -117,21 +119,36 @@ android {
 dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
-    implementation(project(":utils"))
     implementation(project(":utils:ui"))
     implementation(project(":utils:date-time"))
+    implementation(project(":utils:date-time-api"))
     implementation(project(":data:db"))
-    implementation(project(":data:worker-api"))
-    implementation(project(":data:repo-api"))
-    implementation(project(":data:cleaner-api"))
-    implementation(project(":data:local-datastorage-api"))
-    implementation(project(":di"))
     implementation(project(":commons"))
+
     implementation(project(":analytics-api"))
-    implementation(project(":data:remote-config-api"))
+    implementation(project(":analytics-impl"))
+
     implementation(project(":core:appinfo-api"))
 
+    implementation(project(":data:repo-api"))
+    implementation(project(":data:repo-impl"))
+
+    implementation(project(":data:cleaner-api"))
+    implementation(project(":data:cleaner-impl"))
+
+    implementation(project(":data:remote-config-api"))
+    implementation(project(":data:remote-config-impl"))
+
+    implementation(project(":data:local-datastorage-api"))
+    implementation(project(":data:local-datastorage-impl"))
+
+    implementation(project(":data:worker-api"))
+    implementation(project(":data:worker-impl"))
+
     implementation(project(":feature:settings:ui"))
+
+    implementation(project(":utils:files-api"))
+    implementation(project(":utils:files-impl"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)
@@ -179,4 +196,9 @@ dependencies {
 
     implementation(libs.coil)
     implementation(libs.timber)
+}
+
+moduleGraphAssert {
+    maxHeight = 3
+    assertOnAnyBuild = true
 }

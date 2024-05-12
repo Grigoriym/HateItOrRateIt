@@ -4,9 +4,9 @@ import app.cash.turbine.test
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.datetime.DateTimeUtilsImpl
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -20,7 +20,7 @@ import kotlin.test.assertEquals
 
 class ProductsRepositoryImplTest {
 
-    private val dateTimeUtils: DateTimeUtilsImpl = mockk()
+    private val dateTimeUtils: DateTimeUtils = mockk()
 
     private val productsDao: ProductsDao = mockk()
     private val localDataStorage: LocalDataStorage = mockk()

@@ -4,8 +4,8 @@ import android.net.Uri
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
 import com.grappim.hateitorrateit.utils.ui.NativeText
 
 /**

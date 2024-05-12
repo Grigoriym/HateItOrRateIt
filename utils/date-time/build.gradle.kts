@@ -8,6 +8,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":commons"))
+    implementation(project(":utils:date-time-api"))
 }

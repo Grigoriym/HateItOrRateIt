@@ -6,8 +6,8 @@ import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.ProductImageData
-import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
-import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
+import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
