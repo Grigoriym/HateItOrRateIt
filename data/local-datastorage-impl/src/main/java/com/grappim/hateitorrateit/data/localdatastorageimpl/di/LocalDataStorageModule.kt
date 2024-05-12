@@ -5,6 +5,9 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
+import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.localdatastorageimpl.LocalDataStorageImpl
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -21,4 +24,11 @@ class LocalDataStorageModule {
                 context.preferencesDataStoreFile("hateitratestore")
             }
         )
+}
+
+@[Module InstallIn(SingletonComponent::class)]
+interface LocalDataBindsStorageModule {
+
+    @[Binds]
+    fun bindLocalDataStorage(localDataStorageImpl: LocalDataStorageImpl): LocalDataStorage
 }

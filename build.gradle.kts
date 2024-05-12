@@ -124,3 +124,15 @@ testAggregation {
         exclude(coverageExclusions)
     }
 }
+
+val runAndroidTests by tasks.creating {
+    group = "verification"
+    description = "Runs Android instrumented tests only in specific modules"
+
+    dependsOn(
+        ":app:connectedAndroidTest",
+        ":data:db:connectedAndroidTest",
+        ":feature:settings:ui:connectedAndroidTest",
+        ":data:local-datastorage-impl:connectedAndroidTest"
+    )
+}

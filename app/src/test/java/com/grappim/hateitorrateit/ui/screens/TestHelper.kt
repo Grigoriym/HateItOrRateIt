@@ -10,8 +10,8 @@ import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
 import com.grappim.hateitorrateit.testing.getRandomUri
 import com.grappim.hateitorrateit.testing.nowDate
-import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
 import java.io.File
 
 const val PRODUCT_ID = 9012L

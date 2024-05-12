@@ -8,8 +8,8 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.domain.ProductImageData
 import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
-import com.grappim.hateitorrateit.utils.file.deletion.FileDeletionUtils
-import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
+import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
+import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
