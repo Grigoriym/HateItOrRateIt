@@ -55,3 +55,5 @@ include(
 )
 include(":utils:date-time")
 include(":core:appinfo-api")
+include(":feature:settings:ui")
+include(":utils:ui")

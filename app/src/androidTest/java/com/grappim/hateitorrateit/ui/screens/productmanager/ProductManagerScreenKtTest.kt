@@ -5,12 +5,12 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.grappim.hateitorrateit.core.LaunchedEffectResult
-import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.widgets.PLATO_HATE_RATE_CONTENT_TAG
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

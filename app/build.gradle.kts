@@ -118,6 +118,7 @@ dependencies {
     implementation(project(":ui"))
     implementation(project(":domain"))
     implementation(project(":utils"))
+    implementation(project(":utils:ui"))
     implementation(project(":utils:date-time"))
     implementation(project(":data:db"))
     implementation(project(":data:worker-api"))
@@ -129,6 +130,8 @@ dependencies {
     implementation(project(":analytics-api"))
     implementation(project(":data:remote-config-api"))
     implementation(project(":core:appinfo-api"))
+
+    implementation(project(":feature:settings:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)

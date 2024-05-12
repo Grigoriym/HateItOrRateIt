@@ -1,12 +1,12 @@
 package com.grappim.hateitorrateit.ui.screens.productmanager
 
 import android.net.Uri
-import com.grappim.hateitorrateit.core.NativeText
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
+import com.grappim.hateitorrateit.utils.ui.NativeText
 
 /**
  * @param isNewProduct indicates if we creating a new product, the value being true, or editing the

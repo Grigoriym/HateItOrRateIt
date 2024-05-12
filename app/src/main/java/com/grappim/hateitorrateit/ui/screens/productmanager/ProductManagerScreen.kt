@@ -53,9 +53,6 @@ import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
-import com.grappim.hateitorrateit.core.LaunchedEffectResult
-import com.grappim.hateitorrateit.core.NativeText
-import com.grappim.hateitorrateit.core.asString
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.ui.R
 import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
@@ -69,6 +66,9 @@ import com.grappim.hateitorrateit.ui.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.ui.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.ui.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
+import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
+import com.grappim.hateitorrateit.utils.ui.NativeText
+import com.grappim.hateitorrateit.utils.ui.asString
 import kotlinx.coroutines.launch
 import kotlin.math.absoluteValue
 

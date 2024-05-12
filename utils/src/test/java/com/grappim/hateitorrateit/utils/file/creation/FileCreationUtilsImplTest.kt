@@ -9,6 +9,8 @@ import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -42,7 +44,8 @@ class FileCreationUtilsImplTest {
         fileCreationUtils = FileCreationUtilsImpl(
             fileInfoRetriever = fileInfoRetriever,
             context = context,
-            folderPathManager = folderPathManager
+            folderPathManager = folderPathManager,
+            ioDispatcher = UnconfinedTestDispatcher()
         )
 
         contentResolver = context.contentResolver
@@ -50,7 +53,7 @@ class FileCreationUtilsImplTest {
     }
 
     @Test
-    fun `on createFileLocally should correctly create a new file from uri`() {
+    fun `on createFileLocally should correctly create a new file from uri`() = runTest {
         val content = getRandomString().toByteArray()
         val fileDataByteArray = ByteArrayInputStream(content)
         val uri = getRandomUri()

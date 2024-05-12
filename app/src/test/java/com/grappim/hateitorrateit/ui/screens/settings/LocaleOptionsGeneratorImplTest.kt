@@ -1,7 +1,8 @@
 package com.grappim.hateitorrateit.ui.screens.settings
 
-import com.grappim.hateitorrateit.core.NativeText
+import com.grappim.hateitorrateit.feature.settings.ui.optionsgenerator.LocaleOptionsGeneratorImpl
 import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith

@@ -5,9 +5,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
-import com.grappim.hateitorrateit.core.NativeText
-import com.grappim.hateitorrateit.core.SnackbarStateViewModel
-import com.grappim.hateitorrateit.core.SnackbarStateViewModelImpl
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
@@ -24,6 +21,9 @@ import com.grappim.hateitorrateit.utils.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
 import com.grappim.hateitorrateit.utils.productmanager.ProductImageManager
+import com.grappim.hateitorrateit.utils.ui.NativeText
+import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
+import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

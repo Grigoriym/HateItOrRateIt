@@ -8,6 +8,8 @@ import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.feature.settings.ui.optionsgenerator.LocaleOptionsGenerator
+import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsViewModel
 import com.grappim.hateitorrateit.testing.MainDispatcherRule
 import com.grappim.hateitorrateit.testing.testException
 import io.mockk.Runs

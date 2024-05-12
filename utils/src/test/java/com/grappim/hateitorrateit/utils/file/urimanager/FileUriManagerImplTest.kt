@@ -10,9 +10,12 @@ import com.grappim.hateitorrateit.utils.file.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.file.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
+import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,89 +54,91 @@ class FileUriManagerImplTest {
     }
 
     @Test
-    fun `on getFileUriFromGalleryUriwith isEdit true, should return correct ImageData with temp folder name`() {
-        val fileName = "testimage.jpg"
-        val folder = getRandomString()
-        val tempFolder = "${folder}_temp"
-        val file = File(context.filesDir, "products/folder/$fileName")
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.provider",
-            file
-        )
-        val size = getRandomLong()
-        val mimeType = "image/jpeg"
-        val md5 = getRandomString()
+    fun `on getFileUriFromGalleryUriwith isEdit true, should return correct ImageData with temp folder name`() =
+        runTest {
+            val fileName = "testimage.jpg"
+            val folder = getRandomString()
+            val tempFolder = "${folder}_temp"
+            val file = File(context.filesDir, "products/folder/$fileName")
+            val uri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.provider",
+                file
+            )
+            val size = getRandomLong()
+            val mimeType = "image/jpeg"
+            val md5 = getRandomString()
 
-        every { folderPathManager.getTempFolderName(any()) } returns tempFolder
-        every { fileCreationUtils.createFileLocally(any(), any()) } returns file
-        every { fileInfoRetriever.getFileSize(any()) } returns size
-        every { fileInfoRetriever.getMimeType(any()) } returns mimeType
-        every { hashUtils.md5(file) } returns md5
+            every { folderPathManager.getTempFolderName(any()) } returns tempFolder
+            coEvery { fileCreationUtils.createFileLocally(any(), any()) } returns file
+            every { fileInfoRetriever.getFileSize(any()) } returns size
+            every { fileInfoRetriever.getMimeType(any()) } returns mimeType
+            every { hashUtils.md5(file) } returns md5
 
-        val actual = fileUriManager.getFileUriFromGalleryUri(
-            uri = uri,
-            folderName = folder,
-            isEdit = true
-        )
+            val actual = fileUriManager.getFileUriFromGalleryUri(
+                uri = uri,
+                folderName = folder,
+                isEdit = true
+            )
 
-        verify { folderPathManager.getTempFolderName(folder) }
-        verify { fileCreationUtils.createFileLocally(uri, tempFolder) }
-        verify { fileInfoRetriever.getFileSize(uri) }
-        verify { fileInfoRetriever.getMimeType(uri) }
-        verify { hashUtils.md5(file) }
+            verify { folderPathManager.getTempFolderName(folder) }
+            coVerify { fileCreationUtils.createFileLocally(uri, tempFolder) }
+            verify { fileInfoRetriever.getFileSize(uri) }
+            verify { fileInfoRetriever.getMimeType(uri) }
+            verify { hashUtils.md5(file) }
 
-        val expected = ImageData(
-            uri = uri,
-            name = file.name,
-            size = size,
-            mimeType = mimeType,
-            md5 = md5,
-            isEdit = true
-        )
-        assertEquals(expected, actual)
-    }
+            val expected = ImageData(
+                uri = uri,
+                name = file.name,
+                size = size,
+                mimeType = mimeType,
+                md5 = md5,
+                isEdit = true
+            )
+            assertEquals(expected, actual)
+        }
 
     @Test
-    fun `on getFileUriFromGalleryUri with isEdit false should return correct ImageData`() {
-        val fileName = "testimage.jpg"
-        val folder = getRandomString()
-        val file = File(context.filesDir, "products/folder/$fileName")
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.provider",
-            file
-        )
-        val size = getRandomLong()
-        val mimeType = "image/jpeg"
-        val md5 = getRandomString()
+    fun `on getFileUriFromGalleryUri with isEdit false should return correct ImageData`() =
+        runTest {
+            val fileName = "testimage.jpg"
+            val folder = getRandomString()
+            val file = File(context.filesDir, "products/folder/$fileName")
+            val uri = FileProvider.getUriForFile(
+                context,
+                "${context.packageName}.provider",
+                file
+            )
+            val size = getRandomLong()
+            val mimeType = "image/jpeg"
+            val md5 = getRandomString()
 
-        every { fileCreationUtils.createFileLocally(any(), any()) } returns file
-        every { fileInfoRetriever.getFileSize(any()) } returns size
-        every { fileInfoRetriever.getMimeType(any()) } returns mimeType
-        every { hashUtils.md5(file) } returns md5
+            coEvery { fileCreationUtils.createFileLocally(any(), any()) } returns file
+            every { fileInfoRetriever.getFileSize(any()) } returns size
+            every { fileInfoRetriever.getMimeType(any()) } returns mimeType
+            every { hashUtils.md5(file) } returns md5
 
-        val actual = fileUriManager.getFileUriFromGalleryUri(
-            uri = uri,
-            folderName = folder,
-            isEdit = false
-        )
+            val actual = fileUriManager.getFileUriFromGalleryUri(
+                uri = uri,
+                folderName = folder,
+                isEdit = false
+            )
 
-        verify { fileCreationUtils.createFileLocally(uri, folder) }
-        verify { fileInfoRetriever.getFileSize(uri) }
-        verify { fileInfoRetriever.getMimeType(uri) }
-        verify { hashUtils.md5(file) }
+            coVerify { fileCreationUtils.createFileLocally(uri, folder) }
+            verify { fileInfoRetriever.getFileSize(uri) }
+            verify { fileInfoRetriever.getMimeType(uri) }
+            verify { hashUtils.md5(file) }
 
-        val expected = ImageData(
-            uri = uri,
-            name = file.name,
-            size = size,
-            mimeType = mimeType,
-            md5 = md5,
-            isEdit = false
-        )
-        assertEquals(expected, actual)
-    }
+            val expected = ImageData(
+                uri = uri,
+                name = file.name,
+                size = size,
+                mimeType = mimeType,
+                md5 = md5,
+                isEdit = false
+            )
+            assertEquals(expected, actual)
+        }
 
     @Test
     fun `on getFileUriForTakePicture with isEdit false, should return CameraTakePictureData with data`() {

@@ -139,7 +139,7 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, on onProductDone, new product is created`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackCreateButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
@@ -159,7 +159,7 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, on onProductDone, productManagerAnalytics should call trackCreateButtonClicked`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackCreateButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
@@ -217,14 +217,14 @@ class ProductManagerViewModelDraftTest {
     @Test
     fun `with draftProduct, onAddImageFromGalleryClicked should add image`() {
         val imageData = createImageData()
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
 
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
 
-        verify {
+        coVerify {
             fileUriManager.getFileUriFromGalleryUri(
                 uri = imageData.uri,
                 folderName = getProductFolderName(),
@@ -287,7 +287,7 @@ class ProductManagerViewModelDraftTest {
     }
 
     private fun prepareImage(imageData: ImageData) {
-        every {
+        coEvery {
             fileUriManager.getFileUriFromGalleryUri(any(), any(), any())
         } returns imageData
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)

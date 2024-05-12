@@ -8,4 +8,6 @@ class AppInfoProviderImpl @Inject constructor() : AppInfoProvider {
     override fun getAppInfo(): String = "${BuildConfig.VERSION_NAME} - " +
         "${BuildConfig.VERSION_CODE} - " +
         BuildConfig.BUILD_TYPE
+
+    override fun isDebug(): Boolean = BuildConfig.DEBUG
 }

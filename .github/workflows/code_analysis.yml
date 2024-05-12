@@ -32,6 +32,17 @@ jobs:
       - name: Validate Gradle Wrapper
         uses: gradle/actions/wrapper-validation@v3
 
+      - name: Setup Gradle Cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-${{ hashFiles('**/*.gradle*') }}-${{ hashFiles('**/gradle/wrapper/gradle-wrapper.properties') }}-${{ hashFiles('**/buildSrc/**/*.kt') }}
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Decode google-services.json
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
