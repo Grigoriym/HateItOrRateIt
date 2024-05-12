@@ -18,3 +18,5 @@ local.properties
 /debug.keystore.jks
 *.hprof
 /core/build/
+/feature/build/
+/feature/settings/build
