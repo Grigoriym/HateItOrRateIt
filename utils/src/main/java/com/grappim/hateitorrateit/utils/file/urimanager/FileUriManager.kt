@@ -5,7 +5,11 @@ import com.grappim.hateitorrateit.utils.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.models.ImageData
 
 interface FileUriManager {
-    fun getFileUriFromGalleryUri(uri: Uri, folderName: String, isEdit: Boolean = false): ImageData
+    suspend fun getFileUriFromGalleryUri(
+        uri: Uri,
+        folderName: String,
+        isEdit: Boolean = false
+    ): ImageData
 
     fun getFileDataFromCameraPicture(
         cameraTakePictureData: CameraTakePictureData,

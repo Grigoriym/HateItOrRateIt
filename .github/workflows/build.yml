@@ -55,8 +55,5 @@ jobs:
       - name: Restore debug keystore.jks
         run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
-      - name: List directory contents
-        run: ls -la
-
       - name: Build gradle project
         run: ./gradlew build

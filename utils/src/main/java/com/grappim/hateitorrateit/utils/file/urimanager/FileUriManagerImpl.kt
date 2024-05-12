@@ -24,7 +24,7 @@ class FileUriManagerImpl @Inject constructor(
     private val fileCreationUtils: FileCreationUtils
 ) : FileUriManager {
 
-    override fun getFileUriFromGalleryUri(
+    override suspend fun getFileUriFromGalleryUri(
         uri: Uri,
         folderName: String,
         isEdit: Boolean

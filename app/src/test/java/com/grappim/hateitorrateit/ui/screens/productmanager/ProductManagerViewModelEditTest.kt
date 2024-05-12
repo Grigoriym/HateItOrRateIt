@@ -236,14 +236,14 @@ class ProductManagerViewModelEditTest {
     @Test
     fun `with editProduct, onAddImageFromGalleryClicked should add image`() {
         val imageData = createImageData()
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         assertTrue(viewModel.viewState.value.images.isEmpty())
 
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
 
-        verify {
+        coVerify {
             fileUriManager.getFileUriFromGalleryUri(
                 uri = imageData.uri,
                 folderName = getProductFolderName(),
@@ -257,7 +257,7 @@ class ProductManagerViewModelEditTest {
     @Test
     fun `with editProduct, productManagerAnalytics should call correct event`() {
         val imageData = createImageData()
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
@@ -330,7 +330,7 @@ class ProductManagerViewModelEditTest {
         coEvery { productsRepository.getProductById(any()) } returns editProduct
 
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         coEvery {
@@ -366,7 +366,7 @@ class ProductManagerViewModelEditTest {
     fun `with editProduct, on onProductDone, productManagerAnalytics should call trackSaveButtonClicked`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        every { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
         every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         coEvery {
@@ -387,7 +387,7 @@ class ProductManagerViewModelEditTest {
     }
 
     private fun prepareImage(imageData: ImageData) {
-        every {
+        coEvery {
             fileUriManager.getFileUriFromGalleryUri(any(), any(), any())
         } returns imageData
         viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)

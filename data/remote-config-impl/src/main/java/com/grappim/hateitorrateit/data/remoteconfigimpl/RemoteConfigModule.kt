@@ -6,7 +6,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfig
 import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
-import com.grappim.hateitorrateit.commons.AppInfoData
+import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,12 +27,12 @@ class RemoteConfigModule {
     @[Provides Singleton]
     fun provideRemoteConfig(
         remoteConfigDefaults: RemoteConfigDefaults,
-        appInfoData: AppInfoData,
+        appInfoProvider: AppInfoProvider,
         @ApplicationContext context: Context
     ): FirebaseRemoteConfig {
         FirebaseApp.initializeApp(context)
         val remoteConfig: FirebaseRemoteConfig = Firebase.remoteConfig
-        val minimumFetchInterval: Long = if (appInfoData.isDebug) {
+        val minimumFetchInterval: Long = if (appInfoProvider.isDebug()) {
             0
         } else {
             RELEASE_FETCH_INTERVAL
