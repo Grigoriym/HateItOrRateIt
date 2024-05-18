@@ -102,7 +102,7 @@ class DetailsViewModelTest {
 
     @Test
     fun `on onDeleteProductConfirm, clearProductData should be called and productDeleted is true`() {
-        coEvery { dataCleaner.clearProductData(any(), any()) } just Runs
+        coEvery { dataCleaner.deleteProductData(any(), any()) } just Runs
         every { detailsAnalytics.trackDetailsDeleteProductConfirmed() } just Runs
 
         viewModel.viewState.value.onDeleteProductConfirm()
@@ -110,7 +110,7 @@ class DetailsViewModelTest {
         assertTrue(viewModel.viewState.value.isLoading)
         assertEquals(viewModel.viewState.value.productId, PRODUCT_ID.toString())
         coVerify {
-            dataCleaner.clearProductData(
+            dataCleaner.deleteProductData(
                 productId = PRODUCT_ID,
                 productFolderName = PRODUCT_FOLDER_NAME
             )

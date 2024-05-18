@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.domain
 
-data class ProductImageData(
+data class ProductImage(
     val imageId: Long = 0L,
     val name: String,
     val mimeType: String,

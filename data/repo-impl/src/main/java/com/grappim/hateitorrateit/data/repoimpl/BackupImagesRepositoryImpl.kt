@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.data.repoimpl
 
 import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -11,12 +11,12 @@ class BackupImagesRepositoryImpl @Inject constructor(
     private val backupImagesDao: BackupImagesDao,
     private val backupProductMapper: BackupProductMapper
 ) : BackupImagesRepository {
-    override suspend fun insertImages(productId: Long, images: List<ProductImageData>) {
+    override suspend fun insertImages(productId: Long, images: List<ProductImage>) {
         val entities = backupProductMapper.toBackupProductImageDataEntity(productId, images)
         backupImagesDao.insert(entities)
     }
 
-    override suspend fun deleteImages(productId: Long, images: List<ProductImageData>) {
+    override suspend fun deleteImages(productId: Long, images: List<ProductImage>) {
         val entities = backupProductMapper.toBackupProductImageDataEntity(productId, images)
         backupImagesDao.delete(entities)
     }
@@ -25,7 +25,7 @@ class BackupImagesRepositoryImpl @Inject constructor(
         backupImagesDao.deleteImagesByProductId(productId)
     }
 
-    override suspend fun getAllByProductId(productId: Long): List<ProductImageData> {
+    override suspend fun getAllByProductId(productId: Long): List<ProductImage> {
         val result = backupImagesDao.getAllImagesByProductId(productId)
         return backupProductMapper.toProductImageData(result)
     }

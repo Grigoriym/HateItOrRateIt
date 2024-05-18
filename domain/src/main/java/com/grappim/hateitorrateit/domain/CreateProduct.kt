@@ -5,7 +5,7 @@ import java.time.OffsetDateTime
 data class CreateProduct(
     val id: Long,
     val name: String,
-    val images: List<ProductImageData>,
+    val images: List<ProductImage>,
     val createdDate: OffsetDateTime,
     val productFolderName: String,
     val description: String,

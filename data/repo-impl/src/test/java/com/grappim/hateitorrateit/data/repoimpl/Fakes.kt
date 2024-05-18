@@ -4,10 +4,10 @@ import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity
 import com.grappim.hateitorrateit.domain.CreateProduct
-import com.grappim.hateitorrateit.domain.EmptyFileData
+import com.grappim.hateitorrateit.domain.EmptyFile
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import java.time.OffsetDateTime
 
 const val ID = 1L
@@ -54,12 +54,12 @@ fun getListOfEmptyFileData() = listOf(
     getEmptyFileData()
 )
 
-fun getEmptyFileData() = EmptyFileData(
+fun getEmptyFileData() = EmptyFile(
     id = ID,
     productFolderName = FOLDER_NAME
 )
 
-fun getProductImageData() = ProductImageData(
+fun getProductImageData() = ProductImage(
     name = NAME,
     mimeType = "mimeType",
     uriPath = "uriPath",
@@ -72,7 +72,7 @@ fun getProductImageDataList() = listOf(
     getProductImageData()
 )
 
-fun getProduct(filesUri: List<ProductImageData> = getProductImageDataList()): Product = Product(
+fun getProduct(filesUri: List<ProductImage> = getProductImageDataList()): Product = Product(
     id = ID,
     name = NAME,
     images = filesUri,

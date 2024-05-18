@@ -18,7 +18,7 @@ import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.productmanager.ProductImageManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.ui.NativeText
@@ -192,8 +192,8 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
-    private fun addImageData(imageData: ImageData) {
-        val result = _viewState.value.images + imageData
+    private fun addImageData(productImageUIData: ProductImageUIData) {
+        val result = _viewState.value.images + productImageUIData
         _viewState.update {
             it.copy(images = result)
         }
@@ -316,21 +316,22 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
-    private fun deleteImage(imageData: ImageData) {
+    private fun deleteImage(productImageUIData: ProductImageUIData) {
         productManagerAnalytics.trackDeleteImageClicked()
         viewModelScope.launch {
-            if (fileDeletionUtils.deleteFile(uri = imageData.uri)) {
-                Timber.d("file removed: $imageData")
+            if (fileDeletionUtils.deleteFile(uri = productImageUIData.uri)) {
+                Timber.d("file removed: $productImageUIData")
 
                 if (!_viewState.value.isNewProduct) {
                     productsRepository.deleteProductImage(
                         productId = editProductIdLong,
-                        imageName = imageData.name
+                        imageName = productImageUIData.name
                     )
                 }
 
                 _viewState.update { currentState ->
-                    val updatedFilesUris = currentState.images.filterNot { it == imageData }
+                    val updatedFilesUris =
+                        currentState.images.filterNot { it == productImageUIData }
                     currentState.copy(images = updatedFilesUris)
                 }
             }
@@ -345,7 +346,7 @@ class ProductManagerViewModel @Inject constructor(
 
             if (_viewState.value.isNewProduct) {
                 val draftProduct = requireNotNull(viewState.value.draftProduct)
-                dataCleaner.clearProductData(
+                dataCleaner.deleteProductData(
                     productId = draftProduct.id,
                     productFolderName = productFolderName
                 )
@@ -355,16 +356,10 @@ class ProductManagerViewModel @Inject constructor(
                     id = editProductIdLong,
                     images = initialImages
                 )
-
                 productImageManager.moveFromBackupToOriginalFolder(productFolderName)
 
-                dataCleaner.deleteTempFolder(
-                    productFolderName = productFolderName
-                )
-
-                dataCleaner.deleteBackupFolder(
-                    productFolderName = productFolderName
-                )
+                dataCleaner.deleteTempFolder(productFolderName)
+                dataCleaner.deleteBackupFolder(productFolderName)
 
                 backupImagesRepository.deleteImagesByProductId(editProductIdLong)
             }

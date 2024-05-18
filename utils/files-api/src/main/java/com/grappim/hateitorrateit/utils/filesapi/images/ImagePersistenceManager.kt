@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.utils.filesapi.images
 
-import com.grappim.hateitorrateit.domain.ProductImageData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 
 interface ImagePersistenceManager {
-    suspend fun prepareEditedImagesToPersist(images: List<ImageData>): List<ProductImageData>
+    suspend fun prepareEditedImagesToPersist(images: List<ProductImageUIData>): List<ProductImage>
 }

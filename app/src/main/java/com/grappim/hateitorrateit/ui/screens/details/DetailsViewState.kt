@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.ui.screens.details
 
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 
 data class DetailsViewState(
     val productId: String = "",
@@ -10,7 +10,7 @@ data class DetailsViewState(
     val shop: String = "",
     val createdDate: String = "",
     val productFolderName: String = "",
-    val images: List<ProductImageData> = emptyList(),
+    val images: List<ProductImage> = emptyList(),
     val type: HateRateType? = null,
 
     val isLoading: Boolean = true,

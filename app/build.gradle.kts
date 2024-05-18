@@ -7,8 +7,7 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
-
-    id("com.jraska.module.graph.assertion") version "2.5.0"
+    alias(libs.plugins.moduleGraphAssertion)
 }
 
 android {

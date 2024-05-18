@@ -5,13 +5,13 @@ import com.grappim.hateitorrateit.domain.CreateProduct
 import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
 import com.grappim.hateitorrateit.testing.getRandomUri
 import com.grappim.hateitorrateit.testing.nowDate
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import java.io.File
 
 const val PRODUCT_ID = 9012L
@@ -33,7 +33,7 @@ val draftProduct = DraftProduct(
 )
 
 val editProductImages = listOf(
-    ProductImageData(
+    ProductImage(
         imageId = 2616,
         name = "Kim Hyde",
         mimeType = "potenti",
@@ -45,7 +45,7 @@ val editProductImages = listOf(
     )
 )
 
-val imageData = ImageData(
+val productImageUIData = ProductImageUIData(
     imageId = IMAGE_ID,
     uri = uri,
     name = "Kim Hyde",
@@ -55,7 +55,7 @@ val imageData = ImageData(
     isEdit = false
 )
 
-fun createEditProduct(images: List<ProductImageData> = emptyList()): Product = Product(
+fun createEditProduct(images: List<ProductImage> = emptyList()): Product = Product(
     id = PRODUCT_ID,
     name = NAME,
     images = images,
@@ -96,7 +96,7 @@ fun createImageData(
     mimeType: String? = null,
     md5: String? = null,
     isEdit: Boolean? = null
-): ImageData = ImageData(
+): ProductImageUIData = ProductImageUIData(
     imageId = imageId ?: getRandomLong(),
     uri = newUri ?: getRandomUri(),
     name = name ?: getRandomString(),

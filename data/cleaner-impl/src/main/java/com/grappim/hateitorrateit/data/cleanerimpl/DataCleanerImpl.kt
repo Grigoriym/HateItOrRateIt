@@ -5,7 +5,7 @@ import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import kotlinx.coroutines.CoroutineDispatcher
@@ -26,7 +26,7 @@ class DataCleanerImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : DataCleaner {
 
-    override suspend fun clearProductImage(
+    override suspend fun deleteProductImage(
         productId: Long,
         imageName: String,
         uriString: String
@@ -38,10 +38,10 @@ class DataCleanerImpl @Inject constructor(
         false
     }
 
-    override suspend fun deleteProductFileData(productId: Long, list: List<ProductImageData>) =
+    override suspend fun deleteProductImages(productId: Long, list: List<ProductImage>) =
         withContext(ioDispatcher) {
             list.forEach {
-                clearProductImage(
+                deleteProductImage(
                     productId = productId,
                     imageName = it.name,
                     uriString = it.uriString
@@ -49,7 +49,7 @@ class DataCleanerImpl @Inject constructor(
             }
         }
 
-    override suspend fun clearProductData(productId: Long, productFolderName: String) =
+    override suspend fun deleteProductData(productId: Long, productFolderName: String) =
         withContext(ioDispatcher) {
             Timber.d("start cleaning")
             fileDeletionUtils.deleteFolder(productFolderName)

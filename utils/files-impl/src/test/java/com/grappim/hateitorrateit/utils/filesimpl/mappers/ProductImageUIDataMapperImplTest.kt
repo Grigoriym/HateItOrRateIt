@@ -1,11 +1,11 @@
 package com.grappim.hateitorrateit.utils.filesimpl.mappers
 
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
 import com.grappim.hateitorrateit.testing.getRandomUri
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesimpl.UriParser
 import io.mockk.every
 import io.mockk.mockk
@@ -21,7 +21,7 @@ import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class ImageDataMapperImplTest {
+class ProductImageUIDataMapperImplTest {
 
     private val uriParser: UriParser = mockk()
 
@@ -44,7 +44,7 @@ class ImageDataMapperImplTest {
         val md5 = getRandomString()
         val mimeType = getRandomString()
 
-        val expected = ProductImageData(
+        val expected = ProductImage(
             imageId = id,
             name = name,
             mimeType = mimeType,
@@ -55,7 +55,7 @@ class ImageDataMapperImplTest {
             isEdit = false
         )
 
-        val imageData = ImageData(
+        val productImageUIData = ProductImageUIData(
             imageId = id,
             uri = uri,
             name = name,
@@ -65,7 +65,7 @@ class ImageDataMapperImplTest {
             isEdit = false
         )
 
-        val actual = imageDataMapper.toProductImageData(imageData)
+        val actual = imageDataMapper.toProductImageData(productImageUIData)
 
         assertEquals(expected, actual)
     }
@@ -81,7 +81,7 @@ class ImageDataMapperImplTest {
 
         every { uriParser.parse(any()) } returns uri
 
-        val productImageData = ProductImageData(
+        val productImage = ProductImage(
             imageId = id,
             name = name,
             mimeType = mimeType,
@@ -92,7 +92,7 @@ class ImageDataMapperImplTest {
             isEdit = false
         )
 
-        val expected = ImageData(
+        val expected = ProductImageUIData(
             imageId = id,
             uri = uri,
             name = name,
@@ -102,17 +102,17 @@ class ImageDataMapperImplTest {
             isEdit = false
         )
 
-        val actual = imageDataMapper.toImageData(productImageData)
+        val actual = imageDataMapper.toImageData(productImage)
 
         assertEquals(expected, actual)
 
-        verify { uriParser.parse(productImageData.uriString) }
+        verify { uriParser.parse(productImage.uriString) }
     }
 
     @Test
     fun `toProductImageDataList should return correct List of ProductImageData`() = runTest {
-        val imageDataList = listOf(
-            ImageData(
+        val productImageUIDataLists = listOf(
+            ProductImageUIData(
                 getRandomLong(),
                 getRandomUri(),
                 getRandomString(),
@@ -121,7 +121,7 @@ class ImageDataMapperImplTest {
                 getRandomString(),
                 false
             ),
-            ImageData(
+            ProductImageUIData(
                 getRandomLong(),
                 getRandomUri(),
                 getRandomString(),
@@ -132,8 +132,8 @@ class ImageDataMapperImplTest {
             )
         )
 
-        val expectedList = imageDataList.map { imageData ->
-            ProductImageData(
+        val expectedList = productImageUIDataLists.map { imageData ->
+            ProductImage(
                 imageId = imageData.imageId,
                 name = imageData.name,
                 mimeType = imageData.mimeType,
@@ -145,7 +145,7 @@ class ImageDataMapperImplTest {
             )
         }
 
-        val actualList = imageDataMapper.toProductImageDataList(imageDataList)
+        val actualList = imageDataMapper.toProductImageDataList(productImageUIDataLists)
 
         assertEquals(expectedList, actualList)
     }
@@ -155,8 +155,8 @@ class ImageDataMapperImplTest {
         val mockedUri = getRandomUri()
         every { uriParser.parse(any()) } returns mockedUri
 
-        val productImageDataList = listOf(
-            ProductImageData(
+        val productImageLists = listOf(
+            ProductImage(
                 getRandomLong(),
                 getRandomString(),
                 getRandomString(),
@@ -166,7 +166,7 @@ class ImageDataMapperImplTest {
                 getRandomString(),
                 false
             ),
-            ProductImageData(
+            ProductImage(
                 getRandomLong(),
                 getRandomString(),
                 getRandomString(),
@@ -178,8 +178,8 @@ class ImageDataMapperImplTest {
             )
         )
 
-        val expectedList = productImageDataList.map { productImageData ->
-            ImageData(
+        val expectedList = productImageLists.map { productImageData ->
+            ProductImageUIData(
                 imageId = productImageData.imageId,
                 uri = mockedUri,
                 name = productImageData.name,
@@ -190,11 +190,11 @@ class ImageDataMapperImplTest {
             )
         }
 
-        val actualList = imageDataMapper.toImageDataList(productImageDataList)
+        val actualList = imageDataMapper.toImageDataList(productImageLists)
 
         assertEquals(expectedList, actualList)
 
-        productImageDataList.forEach { productImageData ->
+        productImageLists.forEach { productImageData ->
             verify { uriParser.parse(productImageData.uriString) }
         }
     }

@@ -25,7 +25,7 @@ class CleanUnusedDataWorker @AssistedInject constructor(
             val emptyFiles = productsRepository.getEmptyFiles()
             emptyFiles.forEach { file ->
                 Timber.d("Cleaning unused data: $file")
-                dataCleaner.clearProductData(
+                dataCleaner.deleteProductData(
                     productId = file.id,
                     productFolderName = file.productFolderName
                 )

@@ -1,14 +1,14 @@
 package com.grappim.hateitorrateit.utils.filesapi.mappers
 
-import com.grappim.hateitorrateit.domain.ProductImageData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 
 interface ImageDataMapper {
-    suspend fun toProductImageData(imageData: ImageData): ProductImageData
+    suspend fun toProductImageData(productImageUIData: ProductImageUIData): ProductImage
 
-    suspend fun toProductImageDataList(list: List<ImageData>): List<ProductImageData>
+    suspend fun toProductImageDataList(list: List<ProductImageUIData>): List<ProductImage>
 
-    suspend fun toImageData(productImageData: ProductImageData): ImageData
+    suspend fun toImageData(productImage: ProductImage): ProductImageUIData
 
-    suspend fun toImageDataList(list: List<ProductImageData>): List<ImageData>
+    suspend fun toImageDataList(list: List<ProductImage>): List<ProductImageUIData>
 }

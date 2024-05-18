@@ -70,7 +70,7 @@ class DetailsViewModel @Inject constructor(
                 it.copy(isLoading = true)
             }
 
-            dataCleaner.clearProductData(
+            dataCleaner.deleteProductData(
                 productId = productId,
                 productFolderName = viewState.value.productFolderName
             )

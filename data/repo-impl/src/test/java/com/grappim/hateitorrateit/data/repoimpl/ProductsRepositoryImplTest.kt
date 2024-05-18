@@ -139,12 +139,12 @@ class ProductsRepositoryImplTest {
         val emptyFiles = getProductWithImagesEntityList()
         val emptyFileData = getListOfEmptyFileData()
         coEvery { productsDao.getEmptyFiles() } returns emptyFiles
-        coEvery { productsMapper.toEmptyFileDataList(any()) } returns emptyFileData
+        coEvery { productsMapper.toEmptyFileList(any()) } returns emptyFileData
 
         val actual = repository.getEmptyFiles()
 
         coVerify { productsDao.getEmptyFiles() }
-        coVerify { productsMapper.toEmptyFileDataList(emptyFiles) }
+        coVerify { productsMapper.toEmptyFileList(emptyFiles) }
 
         assertEquals(emptyFileData, actual)
     }

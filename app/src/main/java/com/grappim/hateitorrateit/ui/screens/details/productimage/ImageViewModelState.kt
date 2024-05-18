@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.ui.screens.details.productimage
 
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 
 data class ImageViewModelState(
     val uri: String = "",
-    val images: List<ProductImageData> = emptyList()
+    val images: List<ProductImage> = emptyList()
 )

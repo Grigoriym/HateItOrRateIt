@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
 import com.grappim.hateitorrateit.data.db.entities.BackupProductImageDataEntity
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -16,8 +16,8 @@ class BackupProductMapperTest {
         runTest {
             val productId = 1L
             val images = listOf(
-                ProductImageData(1L, "name1", "image/png", "/path1", "uri1", 100L, "md5-1"),
-                ProductImageData(2L, "name2", "image/jpeg", "/path2", "uri2", 200L, "md5-2")
+                ProductImage(1L, "name1", "image/png", "/path1", "uri1", 100L, "md5-1"),
+                ProductImage(2L, "name2", "image/jpeg", "/path2", "uri2", 200L, "md5-2")
             )
 
             val result = mapper.toBackupProductImageDataEntity(productId, images)

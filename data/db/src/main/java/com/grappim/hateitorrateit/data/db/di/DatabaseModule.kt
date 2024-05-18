@@ -8,8 +8,6 @@ import com.grappim.hateitorrateit.data.db.converters.DateTimeConverter
 import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
-import com.grappim.hateitorrateit.data.db.utils.TransactionController
-import com.grappim.hateitorrateit.data.db.utils.TransactionControllerImpl
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapperImpl
 import dagger.Binds
@@ -52,9 +50,4 @@ class DatabaseModule {
 interface DatabaseBindsModule {
     @Binds
     fun bindDatabaseWrapper(databaseWrapper: DatabaseWrapperImpl): DatabaseWrapper
-
-    @Binds
-    fun bindTransactionController(
-        transactionControllerImpl: TransactionControllerImpl
-    ): TransactionController
 }

@@ -1,13 +1,13 @@
 package com.grappim.hateitorrateit.model
 
 import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 
 data class ProductDetailsUi(
     val id: String,
     val name: String,
     val createdDate: String,
-    val images: List<ProductImageData>,
+    val images: List<ProductImage>,
     val productFolderName: String,
     val description: String,
     val shop: String,

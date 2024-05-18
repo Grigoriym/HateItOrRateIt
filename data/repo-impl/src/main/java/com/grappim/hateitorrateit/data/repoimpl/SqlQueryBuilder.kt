@@ -5,9 +5,7 @@ import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.domain.HateRateType
 import timber.log.Timber
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class SqlQueryBuilder @Inject constructor() {
 
     fun buildSqlQuery(query: String, type: HateRateType?): String {

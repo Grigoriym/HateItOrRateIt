@@ -6,9 +6,9 @@ import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity
 import com.grappim.hateitorrateit.domain.CreateProduct
-import com.grappim.hateitorrateit.domain.EmptyFileData
+import com.grappim.hateitorrateit.domain.EmptyFile
 import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -57,36 +57,36 @@ class ProductMapper @Inject constructor(
 
     suspend fun toProductImageDataEntityList(
         productId: Long,
-        images: List<ProductImageData>
+        images: List<ProductImage>
     ): List<ProductImageDataEntity> = withContext(ioDispatcher) {
         images.map {
             toProductImageDataEntity(
                 productId = productId,
-                productImageData = it
+                productImage = it
             )
         }
     }
 
     suspend fun toProductImageDataEntity(
         productId: Long,
-        productImageData: ProductImageData
+        productImage: ProductImage
     ): ProductImageDataEntity = withContext(ioDispatcher) {
         ProductImageDataEntity(
-            imageId = productImageData.imageId,
-            name = productImageData.name,
-            mimeType = productImageData.mimeType,
-            uriPath = productImageData.uriPath,
-            uriString = productImageData.uriString,
-            size = productImageData.size,
-            md5 = productImageData.md5,
+            imageId = productImage.imageId,
+            name = productImage.name,
+            mimeType = productImage.mimeType,
+            uriPath = productImage.uriPath,
+            uriString = productImage.uriString,
+            size = productImage.size,
+            md5 = productImage.md5,
             productId = productId
         )
     }
 
-    suspend fun toEmptyFileDataList(list: List<ProductWithImagesEntity>): List<EmptyFileData> =
+    suspend fun toEmptyFileList(list: List<ProductWithImagesEntity>): List<EmptyFile> =
         withContext(ioDispatcher) {
             list.map { productWithImagesEntity ->
-                EmptyFileData(
+                EmptyFile(
                     id = productWithImagesEntity.productEntity.productId,
                     productFolderName = productWithImagesEntity.productEntity.productFolderName
                 )
@@ -137,7 +137,7 @@ class ProductMapper @Inject constructor(
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun toProductImageData(productImageDataEntity: ProductImageDataEntity) = ProductImageData(
+    fun toProductImageData(productImageDataEntity: ProductImageDataEntity) = ProductImage(
         imageId = productImageDataEntity.imageId,
         name = productImageDataEntity.name,
         mimeType = productImageDataEntity.mimeType,

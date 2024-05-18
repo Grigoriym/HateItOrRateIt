@@ -5,7 +5,7 @@ import com.grappim.hateitorrateit.domain.DraftProduct
 import com.grappim.hateitorrateit.domain.HateRateType
 import com.grappim.hateitorrateit.domain.Product
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.ui.NativeText
 
 /**
@@ -13,7 +13,7 @@ import com.grappim.hateitorrateit.utils.ui.NativeText
  * product, the value being false
  */
 data class ProductManagerViewState(
-    val images: List<ImageData> = emptyList(),
+    val images: List<ProductImageUIData> = emptyList(),
     val productName: String = "",
     val description: String = "",
     val shop: String = "",
@@ -34,7 +34,7 @@ data class ProductManagerViewState(
 
     val productSaved: Boolean = false,
 
-    val onDeleteImageClicked: (imageData: ImageData) -> Unit,
+    val onDeleteImageClicked: (productImageUIData: ProductImageUIData) -> Unit,
     val onAddImageFromGalleryClicked: (uri: Uri) -> Unit,
     val onAddCameraPictureClicked: (cameraTakePictureData: CameraTakePictureData) -> Unit,
     val onQuit: () -> Unit,

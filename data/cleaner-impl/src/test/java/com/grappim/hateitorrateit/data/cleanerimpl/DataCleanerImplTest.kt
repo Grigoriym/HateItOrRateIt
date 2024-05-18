@@ -2,10 +2,9 @@ package com.grappim.hateitorrateit.data.cleanerimpl
 
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao
-import com.grappim.hateitorrateit.data.db.utils.TransactionController
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.domain.ProductImage
 import com.grappim.hateitorrateit.testing.getRandomLong
 import com.grappim.hateitorrateit.testing.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
@@ -26,7 +25,6 @@ import kotlin.test.assertTrue
 class DataCleanerImplTest {
 
     private val productsRepository: ProductsRepository = mockk()
-    private val transactionController: TransactionController = mockk()
     private val databaseDao: DatabaseDao = mockk()
     private val databaseWrapper: DatabaseWrapper = mockk()
     private val fileDeletionUtils: FileDeletionUtils = mockk()
@@ -51,7 +49,7 @@ class DataCleanerImplTest {
             coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns true
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
-            val actual = dataCleaner.clearProductImage(
+            val actual = dataCleaner.deleteProductImage(
                 productId = productId,
                 imageName = imageName,
                 uriString = uriString
@@ -72,7 +70,7 @@ class DataCleanerImplTest {
             coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns false
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
-            val actual = dataCleaner.clearProductImage(
+            val actual = dataCleaner.deleteProductImage(
                 productId = productId,
                 imageName = imageName,
                 uriString = uriString
@@ -92,7 +90,7 @@ class DataCleanerImplTest {
             coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
 
             val list = listOf(
-                ProductImageData(
+                ProductImage(
                     name = getRandomString(),
                     mimeType = "dicit",
                     uriPath = "brute",
@@ -100,7 +98,7 @@ class DataCleanerImplTest {
                     size = 9221,
                     md5 = "nullam"
                 ),
-                ProductImageData(
+                ProductImage(
                     name = getRandomString(),
                     mimeType = "dicit4",
                     uriPath = "brute1",
@@ -108,7 +106,7 @@ class DataCleanerImplTest {
                     size = 123,
                     md5 = "nullcam"
                 ),
-                ProductImageData(
+                ProductImage(
                     name = getRandomString(),
                     mimeType = "dicit5",
                     uriPath = "brute2",
@@ -118,7 +116,7 @@ class DataCleanerImplTest {
                 )
             )
 
-            dataCleaner.deleteProductFileData(
+            dataCleaner.deleteProductImages(
                 productId = productId,
                 list = list
             )
@@ -142,7 +140,7 @@ class DataCleanerImplTest {
         coEvery { fileDeletionUtils.deleteFolder(any()) } just Runs
         coEvery { productsRepository.deleteProductById(any()) } just Runs
 
-        dataCleaner.clearProductData(
+        dataCleaner.deleteProductData(
             productId = productId,
             productFolderName = folderName
         )
@@ -181,9 +179,6 @@ class DataCleanerImplTest {
     fun `on clearAllData, should call the needed functions`() = runTest {
         coEvery { databaseWrapper.clearAllTables() } just Runs
         coEvery { databaseDao.clearPrimaryKeyIndex() } just Runs
-        coEvery { transactionController.runInTransaction(any()) } coAnswers {
-            firstArg<suspend () -> Unit>().invoke()
-        }
         coEvery { fileDeletionUtils.clearMainFolder() } returns true
 
         dataCleaner.clearAllData()

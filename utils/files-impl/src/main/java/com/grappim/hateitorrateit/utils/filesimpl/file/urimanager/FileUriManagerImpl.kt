@@ -6,7 +6,7 @@ import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.filesimpl.HashUtils
@@ -29,7 +29,7 @@ class FileUriManagerImpl @Inject constructor(
         uri: Uri,
         folderName: String,
         isEdit: Boolean
-    ): ImageData {
+    ): ProductImageUIData {
         val folder = if (isEdit) {
             folderPathManager.getTempFolderName(folderName)
         } else {
@@ -41,7 +41,7 @@ class FileUriManagerImpl @Inject constructor(
         val newUri = getFileUri(newFile)
         val fileSize = fileInfoRetriever.getFileSize(newUri)
         val mimeType = fileInfoRetriever.getMimeType(newUri)
-        return ImageData(
+        return ProductImageUIData(
             uri = newUri,
             name = newFile.name,
             size = fileSize,
@@ -54,13 +54,13 @@ class FileUriManagerImpl @Inject constructor(
     override fun getFileDataFromCameraPicture(
         cameraTakePictureData: CameraTakePictureData,
         isEdit: Boolean
-    ): ImageData {
+    ): ProductImageUIData {
         val uri = cameraTakePictureData.uri
         val file = cameraTakePictureData.file
         Timber.d("getFileUrisFromUri, $cameraTakePictureData")
         val fileSize = fileInfoRetriever.getFileSize(uri)
         val mimeType = fileInfoRetriever.getMimeType(uri)
-        return ImageData(
+        return ProductImageUIData(
             uri = uri,
             name = fileInfoRetriever.getFileName(uri),
             size = fileSize,

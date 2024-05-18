@@ -20,12 +20,12 @@ import com.grappim.hateitorrateit.ui.screens.createEditProduct
 import com.grappim.hateitorrateit.ui.screens.createImageData
 import com.grappim.hateitorrateit.ui.screens.editProduct
 import com.grappim.hateitorrateit.ui.screens.editProductImages
-import com.grappim.hateitorrateit.ui.screens.imageData
+import com.grappim.hateitorrateit.ui.screens.productImageUIData
 import com.grappim.hateitorrateit.ui.screens.uri
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.productmanager.ProductImageManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import io.mockk.Runs
@@ -330,7 +330,13 @@ class ProductManagerViewModelEditTest {
         coEvery { productsRepository.getProductById(any()) } returns editProduct
 
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery {
+            fileUriManager.getFileUriFromGalleryUri(
+                any(),
+                any(),
+                any()
+            )
+        } returns productImageUIData
         every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         coEvery {
@@ -347,7 +353,9 @@ class ProductManagerViewModelEditTest {
 
         viewModel.viewState.value.onProductDone()
 
-        coVerify { imagePersistenceManager.prepareEditedImagesToPersist(listOf(imageData)) }
+        coVerify {
+            imagePersistenceManager.prepareEditedImagesToPersist(listOf(productImageUIData))
+        }
         coVerify { productImageManager.moveFromTempToOriginalFolder(PRODUCT_FOLDER_NAME) }
         coVerify { dataCleaner.deleteTempFolder(PRODUCT_FOLDER_NAME) }
         coVerify { dataCleaner.deleteBackupFolder(PRODUCT_FOLDER_NAME) }
@@ -366,7 +374,13 @@ class ProductManagerViewModelEditTest {
     fun `with editProduct, on onProductDone, productManagerAnalytics should call trackSaveButtonClicked`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery {
+            fileUriManager.getFileUriFromGalleryUri(
+                any(),
+                any(),
+                any()
+            )
+        } returns productImageUIData
         every { productManagerAnalytics.trackSaveButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
         coEvery {
@@ -386,11 +400,11 @@ class ProductManagerViewModelEditTest {
         verify { productManagerAnalytics.trackSaveButtonClicked() }
     }
 
-    private fun prepareImage(imageData: ImageData) {
+    private fun prepareImage(productImageUIData: ProductImageUIData) {
         coEvery {
             fileUriManager.getFileUriFromGalleryUri(any(), any(), any())
-        } returns imageData
-        viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
+        } returns productImageUIData
+        viewModel.viewState.value.onAddImageFromGalleryClicked(productImageUIData.uri)
     }
 
     private fun getProductFolderName(): String =

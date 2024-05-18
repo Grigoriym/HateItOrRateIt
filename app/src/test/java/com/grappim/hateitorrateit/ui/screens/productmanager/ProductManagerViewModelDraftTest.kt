@@ -17,12 +17,12 @@ import com.grappim.hateitorrateit.ui.screens.createImageData
 import com.grappim.hateitorrateit.ui.screens.createProduct
 import com.grappim.hateitorrateit.ui.screens.draftProduct
 import com.grappim.hateitorrateit.ui.screens.editProductImages
-import com.grappim.hateitorrateit.ui.screens.imageData
+import com.grappim.hateitorrateit.ui.screens.productImageUIData
 import com.grappim.hateitorrateit.ui.screens.uri
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.productmanager.ProductImageManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import io.mockk.Runs
@@ -119,7 +119,7 @@ class ProductManagerViewModelDraftTest {
 
     @Test
     fun `with draftProduct, on onQuit calls dataCleaner`() {
-        coEvery { dataCleaner.clearProductData(any(), any()) } just Runs
+        coEvery { dataCleaner.deleteProductData(any(), any()) } just Runs
 
         assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Initial)
 
@@ -128,7 +128,7 @@ class ProductManagerViewModelDraftTest {
         assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Finish)
 
         coVerify {
-            dataCleaner.clearProductData(
+            dataCleaner.deleteProductData(
                 viewModel.viewState.value.draftProduct!!.id,
                 viewModel.viewState.value.draftProduct!!.productFolderName
             )
@@ -139,7 +139,13 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, on onProductDone, new product is created`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery {
+            fileUriManager.getFileUriFromGalleryUri(
+                any(),
+                any(),
+                any()
+            )
+        } returns productImageUIData
         every { productManagerAnalytics.trackCreateButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
@@ -159,7 +165,13 @@ class ProductManagerViewModelDraftTest {
     fun `with draftProduct, on onProductDone, productManagerAnalytics should call trackCreateButtonClicked`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
-        coEvery { fileUriManager.getFileUriFromGalleryUri(any(), any(), any()) } returns imageData
+        coEvery {
+            fileUriManager.getFileUriFromGalleryUri(
+                any(),
+                any(),
+                any()
+            )
+        } returns productImageUIData
         every { productManagerAnalytics.trackCreateButtonClicked() } just Runs
         every { productManagerAnalytics.trackGalleryButtonClicked() } just Runs
 
@@ -286,11 +298,11 @@ class ProductManagerViewModelDraftTest {
         assertEquals(cameraData, cameraTakePictureData)
     }
 
-    private fun prepareImage(imageData: ImageData) {
+    private fun prepareImage(productImageUIData: ProductImageUIData) {
         coEvery {
             fileUriManager.getFileUriFromGalleryUri(any(), any(), any())
-        } returns imageData
-        viewModel.viewState.value.onAddImageFromGalleryClicked(imageData.uri)
+        } returns productImageUIData
+        viewModel.viewState.value.onAddImageFromGalleryClicked(productImageUIData.uri)
     }
 
     private fun getProductFolderName(): String =

@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.utils.filesapi.models
 
 import android.net.Uri
 
-data class ImageData(
+data class ProductImageUIData(
     val imageId: Long = 0L,
     val uri: Uri,
     val name: String,
