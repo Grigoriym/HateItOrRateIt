@@ -6,6 +6,16 @@ This application offers a straightforward way to keep track of products you like
 or dislike. It allows you to easily upload photos, names, descriptions, and store
 information, enabling you to make informed decisions about future purchases.
 
+Install
+---------
+<div style="display:flex;">
+
+<a href="https://play.google.com/store/apps/details?id=com.grappim.hateitorrateit">
+    <img alt="Get it on Google Play" height="80"
+        src="docs/graphics/google-badge.png" /></a>
+
+</div>
+
 ## Why This App Can Be Helpful
 
 There are times when you purchase a product that you either like or dislike, only to realize later that you can't remember its name. This is particularly true for items like cheese, ham, etc., where there are countless variations and it's challenging to keep up with all the names. This app aims to solve that problem, enabling you to recall the exact product the next time you need it.
