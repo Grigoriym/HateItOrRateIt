@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.utils.filesimpl.mappers
 
 import com.grappim.hateitorrateit.commons.IoDispatcher
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesimpl.UriParser

@@ -1,7 +1,3 @@
 plugins {
-    alias(libs.plugins.hateitorrateit.android.library)
-}
-
-android {
-    namespace = "com.grappim.hateitorrateit.data.workerapi"
+    alias(libs.plugins.hateitorrateit.java.library)
 }

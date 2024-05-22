@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.utils.filesapi.images
 
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 
 interface ImagePersistenceManager {

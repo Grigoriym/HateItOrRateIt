@@ -1,8 +1,7 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.creation
 
 import android.content.ContentResolver
-import com.grappim.hateitorrateit.testing.getRandomString
-import com.grappim.hateitorrateit.testing.getRandomUri
+import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
@@ -57,7 +56,7 @@ class FileCreationUtilsImplTest {
     fun `on createFileLocally should correctly create a new file from uri`() = runTest {
         val content = getRandomString().toByteArray()
         val fileDataByteArray = ByteArrayInputStream(content)
-        val uri = getRandomUri()
+        val uri = com.grappim.hateitorrateit.testing.core.getRandomUri()
         shadowContentResolver.registerInputStream(
             uri,
             fileDataByteArray

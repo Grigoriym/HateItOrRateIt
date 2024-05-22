@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.urimanager
 
 import androidx.core.content.FileProvider
-import com.grappim.hateitorrateit.testing.getRandomLong
-import com.grappim.hateitorrateit.testing.getRandomString
+import com.grappim.hateitorrateit.testing.domain.getRandomLong
+import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData

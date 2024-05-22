@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.images
 
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
@@ -25,7 +25,7 @@ class ImagePersistenceManagerImpl @Inject constructor(
      */
     override suspend fun prepareEditedImagesToPersist(
         images: List<ProductImageUIData>
-    ): List<ProductImage> = images.map { image ->
+    ): List<com.grappim.hateitorrateit.data.repoapi.models.ProductImage> = images.map { image ->
         if (image.isEdit) {
             val result = imageDataMapper.toProductImageData(image)
             val newUriString = result.uriString.replace("_temp", "")

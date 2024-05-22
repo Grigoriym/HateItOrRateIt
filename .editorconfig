@@ -6,7 +6,7 @@ ktlint_code_style = android_studio
 ktlint_function_naming_ignore_when_annotated_with=Composable
 ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
 
-[**/ui/theme/*.kt]
+[**/uikit/theme/*.kt]
 ktlint_standard_property-naming = disabled
 
 [**/test/**.kt]

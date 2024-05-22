@@ -12,7 +12,6 @@ import androidx.sqlite.db.SupportSQLiteQuery
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity
-import com.grappim.hateitorrateit.domain.HateRateType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -39,7 +38,7 @@ interface ProductsDao {
         name: String,
         description: String,
         shop: String,
-        type: HateRateType,
+        type: com.grappim.hateitorrateit.data.repoapi.models.HateRateType,
         files: List<ProductImageDataEntity>
     ) {
         updateProduct(id, name, description, shop, type)
@@ -57,7 +56,7 @@ interface ProductsDao {
         name: String,
         description: String,
         shop: String,
-        type: HateRateType
+        type: com.grappim.hateitorrateit.data.repoapi.models.HateRateType
     )
 
     @Update(onConflict = OnConflictStrategy.REPLACE)

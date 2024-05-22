@@ -2,7 +2,8 @@ package com.grappim.hateitorrateit.data.repoimpl
 
 import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import com.grappim.hateitorrateit.data.repoimpl.mappers.BackupProductMapper
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -8,7 +8,7 @@ import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.EmptyFile
+import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify

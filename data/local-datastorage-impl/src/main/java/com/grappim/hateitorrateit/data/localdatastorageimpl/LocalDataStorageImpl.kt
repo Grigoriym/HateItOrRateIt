@@ -6,8 +6,8 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import timber.log.Timber

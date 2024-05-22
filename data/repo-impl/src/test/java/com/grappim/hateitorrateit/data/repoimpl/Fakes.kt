@@ -3,11 +3,11 @@ package com.grappim.hateitorrateit.data.repoimpl
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductWithImagesEntity
-import com.grappim.hateitorrateit.domain.CreateProduct
-import com.grappim.hateitorrateit.domain.EmptyFile
-import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
+import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.Product
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import java.time.OffsetDateTime
 
 const val ID = 1L

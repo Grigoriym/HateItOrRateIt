@@ -8,12 +8,11 @@ android {
 }
 
 dependencies {
-    implementation(project(":data:cleaner-api"))
-    implementation(project(":utils:files-api"))
-    implementation(project(":data:repo-api"))
-    implementation(project(":commons"))
-    implementation(project(":domain"))
-    implementation(project(":data:db"))
+    implementation(projects.data.cleanerApi)
+    implementation(projects.utils.filesApi)
+    implementation(projects.data.repoApi)
+    implementation(projects.commons)
+    implementation(projects.data.db)
 
     implementation(libs.timber)
 

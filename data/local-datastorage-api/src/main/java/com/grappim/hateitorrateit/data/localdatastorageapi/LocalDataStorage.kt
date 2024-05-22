@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.localdatastorageapi
 
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import kotlinx.coroutines.flow.Flow
 
 interface LocalDataStorage {

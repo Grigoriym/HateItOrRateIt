@@ -8,8 +8,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":analytics-api"))
-    implementation(project(":domain"))
+    implementation(projects.analyticsApi)
+    implementation(projects.data.repoApi)
 
     releaseImplementation(platform(libs.firebase.bom))
     releaseImplementation(libs.firebase.crashlytics)

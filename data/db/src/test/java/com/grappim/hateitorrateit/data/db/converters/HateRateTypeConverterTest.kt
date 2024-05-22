@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.db.converters
 
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -18,12 +18,12 @@ class HateRateTypeConverterTest {
     fun `when toHateRate should return correct type`() {
         val type = "RATE"
         val actual = converter.toHateRate(type)
-        assertEquals(actual, HateRateType.RATE)
+        assertEquals(actual, com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE)
     }
 
     @Test
     fun `when fromHateRate should return correct String`() {
-        val type = HateRateType.HATE
+        val type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.HATE
         val actual = converter.fromHateRate(type)
         assertEquals(actual, "HATE")
     }

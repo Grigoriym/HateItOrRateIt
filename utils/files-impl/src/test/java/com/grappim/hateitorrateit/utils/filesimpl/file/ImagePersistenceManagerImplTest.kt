@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file
 
 import android.net.Uri
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
@@ -58,7 +58,7 @@ class ImagePersistenceManagerImplTest {
         )
 
         val expectedProductImages = listOf(
-            ProductImage(
+            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
                 imageId = 1L,
                 name = "image.jpg",
                 mimeType = "image/jpeg",
@@ -68,7 +68,7 @@ class ImagePersistenceManagerImplTest {
                 md5 = "abc123",
                 isEdit = true
             ),
-            ProductImage(
+            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
                 imageId = 2L,
                 name = "image2.jpg",
                 mimeType = "image/jpeg",
@@ -83,7 +83,7 @@ class ImagePersistenceManagerImplTest {
         images.forEach { image ->
             coEvery {
                 imageDataMapper.toProductImageData(image)
-            } returns ProductImage(
+            } returns com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
                 imageId = image.imageId,
                 name = image.name,
                 mimeType = image.mimeType,

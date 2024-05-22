@@ -14,7 +14,6 @@ android {
 dependencies {
     implementation(project(":data:repo-api"))
     implementation(project(":data:cleaner-api"))
-    implementation(project(":domain"))
     implementation(project(":data:worker-api"))
 
     implementation(libs.androidx.core.ktx)

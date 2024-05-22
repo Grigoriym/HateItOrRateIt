@@ -26,13 +26,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
+import com.grappim.hateitorrateit.feature.home.ui.HomeScreen
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsRoute
-import com.grappim.hateitorrateit.ui.screens.home.HomeScreen
-import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundDark
-import com.grappim.hateitorrateit.ui.theme.bottomNavigationBackgroundLight
-import com.grappim.hateitorrateit.ui.utils.PlatoIconType
-import com.grappim.hateitorrateit.ui.widgets.PlatoIcon
+import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundDark
+import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundLight
+import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.utils.safeClick
+import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 
 @Composable
 fun RootMainScreen(

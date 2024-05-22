@@ -8,11 +8,10 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":commons"))
-    implementation(project(":utils:date-time"))
-    implementation(project(":utils:date-time-api"))
-    implementation(project(":utils:files-api"))
+    implementation(projects.commons)
+    implementation(projects.data.repoApi)
+    implementation(projects.utils.dateTimeApi)
+    implementation(projects.utils.filesApi)
 
     implementation(libs.androidx.core.ktx)
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="search">Recherche</string>
+
+    <string name="hate">Hate</string>
+    <string name="rate">Rate</string>
+</resources>

@@ -1,9 +1,8 @@
 package com.grappim.hateitorrateit.utils.filesimpl.mappers
 
-import com.grappim.hateitorrateit.domain.ProductImage
-import com.grappim.hateitorrateit.testing.getRandomLong
-import com.grappim.hateitorrateit.testing.getRandomString
-import com.grappim.hateitorrateit.testing.getRandomUri
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import com.grappim.hateitorrateit.testing.domain.getRandomLong
+import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesimpl.UriParser
@@ -37,14 +36,14 @@ class ProductImageUIDataMapperImplTest {
 
     @Test
     fun `toProductImageData should return correct ProductImageData`() = runTest {
-        val uri = getRandomUri()
+        val uri = com.grappim.hateitorrateit.testing.core.getRandomUri()
         val id = getRandomLong()
         val name = getRandomString()
         val size = getRandomLong()
         val md5 = getRandomString()
         val mimeType = getRandomString()
 
-        val expected = ProductImage(
+        val expected = com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
             imageId = id,
             name = name,
             mimeType = mimeType,
@@ -72,7 +71,7 @@ class ProductImageUIDataMapperImplTest {
 
     @Test
     fun `toImageData should return correct ImageData`() = runTest {
-        val uri = getRandomUri()
+        val uri = com.grappim.hateitorrateit.testing.core.getRandomUri()
         val id = getRandomLong()
         val name = getRandomString()
         val size = getRandomLong()
@@ -81,7 +80,7 @@ class ProductImageUIDataMapperImplTest {
 
         every { uriParser.parse(any()) } returns uri
 
-        val productImage = ProductImage(
+        val productImage = com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
             imageId = id,
             name = name,
             mimeType = mimeType,
@@ -114,7 +113,7 @@ class ProductImageUIDataMapperImplTest {
         val productImageUIDataLists = listOf(
             ProductImageUIData(
                 getRandomLong(),
-                getRandomUri(),
+                com.grappim.hateitorrateit.testing.core.getRandomUri(),
                 getRandomString(),
                 getRandomLong(),
                 getRandomString(),
@@ -123,7 +122,7 @@ class ProductImageUIDataMapperImplTest {
             ),
             ProductImageUIData(
                 getRandomLong(),
-                getRandomUri(),
+                com.grappim.hateitorrateit.testing.core.getRandomUri(),
                 getRandomString(),
                 getRandomLong(),
                 getRandomString(),
@@ -133,7 +132,7 @@ class ProductImageUIDataMapperImplTest {
         )
 
         val expectedList = productImageUIDataLists.map { imageData ->
-            ProductImage(
+            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
                 imageId = imageData.imageId,
                 name = imageData.name,
                 mimeType = imageData.mimeType,
@@ -152,11 +151,11 @@ class ProductImageUIDataMapperImplTest {
 
     @Test
     fun `toImageDataList should return correct List of ImageData`() = runTest {
-        val mockedUri = getRandomUri()
+        val mockedUri = com.grappim.hateitorrateit.testing.core.getRandomUri()
         every { uriParser.parse(any()) } returns mockedUri
 
         val productImageLists = listOf(
-            ProductImage(
+            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
                 getRandomLong(),
                 getRandomString(),
                 getRandomString(),
@@ -166,7 +165,7 @@ class ProductImageUIDataMapperImplTest {
                 getRandomString(),
                 false
             ),
-            ProductImage(
+            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
                 getRandomLong(),
                 getRandomString(),
                 getRandomString(),

@@ -21,12 +21,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":utils:date-time-api"))
-    implementation(project(":commons"))
+    implementation(projects.data.repoApi)
+    implementation(projects.utils.dateTimeApi)
+    implementation(projects.commons)
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.androidx.room.testing)
+    testImplementation(libs.androidx.room.testing)
 }

@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.cleanerapi
 
-import com.grappim.hateitorrateit.domain.ProductImage
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 
 interface DataCleaner {
 

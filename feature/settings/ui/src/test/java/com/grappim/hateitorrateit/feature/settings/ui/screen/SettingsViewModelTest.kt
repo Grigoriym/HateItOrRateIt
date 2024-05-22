@@ -5,12 +5,12 @@ import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.settings.ui.optionsgenerator.LocaleOptionsGenerator
-import com.grappim.hateitorrateit.testing.MainDispatcherRule
-import com.grappim.hateitorrateit.testing.testException
+import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.testException
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
