@@ -37,7 +37,7 @@ androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
 coil = "2.6.0"
 
-mockk = "1.13.10"
+mockk = "1.13.11"
 
 kotlin = "1.9.22"
 coroutines = "1.8.1"
