@@ -6,12 +6,14 @@ import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.CreateProduct
-import com.grappim.hateitorrateit.domain.DraftProduct
-import com.grappim.hateitorrateit.domain.EmptyFileData
-import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
+import com.grappim.hateitorrateit.data.repoapi.models.DraftProduct
+import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.Product
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQueryBuilder
+import com.grappim.hateitorrateit.data.repoimpl.mappers.ProductMapper
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -52,7 +54,7 @@ class ProductsRepositoryImpl @Inject constructor(
         productsDao.updateProduct(productsMapper.toProductEntity(product))
     }
 
-    override suspend fun updateProductWithImages(product: Product, images: List<ProductImageData>) {
+    override suspend fun updateProductWithImages(product: Product, images: List<ProductImage>) {
         val entity = productsMapper.toProductEntity(product)
         val imagesEntity = productsMapper.toProductImageDataEntityList(
             productId = product.id,
@@ -64,11 +66,10 @@ class ProductsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun updateImagesInProduct(id: Long, images: List<ProductImageData>) =
-        withContext(ioDispatcher) {
-            val filesEntity = productsMapper.toProductImageDataEntityList(id, images)
-            productsDao.upsertImages(filesEntity)
-        }
+    override suspend fun updateImagesInProduct(id: Long, images: List<ProductImage>) {
+        val filesEntity = productsMapper.toProductImageDataEntityList(id, images)
+        productsDao.upsertImages(filesEntity)
+    }
 
     override suspend fun addDraftProduct(): DraftProduct = withContext(ioDispatcher) {
         val nowDate = dateTimeUtils.getDateTimeUTCNow()
@@ -94,8 +95,8 @@ class ProductsRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun getEmptyFiles(): List<EmptyFileData> =
-        productsMapper.toEmptyFileDataList(productsDao.getEmptyFiles())
+    override suspend fun getEmptyFiles(): List<EmptyFile> =
+        productsMapper.toEmptyFileList(productsDao.getEmptyFiles())
 
     override suspend fun deleteEmptyFiles() = productsDao.deleteEmptyFiles()
 
@@ -106,7 +107,7 @@ class ProductsRepositoryImpl @Inject constructor(
         productsDao.deleteProductAndImagesById(productId)
     }
 
-    override suspend fun addProduct(product: CreateProduct) = withContext(ioDispatcher) {
+    override suspend fun addProduct(product: CreateProduct) {
         val productEntity = productsMapper.toProductEntity(product)
         val images = productsMapper.toProductImageDataEntityList(product)
         productsDao.updateProductAndImages(

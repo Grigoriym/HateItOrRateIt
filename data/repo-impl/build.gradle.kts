@@ -8,10 +8,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
     implementation(project(":utils:files-api"))
     implementation(project(":utils:date-time-api"))
-    implementation(project(":commons"))
+    implementation(projects.commons)
     implementation(project(":data:repo-api"))
     implementation(project(":data:db"))
     implementation(project(":data:local-datastorage-api"))

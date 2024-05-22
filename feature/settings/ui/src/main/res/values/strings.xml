@@ -3,4 +3,29 @@
     <string name="en" translatable="false">English</string>
     <string name="fr" translatable="false">Français</string>
     <string name="de" translatable="false">Deutsch</string>
+
+    <string name="language">English</string>
+
+    <string name="settings">Settings</string>
+    <string name="are_you_sure_clear_all_data">Confirm data deletion</string>
+
+    <string name="no">No</string>
+    <string name="clear_data">Clear All Data</string>
+    <string name="default_type">Default Type</string>
+
+    <string name="toggle_crashlytics">Do you allow crash reports to be sent?</string>
+    <string name="crashlytics_settings_subtitle">This is needed to diagnose and resolve any crashes</string>
+
+    <string name="toggle_analytics">Do you consent to analytics data being collected?</string>
+    <string name="analytics_settings_subtitle">Collecting usage data helps us improve your experience with the app.</string>
+
+    <string name="dark_mode_preferences">Dark mode preferences</string>
+    <string name="system_default">System Default</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+
+    <string name="github_repo_link">Github Link</string>
+    <string name="privacy_policy_link">Privacy Policy</string>
+
+    <string name="content_description_back_button">Going back</string>
 </resources>

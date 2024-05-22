@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.data.db.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import java.time.OffsetDateTime
 
 const val PRODUCTS_TABLE = "products_table"

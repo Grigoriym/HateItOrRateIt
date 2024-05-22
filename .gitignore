@@ -21,3 +21,7 @@ local.properties
 /feature/build/
 /feature/settings/build
 /utils/build/
+/feature/details/build
+/feature/home/build
+feature/productmanager/build
+testing/build

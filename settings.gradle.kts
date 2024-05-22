@@ -17,12 +17,12 @@ dependencyResolutionManagement {
 // https://issuetracker.google.com/issues/315023802#comment18
 gradle.startParameter.excludedTaskNames.addAll(listOf(":build-logic:convention:testClasses"))
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 rootProject.name = "HateItOrRateIt"
 include(":app")
-include(":ui")
-include(":domain")
+include(":uikit")
 include(":commons")
-include(":testing")
 
 include(
     ":data:local-datastorage-api",
@@ -51,10 +51,23 @@ include(
     ":data:repo-api",
     ":data:repo-impl"
 )
-include(":utils:date-time")
-include(":core:appinfo-api")
+
 include(":feature:settings:ui")
-include(":utils:ui")
-include(":utils:files-api")
-include(":utils:files-impl")
-include(":utils:date-time-api")
+
+include(
+    ":core:appinfo-api",
+    ":core:navigation"
+)
+
+include(
+    ":utils:ui",
+    ":utils:files-api",
+    ":utils:files-impl",
+    ":utils:date-time-api",
+    ":utils:date-time"
+)
+include(":feature:home:ui")
+include(":testing:core")
+include(":testing:domain")
+include(":feature:productmanager:ui")
+include(":feature:details:ui")

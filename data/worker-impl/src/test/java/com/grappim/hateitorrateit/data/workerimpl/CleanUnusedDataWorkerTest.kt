@@ -8,7 +8,7 @@ import androidx.work.testing.TestListenableWorkerBuilder
 import androidx.work.testing.WorkManagerTestInitHelper
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
-import com.grappim.hateitorrateit.domain.EmptyFileData
+import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -32,9 +32,9 @@ class CleanUnusedDataWorkerTest {
     private val dataCleaner: DataCleaner = mockk()
 
     private val emptyFiles = listOf(
-        EmptyFileData(id = 7756, productFolderName = "Kathy Copeland"),
-        EmptyFileData(id = 7757, productFolderName = "Ka123thy Copeland"),
-        EmptyFileData(id = 77526, productFolderName = "Ka44thy Copeland")
+        EmptyFile(id = 7756, productFolderName = "Kathy Copeland"),
+        EmptyFile(id = 7757, productFolderName = "Ka123thy Copeland"),
+        EmptyFile(id = 77526, productFolderName = "Ka44thy Copeland")
     )
 
     @Before
@@ -51,7 +51,7 @@ class CleanUnusedDataWorkerTest {
     fun `on doWork with no error should return success`() = runTest {
         coEvery { productsRepository.getEmptyFiles() } returns emptyFiles
         emptyFiles.forEach { _ ->
-            coEvery { dataCleaner.clearProductData(any(), any()) } just Runs
+            coEvery { dataCleaner.deleteProductData(any(), any()) } just Runs
         }
 
         val worker = TestListenableWorkerBuilder<CleanUnusedDataWorker>(context)
@@ -68,7 +68,7 @@ class CleanUnusedDataWorkerTest {
         coVerify { productsRepository.getEmptyFiles() }
         emptyFiles.forEach { emptyFile ->
             coVerify {
-                dataCleaner.clearProductData(
+                dataCleaner.deleteProductData(
                     productId = emptyFile.id,
                     productFolderName = emptyFile.productFolderName
                 )
@@ -96,7 +96,7 @@ class CleanUnusedDataWorkerTest {
         coVerify { productsRepository.getEmptyFiles() }
         emptyFiles.forEach { emptyFile ->
             coVerify(exactly = 0) {
-                dataCleaner.clearProductData(
+                dataCleaner.deleteProductData(
                     productId = emptyFile.id,
                     productFolderName = emptyFile.productFolderName
                 )

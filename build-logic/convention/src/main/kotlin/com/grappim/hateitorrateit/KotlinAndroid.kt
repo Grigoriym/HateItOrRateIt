@@ -31,6 +31,13 @@ internal fun Project.configureKotlinAndroid(
             add("META-INF/LICENSE.md")
             add("META-INF/LICENSE-notice.md")
         }
+
+        testOptions {
+            unitTests {
+                isReturnDefaultValues = true
+                isIncludeAndroidResources = true
+            }
+        }
     }
 
     configureKotlin()

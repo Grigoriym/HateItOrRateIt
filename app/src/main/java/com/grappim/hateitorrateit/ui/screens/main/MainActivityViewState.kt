@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.ui.screens.main
 
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 
 data class MainActivityViewState(
 

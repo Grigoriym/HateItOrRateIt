@@ -1,12 +1,7 @@
 plugins {
-    alias(libs.plugins.hateitorrateit.android.library)
-}
-
-android {
-    namespace = "com.grappim.hateitorrateit.data.localdatastorageapi"
+    alias(libs.plugins.hateitorrateit.java.library)
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(libs.kotlinx.coroutines.core)
+    implementation(projects.data.repoApi)
 }
