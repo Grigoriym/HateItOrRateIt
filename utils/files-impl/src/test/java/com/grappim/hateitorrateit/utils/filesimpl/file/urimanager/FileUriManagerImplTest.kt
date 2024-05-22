@@ -1,12 +1,12 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.urimanager
 
 import androidx.core.content.FileProvider
-import com.grappim.hateitorrateit.testing.getRandomLong
-import com.grappim.hateitorrateit.testing.getRandomString
+import com.grappim.hateitorrateit.testing.domain.getRandomLong
+import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.filesapi.models.ImageData
+import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.filesimpl.HashUtils
@@ -88,7 +88,7 @@ class FileUriManagerImplTest {
             verify { fileInfoRetriever.getMimeType(uri) }
             verify { hashUtils.md5(file) }
 
-            val expected = ImageData(
+            val expected = ProductImageUIData(
                 uri = uri,
                 name = file.name,
                 size = size,
@@ -130,7 +130,7 @@ class FileUriManagerImplTest {
             verify { fileInfoRetriever.getMimeType(uri) }
             verify { hashUtils.md5(file) }
 
-            val expected = ImageData(
+            val expected = ProductImageUIData(
                 uri = uri,
                 name = file.name,
                 size = size,
@@ -208,7 +208,7 @@ class FileUriManagerImplTest {
         verify { hashUtils.md5(file) }
         verify { fileInfoRetriever.getFileName(uri) }
 
-        val expected = ImageData(
+        val expected = ProductImageUIData(
             uri = uri,
             name = fileName,
             size = size,

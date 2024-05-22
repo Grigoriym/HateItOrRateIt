@@ -12,8 +12,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
-    implementation(project(":data:local-datastorage-api"))
+    implementation(projects.data.repoApi)
+    implementation(projects.data.localDatastorageApi)
 
     implementation(libs.androidx.datastore.prefs)
     implementation(libs.timber)

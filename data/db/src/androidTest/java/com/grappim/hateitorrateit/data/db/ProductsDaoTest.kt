@@ -11,7 +11,7 @@ import com.grappim.hateitorrateit.data.db.entities.PRODUCTS_TABLE
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapper
 import com.grappim.hateitorrateit.data.db.wrapper.DatabaseWrapperImpl
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.every
 import io.mockk.mockk
@@ -137,7 +137,7 @@ class ProductsDaoTest {
             name = "name_2",
             description = "description_2",
             shop = "shop_2",
-            type = HateRateType.RATE
+            type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE
         )
         productsDao.updateProduct(
             id = id,
@@ -167,7 +167,7 @@ class ProductsDaoTest {
                 productFolderName = "folder_2",
                 description = "description_2",
                 shop = "shop_2",
-                type = HateRateType.RATE,
+                type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE,
                 isCreated = true
             )
             productsDao.updateProduct(newProduct)

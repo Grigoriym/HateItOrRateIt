@@ -8,13 +8,12 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsScreen
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsViewState
-import com.grappim.hateitorrateit.ui.R
-import com.grappim.hateitorrateit.ui.utils.PlatoIconType
-import com.grappim.hateitorrateit.ui.widgets.PLATO_ALERT_DIALOG_TAG
-import com.grappim.hateitorrateit.ui.widgets.PLATO_LOADING_DIALOG_TAG
+import com.grappim.hateitorrateit.uikit.widgets.PLATO_ALERT_DIALOG_TAG
+import com.grappim.hateitorrateit.uikit.widgets.PLATO_LOADING_DIALOG_TAG
+import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -68,7 +67,7 @@ class SettingsScreenKtTest {
                 PlatoIconType.HighlightOff.testTag,
                 useUnmergedTree = true
             ).assertCountEquals(2)
-            onNodeWithTag(PlatoIconType.ThumbUp.testTag, useUnmergedTree = true).assertIsDisplayed()
+            onNodeWithTag(PlatoIconType.Rate.testTag, useUnmergedTree = true).assertIsDisplayed()
         }
     }
 

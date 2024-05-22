@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.data.db
 
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import java.time.OffsetDateTime
 
 const val PRODUCT_IMAGE_NAME = "product_image_name"
@@ -16,7 +16,7 @@ fun createProductEntity(): ProductEntity = ProductEntity(
     productFolderName = "Sophia House",
     description = "sale",
     shop = "quis",
-    type = HateRateType.RATE,
+    type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE,
     isCreated = true
 )
 

@@ -28,15 +28,15 @@ import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
-import com.grappim.hateitorrateit.ui.screens.details.DetailsRoute
-import com.grappim.hateitorrateit.ui.screens.details.productimage.ProductImageScreen
-import com.grappim.hateitorrateit.ui.screens.productmanager.ProductManagerRoute
-import com.grappim.hateitorrateit.ui.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
+import com.grappim.hateitorrateit.feature.details.ui.DetailsRoute
+import com.grappim.hateitorrateit.feature.details.ui.productimage.ProductImageScreen
+import com.grappim.hateitorrateit.feature.productmanager.ui.ProductManagerRoute
+import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.utils.safeClick
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
-import com.grappim.hateitorrateit.ui.R as uikit
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -91,10 +91,10 @@ class MainActivity : AppCompatActivity() {
     private fun popupSnackbarForCompleteUpdate(appUpdateManager: AppUpdateManager) {
         Snackbar.make(
             window.decorView.rootView,
-            getString(uikit.string.app_update_downloaded),
+            getString(R.string.app_update_downloaded),
             Snackbar.LENGTH_INDEFINITE
         ).apply {
-            setAction(getString(uikit.string.restart)) { appUpdateManager.completeUpdate() }
+            setAction(getString(R.string.restart)) { appUpdateManager.completeUpdate() }
             show()
         }
     }

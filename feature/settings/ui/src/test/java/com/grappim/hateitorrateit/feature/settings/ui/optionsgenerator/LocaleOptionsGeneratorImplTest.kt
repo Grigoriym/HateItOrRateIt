@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.feature.settings.ui.optionsgenerator
 
-import com.grappim.hateitorrateit.ui.R
+import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import org.junit.Before
 import org.junit.Test

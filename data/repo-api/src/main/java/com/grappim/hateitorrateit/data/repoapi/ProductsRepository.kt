@@ -1,11 +1,11 @@
 package com.grappim.hateitorrateit.data.repoapi
 
-import com.grappim.hateitorrateit.domain.CreateProduct
-import com.grappim.hateitorrateit.domain.DraftProduct
-import com.grappim.hateitorrateit.domain.EmptyFileData
-import com.grappim.hateitorrateit.domain.HateRateType
-import com.grappim.hateitorrateit.domain.Product
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
+import com.grappim.hateitorrateit.data.repoapi.models.DraftProduct
+import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.Product
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import kotlinx.coroutines.flow.Flow
 
 interface ProductsRepository {
@@ -21,13 +21,13 @@ interface ProductsRepository {
 
     suspend fun updateProduct(product: Product)
 
-    suspend fun updateImagesInProduct(id: Long, images: List<ProductImageData>)
+    suspend fun updateImagesInProduct(id: Long, images: List<ProductImage>)
 
-    suspend fun updateProductWithImages(product: Product, images: List<ProductImageData>)
+    suspend fun updateProductWithImages(product: Product, images: List<ProductImage>)
 
     suspend fun addDraftProduct(): DraftProduct
 
-    suspend fun getEmptyFiles(): List<EmptyFileData>
+    suspend fun getEmptyFiles(): List<EmptyFile>
 
     suspend fun deleteEmptyFiles()
 

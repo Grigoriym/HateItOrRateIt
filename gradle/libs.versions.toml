@@ -15,13 +15,13 @@ jacocoAggregation = "2.2.0"
 gms = "4.4.1"
 inAppUpdate = "2.1.0"
 
-agp = "8.4.0"
+agp = "8.4.1"
 androidTools = "31.4.1"
 
 hilt = "2.51.1"
 androidx-hilt = "1.2.0"
 navigation = "2.7.7"
-lifecycle = "2.7.0"
+lifecycle = "2.8.0"
 work = "2.9.0"
 appcompat = "1.6.1"
 core-ktx = "1.13.1"
@@ -37,10 +37,9 @@ androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
 coil = "2.6.0"
 
-mockk = "1.13.10"
+mockk = "1.13.11"
 
 kotlin = "1.9.22"
-kotlin-serialization = "1.6.3"
 coroutines = "1.8.1"
 ksp = "1.9.23-1.0.20"
 
@@ -55,7 +54,9 @@ androidxTestRules = "1.5.0"
 
 material = "1.12.0"
 
-robolectric = "4.12.1"
+robolectric = "4.12.2"
+
+moduleGraphAssertion = "2.5.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -64,9 +65,9 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-sqlite = { module = "androidx.sqlite:sqlite-ktx", version.ref = "sqlite" }
 
-androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
-androidx-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-androidx-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-core = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "lifecycle" }
 
 androidx-datastore-prefs = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-prefs" }
 
@@ -87,17 +88,21 @@ androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androi
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
 
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
-androidx-compose-ui = { module = "androidx.compose.ui:ui" }
-androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 androidx-compose-animation = { module = "androidx.compose.animation:animation" }
-androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
-androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-androidx-compose-material = { module = "androidx.compose.material:material" }
+
+androidx-compose-material-core = { module = "androidx.compose.material:material" }
 androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core" }
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+
+androidx-compose-ui-core = { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util" }
+androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
+androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCore" }
@@ -112,7 +117,6 @@ hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.re
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-google-inAppUpdate = { module = "com.google.android.play:app-update", version.ref = "inAppUpdate" }
 google-inAppUpdateKtx = { module = "com.google.android.play:app-update-ktx", version.ref = "inAppUpdate" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
@@ -129,7 +133,6 @@ firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-config = { module = "com.google.firebase:firebase-config" }
 
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
@@ -154,8 +157,10 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 jacocoAggregationCoverage = { id = "io.github.gmazzo.test.aggregation.coverage", version.ref = "jacocoAggregation" }
 jacocoAggregationResults = { id = "io.github.gmazzo.test.aggregation.results", version.ref = "jacocoAggregation" }
+moduleGraphAssertion = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraphAssertion" }
 
 # Plugins definded in the included build-logic
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }
 hateitorrateit-android-library = { id = "hateitorrateit.android.library", version = "unspecified" }
 hateitorrateit-android-library-compose = { id = "hateitorrateit.android.library.compose", version = "unspecified" }
+hateitorrateit-java-library = { id = "hateitorrateit.java.library", version = "unspecified" }

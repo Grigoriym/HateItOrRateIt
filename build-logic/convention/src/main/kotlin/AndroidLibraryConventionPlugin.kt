@@ -23,9 +23,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
             dependencies {
                 add("testImplementation", kotlin("test"))
-                add("testImplementation", project(":testing"))
+                add("testImplementation", project(":testing:core"))
+                add("testImplementation", project(":testing:domain"))
+
                 add("androidTestImplementation", kotlin("test"))
-                add("androidTestImplementation", project(":testing"))
+                add("androidTestImplementation", project(":testing:core"))
+                add("androidTestImplementation", project(":testing:domain"))
             }
         }
     }

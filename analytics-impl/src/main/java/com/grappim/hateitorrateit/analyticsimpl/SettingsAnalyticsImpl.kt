@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.analyticsimpl
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
-import com.grappim.hateitorrateit.domain.HateRateType
+import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import javax.inject.Inject
 
 internal const val SETTINGS_SCREEN_START = "settings_screen_start"

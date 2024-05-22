@@ -7,5 +7,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":domain"))
+    implementation(projects.data.repoApi)
 }

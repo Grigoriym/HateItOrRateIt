@@ -2,7 +2,8 @@ package com.grappim.hateitorrateit.data.repoimpl
 
 import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.entities.BackupProductImageDataEntity
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import com.grappim.hateitorrateit.data.repoimpl.mappers.BackupProductMapper
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -30,7 +31,7 @@ class BackupImagesRepositoryImplTest {
 
         val productId = 1L
         val images = listOf(
-            ProductImageData(
+            ProductImage(
                 imageId = 1L,
                 name = "Test",
                 mimeType = "image/png",
@@ -71,7 +72,7 @@ class BackupImagesRepositoryImplTest {
 
         val productId = 1L
         val images = listOf(
-            ProductImageData(
+            ProductImage(
                 imageId = 1L,
                 name = "Test",
                 mimeType = "image/png",
@@ -133,7 +134,7 @@ class BackupImagesRepositoryImplTest {
             )
         )
         val images = listOf(
-            ProductImageData(
+            ProductImage(
                 imageId = 1L,
                 name = "Test",
                 mimeType = "image/png",

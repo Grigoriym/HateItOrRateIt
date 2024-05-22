@@ -1,10 +1,10 @@
 package com.grappim.hateitorrateit.ui.screens.main
 
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.data.workerapi.WorkerController
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
-import com.grappim.hateitorrateit.testing.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just

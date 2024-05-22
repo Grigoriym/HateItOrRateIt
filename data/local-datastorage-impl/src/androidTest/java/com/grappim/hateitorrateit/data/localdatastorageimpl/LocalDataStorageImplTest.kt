@@ -5,7 +5,6 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import app.cash.turbine.test
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
-import com.grappim.hateitorrateit.domain.HateRateType
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
@@ -42,7 +41,7 @@ class LocalDataStorageImplTest {
     @Test
     fun initial_state_of_type_should_be_correct() = runTest {
         localDataStorage.typeFlow.test {
-            assertEquals(awaitItem(), HateRateType.HATE)
+            assertEquals(awaitItem(), com.grappim.hateitorrateit.data.repoapi.models.HateRateType.HATE)
         }
     }
 
@@ -63,11 +62,11 @@ class LocalDataStorageImplTest {
     @Test
     fun when_changing_the_type_the_flow_should_emit_correct_value() = runTest {
         localDataStorage.typeFlow.test {
-            assertEquals(awaitItem(), HateRateType.HATE)
+            assertEquals(awaitItem(), com.grappim.hateitorrateit.data.repoapi.models.HateRateType.HATE)
 
-            localDataStorage.changeTypeTo(HateRateType.RATE)
+            localDataStorage.changeTypeTo(com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE)
 
-            assertEquals(awaitItem(), HateRateType.RATE)
+            assertEquals(awaitItem(), com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE)
         }
     }
 

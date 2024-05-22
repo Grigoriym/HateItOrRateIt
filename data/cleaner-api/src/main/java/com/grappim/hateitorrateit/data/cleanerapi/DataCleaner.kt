@@ -1,14 +1,14 @@
 package com.grappim.hateitorrateit.data.cleanerapi
 
-import com.grappim.hateitorrateit.domain.ProductImageData
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 
 interface DataCleaner {
 
-    suspend fun clearProductImage(productId: Long, imageName: String, uriString: String): Boolean
+    suspend fun deleteProductImage(productId: Long, imageName: String, uriString: String): Boolean
 
-    suspend fun deleteProductFileData(productId: Long, list: List<ProductImageData>)
+    suspend fun deleteProductImages(productId: Long, list: List<ProductImage>)
 
-    suspend fun clearProductData(productId: Long, productFolderName: String)
+    suspend fun deleteProductData(productId: Long, productFolderName: String)
 
     suspend fun deleteTempFolder(productFolderName: String)
 

@@ -7,8 +7,7 @@ plugins {
     alias(libs.plugins.gms.googleServices)
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
-
-    id("com.jraska.module.graph.assertion") version "2.5.0"
+    alias(libs.plugins.moduleGraphAssertion)
 }
 
 android {
@@ -117,13 +116,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":ui"))
-    implementation(project(":domain"))
+    implementation(projects.core.navigation)
+
+    implementation(projects.uikit)
+
     implementation(project(":utils:ui"))
     implementation(project(":utils:date-time"))
     implementation(project(":utils:date-time-api"))
     implementation(project(":data:db"))
-    implementation(project(":commons"))
+    implementation(projects.commons)
 
     implementation(project(":analytics-api"))
     implementation(project(":analytics-impl"))
@@ -150,15 +151,19 @@ dependencies {
     implementation(project(":utils:files-api"))
     implementation(project(":utils:files-impl"))
 
+    implementation(projects.feature.home.ui)
+    implementation(projects.feature.productmanager.ui)
+    implementation(projects.feature.details.ui)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation(libs.androidx.lifecycle.runtime)
-    implementation(libs.androidx.viewmodel.compose)
-    implementation(libs.androidx.runtime.compose)
+    implementation(libs.androidx.lifecycle.runtime.core)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.work.runtime)
     implementation(libs.androidx.hilt.work)
@@ -170,27 +175,31 @@ dependencies {
     coreLibraryDesugaring(libs.android.desugarJdkLibs)
 
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.core)
     implementation(libs.androidx.compose.ui.util)
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material.core)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
+
+    debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
 
-    implementation(libs.google.inAppUpdate)
     implementation(libs.google.inAppUpdateKtx)
     implementation(libs.google.material)
 
     testImplementation(kotlin("test"))
     androidTestImplementation(kotlin("test"))
-    testImplementation(project(":testing"))
-    androidTestImplementation(project(":testing"))
+    testImplementation(projects.testing.core)
+    testImplementation(projects.testing.domain)
+    androidTestImplementation(projects.testing.core)
+    androidTestImplementation(projects.testing.domain)
 
     testImplementation(libs.robolectric)
 
@@ -199,6 +208,6 @@ dependencies {
 }
 
 moduleGraphAssert {
-    maxHeight = 3
+    maxHeight = 4
     assertOnAnyBuild = true
 }

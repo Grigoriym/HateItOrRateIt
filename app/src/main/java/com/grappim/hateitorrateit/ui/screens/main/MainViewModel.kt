@@ -3,9 +3,9 @@ package com.grappim.hateitorrateit.ui.screens.main
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
+import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
 import com.grappim.hateitorrateit.data.workerapi.WorkerController
-import com.grappim.hateitorrateit.domain.DarkThemeConfig
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
