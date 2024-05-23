@@ -8,7 +8,8 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.getByType
 import org.gradle.kotlin.dsl.provideDelegate
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -50,19 +51,16 @@ internal fun Project.configureKotlinAndroid(
 }
 
 private fun Project.configureKotlin() {
-    // Use withType to workaround https://youtrack.jetbrains.com/issue/KT-55947
-    tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions {
-            jvmTarget = JavaVersion.VERSION_17.toString()
+    tasks.withType<KotlinJvmCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
             // Treat all Kotlin warnings as errors (disabled by default)
             // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
             val warningsAsErrors: String? by project
-            allWarningsAsErrors = warningsAsErrors.toBoolean()
-            freeCompilerArgs = freeCompilerArgs + listOf(
-                "-opt-in=kotlin.RequiresOptIn",
-                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-opt-in=kotlinx.coroutines.FlowPreview",
-            )
+            allWarningsAsErrors.set(warningsAsErrors.toBoolean())
+            freeCompilerArgs.add("-opt-in=kotlin.RequiresOptIn")
+            freeCompilerArgs.add("-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi")
+            freeCompilerArgs.add("-opt-in=kotlinx.coroutines.FlowPreview")
         }
     }
 }

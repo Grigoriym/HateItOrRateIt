@@ -2,7 +2,11 @@
 compose-bom = "2024.05.00"
 firebase-bom = "33.0.0"
 firebaseCrashlytics = "2.9.9"
-composeKotlinCompiler = "1.5.8"
+#composeKotlinCompiler = "1.5.8"
+
+kotlin = "2.0.0"
+coroutines = "1.8.1"
+ksp = "2.0.0-1.0.21"
 
 compileSdk = "34"
 minSdk = "24"
@@ -38,10 +42,6 @@ crypto = "1.0.0"
 coil = "2.6.0"
 
 mockk = "1.13.11"
-
-kotlin = "1.9.22"
-coroutines = "1.8.1"
-ksp = "1.9.23-1.0.20"
 
 androidxEspresso = "3.5.1"
 junit4 = "4.13.2"
@@ -158,6 +158,7 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 jacocoAggregationCoverage = { id = "io.github.gmazzo.test.aggregation.coverage", version.ref = "jacocoAggregation" }
 jacocoAggregationResults = { id = "io.github.gmazzo.test.aggregation.results", version.ref = "jacocoAggregation" }
 moduleGraphAssertion = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraphAssertion" }
+compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 # Plugins definded in the included build-logic
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }

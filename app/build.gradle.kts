@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
     alias(libs.plugins.moduleGraphAssertion)
+    alias(libs.plugins.compose)
 }
 
 android {
@@ -92,9 +93,6 @@ android {
 
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeKotlinCompiler.get()
-    }
     testOptions {
         unitTests {
             isReturnDefaultValues = true
@@ -113,6 +111,12 @@ android {
     androidResources {
         generateLocaleConfig = true
     }
+}
+
+composeCompiler {
+    enableStrongSkippingMode = true
+
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 dependencies {
