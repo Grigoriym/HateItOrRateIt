@@ -4,7 +4,7 @@ import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
-import com.grappim.hateitorrateit.utils.filesimpl.UriParser
+import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

@@ -3,8 +3,8 @@ package com.grappim.hateitorrateit.utils.filesimpl.file.deletion
 import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
+import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import com.grappim.hateitorrateit.utils.filesimpl.ShadowFileProvider
-import com.grappim.hateitorrateit.utils.filesimpl.UriParser
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

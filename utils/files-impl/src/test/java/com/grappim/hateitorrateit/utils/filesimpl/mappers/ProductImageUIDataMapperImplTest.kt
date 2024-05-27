@@ -1,11 +1,10 @@
 package com.grappim.hateitorrateit.utils.filesimpl.mappers
 
-import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.testing.domain.getRandomLong
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
-import com.grappim.hateitorrateit.utils.filesimpl.UriParser
+import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

@@ -2,7 +2,6 @@
 compose-bom = "2024.05.00"
 firebase-bom = "33.0.0"
 firebaseCrashlytics = "2.9.9"
-#composeKotlinCompiler = "1.5.8"
 
 kotlin = "2.0.0"
 coroutines = "1.8.1"
@@ -25,7 +24,8 @@ androidTools = "31.4.1"
 hilt = "2.51.1"
 androidx-hilt = "1.2.0"
 navigation = "2.7.7"
-lifecycle = "2.8.0"
+#leave it 2.7.0 since newer version uses compose 1.7 which breaks the app
+lifecycle = "2.7.0"
 work = "2.9.0"
 appcompat = "1.6.1"
 core-ktx = "1.13.1"
@@ -36,6 +36,9 @@ activity-compose = "1.9.0"
 room = "2.6.1"
 sqlite = "2.4.0"
 archCore = "2.2.0"
+
+#leave it 0.34.0 since newer version uses compose 1.7 which breaks the app
+accompanist = "0.34.0"
 
 androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
@@ -137,6 +140,8 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

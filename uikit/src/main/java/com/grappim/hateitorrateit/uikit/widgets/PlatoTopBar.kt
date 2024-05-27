@@ -32,11 +32,8 @@ fun PlatoTopBar(
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
-        modifier = modifier
-            .testTag(PLATO_TOP_BAR_TAG),
-        title = {
-            Text(text = text)
-        },
+        modifier = modifier.testTag(PLATO_TOP_BAR_TAG),
+        title = { Text(text = text) },
         elevation = elevation,
         backgroundColor = backgroundColor,
         navigationIcon = {

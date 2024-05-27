@@ -25,7 +25,7 @@ class ImagePersistenceManagerImpl @Inject constructor(
      */
     override suspend fun prepareEditedImagesToPersist(
         images: List<ProductImageUIData>
-    ): List<com.grappim.hateitorrateit.data.repoapi.models.ProductImage> = images.map { image ->
+    ): List<ProductImage> = images.map { image ->
         if (image.isEdit) {
             val result = imageDataMapper.toProductImageData(image)
             val newUriString = result.uriString.replace("_temp", "")

@@ -3,6 +3,7 @@ package com.grappim.hateitorrateit.feature.details.ui
 import androidx.lifecycle.SavedStateHandle
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
+import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.productimage.ProductImageViewModel
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_ID
 import com.grappim.hateitorrateit.testing.domain.createEditProduct
