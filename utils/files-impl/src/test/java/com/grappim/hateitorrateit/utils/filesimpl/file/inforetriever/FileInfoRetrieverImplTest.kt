@@ -3,11 +3,11 @@ package com.grappim.hateitorrateit.utils.filesimpl.file.inforetriever
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
+import com.grappim.hateitorrateit.testing.core.ShadowFileProvider
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesimpl.MimeTypes
-import com.grappim.hateitorrateit.utils.filesimpl.ShadowFileProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

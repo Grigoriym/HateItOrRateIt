@@ -218,6 +218,10 @@ class DetailsViewModelTest {
         sut.viewState.value.onShareImageClicked(productImage)
 
         assertEquals(expected, sut.viewState.value.shareImageIntent)
+
+        sut.viewState.value.clearShareImageIntent()
+
+        assertNull(sut.viewState.value.shareImageIntent)
     }
 
     @Test

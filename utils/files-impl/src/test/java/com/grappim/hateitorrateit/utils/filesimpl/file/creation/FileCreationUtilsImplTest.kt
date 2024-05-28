@@ -1,12 +1,12 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.creation
 
 import android.content.ContentResolver
+import com.grappim.hateitorrateit.testing.core.ShadowFileProvider
 import com.grappim.hateitorrateit.testing.core.getRandomUri
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
-import com.grappim.hateitorrateit.utils.filesimpl.ShadowFileProvider
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify

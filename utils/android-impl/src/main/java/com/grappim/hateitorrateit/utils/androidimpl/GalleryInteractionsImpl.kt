@@ -48,12 +48,13 @@ class GalleryInteractionsImpl @Inject constructor(
                 folderName = folderName
             )
 
-            val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-            val srcDir = File(dir, GALLERY_FOLDER_NAME)
-            if (srcDir.exists().not()) {
-                srcDir.mkdirs()
+            val picturesDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val targetDirFile = File(picturesDir, GALLERY_FOLDER_NAME)
+            if (targetDirFile.exists().not()) {
+                targetDirFile.mkdirs()
             }
-            val targetFile = File(srcDir, name)
+            val targetFile = File(targetDirFile, name)
 
             if (targetFile.exists().not()) {
                 targetFile.mkdirs()

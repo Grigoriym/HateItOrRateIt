@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.urimanager
 
 import androidx.core.content.FileProvider
+import com.grappim.hateitorrateit.testing.core.ShadowFileProvider
 import com.grappim.hateitorrateit.testing.domain.getRandomLong
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
@@ -10,7 +11,6 @@ import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.filesimpl.HashUtils
-import com.grappim.hateitorrateit.utils.filesimpl.ShadowFileProvider
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
