@@ -1,9 +1,11 @@
 package com.grappim.hateitorrateit.utils.androidimpl
 
 import android.content.ContentResolver
+import android.os.Build
 import android.os.Environment
-import androidx.core.content.FileProvider
 import com.grappim.hateitorrateit.testing.core.ShadowFileProvider
+import com.grappim.hateitorrateit.testing.core.getRandomFile
+import com.grappim.hateitorrateit.testing.core.getUriForFile
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
@@ -29,11 +31,19 @@ import org.robolectric.shadows.ShadowContentResolver
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.IOException
 
 @RunWith(RobolectricTestRunner::class)
 @Config(
     manifest = Config.NONE,
-    sdk = [24, 27, 28, 29, 30],
+    sdk = [
+        Build.VERSION_CODES.N,
+        Build.VERSION_CODES.O_MR1,
+        Build.VERSION_CODES.P,
+        Build.VERSION_CODES.Q,
+        Build.VERSION_CODES.R,
+        Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+    ],
     shadows = [ShadowFileProvider::class]
 )
 class GalleryInteractionsImplTest {
@@ -63,15 +73,21 @@ class GalleryInteractionsImplTest {
     }
 
     @Test
-    @Config(sdk = [28, 27, 24])
-    fun `on saveImageInGallery for API level less than 29 return success`() = runTest {
-        val name = "image.jpg"
-        val folderName = "MyFolder"
-        val sourceFile = File(context.filesDir, "products/$folderName/srcFile").apply { mkdirs() }
+    @Config(
+        sdk = [
+            Build.VERSION_CODES.P,
+            Build.VERSION_CODES.O_MR1,
+            Build.VERSION_CODES.N
+        ]
+    )
+    fun `on saveImageInGallery for API level less than 29 return Success`() = runTest {
+        val name = getRandomString()
+        val folderName = getRandomString()
+        val sourceFile = context.getRandomFile()
 
-        val targetDirectory =
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-        val targetDirFile = File(targetDirectory, "HateItOrRateIt").apply { mkdirs() }
+        val targetDirectory = getPicturesDirectory()
+        val targetDirFile =
+            File(targetDirectory, GalleryInteractionsImpl.GALLERY_FOLDER_NAME).apply { mkdirs() }
 
         val targetFile = File(targetDirFile, name).apply { mkdirs() }
 
@@ -92,8 +108,110 @@ class GalleryInteractionsImplTest {
     }
 
     @Test
-    @Config(sdk = [29, 30])
-    fun `on saveImageInGallery for API level more than 28 return success`() = runTest {
+    @Config(sdk = [Build.VERSION_CODES.P])
+    fun `on saveImageInGallery for API level less than 29 with NoSuchFileException returns Failure`() =
+        runTest {
+            val name = getRandomString()
+            val folderName = getRandomString()
+            val sourceFile = context.getRandomFile()
+
+            val targetDirectory = getPicturesDirectory()
+            val targetDirFile =
+                File(
+                    targetDirectory,
+                    GalleryInteractionsImpl.GALLERY_FOLDER_NAME
+                ).apply { mkdirs() }
+            val targetFile = File(targetDirFile, name).apply { mkdirs() }
+
+            coEvery { fileInfoRetriever.findFileInFolder(name, folderName) } returns sourceFile
+
+            coEvery {
+                fileTransferOperations.writeSourceFileToTargetFile(any(), any())
+            } throws NoSuchFileException(File(""))
+
+            val result = sut.saveImageInGallery("", name, "", folderName)
+
+            assert(result is SaveImageState.Failure)
+
+            coVerify {
+                fileInfoRetriever.findFileInFolder(name, folderName)
+                fileTransferOperations.writeSourceFileToTargetFile(sourceFile, targetFile)
+            }
+        }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.P])
+    fun `on saveImageInGallery for API level less than 29 with FileAlreadyExistsException returns Failure`() =
+        runTest {
+            val name = getRandomString()
+            val folderName = getRandomString()
+            val sourceFile = context.getRandomFile()
+
+            val targetDirectory = getPicturesDirectory()
+            val targetDirFile =
+                File(
+                    targetDirectory,
+                    GalleryInteractionsImpl.GALLERY_FOLDER_NAME
+                ).apply { mkdirs() }
+            val targetFile = File(targetDirFile, name).apply { mkdirs() }
+
+            coEvery { fileInfoRetriever.findFileInFolder(name, folderName) } returns sourceFile
+
+            coEvery {
+                fileTransferOperations.writeSourceFileToTargetFile(any(), any())
+            } throws FileAlreadyExistsException(File(""))
+
+            val result = sut.saveImageInGallery("", name, "", folderName)
+
+            assert(result is SaveImageState.Failure)
+
+            coVerify {
+                fileInfoRetriever.findFileInFolder(name, folderName)
+                fileTransferOperations.writeSourceFileToTargetFile(sourceFile, targetFile)
+            }
+        }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.P])
+    fun `on saveImageInGallery for API level less than 29 with IOException returns Failure`() =
+        runTest {
+            val name = getRandomString()
+            val folderName = getRandomString()
+            val sourceFile = context.getRandomFile()
+
+            val targetDirectory = getPicturesDirectory()
+            val targetDirFile =
+                File(
+                    targetDirectory,
+                    GalleryInteractionsImpl.GALLERY_FOLDER_NAME
+                ).apply { mkdirs() }
+            val targetFile = File(targetDirFile, name).apply { mkdirs() }
+
+            coEvery { fileInfoRetriever.findFileInFolder(name, folderName) } returns sourceFile
+
+            coEvery {
+                fileTransferOperations.writeSourceFileToTargetFile(any(), any())
+            } throws IOException()
+
+            val result = sut.saveImageInGallery("", name, "", folderName)
+
+            assert(result is SaveImageState.Failure)
+
+            coVerify {
+                fileInfoRetriever.findFileInFolder(name, folderName)
+                fileTransferOperations.writeSourceFileToTargetFile(sourceFile, targetFile)
+            }
+        }
+
+    @Test
+    @Config(
+        sdk = [
+            Build.VERSION_CODES.Q,
+            Build.VERSION_CODES.R,
+            Build.VERSION_CODES.UPSIDE_DOWN_CAKE
+        ]
+    )
+    fun `on saveImageInGallery for API level more than 28 return Success`() = runTest {
         val content = getRandomString().toByteArray()
         val fileDataByteArray = ByteArrayInputStream(content)
         val fos = ByteArrayOutputStream(1000)
@@ -105,11 +223,7 @@ class GalleryInteractionsImplTest {
 
         val file = File(context.filesDir, "products/folder/$name")
 
-        val uri = FileProvider.getUriForFile(
-            context,
-            "${context.packageName}.provider",
-            file
-        )
+        val uri = context.getUriForFile(file)
 
         every { uriParser.parse(uriString) } returns uri
 
@@ -120,4 +234,7 @@ class GalleryInteractionsImplTest {
 
         assert(result is SaveImageState.Success)
     }
+
+    private fun getPicturesDirectory() =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
 }

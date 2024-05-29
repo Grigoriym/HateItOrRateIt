@@ -20,8 +20,6 @@ import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 
-private const val GALLERY_FOLDER_NAME = "HateItOrRateIt"
-
 class GalleryInteractionsImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @ApplicationContext private val context: Context,
@@ -30,6 +28,16 @@ class GalleryInteractionsImpl @Inject constructor(
     private val fileTransferOperations: FileTransferOperations
 ) : GalleryInteractions {
 
+    companion object {
+        const val GALLERY_FOLDER_NAME = "HateItOrRateIt"
+    }
+
+    /**
+     * @param uriString is the uri of the sourceFile
+     * @param name is the name of the sourceFile
+     * @param mimeType is the mimeType of the sourceFile
+     * @param folderName is the name of the folder of the sourceFile
+     */
     override suspend fun saveImageInGallery(
         uriString: String,
         name: String,
