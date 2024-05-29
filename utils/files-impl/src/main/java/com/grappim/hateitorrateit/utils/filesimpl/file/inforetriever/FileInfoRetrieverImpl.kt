@@ -4,10 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
+import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
+import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesimpl.MimeTypes
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.OffsetDateTime
 import javax.inject.Inject
@@ -17,8 +21,18 @@ import javax.inject.Singleton
 class FileInfoRetrieverImpl @Inject constructor(
     @ApplicationContext private val context: Context,
     private val mimeTypes: MimeTypes,
-    private val dateTimeUtils: DateTimeUtils
+    private val dateTimeUtils: DateTimeUtils,
+    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val folderPathManager: FolderPathManager
 ) : FileInfoRetriever {
+
+    override suspend fun findFileInFolder(fileName: String, folderName: String): File =
+        withContext(ioDispatcher) {
+            val folder = folderPathManager.getMainFolder(folderName)
+            val foundFile = folder.walk().filter { it.name.startsWith(fileName) }.firstOrNull()
+                ?: error("file not found")
+            foundFile
+        }
 
     override fun getFileExtension(uri: Uri): String {
         val mimeType = getMimeType(uri)

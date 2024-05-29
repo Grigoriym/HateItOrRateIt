@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_image_error">No applications available to share this image</string>
+    <string name="are_you_sure_to_delete_product">Bestätige das Löschen des Produkts</string>
+    <string name="no">Nein</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="provide_permission">Um die Datei in der Galerie zu speichern, bitte die Berechtigung in den App-Einstellungen erteilen</string>
+
+    <string name="image_saved_in_gallery">Das Bild wurde in der Galerie gespeichert</string>
+    <string name="image_saved_in_gallery_error">Beim Speichern des Bildes in der Galerie ist ein Fehler aufgetreten</string>
+
+</resources>

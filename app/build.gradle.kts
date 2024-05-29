@@ -159,6 +159,9 @@ dependencies {
     implementation(projects.feature.productmanager.ui)
     implementation(projects.feature.details.ui)
 
+    implementation(projects.utils.androidApi)
+    implementation(projects.utils.androidImpl)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.activity.compose)
@@ -166,7 +169,6 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.lifecycle.runtime.core)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.work.runtime)

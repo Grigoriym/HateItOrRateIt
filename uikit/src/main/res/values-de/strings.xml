@@ -20,7 +20,7 @@
     <string name="close">Schließen</string>
 
     <string name="delete_image">Bild löschen</string>
-    <string name="are_you_sure_to_delete_product">Bestätige das Löschen des Produkts</string>
+
     <string name="if_quit_lose_data">Warnung: Beim Beenden gehen alle Daten verloren.</string>
 
     <string name="i_rate_it">Ich bewerte es</string>

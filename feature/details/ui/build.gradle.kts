@@ -20,6 +20,8 @@ dependencies {
     implementation(projects.utils.ui)
     implementation(projects.commons)
     implementation(projects.utils.dateTimeApi)
+    implementation(projects.utils.filesApi)
+    implementation(projects.utils.androidApi)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -32,6 +34,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.coil)
+    implementation(libs.timber)
+
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.robolectric)
 }

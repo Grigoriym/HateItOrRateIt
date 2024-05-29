@@ -1,6 +1,10 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
-import androidx.compose.foundation.Image
+import android.Manifest
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.os.Build
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -8,7 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
@@ -18,6 +22,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Scaffold
+import androidx.compose.material.SnackbarHost
+import androidx.compose.material.SnackbarHostState
+import androidx.compose.material.SnackbarResult
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -27,10 +35,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,8 +50,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
-import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.color
 import com.grappim.hateitorrateit.uikit.icon
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
@@ -50,13 +64,18 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIconButton
+import com.grappim.hateitorrateit.uikit.widgets.PlatoImage
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.PlatoProgressIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
+import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.PlatoIconType
+import com.grappim.hateitorrateit.utils.ui.asString
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 const val DETAILS_SCREEN_CONTENT_TAG = "details_screen_content_tag"
 const val DETAILS_TOP_APP_BAR_TAG = "details_top_app_bar_tag"
@@ -125,6 +144,36 @@ private fun DetailsScreenContent(
     onImageClicked: (productId: String, index: Int) -> Unit,
     onEditClicked: (id: Long) -> Unit
 ) {
+    val snackbarHostSate = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    LaunchedEffect(state.snackbarMessage) {
+        if (state.snackbarMessage != null && state.snackbarMessage.data != NativeText.Empty) {
+            val result = snackbarHostSate.showSnackbar(
+                message = state.snackbarMessage.data.asString(context),
+                actionLabel = context.getString(com.grappim.hateitorrateit.uikit.R.string.close)
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                snackbarHostSate.currentSnackbarData?.dismiss()
+            }
+            state.setSnackbarMessage(NativeText.Empty)
+        }
+    }
+
+    LaunchedEffect(state.saveFileToGalleryState) {
+        when (state.saveFileToGalleryState) {
+            is SaveImageState.Initial -> {}
+            is SaveImageState.Success -> {
+                state.setSnackbarMessage(NativeText.Resource(R.string.image_saved_in_gallery))
+            }
+
+            is SaveImageState.Failure -> {
+                state.setSnackbarMessage(NativeText.Resource(R.string.image_saved_in_gallery_error))
+            }
+        }
+        state.resetSaveFileToGalleryState()
+    }
+
     PlatoAlertDialog(
         text = stringResource(id = R.string.are_you_sure_to_delete_product),
         showAlertDialog = state.showAlertDialog,
@@ -140,34 +189,38 @@ private fun DetailsScreenContent(
         }
     )
 
-    Column(
+    Scaffold(
         modifier = Modifier
             .statusBarsPadding()
-            .imePadding()
+            .navigationBarsPadding()
             .testTag(DETAILS_SCREEN_CONTENT_TAG),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
-    ) {
-        TopAppBarContent(
+        snackbarHost = { SnackbarHost(hostState = snackbarHostSate) }
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .weight(TOP_APP_BAR_WEIGHT),
-            state = state,
-            onImageClicked = onImageClicked,
-            goBack = goBack,
-            onEditClicked = onEditClicked
-        )
+                .padding(paddingValues),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            TopAppBarContent(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(TOP_APP_BAR_WEIGHT),
+                state = state,
+                onImageClicked = onImageClicked,
+                goBack = goBack,
+                onEditClicked = onEditClicked
+            )
 
-        val detailsInfoModifier = Modifier
-            .padding(top = 16.dp)
-            .weight(1f)
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-
-        DetailsDemonstrationContent(
-            modifier = detailsInfoModifier,
-            state = state
-        )
+            DetailsDemonstrationContent(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+                state = state
+            )
+        }
     }
 }
 
@@ -181,6 +234,12 @@ private fun TopAppBarContent(
 ) {
     val pagerState = rememberPagerState {
         state.images.size
+    }
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }.collect { page ->
+            state.setCurrentDisplayedImageIndex(page)
+        }
     }
 
     ScrollToLastImageOnUpdate(state, pagerState)
@@ -208,6 +267,103 @@ private fun TopAppBarContent(
             goBack = goBack,
             onEditClicked = onEditClicked
         )
+
+        ImageInteractionsSection(state)
+    }
+}
+
+/**
+ * On why we use activity for ShareCompat: https://stackoverflow.com/a/11335794/9822532
+ */
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
+    val context = LocalContext.current
+    val activity = context as Activity
+    val permissionState = rememberPermissionState(
+        permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+
+    LaunchedEffect(state.shareImageIntent) {
+        if (state.shareImageIntent != null) {
+            try {
+                activity.startActivity(state.shareImageIntent)
+            } catch (e: ActivityNotFoundException) {
+                Timber.e(e)
+                state.setSnackbarMessage(NativeText.Resource(R.string.share_image_error))
+            } finally {
+                state.clearShareImageIntent()
+            }
+        }
+    }
+
+    if (state.currentImage != null) {
+        PlatoAlertDialog(
+            text = state.permissionsAlertDialogText,
+            showAlertDialog = state.showProvidePermissionsAlertDialog,
+            confirmButtonText = stringResource(id = R.string.ok),
+            onDismissRequest = {
+                state.onShowPermissionsAlertDialog(false, null)
+            },
+            onConfirmButtonClicked = {
+                openAppSettings(activity, state)
+                state.onShowPermissionsAlertDialog(false, null)
+            },
+            dismissButtonText = stringResource(id = R.string.cancel),
+            onDismissButtonClicked = {
+                state.onShowPermissionsAlertDialog(false, null)
+            }
+        )
+
+        PlatoIconButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 4.dp, end = 4.dp),
+            icon = PlatoIconType.Share.imageVector,
+            onButtonClick = {
+                state.onShareImageClicked(state.currentImage)
+            }
+        )
+
+        PlatoIconButton(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(bottom = 4.dp, start = 4.dp),
+            icon = PlatoIconType.Download.imageVector,
+            onButtonClick = {
+                onDownloadClicked(
+                    state = state,
+                    permissionState = permissionState,
+                    text = context.getString(R.string.provide_permission)
+                )
+            }
+        )
+    }
+}
+
+private fun openAppSettings(activity: Activity, state: DetailsViewState) {
+    val intent = state.appSettingsIntent
+    activity.startActivity(intent)
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+private fun onDownloadClicked(
+    state: DetailsViewState,
+    permissionState: PermissionState,
+    text: String
+) {
+    val image = requireNotNull(state.currentImage)
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        state.saveFileToGallery(image)
+    } else {
+        if (permissionState.status.isGranted) {
+            state.saveFileToGallery(image)
+        } else {
+            if (permissionState.status.shouldShowRationale.not()) {
+                state.onShowPermissionsAlertDialog(true, text)
+            }
+            permissionState.launchPermissionRequest()
+        }
     }
 }
 
@@ -273,7 +429,8 @@ private fun BoxScope.AppBarImageContent(
                 .align(Alignment.TopCenter),
             state = pagerState
         ) { index ->
-            val file = state.images[index]
+            val productImage = state.images[index]
+
             PlatoCard(
                 shape = RoundedCornerShape(
                     bottomEnd = 16.dp,
@@ -286,11 +443,9 @@ private fun BoxScope.AppBarImageContent(
                     )
                 }
             ) {
-                Image(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    painter = rememberAsyncImagePainter(file.uriString),
-                    contentDescription = "",
+                PlatoImage(
+                    modifier = Modifier.fillMaxWidth(),
+                    painter = rememberAsyncImagePainter(productImage.uriString),
                     contentScale = ContentScale.Crop
                 )
             }
@@ -313,19 +468,15 @@ private fun DetailsDemonstrationContent(modifier: Modifier = Modifier, state: De
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
-        val type = state.type
+        val type = requireNotNull(state.type)
         TextH4(text = state.name)
 
         if (state.description.isNotEmpty()) {
-            Text(
-                text = state.description
-            )
+            Text(text = state.description)
         }
 
         if (state.shop.isNotEmpty()) {
-            Text(
-                text = state.shop
-            )
+            Text(text = state.shop)
         }
 
         if (state.createdDate.isNotEmpty()) {
@@ -336,7 +487,6 @@ private fun DetailsDemonstrationContent(modifier: Modifier = Modifier, state: De
             )
         }
 
-        requireNotNull(type)
         PlatoIcon(
             imageVector = type.icon(),
             tint = type.color()
@@ -417,7 +567,15 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
                 onDeleteProductConfirm = {},
                 updateProduct = {},
                 trackEditButtonClicked = {},
-                trackScreenStart = {}
+                trackScreenStart = {},
+                setCurrentDisplayedImageIndex = {},
+                setSnackbarMessage = {},
+                saveFileToGallery = { _ -> },
+                onShareImageClicked = { _ -> },
+                clearShareImageIntent = {},
+                onShowPermissionsAlertDialog = { _, _ -> },
+                appSettingsIntent = Intent(),
+                resetSaveFileToGalleryState = {}
             )
         )
 }

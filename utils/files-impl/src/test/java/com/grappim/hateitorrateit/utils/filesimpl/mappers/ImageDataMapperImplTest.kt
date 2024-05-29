@@ -1,11 +1,12 @@
 package com.grappim.hateitorrateit.utils.filesimpl.mappers
 
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import com.grappim.hateitorrateit.testing.core.getRandomUri
 import com.grappim.hateitorrateit.testing.domain.getRandomLong
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
-import com.grappim.hateitorrateit.utils.filesimpl.UriParser
+import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -20,15 +21,15 @@ import kotlin.test.assertEquals
 
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE)
-class ProductImageUIDataMapperImplTest {
+class ImageDataMapperImplTest {
 
     private val uriParser: UriParser = mockk()
 
-    private lateinit var imageDataMapper: ImageDataMapper
+    private lateinit var sut: ImageDataMapper
 
     @Before
     fun setup() {
-        imageDataMapper = ImageDataMapperImpl(
+        sut = ImageDataMapperImpl(
             uriParser = uriParser,
             ioDispatcher = UnconfinedTestDispatcher()
         )
@@ -36,14 +37,14 @@ class ProductImageUIDataMapperImplTest {
 
     @Test
     fun `toProductImageData should return correct ProductImageData`() = runTest {
-        val uri = com.grappim.hateitorrateit.testing.core.getRandomUri()
+        val uri = getRandomUri()
         val id = getRandomLong()
         val name = getRandomString()
         val size = getRandomLong()
         val md5 = getRandomString()
         val mimeType = getRandomString()
 
-        val expected = com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+        val expected = ProductImage(
             imageId = id,
             name = name,
             mimeType = mimeType,
@@ -64,14 +65,14 @@ class ProductImageUIDataMapperImplTest {
             isEdit = false
         )
 
-        val actual = imageDataMapper.toProductImageData(productImageUIData)
+        val actual = sut.toProductImageData(productImageUIData)
 
         assertEquals(expected, actual)
     }
 
     @Test
     fun `toImageData should return correct ImageData`() = runTest {
-        val uri = com.grappim.hateitorrateit.testing.core.getRandomUri()
+        val uri = getRandomUri()
         val id = getRandomLong()
         val name = getRandomString()
         val size = getRandomLong()
@@ -80,7 +81,7 @@ class ProductImageUIDataMapperImplTest {
 
         every { uriParser.parse(any()) } returns uri
 
-        val productImage = com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+        val productImage = ProductImage(
             imageId = id,
             name = name,
             mimeType = mimeType,
@@ -101,7 +102,7 @@ class ProductImageUIDataMapperImplTest {
             isEdit = false
         )
 
-        val actual = imageDataMapper.toImageData(productImage)
+        val actual = sut.toImageData(productImage)
 
         assertEquals(expected, actual)
 
@@ -113,7 +114,7 @@ class ProductImageUIDataMapperImplTest {
         val productImageUIDataLists = listOf(
             ProductImageUIData(
                 getRandomLong(),
-                com.grappim.hateitorrateit.testing.core.getRandomUri(),
+                getRandomUri(),
                 getRandomString(),
                 getRandomLong(),
                 getRandomString(),
@@ -122,7 +123,7 @@ class ProductImageUIDataMapperImplTest {
             ),
             ProductImageUIData(
                 getRandomLong(),
-                com.grappim.hateitorrateit.testing.core.getRandomUri(),
+                getRandomUri(),
                 getRandomString(),
                 getRandomLong(),
                 getRandomString(),
@@ -132,7 +133,7 @@ class ProductImageUIDataMapperImplTest {
         )
 
         val expectedList = productImageUIDataLists.map { imageData ->
-            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+            ProductImage(
                 imageId = imageData.imageId,
                 name = imageData.name,
                 mimeType = imageData.mimeType,
@@ -144,18 +145,18 @@ class ProductImageUIDataMapperImplTest {
             )
         }
 
-        val actualList = imageDataMapper.toProductImageDataList(productImageUIDataLists)
+        val actualList = sut.toProductImageDataList(productImageUIDataLists)
 
         assertEquals(expectedList, actualList)
     }
 
     @Test
     fun `toImageDataList should return correct List of ImageData`() = runTest {
-        val mockedUri = com.grappim.hateitorrateit.testing.core.getRandomUri()
+        val mockedUri = getRandomUri()
         every { uriParser.parse(any()) } returns mockedUri
 
         val productImageLists = listOf(
-            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+            ProductImage(
                 getRandomLong(),
                 getRandomString(),
                 getRandomString(),
@@ -165,7 +166,7 @@ class ProductImageUIDataMapperImplTest {
                 getRandomString(),
                 false
             ),
-            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+            ProductImage(
                 getRandomLong(),
                 getRandomString(),
                 getRandomString(),
@@ -189,7 +190,7 @@ class ProductImageUIDataMapperImplTest {
             )
         }
 
-        val actualList = imageDataMapper.toImageDataList(productImageLists)
+        val actualList = sut.toImageDataList(productImageLists)
 
         assertEquals(expectedList, actualList)
 

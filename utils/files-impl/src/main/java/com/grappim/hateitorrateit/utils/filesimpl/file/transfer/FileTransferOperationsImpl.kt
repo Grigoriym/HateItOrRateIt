@@ -56,6 +56,13 @@ class FileTransferOperationsImpl @Inject constructor(
         }
     }
 
+    @Throws(NoSuchFileException::class, FileAlreadyExistsException::class, IOException::class)
+    override suspend fun writeSourceFileToTargetFile(sourceFile: File, newFile: File): Unit =
+        withContext(ioDispatcher) {
+            val result = sourceFile.copyTo(target = newFile, overwrite = true)
+            Timber.d("writeSourceFileToTargetFile: $result")
+        }
+
     private suspend fun moveFile(sourceFilePath: String, destinationFilePath: String) {
         copyFile(sourceFilePath, destinationFilePath)
         File(sourceFilePath).delete()

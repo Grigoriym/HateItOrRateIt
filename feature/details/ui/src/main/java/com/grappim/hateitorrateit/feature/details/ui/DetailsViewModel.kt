@@ -7,6 +7,13 @@ import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
+import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
+import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
+import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
+import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
+import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,6 +27,8 @@ class DetailsViewModel @Inject constructor(
     private val uiModelsMapper: UiModelsMapper,
     private val dataCleaner: DataCleaner,
     private val detailsAnalytics: DetailsAnalytics,
+    private val galleryInteractions: GalleryInteractions,
+    private val intentGenerator: IntentGenerator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -28,12 +37,20 @@ class DetailsViewModel @Inject constructor(
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(
+            appSettingsIntent = intentGenerator.generateAppSettingsIntent(),
             onDeleteProduct = ::deleteProduct,
             onShowAlertDialog = ::showAlertDialog,
             onDeleteProductConfirm = ::deleteProductConfirm,
             updateProduct = ::updateProduct,
             trackScreenStart = ::trackScreenStart,
-            trackEditButtonClicked = ::trackEditClicked
+            trackEditButtonClicked = ::trackEditClicked,
+            setCurrentDisplayedImageIndex = ::setCurrentDisplayedImageIndex,
+            setSnackbarMessage = ::setSnackbarMessage,
+            saveFileToGallery = ::saveFileToGallery,
+            onShareImageClicked = ::onShareImageClicked,
+            clearShareImageIntent = ::clearShareImageIntent,
+            onShowPermissionsAlertDialog = ::onShowPermissionsAlertDialog,
+            resetSaveFileToGalleryState = ::resetSaveFileToGalleryState
         )
     )
 
@@ -41,6 +58,54 @@ class DetailsViewModel @Inject constructor(
 
     init {
         getProduct()
+    }
+
+    private fun resetSaveFileToGalleryState() {
+        _viewState.update {
+            it.copy(saveFileToGalleryState = SaveImageState.Initial)
+        }
+    }
+
+    private fun onShowPermissionsAlertDialog(show: Boolean, text: String?) {
+        _viewState.update {
+            it.copy(
+                showProvidePermissionsAlertDialog = show,
+                permissionsAlertDialogText = text ?: ""
+            )
+        }
+    }
+
+    /**
+     * To fix the issue when we navigate back to this screen and intent is called again
+     */
+    private fun clearShareImageIntent() {
+        _viewState.update {
+            it.copy(shareImageIntent = null)
+        }
+    }
+
+    private fun onShareImageClicked(productImage: ProductImage) {
+        val intent = intentGenerator.generateIntentToShareImage(
+            uriString = productImage.uriString,
+            mimeType = productImage.mimeType
+        )
+        _viewState.update {
+            it.copy(shareImageIntent = intent)
+        }
+    }
+
+    private fun saveFileToGallery(productImage: ProductImage) {
+        viewModelScope.launch {
+            val state = galleryInteractions.saveImageInGallery(
+                uriString = productImage.uriString,
+                name = productImage.name,
+                mimeType = productImage.mimeType,
+                folderName = requireNotNull(viewState.value.productFolderName)
+            )
+            _viewState.update {
+                it.copy(saveFileToGalleryState = state)
+            }
+        }
     }
 
     private fun trackScreenStart() {
@@ -97,6 +162,18 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
+    private fun setCurrentDisplayedImageIndex(index: Int) {
+        _viewState.update {
+            it.copy(currentImage = _viewState.value.images[index])
+        }
+    }
+
+    private fun setSnackbarMessage(text: NativeText) {
+        _viewState.update {
+            it.copy(snackbarMessage = LaunchedEffectResult(text))
+        }
+    }
+
     private fun getProduct() {
         viewModelScope.launch {
             val product = productsRepository.getProductById(productId)
@@ -111,7 +188,8 @@ class DetailsViewModel @Inject constructor(
                     images = productDetailsUi.images,
                     isLoading = false,
                     type = productDetailsUi.type,
-                    productFolderName = productDetailsUi.productFolderName
+                    productFolderName = productDetailsUi.productFolderName,
+                    currentImage = productDetailsUi.images.firstOrNull()
                 )
             }
         }

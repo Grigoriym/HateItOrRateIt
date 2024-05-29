@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.grappim.hateitorrateit.testing.domain
 
 import com.grappim.hateitorrateit.data.repoapi.models.DraftProduct
@@ -5,6 +7,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import java.time.OffsetDateTime
+import kotlin.random.Random
 
 const val PRODUCT_ID = 9012L
 const val IMAGE_ID = 1276L
@@ -78,6 +81,25 @@ fun createEditProduct(images: List<ProductImage> = emptyList()): Product = Produ
     shop = SHOP,
     type = TYPE
 )
+
+fun createRandomProductImage() = ProductImage(
+    imageId = getRandomLong(),
+    name = getRandomString(),
+    mimeType = getRandomString(),
+    uriPath = getRandomString(),
+    uriString = getRandomString(),
+    size = getRandomLong(),
+    md5 = getRandomString(),
+    isEdit = getRandomBoolean()
+)
+
+fun createRandomProductImageList(): List<ProductImage> {
+    val list = mutableListOf<ProductImage>()
+    repeat(Random(1).nextInt(3, 10)) {
+        list.add(createRandomProductImage())
+    }
+    return list.toList()
+}
 
 fun getImages() = listOf(
     ProductImage(

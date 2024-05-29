@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.feature.details.ui
+package com.grappim.hateitorrateit.feature.details.ui.mappers
 
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.data.repoapi.models.Product
