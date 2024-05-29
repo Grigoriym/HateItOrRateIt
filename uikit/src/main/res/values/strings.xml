@@ -25,7 +25,7 @@
     <string name="close">Close</string>
 
     <string name="delete_image">Delete Image</string>
-    <string name="are_you_sure_to_delete_product">Confirm product deletion?</string>
+
     <string name="if_quit_lose_data">Warning: Quitting will result in data loss.</string>
     <string name="if_quit_ensure_saved">Warning: Please ensure you saved the data.</string>
 

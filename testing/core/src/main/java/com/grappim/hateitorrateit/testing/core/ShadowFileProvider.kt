@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.filesimpl
+package com.grappim.hateitorrateit.testing.core
 
 import android.content.Context
 import android.net.Uri
@@ -9,7 +9,7 @@ import java.io.File
 
 @Suppress("UtilityClassWithPublicConstructor")
 @Implements(FileProvider::class)
-internal class ShadowFileProvider {
+class ShadowFileProvider {
 
     companion object {
 

@@ -26,6 +26,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
+
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.ui.core)
     implementation(libs.androidx.compose.material.core)

@@ -26,8 +26,7 @@ fun PlatoIconButton(modifier: Modifier = Modifier, icon: ImageVector, onButtonCl
         shape = CircleShape
     ) {
         Icon(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = Modifier.fillMaxSize(),
             imageVector = icon,
             contentDescription = "",
             tint = Color.Black

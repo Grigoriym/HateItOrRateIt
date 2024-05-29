@@ -5,7 +5,7 @@ import android.net.Uri
 import com.grappim.hateitorrateit.commons.IoDispatcher
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
-import com.grappim.hateitorrateit.utils.filesimpl.UriParser
+import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

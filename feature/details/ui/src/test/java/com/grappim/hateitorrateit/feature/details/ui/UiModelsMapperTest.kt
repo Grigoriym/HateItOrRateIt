@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
+import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.testing.domain.getFakeProduct
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.coEvery

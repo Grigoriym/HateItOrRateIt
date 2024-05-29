@@ -9,14 +9,17 @@ import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Download
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.HighlightOff
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.ImageNotSupported
+import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Security
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ThumbDown
 import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -39,7 +42,10 @@ enum class PlatoIconType {
     Add,
     Home,
     Settings,
-    PrivacyPolicy;
+    PrivacyPolicy,
+    Share,
+    Download,
+    QuestionMark;
 
     val imageVector: ImageVector
         get() = when (this) {
@@ -61,6 +67,9 @@ enum class PlatoIconType {
             Home -> Icons.Filled.Home
             Settings -> Icons.Filled.Settings
             PrivacyPolicy -> Icons.Filled.Security
+            Share -> Icons.Filled.Share
+            Download -> Icons.Filled.Download
+            QuestionMark -> Icons.Filled.QuestionMark
         }
 
     val testTag: String

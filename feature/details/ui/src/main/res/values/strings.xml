@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="share_image_error">No applications available to share this image</string>
+    <string name="are_you_sure_to_delete_product">Confirm product deletion?</string>
+    <string name="no">No</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok" translatable="false">Ok</string>
+    <string name="provide_permission">To save the file in gallery, please provide the permission in app settings</string>
+
+    <string name="image_saved_in_gallery">Image was saved in the gallery</string>
+    <string name="image_saved_in_gallery_error">There was an error while saving the image in the gallery</string>
+</resources>

@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.transfer
 
+import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.transfer.FileTransferOperations
 import io.mockk.every
@@ -23,7 +24,7 @@ import kotlin.test.assertTrue
 )
 class FileTransferOperationsImplTest {
 
-    private lateinit var fileTransferOperations: FileTransferOperations
+    private lateinit var sut: FileTransferOperations
 
     private val folderPathManager: FolderPathManager = mockk()
 
@@ -31,7 +32,7 @@ class FileTransferOperationsImplTest {
 
     @Before
     fun setUp() {
-        fileTransferOperations = FileTransferOperationsImpl(
+        sut = FileTransferOperationsImpl(
             ioDispatcher = UnconfinedTestDispatcher(),
             folderPathManager = folderPathManager
         )
@@ -57,7 +58,7 @@ class FileTransferOperationsImplTest {
                 "products/source"
             )
 
-            fileTransferOperations.moveSourceFilesToDestinationFolder(
+            sut.moveSourceFilesToDestinationFolder(
                 sourceFolder.name,
                 destinationFolder.name
             )
@@ -94,7 +95,7 @@ class FileTransferOperationsImplTest {
                 "products/source"
             ) andThen File(context.filesDir, "products/destination")
 
-            fileTransferOperations.copySourceFilesToDestination(
+            sut.copySourceFilesToDestination(
                 sourceFolder.name,
                 destinationFolder.name
             )
@@ -110,4 +111,22 @@ class FileTransferOperationsImplTest {
 
             verify { folderPathManager.getMainFolder(sourceFolder.name) }
         }
+
+    @Test
+    fun `on writeSourceFileToTargetFile copies file successfully`() = runTest {
+        val content = getRandomString().toByteArray()
+
+        val sourceFolder = File(context.filesDir, "products/source")
+        assertTrue(sourceFolder.mkdirs())
+
+        val sourceFile = File(sourceFolder, "testFile1.jpg").apply {
+            createNewFile()
+            writeBytes(content)
+        }
+        val targetFile = File(sourceFolder, "testFile2.jpg").apply { createNewFile() }
+
+        sut.writeSourceFileToTargetFile(sourceFile, targetFile)
+        assertTrue(targetFile.exists())
+        assertTrue(targetFile.readBytes().contentEquals(content))
+    }
 }

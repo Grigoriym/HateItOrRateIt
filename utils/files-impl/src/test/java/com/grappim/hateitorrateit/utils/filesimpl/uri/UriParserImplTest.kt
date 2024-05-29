@@ -1,6 +1,7 @@
-package com.grappim.hateitorrateit.utils.filesimpl
+package com.grappim.hateitorrateit.utils.filesimpl.uri
 
 import android.net.Uri
+import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
