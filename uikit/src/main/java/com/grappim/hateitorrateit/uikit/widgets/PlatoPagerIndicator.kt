@@ -23,9 +23,7 @@ import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 @Composable
 fun PlatoPagerIndicator(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.surface.copy(
-        alpha = 0.2f
-    ),
+    backgroundColor: Color = MaterialTheme.colors.surface,
     show: Boolean,
     size: Int,
     pagerState: PagerState
@@ -36,7 +34,8 @@ fun PlatoPagerIndicator(
                 .wrapContentHeight()
                 .wrapContentWidth()
                 .padding(bottom = 16.dp),
-            backgroundColor = backgroundColor
+            backgroundColor = backgroundColor,
+            elevation = 0.dp
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center

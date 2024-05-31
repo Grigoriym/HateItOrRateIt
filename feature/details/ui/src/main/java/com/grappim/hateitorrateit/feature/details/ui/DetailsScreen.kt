@@ -432,6 +432,7 @@ private fun BoxScope.AppBarImageContent(
             val productImage = state.images[index]
 
             PlatoCard(
+                modifier = Modifier.fillMaxSize(),
                 shape = RoundedCornerShape(
                     bottomEnd = 16.dp,
                     bottomStart = 16.dp

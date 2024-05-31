@@ -263,7 +263,6 @@ private fun ProductManagerContent(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(horizontal = 4.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -405,8 +404,7 @@ private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewS
 @Composable
 private fun BottomBarButton(modifier: Modifier = Modifier, state: ProductManagerViewState) {
     PlatoTextButton(
-        modifier = modifier
-            .height(42.dp),
+        modifier = modifier.height(42.dp),
         text = state.bottomBarButtonText.asString(LocalContext.current),
         onClick = state.onProductDone
     )

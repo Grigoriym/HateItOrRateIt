@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,13 +33,18 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.models.ProductListUI
+import com.grappim.hateitorrateit.feature.home.ui.utils.HomePreviewStateProvider
+import com.grappim.hateitorrateit.feature.home.ui.utils.getPreviewProductListUI
 import com.grappim.hateitorrateit.uikit.color
 import com.grappim.hateitorrateit.uikit.icon
+import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
@@ -66,7 +70,6 @@ private fun HomeScreenContent(state: HomeViewState, onProductClick: (id: Long) -
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
             .padding(top = 16.dp)
     ) {
         SearchContent(
@@ -93,7 +96,8 @@ private fun SearchContent(modifier: Modifier = Modifier, state: HomeViewState) {
 
     TextField(
         modifier = modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         value = state.query,
         onValueChange = state.onSearchQueryChanged,
         shape = RoundedCornerShape(10.dp),
@@ -142,7 +146,7 @@ private fun ProductItem(
 ) {
     PlatoCard(
         modifier = Modifier
-            .padding(vertical = 8.dp)
+            .padding(vertical = 8.dp, horizontal = 16.dp)
             .fillMaxWidth()
             .height(200.dp),
         onClick = {
@@ -170,19 +174,24 @@ private fun ProductItem(
 
             PlatoCard(
                 modifier = Modifier
+                    .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .padding(bottom = 12.dp)
-                    .wrapContentWidth()
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(20.dp),
+                elevation = 0.dp,
                 backgroundColor = MaterialTheme.colors.surface.copy(
                     alpha = 0.4f
                 )
             ) {
                 Row(
+                    modifier = Modifier
+                        .padding(
+                            horizontal = 12.dp,
+                            vertical = 4.dp
+                        ),
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(horizontal = 12.dp)
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     Column(
                         modifier = Modifier
@@ -200,7 +209,6 @@ private fun ProductItem(
                     Box(
                         modifier = Modifier
                             .padding(start = 10.dp)
-                            .wrapContentWidth()
                     ) {
                         PlatoIcon(
                             imageVector = product.type.icon(),
@@ -216,7 +224,9 @@ private fun ProductItem(
 @Composable
 private fun FilterChipsContent(modifier: Modifier = Modifier, state: HomeViewState) {
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         FilterChip(
@@ -255,5 +265,18 @@ private fun FilterChipsContent(modifier: Modifier = Modifier, state: HomeViewSta
         ) {
             Text(stringResource(id = R.string.rate))
         }
+    }
+}
+
+@[Composable ThemePreviews]
+private fun ProductItemPreview(
+    @PreviewParameter(HomePreviewStateProvider::class) state: HomeViewState
+) {
+    HateItOrRateItTheme {
+        ProductItem(
+            state = state,
+            product = getPreviewProductListUI(),
+            onProductClick = {}
+        )
     }
 }
