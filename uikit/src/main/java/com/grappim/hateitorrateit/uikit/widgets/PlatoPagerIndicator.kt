@@ -42,7 +42,11 @@ fun PlatoPagerIndicator(
             ) {
                 repeat(size) { iteration ->
                     val color =
-                        if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                        if (pagerState.currentPage == iteration) {
+                            Color.DarkGray
+                        } else {
+                            MaterialTheme.colors.primary
+                        }
                     Box(
                         modifier = Modifier
                             .padding(
