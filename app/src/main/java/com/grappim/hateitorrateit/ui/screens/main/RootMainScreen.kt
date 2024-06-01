@@ -22,16 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.grappim.hateitorrateit.core.navigation.HomeNavDestination
-import com.grappim.hateitorrateit.feature.home.ui.HomeScreen
-import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsRoute
+import com.grappim.hateitorrateit.feature.home.ui.navigation.HomeNavScreen
+import com.grappim.hateitorrateit.feature.home.ui.navigation.homeScreen
+import com.grappim.hateitorrateit.feature.settings.ui.navigation.SettingsNavScreen
+import com.grappim.hateitorrateit.feature.settings.ui.navigation.settingsScreen
 import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundDark
 import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundLight
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
-import com.grappim.hateitorrateit.utils.safeClick
 import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 
 @Composable
@@ -61,8 +60,8 @@ fun RootMainScreen(
         isFloatingActionButtonDocked = true,
         bottomBar = {
             val screens = listOf(
-                HomeNavDestination.Home,
-                HomeNavDestination.Settings
+                HomeNavScreen,
+                SettingsNavScreen
             )
             BottomNavigation(
                 modifier = Modifier
@@ -111,26 +110,10 @@ fun RootMainScreen(
         ) {
             NavHost(
                 navController = navController,
-                startDestination = HomeNavDestination.Home.route
+                startDestination = HomeNavScreen.route
             ) {
-                composable(HomeNavDestination.Home.route) { navBackStackEntry ->
-                    HomeScreen(
-                        onProductClick = { productId: Long ->
-                            navBackStackEntry.safeClick {
-                                goToDetails(productId)
-                            }
-                        }
-                    )
-                }
-                composable(HomeNavDestination.Settings.route) { navBackStackEntry ->
-                    SettingsRoute(
-                        goBack = {
-                            navBackStackEntry.safeClick {
-                                navController.popBackStack()
-                            }
-                        }
-                    )
-                }
+                homeScreen(goToDetails)
+                settingsScreen(navController)
             }
         }
     }

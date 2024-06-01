@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
-import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
+import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
@@ -33,7 +33,7 @@ class DetailsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val productId =
-        requireNotNull(savedStateHandle.get<Long>(RootNavDestinations.Details.KEY))
+        requireNotNull(savedStateHandle.get<Long>(NavDestinations.Details.KEY))
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(

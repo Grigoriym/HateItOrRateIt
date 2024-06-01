@@ -1,13 +1,13 @@
 package com.grappim.hateitorrateit.core.navigation
 
-sealed interface RootNavDestinations {
+sealed interface NavDestinations {
     val route: String
 
-    data object Home : RootNavDestinations {
+    data object BottomBarNavDestination : NavDestinations {
         override val route: String = "root_home"
     }
 
-    data object ProductManager : RootNavDestinations {
+    data object ProductManager : NavDestinations {
         private const val PREFIX = "product_manager"
 
         const val KEY_EDIT_PRODUCT_ID = "keyEditProductId"
@@ -17,7 +17,7 @@ sealed interface RootNavDestinations {
         fun getRouteToNavigate(id: String?) = "$PREFIX/?$KEY_EDIT_PRODUCT_ID=$id"
     }
 
-    data object Details : RootNavDestinations {
+    data object Details : NavDestinations {
         private const val PREFIX = "details/"
         const val KEY = "productId"
         override val route: String = "$PREFIX$KEY={$KEY}"
@@ -26,7 +26,7 @@ sealed interface RootNavDestinations {
         fun getRouteToNavigate(productId: Long) = "$PREFIX$KEY=$productId"
     }
 
-    data object DetailsImage : RootNavDestinations {
+    data object DetailsImage : NavDestinations {
         const val KEY_INDEX = "keyIndex"
         const val KEY_PRODUCT_ID = "keyProductId"
 

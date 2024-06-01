@@ -27,7 +27,7 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class SettingsViewModelTest {
+class SettingsNavScreenViewModelTest {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()

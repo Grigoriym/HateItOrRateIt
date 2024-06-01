@@ -22,6 +22,7 @@ dependencies {
     implementation(project(":data:remote-config-api"))
     implementation(projects.commons)
     implementation(projects.data.repoApi)
+    implementation(projects.core.navigation)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)

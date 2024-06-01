@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
 import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
+import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.productimage.ProductImageViewModel
@@ -33,8 +33,8 @@ class ProductImageViewModelTest {
     @Before
     fun setup() {
         savedStateHandle = SavedStateHandle()
-        savedStateHandle[RootNavDestinations.DetailsImage.KEY_PRODUCT_ID] = PRODUCT_ID.toString()
-        savedStateHandle[RootNavDestinations.DetailsImage.KEY_INDEX] = index
+        savedStateHandle[NavDestinations.DetailsImage.KEY_PRODUCT_ID] = PRODUCT_ID.toString()
+        savedStateHandle[NavDestinations.DetailsImage.KEY_INDEX] = index
     }
 
     @Test

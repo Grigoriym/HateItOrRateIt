@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils
+package com.grappim.hateitorrateit.utils.ui.navigation
 
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.NavBackStackEntry

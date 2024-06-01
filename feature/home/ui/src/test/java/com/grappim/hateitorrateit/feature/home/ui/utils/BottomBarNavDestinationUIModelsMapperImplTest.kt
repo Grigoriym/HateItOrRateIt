@@ -11,7 +11,7 @@ import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class HomeUIModelsMapperImplTest {
+class BottomBarNavDestinationUIModelsMapperImplTest {
 
     private val dateTimeUtils: DateTimeUtils = mockk()
 

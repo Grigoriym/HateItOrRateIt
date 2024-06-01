@@ -23,7 +23,7 @@ import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-class HomeViewModelTest {
+class BottomBarNavDestinationViewModelTest {
 
     @get:Rule
     val coroutineRule = MainDispatcherRule()

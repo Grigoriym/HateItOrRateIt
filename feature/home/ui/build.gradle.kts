@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.commons)
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.ui)
+    implementation(projects.core.navigation)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.core.ktx)
