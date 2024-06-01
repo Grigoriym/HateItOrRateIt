@@ -9,8 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
+const val PLAT_CARD_TAG = "plato_card_tag"
 
 @Composable
 fun PlatoCard(
@@ -25,7 +28,7 @@ fun PlatoCard(
 ) {
     if (onClick == null) {
         Card(
-            modifier = modifier,
+            modifier = modifier.testTag(PLAT_CARD_TAG),
             shape = shape,
             backgroundColor = backgroundColor,
             contentColor = contentColor,
@@ -35,7 +38,7 @@ fun PlatoCard(
         )
     } else {
         Card(
-            modifier = modifier,
+            modifier = modifier.testTag(PLAT_CARD_TAG),
             shape = shape,
             backgroundColor = backgroundColor,
             contentColor = contentColor,
