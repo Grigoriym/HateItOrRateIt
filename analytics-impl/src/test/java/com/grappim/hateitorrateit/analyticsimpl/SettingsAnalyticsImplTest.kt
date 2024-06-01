@@ -2,7 +2,6 @@ package com.grappim.hateitorrateit.analyticsimpl
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
-import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -40,14 +39,14 @@ class SettingsAnalyticsImplTest {
 
     @Test
     fun `on trackDefaultTypeChangedTo should track correct event`() {
-        val type = HateRateType.HATE
+        val type = "RATE"
 
-        sut.trackDefaultTypeChangedTo(type.name)
+        sut.trackDefaultTypeChangedTo(type)
 
         verify {
             analyticsController.trackEvent(
                 DEFAULT_TYPE_CHANGED_TO,
-                mapOf(TYPE to type.name)
+                mapOf(TYPE to type)
             )
         }
     }
