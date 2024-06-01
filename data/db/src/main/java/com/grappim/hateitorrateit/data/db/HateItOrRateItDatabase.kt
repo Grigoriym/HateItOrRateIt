@@ -12,8 +12,7 @@ import com.grappim.hateitorrateit.data.db.entities.BackupProductImageDataEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.db.entities.ProductImageDataEntity
 
-@[
-Database(
+@Database(
     entities = [
         ProductEntity::class,
         ProductImageDataEntity::class,
@@ -22,11 +21,10 @@ Database(
     version = 1,
     exportSchema = true
 )
-TypeConverters(
+@TypeConverters(
     DateTimeConverter::class,
     HateRateTypeConverter::class
 )
-]
 abstract class HateItOrRateItDatabase : RoomDatabase() {
 
     abstract fun productsDao(): ProductsDao

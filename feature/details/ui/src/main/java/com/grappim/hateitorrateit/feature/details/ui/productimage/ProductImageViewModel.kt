@@ -43,10 +43,7 @@ class ProductImageViewModel @Inject constructor(
             val productUi = uiModelsMapper.toProductDetailsImageUI(product)
             val uri = productUi.images[index]
             _viewState.update {
-                it.copy(
-                    uri = uri.uriString,
-                    images = productUi.images
-                )
+                it.copy(uri = uri.uriString)
             }
         }
     }

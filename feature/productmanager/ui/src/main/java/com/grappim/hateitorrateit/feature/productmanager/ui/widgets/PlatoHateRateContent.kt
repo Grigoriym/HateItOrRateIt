@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.uikit.widgets
+package com.grappim.hateitorrateit.feature.productmanager.ui.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -15,14 +15,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
-import com.grappim.hateitorrateit.uikit.color
-import com.grappim.hateitorrateit.uikit.hateColors
-import com.grappim.hateitorrateit.uikit.rateColors
+import com.grappim.hateitorrateit.feature.productmanager.ui.R
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
+import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
+import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
+import com.grappim.hateitorrateit.utils.ui.type.color
+import com.grappim.hateitorrateit.utils.ui.type.hateColors
+import com.grappim.hateitorrateit.utils.ui.type.rateColors
 
 const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 
@@ -66,8 +70,8 @@ fun PlatoHateRateContent(
 
             Text(
                 text = when (currentType) {
-                    HateRateType.RATE -> "I Like it"
-                    HateRateType.HATE -> "I Hate it"
+                    HateRateType.RATE -> stringResource(id = R.string.i_rate_it)
+                    HateRateType.HATE -> stringResource(id = R.string.i_hate_it)
                 }
             )
 

@@ -28,10 +28,10 @@ import com.grappim.hateitorrateit.feature.home.ui.navigation.HomeNavScreen
 import com.grappim.hateitorrateit.feature.home.ui.navigation.homeScreen
 import com.grappim.hateitorrateit.feature.settings.ui.navigation.SettingsNavScreen
 import com.grappim.hateitorrateit.feature.settings.ui.navigation.settingsScreen
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundDark
 import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundLight
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 
 @Composable
 fun RootMainScreen(

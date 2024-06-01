@@ -7,10 +7,10 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.widgets.PLATO_PLACEHOLDER_IMAGE_TAG
 import com.grappim.hateitorrateit.uikit.widgets.PLATO_TOP_BAR_TAG
 import com.grappim.hateitorrateit.uikit.widgets.PROGRESS_INDICATOR_TAG
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import org.junit.Rule
 import org.junit.Test
 

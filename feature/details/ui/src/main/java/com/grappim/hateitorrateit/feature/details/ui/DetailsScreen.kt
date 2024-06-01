@@ -56,8 +56,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
-import com.grappim.hateitorrateit.uikit.color
-import com.grappim.hateitorrateit.uikit.icon
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
@@ -72,8 +71,9 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
 import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import com.grappim.hateitorrateit.utils.ui.asString
+import com.grappim.hateitorrateit.utils.ui.type.color
+import com.grappim.hateitorrateit.utils.ui.type.icon
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

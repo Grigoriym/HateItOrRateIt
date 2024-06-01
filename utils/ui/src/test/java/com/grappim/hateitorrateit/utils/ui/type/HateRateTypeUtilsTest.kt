@@ -1,14 +1,14 @@
-package com.grappim.hateitorrateit.uikit
+package com.grappim.hateitorrateit.utils.ui.type
 
 import androidx.compose.ui.graphics.Color
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class HateRateTypeUtilsKtTest {
+class HateRateTypeUtilsTest {
 
     @Test
     fun `hateColors returns correct colors for HATE type`() {

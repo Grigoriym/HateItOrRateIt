@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.ui
+package com.grappim.hateitorrateit.uikit.icons
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack

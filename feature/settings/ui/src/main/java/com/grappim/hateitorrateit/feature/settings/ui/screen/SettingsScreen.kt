@@ -42,8 +42,7 @@ import com.grappim.hateitorrateit.data.localdatastorageapi.models.isDark
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.isLight
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.isSystemDefault
 import com.grappim.hateitorrateit.feature.settings.ui.R
-import com.grappim.hateitorrateit.uikit.color
-import com.grappim.hateitorrateit.uikit.icon
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
@@ -51,12 +50,14 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer16
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer32
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer8
+import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoOutlinedButton
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import com.grappim.hateitorrateit.utils.ui.asString
+import com.grappim.hateitorrateit.utils.ui.type.color
+import com.grappim.hateitorrateit.utils.ui.type.icon
 
 const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
 const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
@@ -348,11 +349,10 @@ fun TypeIcon(state: SettingsViewState) {
         label = "type_crossfade_icon",
         animationSpec = tween(ANIMATION_DURATION)
     ) { type ->
-        Icon(
+        PlatoIcon(
             modifier = Modifier
                 .testTag(type.icon().name),
             imageVector = type.icon(),
-            contentDescription = null,
             tint = type.color()
         )
     }

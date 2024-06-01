@@ -2,8 +2,8 @@ package com.grappim.hateitorrateit.feature.details.ui.mappers
 
 import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.repoapi.models.Product
-import com.grappim.hateitorrateit.uikit.models.ProductDetailsImageUi
-import com.grappim.hateitorrateit.uikit.models.ProductDetailsUi
+import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsImageUi
+import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

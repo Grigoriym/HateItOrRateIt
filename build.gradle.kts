@@ -18,6 +18,7 @@ plugins {
     alias(libs.plugins.jacocoAggregationCoverage)
 
     alias(libs.plugins.gradleDoctor)
+    alias(libs.plugins.dependencyAnalysis)
 }
 
 doctor {

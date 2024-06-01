@@ -1,9 +1,9 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsImageUi
+import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
 import com.grappim.hateitorrateit.testing.domain.getImages
-import com.grappim.hateitorrateit.uikit.models.ProductDetailsImageUi
-import com.grappim.hateitorrateit.uikit.models.ProductDetailsUi
 
 const val DATE = "123,231.23"
 

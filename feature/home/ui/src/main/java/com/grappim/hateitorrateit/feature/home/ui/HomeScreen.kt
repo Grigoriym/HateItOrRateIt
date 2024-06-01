@@ -41,15 +41,15 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.models.ProductListUI
 import com.grappim.hateitorrateit.feature.home.ui.utils.HomePreviewStateProvider
 import com.grappim.hateitorrateit.feature.home.ui.utils.getPreviewProductListUI
-import com.grappim.hateitorrateit.uikit.color
-import com.grappim.hateitorrateit.uikit.icon
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
+import com.grappim.hateitorrateit.utils.ui.type.color
+import com.grappim.hateitorrateit.utils.ui.type.icon
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onProductClick: (id: Long) -> Unit) {

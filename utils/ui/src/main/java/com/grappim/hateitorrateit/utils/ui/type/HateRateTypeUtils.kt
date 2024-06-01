@@ -1,10 +1,10 @@
-package com.grappim.hateitorrateit.uikit
+package com.grappim.hateitorrateit.utils.ui.type
 
 import androidx.compose.ui.graphics.Color
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 
 fun deactivatedColor() = Color.LightGray
 
@@ -27,11 +27,7 @@ fun HateRateType.color() = if (this == HateRateType.HATE) {
 }
 
 fun HateRateType.icon() = if (this == HateRateType.HATE) {
-    hateIcon()
+    PlatoIconType.Hate.imageVector
 } else {
-    rateIcon()
+    PlatoIconType.Rate.imageVector
 }
-
-fun hateIcon() = PlatoIconType.Hate.imageVector
-
-fun rateIcon() = PlatoIconType.Rate.imageVector
