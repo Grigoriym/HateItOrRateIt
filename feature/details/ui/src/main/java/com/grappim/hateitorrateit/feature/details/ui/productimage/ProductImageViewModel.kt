@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.feature.details.ui.productimage
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
+import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,11 +21,11 @@ class ProductImageViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val productId = checkNotNull(
-        savedStateHandle.get<String>(RootNavDestinations.DetailsImage.KEY_PRODUCT_ID)
+        savedStateHandle.get<String>(NavDestinations.DetailsImage.KEY_PRODUCT_ID)
     )
 
     private val index = checkNotNull(
-        savedStateHandle.get<Int>(RootNavDestinations.DetailsImage.KEY_INDEX)
+        savedStateHandle.get<Int>(NavDestinations.DetailsImage.KEY_INDEX)
     )
 
     private val _viewState = MutableStateFlow(

@@ -150,14 +150,14 @@ dependencies {
     implementation(project(":data:worker-api"))
     implementation(project(":data:worker-impl"))
 
-    implementation(project(":feature:settings:ui"))
-
     implementation(project(":utils:files-api"))
     implementation(project(":utils:files-impl"))
 
     implementation(projects.feature.home.ui)
     implementation(projects.feature.productmanager.ui)
     implementation(projects.feature.details.ui)
+
+    implementation(projects.feature.settings.ui)
 
     implementation(projects.utils.androidApi)
     implementation(projects.utils.androidImpl)

@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.feature.productmanager.ui
 
 import androidx.lifecycle.SavedStateHandle
 import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
-import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
+import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
@@ -69,7 +69,7 @@ class ProductManagerViewModelEditTest {
         savedStateHandle = SavedStateHandle()
         every { localDataStorage.typeFlow } returns flowOf(TYPE)
 
-        savedStateHandle[RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID] =
+        savedStateHandle[NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID] =
             PRODUCT_ID.toString()
 
         coEvery { productsRepository.getProductById(any()) } returns editProduct
@@ -94,7 +94,7 @@ class ProductManagerViewModelEditTest {
 
     @After
     fun clear() {
-        savedStateHandle.remove<Long>(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)
+        savedStateHandle.remove<Long>(NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)
     }
 
     @Test
@@ -409,6 +409,6 @@ class ProductManagerViewModelEditTest {
         requireNotNull(viewModel.viewState.value.editProduct).productFolderName
 
     private fun getEditProductId(): Long =
-        savedStateHandle.get<String?>(RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)!!
+        savedStateHandle.get<String?>(NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)!!
             .toLong()
 }
