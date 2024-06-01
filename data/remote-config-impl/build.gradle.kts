@@ -8,9 +8,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":data:remote-config-api"))
+    implementation(projects.data.remoteConfigApi)
     implementation(projects.core.async)
-    implementation(project(":core:appinfo-api"))
+    implementation(projects.core.appinfoApi)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.config)

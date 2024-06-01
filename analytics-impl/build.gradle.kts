@@ -9,7 +9,6 @@ android {
 
 dependencies {
     implementation(projects.analyticsApi)
-    implementation(projects.data.repoApi)
 
     releaseImplementation(platform(libs.firebase.bom))
     releaseImplementation(libs.firebase.crashlytics)

@@ -8,12 +8,12 @@ android {
 }
 
 dependencies {
-    implementation(project(":utils:files-api"))
-    implementation(project(":utils:date-time-api"))
+    implementation(projects.utils.filesApi)
+    implementation(projects.utils.dateTimeApi)
     implementation(projects.core.async)
-    implementation(project(":data:repo-api"))
-    implementation(project(":data:db"))
-    implementation(project(":data:local-datastorage-api"))
+    implementation(projects.data.repoApi)
+    implementation(projects.data.db)
+    implementation(projects.data.localDatastorageApi)
 
     implementation(libs.androidx.core.ktx)
 
