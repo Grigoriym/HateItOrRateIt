@@ -2,7 +2,6 @@ package com.grappim.hateitorrateit.analyticsimpl
 
 import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
 import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
-import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import javax.inject.Inject
 
 internal const val SETTINGS_SCREEN_START = "settings_screen_start"
@@ -21,7 +20,7 @@ class SettingsAnalyticsImpl @Inject constructor(
         analyticsController.trackEvent(ALL_DATA_CLEAR_CONFIRM)
     }
 
-    override fun trackDefaultTypeChangedTo(type: HateRateType) {
-        analyticsController.trackEvent(DEFAULT_TYPE_CHANGED_TO, mapOf(TYPE to type.name))
+    override fun trackDefaultTypeChangedTo(type: String) {
+        analyticsController.trackEvent(DEFAULT_TYPE_CHANGED_TO, mapOf(TYPE to type))
     }
 }

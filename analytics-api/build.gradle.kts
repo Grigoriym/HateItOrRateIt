@@ -5,7 +5,3 @@ plugins {
 android {
     namespace = "com.grappim.hateitorrateit.analyticsapi"
 }
-
-dependencies {
-    implementation(projects.data.repoApi)
-}

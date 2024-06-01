@@ -61,6 +61,8 @@ robolectric = "4.12.2"
 
 moduleGraphAssertion = "2.5.0"
 
+gradleDoctor = "0.10.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
@@ -164,6 +166,7 @@ jacocoAggregationCoverage = { id = "io.github.gmazzo.test.aggregation.coverage",
 jacocoAggregationResults = { id = "io.github.gmazzo.test.aggregation.results", version.ref = "jacocoAggregation" }
 moduleGraphAssertion = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraphAssertion" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+gradleDoctor = { id = "com.osacky.doctor", version.ref = "gradleDoctor" }
 
 # Plugins definded in the included build-logic
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }

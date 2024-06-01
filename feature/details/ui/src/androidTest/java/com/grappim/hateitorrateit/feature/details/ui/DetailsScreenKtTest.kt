@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
+import android.content.Intent
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -96,6 +97,14 @@ class DetailsScreenKtTest {
         onDeleteProductConfirm = {},
         updateProduct = {},
         trackScreenStart = {},
-        trackEditButtonClicked = {}
+        trackEditButtonClicked = {},
+        appSettingsIntent = Intent(),
+        clearShareImageIntent = {},
+        onShareImageClicked = {},
+        onShowPermissionsAlertDialog = { _, _ -> },
+        resetSaveFileToGalleryState = {},
+        saveFileToGallery = {},
+        setCurrentDisplayedImageIndex = {},
+        setSnackbarMessage = {}
     )
 }

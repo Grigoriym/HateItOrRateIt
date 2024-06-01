@@ -22,7 +22,6 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "HateItOrRateIt"
 include(":app")
 include(":uikit")
-include(":commons")
 
 include(
     ":data:local-datastorage-api",
@@ -56,7 +55,8 @@ include(":feature:settings:ui")
 
 include(
     ":core:appinfo-api",
-    ":core:navigation"
+    ":core:navigation",
+    ":core:async"
 )
 
 include(

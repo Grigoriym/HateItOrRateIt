@@ -96,7 +96,7 @@ class SettingsNavScreenViewModelTest {
         viewModel.viewState.value.setNewType()
 
         coVerify { localDataStorage.changeTypeTo(newType) }
-        verify { settingsAnalytics.trackDefaultTypeChangedTo(newType) }
+        verify { settingsAnalytics.trackDefaultTypeChangedTo(newType.name) }
     }
 
     @Test

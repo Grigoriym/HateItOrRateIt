@@ -134,7 +134,7 @@ class SettingsViewModel @Inject constructor(
 
     private fun setNewType() {
         val newType = HateRateType.changeType(_viewState.value.type)
-        settingsAnalytics.trackDefaultTypeChangedTo(newType)
+        settingsAnalytics.trackDefaultTypeChangedTo(newType.name)
         viewModelScope.launch {
             localDataStorage.changeTypeTo(newType)
         }

@@ -128,12 +128,12 @@ dependencies {
     implementation(project(":utils:date-time"))
     implementation(project(":utils:date-time-api"))
     implementation(project(":data:db"))
-    implementation(projects.commons)
 
     implementation(project(":analytics-api"))
     implementation(project(":analytics-impl"))
 
-    implementation(project(":core:appinfo-api"))
+    implementation(projects.core.async)
+    implementation(projects.core.appinfoApi)
 
     implementation(project(":data:repo-api"))
     implementation(project(":data:repo-impl"))

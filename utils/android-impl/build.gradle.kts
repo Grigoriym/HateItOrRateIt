@@ -10,7 +10,7 @@ android {
 dependencies {
     implementation(projects.utils.androidApi)
     implementation(projects.utils.filesApi)
-    implementation(projects.commons)
+    implementation(projects.core.async)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

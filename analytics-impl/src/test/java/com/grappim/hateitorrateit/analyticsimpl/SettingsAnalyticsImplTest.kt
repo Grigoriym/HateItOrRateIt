@@ -40,9 +40,9 @@ class SettingsAnalyticsImplTest {
 
     @Test
     fun `on trackDefaultTypeChangedTo should track correct event`() {
-        val type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.HATE
+        val type = HateRateType.HATE
 
-        sut.trackDefaultTypeChangedTo(type)
+        sut.trackDefaultTypeChangedTo(type.name)
 
         verify {
             analyticsController.trackEvent(

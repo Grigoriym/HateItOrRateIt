@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
 import androidx.sqlite.db.SimpleSQLiteQuery
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage

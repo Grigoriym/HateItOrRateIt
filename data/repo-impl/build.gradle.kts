@@ -10,7 +10,7 @@ android {
 dependencies {
     implementation(project(":utils:files-api"))
     implementation(project(":utils:date-time-api"))
-    implementation(projects.commons)
+    implementation(projects.core.async)
     implementation(project(":data:repo-api"))
     implementation(project(":data:db"))
     implementation(project(":data:local-datastorage-api"))

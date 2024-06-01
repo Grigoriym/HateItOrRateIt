@@ -20,7 +20,7 @@ dependencies {
     implementation(project(":data:cleaner-api"))
     implementation(project(":data:local-datastorage-api"))
     implementation(project(":data:remote-config-api"))
-    implementation(projects.commons)
+    implementation(projects.core.async)
     implementation(projects.data.repoApi)
     implementation(projects.core.navigation)
 

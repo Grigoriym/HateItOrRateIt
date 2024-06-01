@@ -16,6 +16,15 @@ plugins {
 
     alias(libs.plugins.jacocoAggregationResults)
     alias(libs.plugins.jacocoAggregationCoverage)
+
+    alias(libs.plugins.gradleDoctor)
+}
+
+doctor {
+    enableTestCaching.set(false)
+    failOnEmptyDirectories.set(true)
+    warnWhenNotUsingParallelGC.set(true)
+    disallowCleanTaskDependencies.set(true)
 }
 
 allprojects {

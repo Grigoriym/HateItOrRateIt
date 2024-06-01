@@ -18,7 +18,7 @@ dependencies {
     implementation(projects.core.navigation)
     implementation(projects.analyticsApi)
     implementation(projects.utils.ui)
-    implementation(projects.commons)
+    implementation(projects.core.async)
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.filesApi)
     implementation(projects.utils.androidApi)

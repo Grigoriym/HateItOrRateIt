@@ -4,5 +4,5 @@ plugins {
 }
 
 android {
-    namespace = "com.grappim.hateitorrateit.commons"
+    namespace = "com.grappim.hateitorrateit.core.async"
 }

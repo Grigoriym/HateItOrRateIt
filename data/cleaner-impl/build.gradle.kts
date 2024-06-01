@@ -11,7 +11,7 @@ dependencies {
     implementation(projects.data.cleanerApi)
     implementation(projects.utils.filesApi)
     implementation(projects.data.repoApi)
-    implementation(projects.commons)
+    implementation(projects.core.async)
     implementation(projects.data.db)
 
     implementation(libs.timber)

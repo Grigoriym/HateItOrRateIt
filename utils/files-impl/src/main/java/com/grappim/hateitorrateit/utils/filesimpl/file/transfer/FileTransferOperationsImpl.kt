@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.transfer
 
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.transfer.FileTransferOperations
 import kotlinx.coroutines.CoroutineDispatcher

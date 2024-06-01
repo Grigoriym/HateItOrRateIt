@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.commons
+package com.grappim.hateitorrateit.core.async
 
 import dagger.Module
 import dagger.Provides

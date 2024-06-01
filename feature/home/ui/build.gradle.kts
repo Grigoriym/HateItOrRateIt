@@ -16,7 +16,7 @@ dependencies {
     implementation(projects.data.repoApi)
     implementation(projects.analyticsApi)
     implementation(projects.uikit)
-    implementation(projects.commons)
+    implementation(projects.core.async)
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.ui)
     implementation(projects.core.navigation)
