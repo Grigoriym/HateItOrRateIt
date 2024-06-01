@@ -34,7 +34,7 @@ import com.grappim.hateitorrateit.uikit.theme.bottomNavigationBackgroundLight
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 
 @Composable
-fun RootMainScreen(
+fun BottomNavigationScreen(
     goToHateOrRate: () -> Unit,
     goToDetails: (id: Long) -> Unit,
     darkTheme: Boolean
