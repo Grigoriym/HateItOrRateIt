@@ -1,4 +1,5 @@
 import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
@@ -80,13 +81,10 @@ android {
 
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "17"
-
-        freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
-        freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
     buildFeatures {
         compose = true
@@ -132,8 +130,8 @@ dependencies {
     implementation(projects.utils.androidApi)
     implementation(projects.utils.androidImpl)
 
-    implementation(projects.analyticsApi)
-    implementation(projects.analyticsImpl)
+    implementation(projects.data.analyticsApi)
+    implementation(projects.data.analyticsImpl)
 
     implementation(projects.core.async)
     implementation(projects.core.appinfoApi)

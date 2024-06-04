@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.feature.settings.ui.screen
 
-import com.grappim.hateitorrateit.analyticsapi.AnalyticsController
-import com.grappim.hateitorrateit.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
+import com.grappim.hateitorrateit.data.analyticsapi.AnalyticsController
+import com.grappim.hateitorrateit.data.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig

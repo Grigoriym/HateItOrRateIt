@@ -2,8 +2,8 @@ package com.grappim.hateitorrateit.feature.details.ui
 
 import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType

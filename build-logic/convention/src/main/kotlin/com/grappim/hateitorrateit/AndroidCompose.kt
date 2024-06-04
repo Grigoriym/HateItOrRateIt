@@ -35,10 +35,6 @@ internal fun Project.configureAndroidCompose(
 
 private fun Project.configureKotlin() {
     tasks.withType<KotlinJvmCompile>().configureEach {
-        compilerOptions {
-            freeCompilerArgs.add("-opt-in=androidx.compose.material.ExperimentalMaterialApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.foundation.ExperimentalFoundationApi")
-            freeCompilerArgs.add("-opt-in=androidx.compose.ui.ExperimentalComposeUiApi")
-        }
+        compilerOptions {}
     }
 }

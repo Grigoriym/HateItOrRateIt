@@ -1,8 +1,8 @@
 package com.grappim.hateitorrateit.feature.productmanager.ui
 
 import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import com.grappim.hateitorrateit.data.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
@@ -188,6 +188,13 @@ class ProductManagerViewModelEditTest {
         viewModel.viewState.value.onTypeClicked(HateRateType.HATE)
 
         assertEquals(viewModel.viewState.value.type, HateRateType.HATE)
+    }
+
+    @Test
+    fun `with editProduct, on onTypeClicked with the same type, type is not changed`() {
+        viewModel.viewState.value.onTypeClicked(TYPE)
+
+        assertEquals(viewModel.viewState.value.type, TYPE)
     }
 
     @Test

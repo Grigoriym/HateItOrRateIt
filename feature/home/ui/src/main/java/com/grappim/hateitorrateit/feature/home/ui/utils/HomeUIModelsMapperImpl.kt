@@ -19,7 +19,7 @@ class HomeUIModelsMapperImpl @Inject constructor(
             id = product.id.toString(),
             name = product.name,
             createdDate = formattedCreatedDate,
-            previewUriString = product.images.firstOrNull()?.uriString ?: "",
+            previewUriString = product.images.firstOrNull()?.uriString.orEmpty(),
             productFolderName = product.productFolderName,
             shop = product.shop,
             type = product.type

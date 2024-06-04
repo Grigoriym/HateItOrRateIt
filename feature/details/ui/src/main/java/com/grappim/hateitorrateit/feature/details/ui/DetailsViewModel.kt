@@ -3,8 +3,8 @@ package com.grappim.hateitorrateit.feature.details.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage

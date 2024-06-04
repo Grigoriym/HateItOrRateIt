@@ -10,6 +10,7 @@ import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -40,6 +41,7 @@ class FileCreationUtilsImplTest {
     private lateinit var contentResolver: ContentResolver
     private lateinit var shadowContentResolver: ShadowContentResolver
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         fileCreationUtils = FileCreationUtilsImpl(

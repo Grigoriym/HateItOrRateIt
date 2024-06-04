@@ -16,6 +16,7 @@ import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQueryBuilder
 import com.grappim.hateitorrateit.data.repoimpl.mappers.ProductMapper
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
@@ -25,6 +26,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 class ProductsRepositoryImpl @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,

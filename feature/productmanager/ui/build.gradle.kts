@@ -20,7 +20,7 @@ dependencies {
     implementation(projects.utils.ui)
     implementation(projects.utils.filesApi)
     implementation(projects.core.navigation)
-    implementation(projects.analyticsApi)
+    implementation(projects.data.analyticsApi)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.core)

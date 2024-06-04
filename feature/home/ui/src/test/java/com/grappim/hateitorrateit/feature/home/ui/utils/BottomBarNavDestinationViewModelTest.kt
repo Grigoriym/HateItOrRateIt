@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.feature.home.ui.utils
 
-import com.grappim.hateitorrateit.analyticsapi.HomeAnalytics
+import com.grappim.hateitorrateit.data.analyticsapi.HomeAnalytics
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product

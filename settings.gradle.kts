@@ -34,8 +34,8 @@ include(
 )
 
 include(
-    ":analytics-impl",
-    ":analytics-api"
+    ":data:analytics-impl",
+    ":data:analytics-api"
 )
 
 include(

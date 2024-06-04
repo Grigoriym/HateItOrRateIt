@@ -14,7 +14,7 @@ android {
 
 dependencies {
     implementation(projects.data.repoApi)
-    implementation(projects.analyticsApi)
+    implementation(projects.data.analyticsApi)
     implementation(projects.uikit)
     implementation(projects.core.async)
     implementation(projects.utils.dateTimeApi)

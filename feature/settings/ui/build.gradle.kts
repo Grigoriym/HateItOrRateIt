@@ -15,7 +15,7 @@ android {
 dependencies {
     implementation(projects.utils.ui)
     implementation(projects.uikit)
-    implementation(projects.analyticsApi)
+    implementation(projects.data.analyticsApi)
     implementation(projects.core.async)
     implementation(projects.core.navigation)
     implementation(projects.core.appinfoApi)

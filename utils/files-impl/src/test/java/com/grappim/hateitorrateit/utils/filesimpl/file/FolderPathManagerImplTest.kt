@@ -17,13 +17,13 @@ import kotlin.test.assertEquals
 )
 class FolderPathManagerImplTest {
 
-    private lateinit var folderPathManager: FolderPathManager
+    private lateinit var sut: FolderPathManager
 
     private val context = RuntimeEnvironment.getApplication()
 
     @Before
     fun setUp() {
-        folderPathManager = FolderPathManagerImpl(
+        sut = FolderPathManagerImpl(
             context = context
         )
     }
@@ -32,7 +32,7 @@ class FolderPathManagerImplTest {
     fun `getMainFolder should return correct folder`() {
         val expected = File(context.filesDir, "products")
 
-        val actual = folderPathManager.getMainFolder()
+        val actual = sut.getMainFolder()
 
         assertEquals(expected.path, actual.path)
     }
@@ -41,7 +41,7 @@ class FolderPathManagerImplTest {
     fun `getMainFolder with a child should return correct folder`() {
         val expected = File(context.filesDir, "products/testChild")
 
-        val actual = folderPathManager.getMainFolder("testChild")
+        val actual = sut.getMainFolder("testChild")
 
         assertEquals(expected.path, actual.path)
     }
@@ -49,14 +49,14 @@ class FolderPathManagerImplTest {
     @Test
     fun `getTempFolderName should return correct temp folder string`() {
         val expected = "testFolder_temp"
-        val actual = folderPathManager.getTempFolderName("testFolder")
+        val actual = sut.getTempFolderName("testFolder")
         assertEquals(expected, actual)
     }
 
     @Test
     fun `getBackupFolderName should return correct backup folder string`() {
         val expected = "testFolder_backup"
-        val actual = folderPathManager.getBackupFolderName("testFolder")
+        val actual = sut.getBackupFolderName("testFolder")
         assertEquals(expected, actual)
     }
 }

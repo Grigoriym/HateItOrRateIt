@@ -39,6 +39,18 @@ allprojects {
     }
 }
 
+val runAndroidTests by tasks.creating {
+    group = "verification"
+    description = "Runs Android instrumented tests only in specific modules"
+
+    dependsOn(
+        ":app:connectedAndroidTest",
+        ":data:db:connectedAndroidTest",
+        ":feature:settings:ui:connectedAndroidTest",
+        ":data:local-datastorage-impl:connectedAndroidTest"
+    )
+}
+
 subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
@@ -109,7 +121,7 @@ private val coverageExclusions = listOf(
 
     "**/LocalDataStorageImpl",
     "**/TransactionControllerImpl",
-    "**/AnalyticsControllerImpl",
+    "**/*AnalyticsControllerImpl",
     "**/*HateItOrRateItDatabase",
     "**/*LoggerInitializer",
     "**/*DevelopmentTree",
@@ -120,8 +132,10 @@ private val coverageExclusions = listOf(
     "**/*NavUtils",
     "**/DebugAnalyticsControllerImpl",
     "**/RemoteConfigsListenerImpl",
-    "**/RemoteConfigManagerImpl",
-    "**/WorkerControllerImpl"
+    "**/WorkerControllerImpl",
+
+    "**/TestUtils",
+    "**/HioriTestRunner"
 ).flatMap {
     listOf(
         "$it.class",
@@ -134,16 +148,4 @@ testAggregation {
     coverage {
         exclude(coverageExclusions)
     }
-}
-
-val runAndroidTests by tasks.creating {
-    group = "verification"
-    description = "Runs Android instrumented tests only in specific modules"
-
-    dependsOn(
-        ":app:connectedAndroidTest",
-        ":data:db:connectedAndroidTest",
-        ":feature:settings:ui:connectedAndroidTest",
-        ":data:local-datastorage-impl:connectedAndroidTest"
-    )
 }

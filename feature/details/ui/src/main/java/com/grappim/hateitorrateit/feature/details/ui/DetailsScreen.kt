@@ -1,3 +1,9 @@
+@file:OptIn(
+    ExperimentalFoundationApi::class,
+    ExperimentalPermissionsApi::class,
+    ExperimentalFoundationApi::class
+)
+
 package com.grappim.hateitorrateit.feature.details.ui
 
 import android.Manifest
@@ -5,6 +11,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -275,7 +282,6 @@ private fun TopAppBarContent(
 /**
  * On why we use activity for ShareCompat: https://stackoverflow.com/a/11335794/9822532
  */
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
     val context = LocalContext.current
@@ -416,6 +422,7 @@ private fun AppBarTopButtonsContent(
     )
 }
 
+@ExperimentalFoundationApi
 @Composable
 private fun BoxScope.AppBarImageContent(
     state: DetailsViewState,
