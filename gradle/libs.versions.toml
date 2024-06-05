@@ -15,7 +15,7 @@ detekt = "1.23.6"
 ktlint = "12.1.1"
 jacocoAggregation = "2.2.0"
 
-gms = "4.4.1"
+gms = "4.4.2"
 inAppUpdate = "2.1.0"
 
 agp = "8.4.1"
