@@ -23,7 +23,7 @@ android {
 dependencies {
     implementation(projects.data.repoApi)
     implementation(projects.utils.dateTimeApi)
-    implementation(projects.commons)
+    implementation(projects.core.async)
 
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)

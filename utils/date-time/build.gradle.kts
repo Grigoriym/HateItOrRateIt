@@ -8,5 +8,5 @@ android {
 }
 
 dependencies {
-    implementation(project(":utils:date-time-api"))
+    implementation(projects.utils.dateTimeApi)
 }

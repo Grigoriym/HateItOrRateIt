@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.feature.home.ui.utils
 
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.home.ui.models.ProductListUI
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
@@ -19,7 +19,7 @@ class HomeUIModelsMapperImpl @Inject constructor(
             id = product.id.toString(),
             name = product.name,
             createdDate = formattedCreatedDate,
-            previewUriString = product.images.firstOrNull()?.uriString ?: "",
+            previewUriString = product.images.firstOrNull()?.uriString.orEmpty(),
             productFolderName = product.productFolderName,
             shop = product.shop,
             type = product.type

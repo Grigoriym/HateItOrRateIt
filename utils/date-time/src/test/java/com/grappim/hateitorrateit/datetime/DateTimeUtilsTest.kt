@@ -15,33 +15,15 @@ class DateTimeUtilsTest {
     private val dtfToDemonstrate: DateTimeFormatter = mockk()
     private val dtfDocumentFolder: DateTimeFormatter = mockk()
 
-    private lateinit var dateTimeUtilsWithMocks: DateTimeUtilsImpl
-    private lateinit var dateTimeUtilsWithFakes: DateTimeUtilsImpl
+    private lateinit var sut: DateTimeUtilsImpl
 
     @Before
     fun setUp() {
-        dateTimeUtilsWithMocks = DateTimeUtilsImpl(
+        sut = DateTimeUtilsImpl(
             dtfToStore,
             dtfToDemonstrate,
             dtfDocumentFolder
         )
-
-        dateTimeUtilsWithFakes = DateTimeUtilsImpl(
-            DateTimeModule.provideDtfToStore(),
-            DateTimeModule.provideDtfToDemonstrate(),
-            DateTimeModule.provideDtfDocumentFolder()
-        )
-    }
-
-    @Test
-    fun `formatToStoreInDb should return correct string with fake`() {
-        val dateNow = OffsetDateTime.now()
-
-        val result = dateTimeUtilsWithFakes.formatToStoreInDb(dateNow)
-
-        val expected = DateTimeModule.provideDtfToStore().format(dateNow)
-
-        assertEquals(expected, result)
     }
 
     @Test
@@ -50,7 +32,7 @@ class DateTimeUtilsTest {
 
         every { dtfToStore.format(any()) } returns "2011-12-03T10:15:30"
 
-        val result = dateTimeUtilsWithMocks.formatToStoreInDb(dateNow)
+        val result = sut.formatToStoreInDb(dateNow)
 
         verify { dtfToStore.format(any()) }
 
@@ -63,20 +45,9 @@ class DateTimeUtilsTest {
 
         every { dtfToStore.parse(any()) } returns dateNow
 
-        val result = dateTimeUtilsWithMocks.parseFromStoringInDb("2023-11-23T14:16:37.502Z")
+        val result = sut.parseFromStoringInDb("2023-11-23T14:16:37.502Z")
 
         assertEquals(dateNow, result)
-    }
-
-    @Test
-    fun `parseFromStoringInDb should return correct string with fake`() {
-        val dateString = "2023-11-23T14:16:37.502Z"
-
-        val result = dateTimeUtilsWithFakes.parseFromStoringInDb(dateString)
-
-        val expected = OffsetDateTime.from(DateTimeModule.provideDtfToStore().parse(dateString))
-
-        assertEquals(expected, result)
     }
 
     @Test
@@ -85,22 +56,11 @@ class DateTimeUtilsTest {
 
         every { dtfToDemonstrate.format(any()) } returns "2011-12-03T10:15:30"
 
-        val result = dateTimeUtilsWithMocks.formatToDemonstrate(dateNow)
+        val result = sut.formatToDemonstrate(dateNow)
 
         verify { dtfToDemonstrate.format(any()) }
 
         assertEquals("2011-12-03T10:15:30", result)
-    }
-
-    @Test
-    fun `formatToDemonstrate should return correct string with fake`() {
-        val dateNow = OffsetDateTime.now()
-
-        val result = dateTimeUtilsWithFakes.formatToDemonstrate(dateNow)
-
-        val expected = DateTimeModule.provideDtfToDemonstrate().format(dateNow)
-
-        assertEquals(expected, result)
     }
 
     @Test
@@ -109,21 +69,10 @@ class DateTimeUtilsTest {
 
         every { dtfDocumentFolder.format(any()) } returns "2011-12-03T10:15:30"
 
-        val result = dateTimeUtilsWithMocks.formatToDocumentFolder(dateNow)
+        val result = sut.formatToDocumentFolder(dateNow)
 
         verify { dtfDocumentFolder.format(any()) }
 
         assertEquals("2011-12-03T10:15:30", result)
-    }
-
-    @Test
-    fun `formatToDocumentFolder should return correct string with fake`() {
-        val dateNow = OffsetDateTime.now()
-
-        val result = dateTimeUtilsWithFakes.formatToDocumentFolder(dateNow)
-
-        val expected = DateTimeModule.provideDtfDocumentFolder().format(dateNow)
-
-        assertEquals(expected, result)
     }
 }

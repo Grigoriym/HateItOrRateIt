@@ -12,10 +12,12 @@ import com.grappim.hateitorrateit.data.repoimpl.getProductImageDataList
 import com.grappim.hateitorrateit.data.repoimpl.getProductWithImagesEntity
 import com.grappim.hateitorrateit.data.repoimpl.getProductWithImagesEntityList
 import junit.framework.TestCase.assertEquals
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ProductMapperTest {
 
     private val productMapper = ProductMapper(
@@ -26,6 +28,14 @@ class ProductMapperTest {
     fun `toProduct should return correct product`() = runTest {
         val actual = productMapper.toProduct(getProductWithImagesEntity())
         val expected = getProduct()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toProduct with no images should return correct product`() = runTest {
+        val entity = getProductWithImagesEntity().copy(files = emptyList())
+        val actual = productMapper.toProduct(entity)
+        val expected = getProduct().copy(images = emptyList())
         assertEquals(expected, actual)
     }
 
@@ -93,6 +103,22 @@ class ProductMapperTest {
     fun `toProductImageData should return correct ProductImageData`() = runTest {
         val actual = productMapper.toProductImageData(getProductImageDataEntity())
         val expected = getProductImageData()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toProductEntity with Product should return correct ProductEntity`() = runTest {
+        val product = getProduct()
+        val actual = productMapper.toProductEntity(product)
+        val expected = getProductEntity()
+        assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `toProductImageDataEntityList with CreateProduct should return correct list of ProductImageDataEntity`() = runTest {
+        val createProduct = getCreateProduct()
+        val actual = productMapper.toProductImageDataEntityList(createProduct)
+        val expected = getProductImageDataEntityList()
         assertEquals(expected, actual)
     }
 }

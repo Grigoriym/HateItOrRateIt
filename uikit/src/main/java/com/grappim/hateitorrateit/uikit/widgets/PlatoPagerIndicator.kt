@@ -1,5 +1,8 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.grappim.hateitorrateit.uikit.widgets
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -23,9 +26,7 @@ import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 @Composable
 fun PlatoPagerIndicator(
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.surface.copy(
-        alpha = 0.2f
-    ),
+    backgroundColor: Color = MaterialTheme.colors.surface,
     show: Boolean,
     size: Int,
     pagerState: PagerState
@@ -36,14 +37,19 @@ fun PlatoPagerIndicator(
                 .wrapContentHeight()
                 .wrapContentWidth()
                 .padding(bottom = 16.dp),
-            backgroundColor = backgroundColor
+            backgroundColor = backgroundColor,
+            elevation = 0.dp
         ) {
             Row(
                 horizontalArrangement = Arrangement.Center
             ) {
                 repeat(size) { iteration ->
                     val color =
-                        if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                        if (pagerState.currentPage == iteration) {
+                            Color.DarkGray
+                        } else {
+                            MaterialTheme.colors.primary
+                        }
                     Box(
                         modifier = Modifier
                             .padding(

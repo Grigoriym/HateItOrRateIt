@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalFoundationApi::class)
+
 package com.grappim.hateitorrateit.feature.productmanager.ui
 
 import android.net.Uri
@@ -5,6 +7,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -41,7 +44,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -49,17 +51,17 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.lerp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PlatoHateRateContent
 import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
-import com.grappim.hateitorrateit.uikit.widgets.PlatoHateRateContent
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIconButton
 import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTextButton
@@ -67,10 +69,8 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import com.grappim.hateitorrateit.utils.ui.asString
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
 @Composable
 fun ProductManagerRoute(
@@ -263,7 +263,6 @@ private fun ProductManagerContent(
         Column(
             modifier = Modifier
                 .padding(it)
-                .padding(horizontal = 4.dp)
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
         ) {
@@ -358,21 +357,8 @@ private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewS
         contentPadding = PaddingValues(horizontal = 32.dp),
         pageSpacing = 8.dp
     ) { page ->
-        val file = state.images[page]
-        PlatoCard(
-            modifier = Modifier
-                .graphicsLayer {
-                    val pageOffset = (
-                        (pagerState.currentPage - page) +
-                            pagerState.currentPageOffsetFraction
-                        ).absoluteValue
-                    alpha = lerp(
-                        start = 0.5f,
-                        stop = 1f,
-                        fraction = 1f - pageOffset.coerceIn(0f, 1f)
-                    )
-                }
-        ) {
+        val image = state.images[page]
+        PlatoCard {
             Box(
                 modifier = Modifier
                     .size(width = 350.dp, height = 300.dp)
@@ -380,7 +366,7 @@ private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewS
                 Image(
                     modifier = Modifier
                         .fillMaxSize(),
-                    painter = rememberAsyncImagePainter(file.uri),
+                    painter = rememberAsyncImagePainter(image.uri),
                     contentDescription = null,
                     contentScale = ContentScale.Crop
                 )
@@ -394,7 +380,7 @@ private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewS
                         ),
                     icon = PlatoIconType.Delete.imageVector,
                     onButtonClick = {
-                        state.onDeleteImageClicked(file)
+                        state.onDeleteImageClicked(image)
                     }
                 )
             }
@@ -405,8 +391,7 @@ private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewS
 @Composable
 private fun BottomBarButton(modifier: Modifier = Modifier, state: ProductManagerViewState) {
     PlatoTextButton(
-        modifier = modifier
-            .height(42.dp),
+        modifier = modifier.height(42.dp),
         text = state.bottomBarButtonText.asString(LocalContext.current),
         onClick = state.onProductDone
     )

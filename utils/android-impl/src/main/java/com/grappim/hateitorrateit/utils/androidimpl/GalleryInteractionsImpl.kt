@@ -6,7 +6,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever

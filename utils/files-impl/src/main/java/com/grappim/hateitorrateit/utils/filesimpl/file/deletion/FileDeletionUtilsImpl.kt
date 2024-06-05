@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.utils.filesimpl.file.deletion
 
 import android.content.Context
 import android.net.Uri
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser

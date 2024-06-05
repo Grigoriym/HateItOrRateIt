@@ -11,6 +11,7 @@ import com.grappim.hateitorrateit.utils.filesimpl.MimeTypes
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -43,6 +44,7 @@ class FileInfoRetrieverImplTest {
     private val jpgMimeType = "image/jpeg"
     private val pngMimeType = "image/png"
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         sut = FileInfoRetrieverImpl(

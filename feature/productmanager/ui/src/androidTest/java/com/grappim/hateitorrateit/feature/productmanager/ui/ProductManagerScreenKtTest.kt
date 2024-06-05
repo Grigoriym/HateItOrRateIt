@@ -6,8 +6,8 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PLATO_HATE_RATE_CONTENT_TAG
 import com.grappim.hateitorrateit.uikit.R
-import com.grappim.hateitorrateit.uikit.widgets.PLATO_HATE_RATE_CONTENT_TAG
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
 import com.grappim.hateitorrateit.utils.ui.NativeText
