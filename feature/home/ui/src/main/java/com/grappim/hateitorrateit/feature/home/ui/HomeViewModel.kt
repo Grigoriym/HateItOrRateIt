@@ -1,12 +1,15 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package com.grappim.hateitorrateit.feature.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.analyticsapi.HomeAnalytics
+import com.grappim.hateitorrateit.data.analyticsapi.HomeAnalytics
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.utils.HomeUIModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collect

@@ -2,7 +2,7 @@ package com.grappim.hateitorrateit.utils.filesimpl.file.creation
 
 import android.content.Context
 import android.net.Uri
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.utils.filesapi.creation.FileCreationUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager

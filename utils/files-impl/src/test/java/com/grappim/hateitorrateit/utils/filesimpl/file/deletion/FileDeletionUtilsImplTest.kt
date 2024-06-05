@@ -8,6 +8,7 @@ import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -33,6 +34,7 @@ class FileDeletionUtilsImplTest {
     private val uriParser: UriParser = mockk()
     private val folderPathManager: FolderPathManager = mockk()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         fileDeletionUtils = FileDeletionUtilsImpl(

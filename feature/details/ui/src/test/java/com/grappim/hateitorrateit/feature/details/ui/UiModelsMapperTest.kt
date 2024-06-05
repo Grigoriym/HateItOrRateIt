@@ -5,6 +5,7 @@ import com.grappim.hateitorrateit.testing.domain.getFakeProduct
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -17,6 +18,7 @@ class UiModelsMapperTest {
 
     private lateinit var uiModelsMapper: UiModelsMapper
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setup() {
         uiModelsMapper = UiModelsMapper(

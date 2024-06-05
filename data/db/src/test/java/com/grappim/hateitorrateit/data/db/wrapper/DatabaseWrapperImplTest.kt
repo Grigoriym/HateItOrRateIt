@@ -3,11 +3,13 @@ package com.grappim.hateitorrateit.data.db.wrapper
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class DatabaseWrapperImplTest {
     private val db = mockk<HateItOrRateItDatabase>(relaxed = true)
 
