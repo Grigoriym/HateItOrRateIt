@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.grappim.hateitorrateit.feature.home.ui
 
 import androidx.compose.foundation.Image
@@ -14,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FilterChip
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -41,15 +44,15 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.models.ProductListUI
 import com.grappim.hateitorrateit.feature.home.ui.utils.HomePreviewStateProvider
 import com.grappim.hateitorrateit.feature.home.ui.utils.getPreviewProductListUI
-import com.grappim.hateitorrateit.uikit.color
-import com.grappim.hateitorrateit.uikit.icon
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
+import com.grappim.hateitorrateit.utils.ui.type.color
+import com.grappim.hateitorrateit.utils.ui.type.icon
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onProductClick: (id: Long) -> Unit) {

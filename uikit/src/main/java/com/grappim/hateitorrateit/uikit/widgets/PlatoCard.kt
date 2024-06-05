@@ -1,8 +1,11 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package com.grappim.hateitorrateit.uikit.widgets
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.contentColorFor
 import androidx.compose.runtime.Composable

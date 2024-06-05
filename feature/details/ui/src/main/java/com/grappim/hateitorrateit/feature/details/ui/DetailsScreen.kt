@@ -1,3 +1,9 @@
+@file:OptIn(
+    ExperimentalFoundationApi::class,
+    ExperimentalPermissionsApi::class,
+    ExperimentalFoundationApi::class
+)
+
 package com.grappim.hateitorrateit.feature.details.ui
 
 import android.Manifest
@@ -5,6 +11,7 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
@@ -56,8 +63,7 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
-import com.grappim.hateitorrateit.uikit.color
-import com.grappim.hateitorrateit.uikit.icon
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
@@ -72,8 +78,9 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
 import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import com.grappim.hateitorrateit.utils.ui.asString
+import com.grappim.hateitorrateit.utils.ui.type.color
+import com.grappim.hateitorrateit.utils.ui.type.icon
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -275,7 +282,6 @@ private fun TopAppBarContent(
 /**
  * On why we use activity for ShareCompat: https://stackoverflow.com/a/11335794/9822532
  */
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
     val context = LocalContext.current
@@ -416,6 +422,7 @@ private fun AppBarTopButtonsContent(
     )
 }
 
+@ExperimentalFoundationApi
 @Composable
 private fun BoxScope.AppBarImageContent(
     state: DetailsViewState,

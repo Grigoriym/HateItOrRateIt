@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.grappim.hateitorrateit.core.navigation.BottomNavDestinations
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsRoute
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.utils.ui.navigation.safeClick
 
 fun NavGraphBuilder.settingsScreen(navController: NavController) {

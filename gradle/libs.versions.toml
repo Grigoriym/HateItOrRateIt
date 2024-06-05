@@ -61,6 +61,9 @@ robolectric = "4.12.2"
 
 moduleGraphAssertion = "2.5.0"
 
+gradleDoctor = "0.10.0"
+dependencyAnalysis = "1.32.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 androidx-startup = { module = "androidx.startup:startup-runtime", version.ref = "startup" }
@@ -100,6 +103,7 @@ androidx-compose-material-icons-extended = { module = "androidx.compose.material
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 
+androidx-compose-runtime = { module = "androidx.compose.runtime:runtime" }
 androidx-compose-ui-core = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
@@ -164,6 +168,8 @@ jacocoAggregationCoverage = { id = "io.github.gmazzo.test.aggregation.coverage",
 jacocoAggregationResults = { id = "io.github.gmazzo.test.aggregation.results", version.ref = "jacocoAggregation" }
 moduleGraphAssertion = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraphAssertion" }
 compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+gradleDoctor = { id = "com.osacky.doctor", version.ref = "gradleDoctor" }
+dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 
 # Plugins definded in the included build-logic
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }

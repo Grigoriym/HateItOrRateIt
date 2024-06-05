@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="i_rate_it">Je l\'évalue</string>
+    <string name="i_hate_it">Je le déteste</string>
+</resources>

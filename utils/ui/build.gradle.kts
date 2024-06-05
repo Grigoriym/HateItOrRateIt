@@ -15,7 +15,9 @@ android {
 }
 
 dependencies {
-    implementation(projects.commons)
+    implementation(projects.core.async)
+    implementation(projects.data.repoApi)
+    implementation(projects.uikit)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

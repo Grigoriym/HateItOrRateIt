@@ -11,9 +11,9 @@ import androidx.compose.ui.test.onNodeWithText
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsScreen
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsViewState
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.widgets.PLATO_ALERT_DIALOG_TAG
 import com.grappim.hateitorrateit.uikit.widgets.PLATO_LOADING_DIALOG_TAG
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

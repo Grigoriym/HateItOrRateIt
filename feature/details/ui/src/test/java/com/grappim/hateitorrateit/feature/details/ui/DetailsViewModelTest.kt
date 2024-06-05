@@ -2,20 +2,20 @@ package com.grappim.hateitorrateit.feature.details.ui
 
 import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
+import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
 import com.grappim.hateitorrateit.testing.domain.NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_FOLDER_NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_ID
 import com.grappim.hateitorrateit.testing.domain.createRandomProductImage
 import com.grappim.hateitorrateit.testing.domain.createRandomProductImageList
-import com.grappim.hateitorrateit.uikit.models.ProductDetailsUi
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
 import com.grappim.hateitorrateit.utils.androidapi.SaveImageState

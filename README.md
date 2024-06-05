@@ -28,6 +28,8 @@ https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/de24f8f3-ed42-4944-a
 | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3e79ad35-7b87-43d0-b7fe-8adb5bcdd212" alt="drawing" width="400" height="900"/>  |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/ec249ed8-fa86-4aac-9c72-70bdc9e862f5" alt="drawing" width="400" height="900"/> |
 | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/c8acad80-5211-4d1f-94ff-2fba5bfdff1e" alt="drawing" width="400" height="900"/>  | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3a76cb2c-1a87-4492-9d4f-930efe0d840e" alt="drawing" width="400" height="900"/>  |
 
+## Codecov Graph
+https://codecov.io/gh/Grigoriym/HateItOrRateIt/graphs/tree.svg?token=EPFJKZ1EJ7
 
 ## This app offers
 

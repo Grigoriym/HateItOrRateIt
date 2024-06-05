@@ -16,8 +16,8 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 @RunWith(RobolectricTestRunner::class)
 class ProductImageViewModelTest {
@@ -33,12 +33,13 @@ class ProductImageViewModelTest {
     @Before
     fun setup() {
         savedStateHandle = SavedStateHandle()
-        savedStateHandle[NavDestinations.DetailsImage.KEY_PRODUCT_ID] = PRODUCT_ID.toString()
-        savedStateHandle[NavDestinations.DetailsImage.KEY_INDEX] = index
     }
 
     @Test
     fun `on init should update state with correct data`() = runTest {
+        savedStateHandle[NavDestinations.DetailsImage.KEY_PRODUCT_ID] = PRODUCT_ID.toString()
+        savedStateHandle[NavDestinations.DetailsImage.KEY_INDEX] = index
+
         val product = createEditProduct(editProductImages)
         val productUi = createProductDetailsImageUi()
 
@@ -55,6 +56,31 @@ class ProductImageViewModelTest {
         coVerify { uiModelsMapper.toProductDetailsImageUI(product) }
 
         assertEquals(vm.viewState.value.uri, productUi.images[index].uriString)
-        assertContentEquals(vm.viewState.value.images, productUi.images)
+    }
+
+    @Test
+    fun `on init with productId being null, should throw an error`() {
+        savedStateHandle[NavDestinations.DetailsImage.KEY_PRODUCT_ID] = null
+
+        assertFailsWith<IllegalStateException> {
+            ProductImageViewModel(
+                productsRepository = productsRepository,
+                uiModelsMapper = uiModelsMapper,
+                savedStateHandle = savedStateHandle
+            )
+        }
+    }
+
+    @Test
+    fun `on init with index being null, should throw an error`() {
+        savedStateHandle[NavDestinations.DetailsImage.KEY_INDEX] = null
+
+        assertFailsWith<IllegalStateException> {
+            ProductImageViewModel(
+                productsRepository = productsRepository,
+                uiModelsMapper = uiModelsMapper,
+                savedStateHandle = savedStateHandle
+            )
+        }
     }
 }

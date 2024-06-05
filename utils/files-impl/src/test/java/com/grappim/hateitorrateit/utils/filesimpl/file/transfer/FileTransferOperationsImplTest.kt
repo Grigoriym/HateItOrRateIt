@@ -6,6 +6,7 @@ import com.grappim.hateitorrateit.utils.filesapi.transfer.FileTransferOperations
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -30,6 +31,7 @@ class FileTransferOperationsImplTest {
 
     private val context = RuntimeEnvironment.getApplication()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         sut = FileTransferOperationsImpl(

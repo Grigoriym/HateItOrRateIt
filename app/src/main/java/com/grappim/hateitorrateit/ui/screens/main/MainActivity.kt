@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity() {
                 startDestination = NavDestinations.BottomBarNavDestination.route
             ) {
                 composable(NavDestinations.BottomBarNavDestination.route) { navBackStackEntry ->
-                    RootMainScreen(
+                    BottomNavigationScreen(
                         darkTheme = darkTheme,
                         goToHateOrRate = {
                             navBackStackEntry.safeClick {

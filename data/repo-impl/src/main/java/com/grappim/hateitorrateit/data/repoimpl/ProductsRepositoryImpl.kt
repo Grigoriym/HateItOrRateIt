@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
 import androidx.sqlite.db.SimpleSQLiteQuery
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.db.entities.ProductEntity
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
@@ -16,6 +16,7 @@ import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQueryBuilder
 import com.grappim.hateitorrateit.data.repoimpl.mappers.ProductMapper
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.first
@@ -25,6 +26,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @Singleton
 class ProductsRepositoryImpl @Inject constructor(
     private val dateTimeUtils: DateTimeUtils,

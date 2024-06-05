@@ -1,6 +1,5 @@
 package com.grappim.hateitorrateit.feature.details.ui.productimage
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
+import com.grappim.hateitorrateit.uikit.widgets.PlatoImage
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import kotlin.math.max
 
@@ -83,7 +83,7 @@ private fun ImageContent(uriString: String) {
 
     val painter = rememberAsyncImagePainter(uriString)
 
-    Image(
+    PlatoImage(
         modifier = Modifier
             .fillMaxWidth()
             .pointerInput(Unit) {
@@ -113,7 +113,6 @@ private fun ImageContent(uriString: String) {
                 translationY = offset.y
             },
         painter = painter,
-        contentDescription = "",
         contentScale = ContentScale.Crop
     )
 }

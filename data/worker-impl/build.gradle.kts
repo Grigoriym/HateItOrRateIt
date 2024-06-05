@@ -12,9 +12,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":data:repo-api"))
-    implementation(project(":data:cleaner-api"))
-    implementation(project(":data:worker-api"))
+    implementation(projects.data.repoApi)
+    implementation(projects.data.cleanerApi)
+    implementation(projects.data.workerApi)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

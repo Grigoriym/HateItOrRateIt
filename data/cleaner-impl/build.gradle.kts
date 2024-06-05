@@ -9,10 +9,10 @@ android {
 
 dependencies {
     implementation(projects.data.cleanerApi)
-    implementation(projects.utils.filesApi)
     implementation(projects.data.repoApi)
-    implementation(projects.commons)
     implementation(projects.data.db)
+    implementation(projects.core.async)
+    implementation(projects.utils.filesApi)
 
     implementation(libs.timber)
 

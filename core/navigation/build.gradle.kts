@@ -8,6 +8,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.utils.ui)
     implementation(libs.androidx.compose.ui.core)
 }

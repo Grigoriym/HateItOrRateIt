@@ -8,7 +8,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.commons)
+    implementation(projects.core.async)
     implementation(projects.data.repoApi)
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.filesApi)
