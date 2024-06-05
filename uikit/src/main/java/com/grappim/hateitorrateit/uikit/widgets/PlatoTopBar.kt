@@ -15,9 +15,9 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
-import com.grappim.hateitorrateit.utils.ui.PlatoIconType
 
 const val PLATO_TOP_BAR_TAG = "plato_top_bar_tag"
 

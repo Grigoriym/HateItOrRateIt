@@ -2,11 +2,13 @@ package com.grappim.hateitorrateit.data.repoimpl.mappers
 
 import com.grappim.hateitorrateit.data.db.entities.BackupProductImageDataEntity
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class BackupProductMapperTest {
 
     private val mapper = BackupProductMapper(ioDispatcher = UnconfinedTestDispatcher())

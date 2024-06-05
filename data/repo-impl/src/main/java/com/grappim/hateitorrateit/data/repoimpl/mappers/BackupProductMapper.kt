@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.repoimpl.mappers
 
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.db.entities.BackupProductImageDataEntity
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import kotlinx.coroutines.CoroutineDispatcher

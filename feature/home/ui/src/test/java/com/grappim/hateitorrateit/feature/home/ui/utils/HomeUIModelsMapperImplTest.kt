@@ -5,6 +5,7 @@ import com.grappim.hateitorrateit.testing.domain.getFakeProduct
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -17,6 +18,7 @@ class HomeUIModelsMapperImplTest {
 
     private lateinit var sut: HomeUIModelsMapper
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         sut = HomeUIModelsMapperImpl(
@@ -37,6 +39,28 @@ class HomeUIModelsMapperImplTest {
             name = product.name,
             createdDate = date,
             previewUriString = product.images.first().uriString,
+            productFolderName = product.productFolderName,
+            shop = product.shop,
+            type = product.type
+        )
+
+        val result = sut.toProductUi(product)
+
+        assertEquals(expected, result)
+    }
+
+    @Test
+    fun `on toProductUi with no images maps Product to ProductListUI correctly`() = runTest {
+        val product = getFakeProduct().copy(images = emptyList())
+        val date = "123 123"
+
+        coEvery { dateTimeUtils.formatToDemonstrate(any()) } returns date
+
+        val expected = ProductListUI(
+            id = product.id.toString(),
+            name = product.name,
+            createdDate = date,
+            previewUriString = "",
             productFolderName = product.productFolderName,
             shop = product.shop,
             type = product.type

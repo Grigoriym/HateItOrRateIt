@@ -4,8 +4,8 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.analyticsapi.ProductManagerAnalytics
-import com.grappim.hateitorrateit.core.navigation.RootNavDestinations
+import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import com.grappim.hateitorrateit.data.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
@@ -68,7 +68,7 @@ class ProductManagerViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     private val editProductId: String? =
-        savedStateHandle[RootNavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID]
+        savedStateHandle[NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID]
 
     private val editProductIdLong: Long
         get() = requireNotNull(editProductId?.toLong())

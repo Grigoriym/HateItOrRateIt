@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.data.db.wrapper
 
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.db.HateItOrRateItDatabase
 import com.grappim.hateitorrateit.data.db.dao.BackupImagesDao
 import com.grappim.hateitorrateit.data.db.dao.DatabaseDao

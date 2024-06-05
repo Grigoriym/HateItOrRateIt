@@ -1,4 +1,5 @@
 import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
@@ -80,13 +81,10 @@ android {
 
         isCoreLibraryDesugaringEnabled = true
     }
-    kotlinOptions {
-        jvmTarget = "17"
-
-        freeCompilerArgs += "-opt-in=androidx.compose.material.ExperimentalMaterialApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.foundation.ExperimentalFoundationApi"
-        freeCompilerArgs += "-opt-in=androidx.compose.ui.ExperimentalComposeUiApi"
-        freeCompilerArgs += "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_17)
+        }
     }
     buildFeatures {
         compose = true
@@ -124,43 +122,36 @@ dependencies {
 
     implementation(projects.uikit)
 
-    implementation(project(":utils:ui"))
-    implementation(project(":utils:date-time"))
-    implementation(project(":utils:date-time-api"))
-    implementation(project(":data:db"))
-    implementation(projects.commons)
+    implementation(projects.utils.ui)
+    implementation(projects.utils.dateTimeApi)
+    implementation(projects.utils.dateTime)
+    implementation(projects.utils.filesApi)
+    implementation(projects.utils.filesImpl)
+    implementation(projects.utils.androidApi)
+    implementation(projects.utils.androidImpl)
 
-    implementation(project(":analytics-api"))
-    implementation(project(":analytics-impl"))
+    implementation(projects.data.analyticsApi)
+    implementation(projects.data.analyticsImpl)
 
-    implementation(project(":core:appinfo-api"))
+    implementation(projects.core.async)
+    implementation(projects.core.appinfoApi)
 
-    implementation(project(":data:repo-api"))
-    implementation(project(":data:repo-impl"))
-
-    implementation(project(":data:cleaner-api"))
-    implementation(project(":data:cleaner-impl"))
-
-    implementation(project(":data:remote-config-api"))
-    implementation(project(":data:remote-config-impl"))
-
-    implementation(project(":data:local-datastorage-api"))
-    implementation(project(":data:local-datastorage-impl"))
-
-    implementation(project(":data:worker-api"))
-    implementation(project(":data:worker-impl"))
-
-    implementation(project(":feature:settings:ui"))
-
-    implementation(project(":utils:files-api"))
-    implementation(project(":utils:files-impl"))
+    implementation(projects.data.db)
+    implementation(projects.data.repoApi)
+    implementation(projects.data.repoImpl)
+    implementation(projects.data.cleanerApi)
+    implementation(projects.data.cleanerImpl)
+    implementation(projects.data.remoteConfigApi)
+    implementation(projects.data.remoteConfigImpl)
+    implementation(projects.data.localDatastorageApi)
+    implementation(projects.data.localDatastorageImpl)
+    implementation(projects.data.workerApi)
+    implementation(projects.data.workerImpl)
 
     implementation(projects.feature.home.ui)
     implementation(projects.feature.productmanager.ui)
     implementation(projects.feature.details.ui)
-
-    implementation(projects.utils.androidApi)
-    implementation(projects.utils.androidImpl)
+    implementation(projects.feature.settings.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.startup)
@@ -214,6 +205,6 @@ dependencies {
 }
 
 moduleGraphAssert {
-    maxHeight = 4
+    maxHeight = 3
     assertOnAnyBuild = true
 }

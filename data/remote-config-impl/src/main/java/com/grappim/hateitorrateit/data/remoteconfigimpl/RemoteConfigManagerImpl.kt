@@ -1,7 +1,7 @@
 package com.grappim.hateitorrateit.data.remoteconfigimpl
 
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.grappim.hateitorrateit.commons.IoDispatcher
+import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigManager
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

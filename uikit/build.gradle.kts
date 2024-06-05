@@ -8,8 +8,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.utils.ui)
-    implementation(projects.data.repoApi)
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.androidx.compose.ui.core)
