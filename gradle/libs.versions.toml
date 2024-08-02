@@ -57,7 +57,7 @@ androidxTestRules = "1.5.0"
 
 material = "1.12.0"
 
-robolectric = "4.12.2"
+robolectric = "4.13"
 
 moduleGraphAssertion = "2.5.0"
 
