@@ -50,7 +50,7 @@ androidxEspresso = "3.6.1"
 junit4 = "4.13.2"
 turbine = "1.1.0"
 
-androidxTestCore = "1.5.0"
+androidxTestCore = "1.6.1"
 androidx-junit = "1.1.5"
 androidxTestRunner = "1.5.2"
 androidxTestRules = "1.5.0"
