@@ -52,7 +52,7 @@ turbine = "1.1.0"
 
 androidxTestCore = "1.6.1"
 androidx-junit = "1.2.1"
-androidxTestRunner = "1.5.2"
+androidxTestRunner = "1.6.2"
 androidxTestRules = "1.5.0"
 
 material = "1.12.0"
