@@ -42,7 +42,7 @@ accompanist = "0.34.0"
 
 androidDesugarJdkLibs = "2.0.4"
 crypto = "1.0.0"
-coil = "2.6.0"
+coil = "2.7.0"
 
 mockk = "1.13.12"
 
