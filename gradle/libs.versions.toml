@@ -40,7 +40,7 @@ archCore = "2.2.0"
 #leave it 0.34.0 since newer version uses compose 1.7 which breaks the app
 accompanist = "0.34.0"
 
-androidDesugarJdkLibs = "2.0.4"
+androidDesugarJdkLibs = "2.1.2"
 crypto = "1.0.0"
 coil = "2.7.0"
 
