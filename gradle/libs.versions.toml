@@ -11,7 +11,7 @@ compileSdk = "34"
 minSdk = "24"
 targetSdk = "34"
 
-detekt = "1.23.6"
+detekt = "1.23.7"
 ktlint = "12.1.1"
 jacocoAggregation = "2.2.1"
 
