@@ -1,5 +1,5 @@
 [versions]
-compose-bom = "2024.06.00"
+compose-bom = "2024.09.02"
 firebase-bom = "33.2.0"
 firebaseCrashlytics = "3.0.2"
 
