@@ -1,10 +1,10 @@
 [versions]
-compose-bom = "2024.06.00"
+compose-bom = "2024.09.02"
 firebase-bom = "33.2.0"
 firebaseCrashlytics = "3.0.2"
 
 kotlin = "2.0.0"
-coroutines = "1.8.1"
+coroutines = "1.9.0"
 ksp = "2.0.0-1.0.24"
 
 compileSdk = "34"
@@ -18,8 +18,8 @@ jacocoAggregation = "2.2.1"
 gms = "4.4.2"
 inAppUpdate = "2.1.0"
 
-agp = "8.6.0"
-androidTools = "31.6.0"
+agp = "8.6.1"
+androidTools = "31.6.1"
 
 hilt = "2.52"
 androidx-hilt = "1.2.0"
@@ -32,7 +32,7 @@ core-ktx = "1.13.1"
 startup = "1.1.1"
 timber = "5.0.1"
 datastore-prefs = "1.1.1"
-activity-compose = "1.9.1"
+activity-compose = "1.9.2"
 room = "2.6.1"
 sqlite = "2.4.0"
 archCore = "2.2.0"
@@ -40,7 +40,7 @@ archCore = "2.2.0"
 #leave it 0.34.0 since newer version uses compose 1.7 which breaks the app
 accompanist = "0.34.0"
 
-androidDesugarJdkLibs = "2.0.4"
+androidDesugarJdkLibs = "2.1.2"
 crypto = "1.0.0"
 coil = "2.7.0"
 
