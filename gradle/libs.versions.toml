@@ -25,7 +25,7 @@ hilt = "2.52"
 androidx-hilt = "1.2.0"
 navigation = "2.7.7"
 #leave it 2.7.0 since newer version uses compose 1.7 which breaks the app
-lifecycle = "2.7.0"
+lifecycle = "2.8.6"
 work = "2.9.1"
 appcompat = "1.7.0"
 core-ktx = "1.13.1"
