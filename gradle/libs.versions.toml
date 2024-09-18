@@ -21,7 +21,7 @@ inAppUpdate = "2.1.0"
 agp = "8.6.0"
 androidTools = "31.6.0"
 
-hilt = "2.51.1"
+hilt = "2.52"
 androidx-hilt = "1.2.0"
 navigation = "2.7.7"
 #leave it 2.7.0 since newer version uses compose 1.7 which breaks the app
