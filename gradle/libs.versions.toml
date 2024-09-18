@@ -18,7 +18,7 @@ jacocoAggregation = "2.2.1"
 gms = "4.4.2"
 inAppUpdate = "2.1.0"
 
-agp = "8.6.0"
+agp = "8.6.1"
 androidTools = "31.6.0"
 
 hilt = "2.52"
