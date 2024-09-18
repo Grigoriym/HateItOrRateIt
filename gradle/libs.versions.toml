@@ -62,7 +62,7 @@ robolectric = "4.13"
 moduleGraphAssertion = "2.7.1"
 
 gradleDoctor = "0.10.0"
-dependencyAnalysis = "1.33.0"
+dependencyAnalysis = "2.0.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
