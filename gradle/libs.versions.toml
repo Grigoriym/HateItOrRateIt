@@ -24,7 +24,6 @@ androidTools = "31.6.1"
 hilt = "2.52"
 androidx-hilt = "1.2.0"
 navigation = "2.8.1"
-#leave it 2.7.0 since newer version uses compose 1.7 which breaks the app
 lifecycle = "2.8.6"
 work = "2.9.1"
 appcompat = "1.7.0"
@@ -37,11 +36,9 @@ room = "2.6.1"
 sqlite = "2.4.0"
 archCore = "2.2.0"
 
-#leave it 0.34.0 since newer version uses compose 1.7 which breaks the app
 accompanist = "0.36.0"
 
 androidDesugarJdkLibs = "2.1.2"
-crypto = "1.0.0"
 coil = "2.7.0"
 
 mockk = "1.13.12"
