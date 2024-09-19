@@ -23,7 +23,7 @@ androidTools = "31.6.1"
 
 hilt = "2.52"
 androidx-hilt = "1.2.0"
-navigation = "2.7.7"
+navigation = "2.8.1"
 #leave it 2.7.0 since newer version uses compose 1.7 which breaks the app
 lifecycle = "2.7.0"
 work = "2.9.1"
