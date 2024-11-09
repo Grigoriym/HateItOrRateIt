@@ -1,6 +1,6 @@
 [versions]
 compose-bom = "2024.10.01"
-firebase-bom = "33.3.0"
+firebase-bom = "33.5.1"
 firebaseCrashlytics = "3.0.2"
 
 kotlin = "2.0.0"
