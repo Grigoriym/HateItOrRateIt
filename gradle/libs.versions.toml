@@ -38,7 +38,7 @@ archCore = "2.2.0"
 
 accompanist = "0.36.0"
 
-androidDesugarJdkLibs = "2.1.2"
+androidDesugarJdkLibs = "2.1.3"
 coil = "2.7.0"
 
 mockk = "1.13.13"
