@@ -3,7 +3,7 @@ compose-bom = "2024.10.01"
 firebase-bom = "33.5.1"
 firebaseCrashlytics = "3.0.2"
 
-kotlin = "2.0.0"
+kotlin = "2.0.20"
 coroutines = "1.9.0"
 ksp = "2.0.0-1.0.24"
 
