@@ -41,7 +41,7 @@ accompanist = "0.37.2"
 androidDesugarJdkLibs = "2.1.4"
 coil = "2.7.0"
 
-mockk = "1.13.14"
+mockk = "1.13.16"
 
 androidxEspresso = "3.6.1"
 junit4 = "4.13.2"
