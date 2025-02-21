@@ -85,14 +85,19 @@ jobs:
 
       - name: Get latest tag
         id: last_tag
-        run: echo "LAST_TAG=$(git describe --tags --abbrev=0 --exclude=$(git describe --tags --abbrev=0))" >> $GITHUB_ENV
+        run: |
+          echo "LAST_TAG=$(git tag --sort=-creatordate | sed -n 2p)" >> $GITHUB_ENV
 
       - name: Generate changelog
         id: generate_changelog
         run: |
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          git log --pretty=format:"- %s" $LAST_TAG..HEAD >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+          if [[ -z "$LAST_TAG" ]]; then
+            echo "CHANGELOG=First release!" >> $GITHUB_ENV
+          else
+            echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+            git log --pretty=format:"- %s" $LAST_TAG..HEAD >> $GITHUB_ENV
+            echo "EOF" >> $GITHUB_ENV
+          fi
 
       - name: Create Github release
         uses: softprops/action-gh-release@v2
