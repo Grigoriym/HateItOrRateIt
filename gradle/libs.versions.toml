@@ -56,7 +56,7 @@ material = "1.12.0"
 
 robolectric = "4.14.1"
 
-moduleGraphAssertion = "2.7.1"
+moduleGraphAssertion = "2.7.3"
 
 gradleDoctor = "0.10.0"
 dependencyAnalysis = "2.10.0"
