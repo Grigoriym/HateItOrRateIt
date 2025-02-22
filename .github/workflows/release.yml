@@ -83,8 +83,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@latest
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          version: ${{ github.ref_name }}
-          output-file: "changelog.txt"
+          output-file: "false"
 
       - name: Build Release APK & AAB
         run: |
@@ -93,9 +92,11 @@ jobs:
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
+        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         with:
-          body_path: "changelog.txt"
-          tag_name: "${{ github.ref_name }}"
+          tag_name: ${{ steps.changelog.outputs.tag }}
+          release_name: ${{ steps.changelog.outputs.tag }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
           files: |
             app/build/outputs/apk/release/app-release.apk
             app/build/outputs/bundle/release/app-release.aab
