@@ -75,9 +75,13 @@ jobs:
             app/build/outputs/apl/release/
             app/build/outputs/bundle/release/
 
+      - name: Fetch all tags
+        run: git fetch --tags --force --unshallow
+
       - name: Get latest tag
+        id: last_tag
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 --exclude=$(git describe --tags --abbrev=0))
+          LAST_TAG=$(git tag --sort=-creatordate | sed -n 2p)
           if [ -z "$LAST_TAG" ]; then
             echo "LAST_TAG=none" >> $GITHUB_ENV
           else
