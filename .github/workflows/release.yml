@@ -94,7 +94,16 @@ jobs:
           if [[ "$LAST_TAG" == "none" ]]; then
             echo "First release!" > changelog.txt
           else
-            git log --pretty=format:"- %s" $LAST_TAG..HEAD > changelog.txt
+            {
+              echo "## Changes in this release:"
+              echo ""
+              gh api repos/${{ github.repository }}/pulls \
+                --jq '[.[] | select(.merged_at != null) | select(.base.ref == "master")] | map("- \(.title) by @\(.user.login) in [#\(.number)](\(.html_url))") | join("\n")' \
+                --method GET \
+                --paginate > changelog.txt
+            } || {
+              echo "FAILED TO FETCH PRs" > changelog.txt
+            }
           fi
 
       - name: Build Release APK & AAB
