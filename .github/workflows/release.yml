@@ -75,15 +75,21 @@ jobs:
             app/build/outputs/apl/release/
             app/build/outputs/bundle/release/
 
-      - name: Fetch all tags
-        run: git fetch --tags --force --unshallow
+#      - name: Fetch all tags
+#        run: git fetch --tags --force --unshallow
 
-      - name: Generate changelog
+#      - name: Generate changelog
+#        id: generate_changelog
+#        uses: TriPSs/conventional-changelog-action@latest
+#        with:
+#          github-token: ${{ secrets.GITHUB_TOKEN }}
+#          output-file: "false"
+
+      - name: "✏️ Generate release changelog"
         id: generate_changelog
-        uses: TriPSs/conventional-changelog-action@latest
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          output-file: "false"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build Release APK & AAB
         run: |
@@ -92,11 +98,8 @@ jobs:
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         with:
-          tag_name: ${{ steps.changelog.outputs.tag }}
-          release_name: ${{ steps.changelog.outputs.tag }}
-          body: ${{ steps.changelog.outputs.clean_changelog }}
+          body: "${{ steps.generate_changelog.outputs.changelog }}"
           files: |
             app/build/outputs/apk/release/app-release.apk
             app/build/outputs/bundle/release/app-release.aab
