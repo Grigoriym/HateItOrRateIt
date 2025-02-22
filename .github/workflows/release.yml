@@ -96,14 +96,16 @@ jobs:
           else
             git log --pretty=format:"- %s" $LAST_TAG..HEAD > changelog.txt
           fi
-          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-          cat changelog.txt >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
 
-      - name: Create Github release
+      - name: Build Release APK & AAB
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease bundleRelease
+
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          body: "${{ env.CHANGELOG }}"
+          body_path: "changelog.txt"
           tag_name: "${{ github.ref_name }}"
           files: |
             app/build/outputs/apk/release/app-release.apk
