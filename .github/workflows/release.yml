@@ -75,49 +75,24 @@ jobs:
             app/build/outputs/apl/release/
             app/build/outputs/bundle/release/
 
-      - name: Generate Release Notes
-        id: release_notes
-        run: |
-          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^)
-          NOTES=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"* %s")
-          echo "RELEASE_NOTES<<EOF" >> $GITHUB_ENV
-          echo "$NOTES" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
+      - name: "✏️ Generate release changelog"
+        id: generate_changelog
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
+        with:
+          onlyLastTag: "true"
+          stripHeaders: "true"
+          stripGeneratorNotice: "true"
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Create Github release
+      - name: Build Release APK & AAB
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease bundleRelease
+
+      - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ env.RELEASE_NOTES }}
+          body: "${{ steps.generate_changelog.outputs.changelog }}"
           files: |
             app/build/outputs/apk/release/app-release.apk
             app/build/outputs/bundle/release/app-release.aab
-
-#      - name: Get latest tag
-#        id: last_tag
-#        run: |
-#          LAST_TAG=$(git tag --sort=-creatordate | tail -n 2 | head -n 1)
-#          if [ -z "$LAST_TAG" ]; then
-#            echo "LAST_TAG=none" >> $GITHUB_ENV
-#          else
-#            echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
-#          fi
-#
-#      - name: Generate changelog
-#        id: generate_changelog
-#        run: |
-#          if [[ "$LAST_TAG" == "none" ]]; then
-#            echo "CHANGELOG=First release!" >> $GITHUB_ENV
-#          else
-#            echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-#            git log --pretty=format:"- %s" $LAST_TAG..HEAD >> $GITHUB_ENV
-#            echo "EOF" >> $GITHUB_ENV
-#          fi
-#
-#      - name: Create Github release
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          body: "${{ env.CHANGELOG }}"
-#          tag_name: "${{ github.ref_name }}"
-#          files: |
-#            app/build/outputs/apk/release/app-release.apk
-#            app/build/outputs/bundle/release/app-release.aab
