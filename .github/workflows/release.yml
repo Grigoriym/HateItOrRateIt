@@ -88,19 +88,23 @@ jobs:
             echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
           fi
 
-      - name: Generate changelog
+      - name: Generate changelog with PR Links
         id: generate_changelog
         run: |
           if [[ "$LAST_TAG" == "none" ]]; then
             echo "First release!" > changelog.txt
           else
             {
-              echo "## Changes in this release:"
-              echo ""
+              echo "## Changes in this release:" > changelog.txt
+              echo "" >> changelog.txt
+
+              # Fetch merged PRs between LAST_TAG and HEAD
               gh api repos/${{ github.repository }}/pulls \
-                --jq '[.[] | select(.merged_at != null) | select(.base.ref == "master")] | map("- \(.title) by @\(.user.login) in [#\(.number)](\(.html_url))") | join("\n")' \
+                --jq '[.[] | select(.merged_at != null) |
+                       select(.merged_at > "'$(git log -1 --format=%aI $LAST_TAG)'") ] |
+                     map("- \(.title) by @\(.user.login) in [#\(.number)](\(.html_url))") | join("\n")' \
                 --method GET \
-                --paginate > changelog.txt
+                --paginate >> changelog.txt
             } || {
               echo "FAILED TO FETCH PRs" > changelog.txt
             }
