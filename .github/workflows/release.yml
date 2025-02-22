@@ -94,9 +94,11 @@ jobs:
           if [[ "$LAST_TAG" == "none" ]]; then
             echo "CHANGELOG=First release!" >> $GITHUB_ENV
           else
-            echo "CHANGELOG<<EOF" >> $GITHUB_ENV
-            git log --pretty=format:"- %s" $LAST_TAG..HEAD >> $GITHUB_ENV
-            echo "EOF" >> $GITHUB_ENV
+            {
+              echo "CHANGELOG<<EOF"
+              git log --pretty=format:"- %s" $LAST_TAG..HEAD
+              echo "EOF"
+            } >> $GITHUB_ENV
           fi
 
       - name: Create Github release
