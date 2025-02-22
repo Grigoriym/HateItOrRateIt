@@ -78,44 +78,13 @@ jobs:
       - name: Fetch all tags
         run: git fetch --tags --force --unshallow
 
-      - name: Get latest tag
-        id: last_tag
-        run: |
-          LAST_TAG=$(git tag --sort=-creatordate | sed -n 2p)
-          if [ -z "$LAST_TAG" ]; then
-            echo "LAST_TAG=none" >> $GITHUB_ENV
-          else
-            echo "LAST_TAG=$LAST_TAG" >> $GITHUB_ENV
-          fi
-
-      - name: Generate changelog with PR Links
+      - name: Generate changelog
         id: generate_changelog
-        run: |
-          if [[ "$LAST_TAG" == "none" ]]; then
-            echo "First release!" > changelog.txt
-          else
-            {
-              echo "## Changes in this release:" > changelog.txt
-              echo "" >> changelog.txt
-
-              # Extract merged PRs using git log
-              git log --merges --pretty=format:"%b" $LAST_TAG..HEAD | \
-                grep -oE "#[0-9]+" | sort -u | while read pr_number; do
-                  pr_json=$(gh pr view "${pr_number#\#}" --json title,author,url)
-                  title=$(echo "$pr_json" | jq -r '.title')
-                  author=$(echo "$pr_json" | jq -r '.author.login')
-                  url=$(echo "$pr_json" | jq -r '.url')
-                  echo "- $title by @$author in [${pr_number}]($url)" >> changelog.txt
-              done
-
-              if ! grep -q "#" changelog.txt; then
-                echo "No significant changes." >> changelog.txt
-              fi
-
-            } || {
-              echo "FAILED TO FETCH PRs" > changelog.txt
-            }
-          fi
+        uses: TriPSs/conventional-changelog-action@latest
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          version: ${{ github.ref_name }}
+          output-file: "changelog.txt"
 
       - name: Build Release APK & AAB
         run: |
