@@ -21,7 +21,7 @@ inAppUpdate = "2.1.0"
 agp = "8.8.1"
 androidTools = "31.8.1"
 
-hilt = "2.54"
+hilt = "2.55"
 androidx-hilt = "1.2.0"
 navigation = "2.8.7"
 lifecycle = "2.8.7"
