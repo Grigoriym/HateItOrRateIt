@@ -77,7 +77,7 @@ jobs:
 
       - name: "✏️ Generate release changelog"
         id: generate_changelog
-        uses: janheinrichmerker/action-github-changelog-generator@v2.4
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
         with:
           onlyLastTag: "true"
           stripHeaders: "true"
