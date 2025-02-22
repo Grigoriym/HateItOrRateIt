@@ -92,14 +92,13 @@ jobs:
         id: generate_changelog
         run: |
           if [[ "$LAST_TAG" == "none" ]]; then
-            echo "CHANGELOG=First release!" >> $GITHUB_ENV
+            echo "First release!" > changelog.txt
           else
-            {
-              echo "CHANGELOG<<EOF"
-              git log --pretty=format:"- %s" $LAST_TAG..HEAD
-              echo "EOF"
-            } >> $GITHUB_ENV
+            git log --pretty=format:"- %s" $LAST_TAG..HEAD > changelog.txt
           fi
+          echo "CHANGELOG<<EOF" >> $GITHUB_ENV
+          cat changelog.txt >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Create Github release
         uses: softprops/action-gh-release@v2
