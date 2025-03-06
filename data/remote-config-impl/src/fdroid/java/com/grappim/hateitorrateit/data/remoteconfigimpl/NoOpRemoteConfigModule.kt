@@ -11,7 +11,7 @@ import dagger.hilt.components.SingletonComponent
 interface NoOpRemoteConfigModule {
 
     @Binds
-    fun bindRemoteConfig(impl: RemoteConfigManagerImpl): RemoteConfigManager
+    fun bindRemoteConfig(impl: NoOpConfigManagerImpl): RemoteConfigManager
 
     @Binds
     fun bindNoOpRemoteConfigListener(impl: NoOpRemoteConfigsListenerImpl): RemoteConfigsListener
