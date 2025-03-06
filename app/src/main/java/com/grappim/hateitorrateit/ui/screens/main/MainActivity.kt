@@ -17,13 +17,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.play.core.appupdate.AppUpdateManager
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.appupdate.AppUpdateOptions
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.InstallStatus
-import com.google.android.play.core.install.model.UpdateAvailability
-import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
+import com.grappim.hateitorrateit.appupdateapi.AppUpdateChecker
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 import com.grappim.hateitorrateit.feature.details.ui.navigation.detailsScreen
@@ -32,12 +26,15 @@ import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.utils.ui.navigation.safeClick
 import dagger.hilt.android.AndroidEntryPoint
-import timber.log.Timber
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+
+    @Inject
+    lateinit var appUpdateChecker: AppUpdateChecker
 
     override fun onResume() {
         super.onResume()
@@ -63,35 +60,15 @@ class MainActivity : AppCompatActivity() {
         if (viewModel.inAppUpdateEnabled.value.not()) {
             return
         }
-        val appUpdateManager: AppUpdateManager = AppUpdateManagerFactory.create(this)
-        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
-            Timber.d("appUpdateInfo: $info")
-            val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-            if (info.isFlexibleUpdateAllowed && isUpdateAvailable) {
-                val type = AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build()
-                appUpdateManager.startUpdateFlowForResult(
-                    info,
-                    this,
-                    type,
-                    0
-                )
+        appUpdateChecker.checkForUpdates {
+            Snackbar.make(
+                window.decorView.rootView,
+                getString(R.string.app_update_downloaded),
+                Snackbar.LENGTH_INDEFINITE
+            ).apply {
+                setAction(getString(R.string.restart)) { appUpdateChecker.completeUpdate() }
+                show()
             }
-            if (info.installStatus() == InstallStatus.DOWNLOADED) {
-                popupSnackbarForCompleteUpdate(appUpdateManager)
-            }
-        }.addOnFailureListener {
-            Timber.e(it, "appUpdateInfo failure")
-        }
-    }
-
-    private fun popupSnackbarForCompleteUpdate(appUpdateManager: AppUpdateManager) {
-        Snackbar.make(
-            window.decorView.rootView,
-            getString(R.string.app_update_downloaded),
-            Snackbar.LENGTH_INDEFINITE
-        ).apply {
-            setAction(getString(R.string.restart)) { appUpdateManager.completeUpdate() }
-            show()
         }
     }
 

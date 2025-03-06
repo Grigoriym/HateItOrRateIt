@@ -169,6 +169,7 @@ gradleDoctor = { id = "com.osacky.doctor", version.ref = "gradleDoctor" }
 dependencyAnalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 
 # Plugins definded in the included build-logic
+hateitorrateit-android-app = { id = "hateitorrateit.android.app", version = "unspecified" }
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }
 hateitorrateit-android-library = { id = "hateitorrateit.android.library", version = "unspecified" }
 hateitorrateit-android-library-compose = { id = "hateitorrateit.android.library.compose", version = "unspecified" }
