@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.data.analyticsimpl.di
+package com.grappim.hateitorrateit.data.analyticsimpl
 
 import com.grappim.hateitorrateit.data.analyticsapi.AnalyticsController
 import timber.log.Timber

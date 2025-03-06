@@ -1,5 +1,3 @@
-@file:Suppress("EnumEntryName")
-
 package com.grappim.hateitorrateit
 
 import com.android.build.api.dsl.ApplicationExtension
@@ -8,16 +6,17 @@ import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ProductFlavor
 
 enum class FlavorDimensions {
-    store
+    STORE
 }
 
 enum class AppFlavors(
+    val title: String,
     val dimensions: FlavorDimensions,
     val versionNameSuffix: String,
     val applicationIdSuffix: String? = null
 ) {
-    gplay(FlavorDimensions.store, "-gplay"),
-    fdroid(FlavorDimensions.store, "-fdroid", ".fdroid")
+    GPLAY("gplay", FlavorDimensions.STORE, "-gplay"),
+    FDROID("fdroid", FlavorDimensions.STORE, "-fdroid", ".fdroid")
 }
 
 fun configureFlavors(
@@ -31,7 +30,7 @@ fun configureFlavors(
 
         productFlavors {
             AppFlavors.values().forEach { hiorFlavor ->
-                register(hiorFlavor.name) {
+                register(hiorFlavor.title) {
                     dimension = hiorFlavor.dimensions.name
                     flavorConfigurationBlock(this, hiorFlavor)
                     if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {

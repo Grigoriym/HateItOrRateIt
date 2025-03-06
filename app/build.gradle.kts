@@ -116,7 +116,7 @@ android {
 
 // Disable certain buildVariants
 androidComponents {
-    val flavorToBlock = AppFlavors.gplay.dimensions.name to AppFlavors.gplay.name
+    val flavorToBlock = AppFlavors.GPLAY.dimensions.name to AppFlavors.GPLAY.title
     beforeVariants { variantBuilder ->
         if (variantBuilder.productFlavors.contains(flavorToBlock) &&
             variantBuilder.buildType == AppBuildTypes.DEBUG.name.lowercase()
@@ -130,7 +130,7 @@ androidComponents {
 afterEvaluate {
     android.applicationVariants.configureEach {
         logger.lifecycle("Supported application variant: $name")
-        if (name == "${AppFlavors.gplay.name}${AppBuildTypes.RELEASE.name.capitalize()}") {
+        if (name == "${AppFlavors.GPLAY.title}${AppBuildTypes.RELEASE.name.capitalize()}") {
             logger.lifecycle("✅ Applying google-services and crashlytics plugins to $name")
             apply(plugin = libs.plugins.gms.googleServices.get().pluginId)
             apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
