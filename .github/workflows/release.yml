@@ -52,19 +52,16 @@ jobs:
       - name: Decode google-services.json
         run: echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x ./gradlew
-
       - name: Restore release keystore.jks
         run: echo $ENCODED_STRING_R | base64 -d > ./release.keystore.jks
 
       - name: Restore debug keystore.jks
         run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
-      - name: Build Release APK & AAB
+      - name: Build Release APKs
         run: |
           chmod +x ./gradlew
-          ./gradlew assembleRelease bundleRelease
+          ./gradlew assembleFdroidRelease assembleGplayRelease
 
       - name: Upload Release Build To Artifacts
         uses: actions/upload-artifact@v4
@@ -88,5 +85,5 @@ jobs:
         with:
           body: "${{ steps.generate_changelog.outputs.changelog }}"
           files: |
-            app/build/outputs/apk/release/app-release.apk
-            app/build/outputs/bundle/release/app-release.aab
+            app/build/outputs/apk/fdroid/release/app-fdroid-release.apk
+            app/build/outputs/apk/gplay/release/app-gplay-release.apk
