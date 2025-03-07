@@ -1,18 +1,17 @@
 import com.grappim.hateitorrateit.AppBuildTypes
-import com.grappim.hateitorrateit.AppFlavors
-import dagger.hilt.android.plugin.util.capitalize
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.gms.googleServices) apply false
-    alias(libs.plugins.firebase.crashlytics) apply false
     alias(libs.plugins.hateitorrateit.android.hilt)
     alias(libs.plugins.hateitorrateit.android.app)
     alias(libs.plugins.moduleGraphAssertion)
     alias(libs.plugins.compose)
+
+    alias(libs.plugins.gms.googleServices) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
 }
 
 android {
@@ -114,28 +113,20 @@ android {
     }
 }
 
-// Disable certain buildVariants
-androidComponents {
-    val flavorToBlock = AppFlavors.GPLAY.dimensions.name to AppFlavors.GPLAY.title
-    beforeVariants { variantBuilder ->
-        if (variantBuilder.productFlavors.contains(flavorToBlock) &&
-            variantBuilder.buildType == AppBuildTypes.DEBUG.name.lowercase()
-        ) {
-            variantBuilder.enable = false
-        }
-    }
+// ✅ Safe Conditional Plugin Application:
+val isGooglePlayBuild = project.gradle.startParameter.taskRequests.toString().contains("Gplay")
+
+logger.lifecycle("${project.gradle.startParameter.taskRequests}")
+project.gradle.startParameter.taskRequests.forEach {
+    logger.lifecycle("🔥 Detected Gradle Task: $it")
 }
 
-// Enable google plugins only on selected buildVariants
-afterEvaluate {
-    android.applicationVariants.configureEach {
-        logger.lifecycle("Supported application variant: $name")
-        if (name == "${AppFlavors.GPLAY.title}${AppBuildTypes.RELEASE.name.capitalize()}") {
-            logger.lifecycle("✅ Applying google-services and crashlytics plugins to $name")
-            apply(plugin = libs.plugins.gms.googleServices.get().pluginId)
-            apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
-        }
-    }
+if (isGooglePlayBuild) {
+    logger.lifecycle("✅ Applying Google Services Plugin due to detected Google Play Build!")
+    apply(plugin = libs.plugins.gms.googleServices.get().pluginId)
+    apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
+} else {
+    logger.lifecycle("🚫 Google Services Plugin is NOT applied for this variant.")
 }
 
 composeCompiler {
@@ -216,7 +207,6 @@ dependencies {
     gplayImplementation(libs.firebase.crashlytics)
     gplayImplementation(libs.firebase.analytics)
 
-//    gplayImplementation(libs.google.inAppUpdateKtx)
     implementation(libs.google.material)
 
     testImplementation(kotlin("test"))

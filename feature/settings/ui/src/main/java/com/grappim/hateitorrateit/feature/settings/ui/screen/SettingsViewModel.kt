@@ -42,7 +42,8 @@ class SettingsViewModel @Inject constructor(
             trackScreenStart = ::trackScreenStart,
             onDarkThemeConfigClicked = ::onDarkThemeConfigClicked,
             localeOptions = localeOptionsGenerator.getLocaleOptions(),
-            appInfo = appInfoProvider.getAppInfo()
+            appInfo = appInfoProvider.getAppInfo(),
+            isFdroidBuild = appInfoProvider.isFdroidBuild()
         )
     )
     val viewState = _viewState.asStateFlow()

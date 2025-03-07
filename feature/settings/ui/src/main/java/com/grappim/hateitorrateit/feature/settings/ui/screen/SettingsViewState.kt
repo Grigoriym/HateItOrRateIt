@@ -27,5 +27,6 @@ data class SettingsViewState(
 
     val localeOptions: Map<NativeText, String>,
 
-    val appInfo: String
+    val appInfo: String,
+    val isFdroidBuild: Boolean
 )

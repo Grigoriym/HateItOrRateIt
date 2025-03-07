@@ -64,6 +64,8 @@ class SettingsNavScreenViewModelTest {
 
         every { appInfoProvider.getAppInfo() } returns "appInfo"
 
+        every { appInfoProvider.isFdroidBuild() } returns true
+
         viewModel = SettingsViewModel(
             dataCleaner = dataCleaner,
             localDataStorage = localDataStorage,

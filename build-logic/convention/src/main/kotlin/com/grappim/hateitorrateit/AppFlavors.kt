@@ -4,6 +4,8 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.ApplicationProductFlavor
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ProductFlavor
+import org.gradle.api.Project
+import org.gradle.kotlin.dsl.apply
 
 enum class FlavorDimensions {
     STORE
@@ -21,9 +23,10 @@ enum class AppFlavors(
 
 fun configureFlavors(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
-    flavorConfigurationBlock: ProductFlavor.(flavor: AppFlavors) -> Unit = {},
+    flavorConfigurationBlock: ProductFlavor.(flavor: AppFlavors) -> Unit = {}
 ) {
     commonExtension.apply {
+
         FlavorDimensions.values().forEach { flavorDimension ->
             flavorDimensions += flavorDimension.name
         }

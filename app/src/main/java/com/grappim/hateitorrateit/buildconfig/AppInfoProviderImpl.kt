@@ -10,4 +10,5 @@ class AppInfoProviderImpl @Inject constructor() : AppInfoProvider {
         BuildConfig.BUILD_TYPE
 
     override fun isDebug(): Boolean = BuildConfig.DEBUG
+    override fun isFdroidBuild(): Boolean = BuildConfig.FLAVOR == "fdroid"
 }

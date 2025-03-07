@@ -155,43 +155,46 @@ private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) 
                     }
                 )
             }
-            item {
-                ListItem(
-                    modifier = Modifier
-                        .clickable {
-                            state.onCrashlyticsToggle()
-                        }
-                        .testTag(CRASHLYTICS_TILE_TAG),
-                    text = {
-                        Text(text = stringResource(id = R.string.toggle_crashlytics))
-                    },
-                    trailing = {
-                        FeatureEnabledIcon(state.isCrashesCollectionEnabled)
-                    },
-                    secondaryText = {
-                        Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
-                    }
-                )
-            }
-            item {
-                ListItem(
-                    modifier = Modifier
-                        .clickable {
-                            state.onAnalyticsToggle()
-                        }
-                        .testTag(ANALYTICS_TILE_TAG),
-                    text = {
-                        Text(text = stringResource(id = R.string.toggle_analytics))
-                    },
-                    trailing = {
-                        FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
-                    },
-                    secondaryText = {
-                        Text(text = stringResource(id = R.string.analytics_settings_subtitle))
-                    }
-                )
-            }
 
+            if (!state.isFdroidBuild) {
+                item {
+                    ListItem(
+                        modifier = Modifier
+                            .clickable {
+                                state.onCrashlyticsToggle()
+                            }
+                            .testTag(CRASHLYTICS_TILE_TAG),
+                        text = {
+                            Text(text = stringResource(id = R.string.toggle_crashlytics))
+                        },
+                        trailing = {
+                            FeatureEnabledIcon(state.isCrashesCollectionEnabled)
+                        },
+                        secondaryText = {
+                            Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+                        }
+                    )
+                }
+
+                item {
+                    ListItem(
+                        modifier = Modifier
+                            .clickable {
+                                state.onAnalyticsToggle()
+                            }
+                            .testTag(ANALYTICS_TILE_TAG),
+                        text = {
+                            Text(text = stringResource(id = R.string.toggle_analytics))
+                        },
+                        trailing = {
+                            FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
+                        },
+                        secondaryText = {
+                            Text(text = stringResource(id = R.string.analytics_settings_subtitle))
+                        }
+                    )
+                }
+            }
             item {
                 PlatoHeightSpacer16()
                 DarkModePreferencesContent(state = state)

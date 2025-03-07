@@ -2,6 +2,8 @@ package com.grappim.hateitorrateit.data.remoteconfigapi
 
 const val GITHUB_REPO_URL = "https://github.com/Grigoriym/HateItOrRateIt"
 const val PRIVACY_POLICY_URL = "https://github.com/Grigoriym/HateItOrRateIt/wiki/Privacy-Policy"
+const val FDROID_PRIVACY_POLICY_URL =
+    "https://github.com/Grigoriym/HateItOrRateIt/wiki/FDroid-Privacy-policy"
 
 data class RemoteConfigDefaults(
     val defaults: Map<String, Any> = mapOf(
