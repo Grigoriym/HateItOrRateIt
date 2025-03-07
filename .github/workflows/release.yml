@@ -65,9 +65,9 @@ jobs:
         run: |
           ./gradlew assembleFdroidRelease
 
-      - name: Build Release Gplay APK
+      - name: Build Release Gplay APK and AAB
         run: |
-          ./gradlew assembleGplayRelease
+          ./gradlew assembleGplayRelease bundleGplayRelease
 
       - name: Upload Release Build To Artifacts
         uses: actions/upload-artifact@v4
@@ -93,3 +93,4 @@ jobs:
           files: |
             app/build/outputs/apk/fdroid/release/app-fdroid-release.apk
             app/build/outputs/apk/gplay/release/app-gplay-release.apk
+            app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
