@@ -4,8 +4,6 @@ import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.ApplicationProductFlavor
 import com.android.build.api.dsl.CommonExtension
 import com.android.build.api.dsl.ProductFlavor
-import org.gradle.api.Project
-import org.gradle.kotlin.dsl.apply
 
 enum class FlavorDimensions {
     STORE
