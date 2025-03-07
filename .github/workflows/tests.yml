@@ -1,0 +1,24 @@
+name: Unit Tests
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    needs: android-setup
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/android-setup.yml
+
+      - name: Run Unit Tests
+        run: ./gradlew testDebugUnitTest --no-daemon
+
+      - name: Upload Coverage Reports
+        uses: codecov/codecov-action@v5
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        with:
+          files: ./build/reports/jacoco/jacocoAggregatedReport/jacocoTestReport.xml
+          fail_ci_if_error: true
