@@ -12,9 +12,9 @@ dependencies {
     implementation(projects.core.async)
     implementation(projects.core.appinfoApi)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.config)
-    implementation(libs.firebase.analytics)
+    gplayImplementation(platform(libs.firebase.bom))
+    gplayImplementation(libs.firebase.config)
+    gplayImplementation(libs.firebase.analytics)
 
     implementation(libs.timber)
 }

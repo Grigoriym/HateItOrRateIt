@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name" translatable="false">Hate Rate</string>
     <string name="app_name_debug" translatable="false">Dbg Hate Rate</string>
+    <string name="app_name_gplay" translatable="false">Hate Rate</string>
 
     <string name="en" translatable="false">English</string>
     <string name="fr" translatable="false">Français</string>

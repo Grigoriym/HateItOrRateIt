@@ -45,5 +45,9 @@ gradlePlugin {
             id = "hateitorrateit.java.library"
             implementationClass = "JavaLibraryConventionPlugin"
         }
+        register("androidApp") {
+            id = "hateitorrateit.android.app"
+            implementationClass = "AndroidApplicationConventionPlugin"
+        }
     }
 }

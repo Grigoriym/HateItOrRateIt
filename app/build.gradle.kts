@@ -1,15 +1,17 @@
-import com.grappim.hateitorrateit.HateItOrRateItBuildTypes
+import com.grappim.hateitorrateit.AppBuildTypes
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.gms.googleServices)
-    alias(libs.plugins.firebase.crashlytics)
     alias(libs.plugins.hateitorrateit.android.hilt)
+    alias(libs.plugins.hateitorrateit.android.app)
     alias(libs.plugins.moduleGraphAssertion)
     alias(libs.plugins.compose)
+
+    alias(libs.plugins.gms.googleServices) apply false
+    alias(libs.plugins.firebase.crashlytics) apply false
 }
 
 android {
@@ -58,12 +60,12 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = HateItOrRateItBuildTypes.DEBUG.applicationIdSuffix
+            applicationIdSuffix = AppBuildTypes.DEBUG.applicationIdSuffix
 
             signingConfig = signingConfigs.getByName("debug")
         }
         release {
-            applicationIdSuffix = HateItOrRateItBuildTypes.RELEASE.applicationIdSuffix
+            applicationIdSuffix = AppBuildTypes.RELEASE.applicationIdSuffix
 
             isMinifyEnabled = true
             isShrinkResources = true
@@ -111,6 +113,22 @@ android {
     }
 }
 
+// ✅ Safe Conditional Plugin Application:
+val isGooglePlayBuild = project.gradle.startParameter.taskRequests.toString().contains("Gplay")
+
+logger.lifecycle("${project.gradle.startParameter.taskRequests}")
+project.gradle.startParameter.taskRequests.forEach {
+    logger.lifecycle("🔥 Detected Gradle Task: $it")
+}
+
+if (isGooglePlayBuild) {
+    logger.lifecycle("✅ Applying Google Services Plugin due to detected Google Play Build!")
+    apply(plugin = libs.plugins.gms.googleServices.get().pluginId)
+    apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
+} else {
+    logger.lifecycle("🚫 Google Services Plugin is NOT applied for this variant.")
+}
+
 composeCompiler {
     enableStrongSkippingMode = true
 
@@ -119,7 +137,6 @@ composeCompiler {
 
 dependencies {
     implementation(projects.core.navigation)
-
     implementation(projects.uikit)
 
     implementation(projects.utils.ui)
@@ -135,6 +152,8 @@ dependencies {
 
     implementation(projects.core.async)
     implementation(projects.core.appinfoApi)
+    implementation(projects.core.appUpdateApi)
+    implementation(projects.core.appUpdateImpl)
 
     implementation(projects.data.db)
     implementation(projects.data.repoApi)
@@ -184,11 +203,10 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.testManifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.analytics)
+    gplayImplementation(platform(libs.firebase.bom))
+    gplayImplementation(libs.firebase.crashlytics)
+    gplayImplementation(libs.firebase.analytics)
 
-    implementation(libs.google.inAppUpdateKtx)
     implementation(libs.google.material)
 
     testImplementation(kotlin("test"))

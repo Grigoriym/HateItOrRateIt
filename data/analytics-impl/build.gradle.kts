@@ -10,9 +10,9 @@ android {
 dependencies {
     implementation(projects.data.analyticsApi)
 
-    releaseImplementation(platform(libs.firebase.bom))
-    releaseImplementation(libs.firebase.crashlytics)
-    releaseImplementation(libs.firebase.analytics)
+    gplayImplementation(platform(libs.firebase.bom))
+    gplayImplementation(libs.firebase.crashlytics)
+    gplayImplementation(libs.firebase.analytics)
 
-    debugImplementation(libs.timber)
+    implementation(libs.timber)
 }

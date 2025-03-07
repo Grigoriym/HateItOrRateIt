@@ -135,7 +135,10 @@ private val coverageExclusions = listOf(
     "**/WorkerControllerImpl",
 
     "**/TestUtils",
-    "**/HioriTestRunner"
+    "**/HioriTestRunner",
+
+    "**/NoOp*",
+    "**/AppInfoProviderImpl"
 ).flatMap {
     listOf(
         "$it.class",
