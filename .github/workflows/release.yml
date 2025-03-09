@@ -63,7 +63,7 @@ jobs:
 
       - name: Build Release Fdroid APK
         run: |
-          ./gradlew assembleFdroidRelease
+          ./gradlew assembleFdroidRelease assembleFdroidDebug
 
       - name: Build Release Gplay APK and AAB
         run: |
