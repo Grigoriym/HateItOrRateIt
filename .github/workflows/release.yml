@@ -93,6 +93,6 @@ jobs:
           body: "${{ steps.generate_changelog.outputs.changelog }}"
           files: |
             app/build/outputs/apk/fdroid/release/app-fdroid-release.apk
-            app/build/outputs/apk/fdroid/release/app-fdroid-debug.apk
+            app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
             app/build/outputs/apk/gplay/release/app-gplay-release.apk
             app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
