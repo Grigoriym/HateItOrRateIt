@@ -26,3 +26,11 @@ local.properties
 feature/productmanager/build
 testing/build
 .kotlin
+
+/Gemfile
+/Gemfile.lock
+/fastlane/hateitorrateit-service-account.json
+/fastlane/Appfile
+/fastlane/Fastfile
+/fastlane/README.md
+/fastlane/report.xml
