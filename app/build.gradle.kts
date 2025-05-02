@@ -113,7 +113,7 @@ android {
     }
 }
 
-// ✅ Safe Conditional Plugin Application:
+// It will find a gplay build only if start building specifically gplay build
 val isGooglePlayBuild = project.gradle.startParameter.taskRequests.toString().contains("Gplay")
 
 logger.lifecycle("${project.gradle.startParameter.taskRequests}")
@@ -127,6 +127,13 @@ if (isGooglePlayBuild) {
     apply(plugin = libs.plugins.firebase.crashlytics.get().pluginId)
 } else {
     logger.lifecycle("🚫 Google Services Plugin is NOT applied for this variant.")
+    // Disable DependencyInfoBlock for fdroid builds
+    android {
+        dependenciesInfo {
+            includeInApk = false
+            includeInBundle = false
+        }
+    }
 }
 
 composeCompiler {
