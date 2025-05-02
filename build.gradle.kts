@@ -22,10 +22,15 @@ plugins {
 }
 
 doctor {
+    failOnEmptyDirectories.set(false)
     enableTestCaching.set(false)
     failOnEmptyDirectories.set(true)
     warnWhenNotUsingParallelGC.set(true)
     disallowCleanTaskDependencies.set(true)
+    warnWhenJetifierEnabled.set(true)
+    javaHome {
+        failOnError.set(false)
+    }
 }
 
 allprojects {
