@@ -56,4 +56,4 @@ jobs:
         run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
       - name: Assemble gradle project
-        run: ./gradlew assembleFdroidDebug assembleGplayDebug
+        run: ./gradlew assembleFdroidDebug
