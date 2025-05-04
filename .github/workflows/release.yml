@@ -6,7 +6,7 @@ on:
       - v*
 
 jobs:
-  build:
+  release:
     permissions: write-all
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
