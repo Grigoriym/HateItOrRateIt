@@ -55,5 +55,5 @@ jobs:
       - name: Restore debug keystore.jks
         run: echo $ENCODED_STRING_D | base64 -d > ./debug.keystore.jks
 
-      - name: Build gradle project
-        run: ./gradlew build
+      - name: Assemble gradle project
+        run: ./gradlew assembleFdroidDebug

@@ -12,11 +12,10 @@ enum class FlavorDimensions {
 enum class AppFlavors(
     val title: String,
     val dimensions: FlavorDimensions,
-    val versionNameSuffix: String,
     val applicationIdSuffix: String? = null
 ) {
-    GPLAY("gplay", FlavorDimensions.STORE, "-gplay"),
-    FDROID("fdroid", FlavorDimensions.STORE, "-fdroid", ".fdroid")
+    GPLAY("gplay", FlavorDimensions.STORE),
+    FDROID("fdroid", FlavorDimensions.STORE, ".fdroid")
 }
 
 fun configureFlavors(
@@ -35,7 +34,6 @@ fun configureFlavors(
                     dimension = hiorFlavor.dimensions.name
                     flavorConfigurationBlock(this, hiorFlavor)
                     if (this@apply is ApplicationExtension && this is ApplicationProductFlavor) {
-                        versionNameSuffix = hiorFlavor.versionNameSuffix
                         if (hiorFlavor.applicationIdSuffix != null) {
                             applicationIdSuffix = hiorFlavor.applicationIdSuffix
                         }
