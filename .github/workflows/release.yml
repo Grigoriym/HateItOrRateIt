@@ -74,9 +74,8 @@ jobs:
         with:
           name: release-artifacts
           path: |
-            app/build/outputs/apk/fdroid/release/
-            app/build/outputs/apk/fdroid/debug/
-            app/build/outputs/apk/gplay/release/
+            app/build/outputs/apk/*
+            app/build/outputs/bundle/*
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
@@ -86,7 +85,6 @@ jobs:
           make_latest: true
           preserve_order: true
           files: |
-            app/build/outputs/apk/fdroid/release/app-fdroid-release.apk
-            app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
+            app/build/outputs/apk/fdroid/*
             app/build/outputs/apk/gplay/release/app-gplay-release.apk
             app/build/outputs/bundle/gplayRelease/app-gplay-release.aab
