@@ -22,11 +22,11 @@ jobs:
 
       GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
     steps:
-      - name: Check out the repo
-        uses: actions/checkout@v4
+#      - name: Check out the repo
+#        uses: actions/checkout@v4
 
       - name: Setup Android Environment
-        uses: ./.github/actions/android_setup.yml
+        uses: ./.github/workflows/android_setup.yml
 #      - name: Check out the repo
 #        uses: actions/checkout@v4
 #
