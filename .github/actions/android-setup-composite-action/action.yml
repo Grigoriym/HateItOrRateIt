@@ -30,4 +30,5 @@ runs:
       uses: android-actions/setup-android@v3
 
     - name: Grant execute permission for gradlew
+      shell: bash
       run: chmod +x ./gradlew
