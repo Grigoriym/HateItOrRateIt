@@ -90,7 +90,11 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          body: "${{ steps.generate_changelog.outputs.changelog }}"
+          #body: "${{ steps.generate_changelog.outputs.changelog }}"
+          generate_release_notes: true
+          draft: false
+          make_latest: true
+          preserve_order: true
           files: |
             app/build/outputs/apk/fdroid/release/app-fdroid-release.apk
             app/build/outputs/apk/fdroid/debug/app-fdroid-debug.apk
