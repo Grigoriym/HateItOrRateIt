@@ -45,8 +45,6 @@ include(
 
 include(
     ":data:db",
-    ":data:worker-api",
-    ":data:worker-impl",
     ":data:repo-api",
     ":data:repo-impl"
 )

@@ -25,7 +25,6 @@ hilt = "2.55"
 androidx-hilt = "1.2.0"
 navigation = "2.8.7"
 lifecycle = "2.8.7"
-work = "2.10.0"
 appcompat = "1.7.0"
 core-ktx = "1.15.0"
 startup = "1.2.0"
@@ -83,11 +82,7 @@ androidx-room-testing = { module = "androidx.room:room-testing", version.ref = "
 
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 
-androidx-work-runtime = { module = "androidx.work:work-runtime-ktx", version.ref = "work" }
-androidx-work-testing = { module = "androidx.work:work-testing", version.ref = "work" }
-
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidx-hilt" }
-androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "androidx-hilt" }
 androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "androidx-hilt" }
 
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

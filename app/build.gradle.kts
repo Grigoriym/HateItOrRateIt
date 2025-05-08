@@ -171,8 +171,6 @@ dependencies {
     implementation(projects.data.remoteConfigImpl)
     implementation(projects.data.localDatastorageApi)
     implementation(projects.data.localDatastorageImpl)
-    implementation(projects.data.workerApi)
-    implementation(projects.data.workerImpl)
 
     implementation(projects.feature.home.ui)
     implementation(projects.feature.productmanager.ui)
@@ -188,10 +186,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
 
-    implementation(libs.androidx.work.runtime)
-    implementation(libs.androidx.hilt.work)
     ksp(libs.androidx.hilt.compiler)
-
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
