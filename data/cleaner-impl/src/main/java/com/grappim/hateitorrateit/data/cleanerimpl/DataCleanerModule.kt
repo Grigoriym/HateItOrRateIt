@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.data.cleanerimpl
 
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
+import com.grappim.hateitorrateit.data.cleanerapi.EmptyFilesCleaner
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -11,4 +12,7 @@ interface DataCleanerModule {
 
     @Binds
     fun bindDataCleaner(impl: DataCleanerImpl): DataCleaner
+
+    @Binds
+    fun bindEmptyFilesCleaner(impl: EmptyFilesCleanerImpl): EmptyFilesCleaner
 }
