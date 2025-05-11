@@ -137,7 +137,6 @@ private val coverageExclusions = listOf(
     "**/*NavUtils",
     "**/DebugAnalyticsControllerImpl",
     "**/RemoteConfigsListenerImpl",
-    "**/WorkerControllerImpl",
 
     "**/TestUtils",
     "**/HioriTestRunner",

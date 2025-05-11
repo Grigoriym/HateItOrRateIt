@@ -2,10 +2,10 @@ package com.grappim.hateitorrateit.ui.screens.main
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.grappim.hateitorrateit.data.cleanerapi.EmptyFilesCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigsListener
-import com.grappim.hateitorrateit.data.workerapi.WorkerController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    workerController: WorkerController,
+    private val emptyFilesCleaner: EmptyFilesCleaner,
     private val localDataStorage: LocalDataStorage,
     remoteConfigsListener: RemoteConfigsListener
 ) : ViewModel() {
@@ -38,12 +38,16 @@ class MainViewModel @Inject constructor(
         )
 
     init {
-        workerController.startCleaning()
-
         viewModelScope.launch {
-            localDataStorage.darkThemeConfig.collect { value ->
-                _viewState.update {
-                    it.copy(darkThemeConfig = value)
+            launch {
+                emptyFilesCleaner.clean()
+            }
+
+            launch {
+                localDataStorage.darkThemeConfig.collect { value ->
+                    _viewState.update {
+                        it.copy(darkThemeConfig = value)
+                    }
                 }
             }
         }

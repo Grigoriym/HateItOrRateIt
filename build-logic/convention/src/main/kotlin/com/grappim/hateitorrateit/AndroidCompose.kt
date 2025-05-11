@@ -30,11 +30,5 @@ internal fun Project.configureAndroidCompose(
             }
         }
     }
-    configureKotlin()
 }
 
-private fun Project.configureKotlin() {
-    tasks.withType<KotlinJvmCompile>().configureEach {
-        compilerOptions {}
-    }
-}

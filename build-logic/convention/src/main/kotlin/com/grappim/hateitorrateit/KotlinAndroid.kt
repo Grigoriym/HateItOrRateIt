@@ -43,10 +43,8 @@ internal fun Project.configureKotlinAndroid(
 
     configureKotlin()
 
-    val libs = extensions.getByType<VersionCatalogsExtension>().named("libs")
-
     dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.desugarJdkLibs").get())
+        "coreLibraryDesugaring"(libs.findLibrary("android.desugarJdkLibs").get())
     }
 }
 
@@ -54,10 +52,6 @@ private fun Project.configureKotlin() {
     tasks.withType<KotlinJvmCompile>().configureEach {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
-            // Treat all Kotlin warnings as errors (disabled by default)
-            // Override by setting warningsAsErrors=true in your ~/.gradle/gradle.properties
-            val warningsAsErrors: String? by project
-            allWarningsAsErrors.set(warningsAsErrors.toBoolean())
         }
     }
 }
