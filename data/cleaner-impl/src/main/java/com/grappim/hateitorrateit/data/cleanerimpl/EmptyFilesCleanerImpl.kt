@@ -10,6 +10,7 @@ import timber.log.Timber
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
+@Suppress("TooGenericExceptionCaught")
 class EmptyFilesCleanerImpl @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,
     private val dataCleaner: DataCleaner,
