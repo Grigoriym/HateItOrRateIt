@@ -11,12 +11,11 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.compose) apply false
+
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
-
     alias(libs.plugins.jacocoAggregationResults)
     alias(libs.plugins.jacocoAggregationCoverage)
-
     alias(libs.plugins.gradleDoctor)
     alias(libs.plugins.dependencyAnalysis)
 }
@@ -62,7 +61,9 @@ subprojects {
         plugin("org.jlleitschuh.gradle.ktlint")
     }
 
+    // https://github.com/cortinico/kotlin-android-template/
     detekt {
+        buildUponDefaultConfig = true
         parallel = true
         config.setFrom(rootProject.files("config/detekt/detekt.yml"))
         allRules = false

@@ -5,13 +5,6 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.utils.ui"
-
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-            isIncludeAndroidResources = true
-        }
-    }
 }
 
 dependencies {

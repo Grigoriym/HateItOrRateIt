@@ -1,45 +1,48 @@
 [versions]
-compose-bom = "2025.02.00"
-firebase-bom = "33.9.0"
-firebaseCrashlytics = "3.0.3"
-
-kotlin = "2.1.10"
-coroutines = "1.10.1"
-ksp = "2.1.10-1.0.30"
+compose-bom = "2025.05.00"
+firebase-bom = "33.13.0"
 
 compileSdk = "35"
 minSdk = "24"
 targetSdk = "35"
 
+agp = "8.10.0"
+androidTools = "31.10.0"
+androidDesugarJdkLibs = "2.1.5"
+
+kotlin = "2.1.10"
+coroutines = "1.10.1"
+ksp = "2.1.10-1.0.30"
+
 detekt = "1.23.8"
 ktlint = "12.1.2"
 jacocoAggregation = "2.4.4"
+moduleGraphAssertion = "2.7.3"
+gradleDoctor = "0.10.0"
+dependencyAnalysis = "2.10.1"
 
 gms = "4.4.2"
 inAppUpdate = "2.1.0"
+firebaseCrashlytics = "3.0.3"
+material = "1.12.0"
 
-agp = "8.8.1"
-androidTools = "31.8.1"
-
-hilt = "2.55"
+hilt = "2.56"
 androidx-hilt = "1.2.0"
-navigation = "2.8.7"
-lifecycle = "2.8.7"
+navigation = "2.9.0"
+lifecycle = "2.9.0"
 appcompat = "1.7.0"
-core-ktx = "1.15.0"
+core-ktx = "1.16.0"
 startup = "1.2.0"
-timber = "5.0.1"
-datastore-prefs = "1.1.2"
-activity-compose = "1.10.0"
-room = "2.6.1"
-sqlite = "2.4.0"
+datastore-prefs = "1.1.6"
+activity-compose = "1.10.1"
+room = "2.7.1"
+sqlite = "2.5.1"
 archCore = "2.2.0"
 
 accompanist = "0.37.2"
 
-androidDesugarJdkLibs = "2.1.4"
 coil = "2.7.0"
-
+timber = "5.0.1"
 mockk = "1.13.16"
 
 androidxEspresso = "3.6.1"
@@ -51,14 +54,7 @@ androidx-junit = "1.2.1"
 androidxTestRunner = "1.6.2"
 androidxTestRules = "1.6.1"
 
-material = "1.12.0"
-
 robolectric = "4.14.1"
-
-moduleGraphAssertion = "2.7.3"
-
-gradleDoctor = "0.10.0"
-dependencyAnalysis = "2.10.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
