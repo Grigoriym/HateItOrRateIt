@@ -34,25 +34,17 @@ doctor {
 
 allprojects {
     tasks.withType<Test> {
+        failFast = true
+        reports {
+            html.required.set(true)
+        }
         testLogging {
+            events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+            showStandardStreams = true
             exceptionFormat = TestExceptionFormat.FULL
-            showCauses = true
             showExceptions = true
-            showStackTraces = true
         }
     }
-}
-
-val runAndroidTests by tasks.creating {
-    group = "verification"
-    description = "Runs Android instrumented tests only in specific modules"
-
-    dependsOn(
-        ":app:connectedAndroidTest",
-        ":data:db:connectedAndroidTest",
-        ":feature:settings:ui:connectedAndroidTest",
-        ":data:local-datastorage-impl:connectedAndroidTest"
-    )
 }
 
 subprojects {
@@ -69,24 +61,21 @@ subprojects {
         allRules = false
     }
 
-    ktlint {
-        android = true
-        ignoreFailures = false
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        android.set(true)
+        ignoreFailures.set(false)
+        verbose.set(true)
+        outputColorName.set("RED")
+        outputToConsole.set(true)
         reporters {
+            reporter(ReporterType.PLAIN)
+            reporter(ReporterType.CHECKSTYLE)
             reporter(ReporterType.HTML)
+            reporter(ReporterType.JSON)
         }
-    }
-
-    tasks.withType<Test> {
-        failFast = true
-        reports {
-            html.required.set(true)
-        }
-        testLogging {
-            events(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-            showStandardStreams = true
-            exceptionFormat = TestExceptionFormat.FULL
-            showExceptions = true
+        filter {
+            exclude("**/generated/**")
+            include("**/kotlin/**")
         }
     }
 }
