@@ -11,12 +11,11 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.compose) apply false
+
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
-
     alias(libs.plugins.jacocoAggregationResults)
     alias(libs.plugins.jacocoAggregationCoverage)
-
     alias(libs.plugins.gradleDoctor)
     alias(libs.plugins.dependencyAnalysis)
 }
@@ -35,48 +34,6 @@ doctor {
 
 allprojects {
     tasks.withType<Test> {
-        testLogging {
-            exceptionFormat = TestExceptionFormat.FULL
-            showCauses = true
-            showExceptions = true
-            showStackTraces = true
-        }
-    }
-}
-
-val runAndroidTests by tasks.creating {
-    group = "verification"
-    description = "Runs Android instrumented tests only in specific modules"
-
-    dependsOn(
-        ":app:connectedAndroidTest",
-        ":data:db:connectedAndroidTest",
-        ":feature:settings:ui:connectedAndroidTest",
-        ":data:local-datastorage-impl:connectedAndroidTest"
-    )
-}
-
-subprojects {
-    apply {
-        plugin("io.gitlab.arturbosch.detekt")
-        plugin("org.jlleitschuh.gradle.ktlint")
-    }
-
-    detekt {
-        parallel = true
-        config.setFrom(rootProject.files("config/detekt/detekt.yml"))
-        allRules = false
-    }
-
-    ktlint {
-        android = true
-        ignoreFailures = false
-        reporters {
-            reporter(ReporterType.HTML)
-        }
-    }
-
-    tasks.withType<Test> {
         failFast = true
         reports {
             html.required.set(true)
@@ -86,6 +43,39 @@ subprojects {
             showStandardStreams = true
             exceptionFormat = TestExceptionFormat.FULL
             showExceptions = true
+        }
+    }
+}
+
+subprojects {
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+        plugin("org.jlleitschuh.gradle.ktlint")
+    }
+
+    // https://github.com/cortinico/kotlin-android-template/
+    detekt {
+        buildUponDefaultConfig = true
+        parallel = true
+        config.setFrom(rootProject.files("config/detekt/detekt.yml"))
+        allRules = false
+    }
+
+    configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        android.set(true)
+        ignoreFailures.set(false)
+        verbose.set(true)
+        outputColorName.set("RED")
+        outputToConsole.set(true)
+        reporters {
+            reporter(ReporterType.PLAIN)
+            reporter(ReporterType.CHECKSTYLE)
+            reporter(ReporterType.HTML)
+            reporter(ReporterType.JSON)
+        }
+        filter {
+            exclude("**/generated/**")
+            include("**/kotlin/**")
         }
     }
 }

@@ -1,14 +1,11 @@
-import com.grappim.hateitorrateit.AppBuildTypes
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.hateitorrateit.android.app)
+    alias(libs.plugins.hateitorrateit.android.hilt)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hateitorrateit.android.hilt)
-    alias(libs.plugins.hateitorrateit.android.app)
-    alias(libs.plugins.moduleGraphAssertion)
     alias(libs.plugins.compose)
+
+    alias(libs.plugins.moduleGraphAssertion)
 
     alias(libs.plugins.gms.googleServices) apply false
     alias(libs.plugins.firebase.crashlytics) apply false
@@ -16,14 +13,11 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit"
-    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
         applicationId = "com.grappim.hateitorrateit"
         testApplicationId = "com.grappim.hateitorrateit.tests"
 
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 19
         versionName = "1.3.6"
 
@@ -32,85 +26,10 @@ android {
             useSupportLibrary = true
         }
     }
+}
 
-    packaging.resources.excludes.apply {
-        add("META-INF/AL2.0")
-        add("META-INF/LGPL2.1")
-        add("META-INF/LICENSE.md")
-        add("META-INF/LICENSE-notice.md")
-    }
-
-    signingConfigs {
-        getByName("debug") {
-            storeFile = file("../debug.keystore.jks")
-            keyAlias = System.getenv("HIOR_ALIAS_D")
-            keyPassword = System.getenv("HIOR_KEY_PASS_D")
-            storePassword = System.getenv("HIOR_STORE_PASS_D")
-        }
-
-        create("release") {
-            storeFile = file("../release.keystore.jks")
-            keyAlias = System.getenv("HIOR_ALIAS_R")
-            keyPassword = System.getenv("HIOR_KEY_PASS_R")
-            storePassword = System.getenv("HIOR_STORE_PASS_R")
-            enableV2Signing = true
-            enableV3Signing = true
-        }
-    }
-
-    buildTypes {
-        debug {
-            applicationIdSuffix = AppBuildTypes.DEBUG.applicationIdSuffix
-
-            signingConfig = signingConfigs.getByName("debug")
-        }
-        release {
-            applicationIdSuffix = AppBuildTypes.RELEASE.applicationIdSuffix
-
-            isMinifyEnabled = true
-            isShrinkResources = true
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-
-        isCoreLibraryDesugaringEnabled = true
-    }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_17)
-        }
-    }
-    buildFeatures {
-        compose = true
-
-        buildConfig = true
-    }
-    testOptions {
-        unitTests {
-            isReturnDefaultValues = true
-            isIncludeAndroidResources = true
-        }
-    }
-    bundle {
-        language {
-            // Specifies that the app bundle should not support
-            // configuration APKs for language resources. These
-            // resources are instead packaged with each base and
-            // dynamic feature APK.
-            enableSplit = false
-        }
-    }
-    androidResources {
-        generateLocaleConfig = true
-    }
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 // It will find a gplay build only if start building specifically gplay build
@@ -134,12 +53,6 @@ if (isGooglePlayBuild) {
             includeInBundle = false
         }
     }
-}
-
-composeCompiler {
-    enableStrongSkippingMode = true
-
-    reportsDestination = layout.buildDirectory.dir("compose_compiler")
 }
 
 dependencies {
@@ -190,8 +103,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    coreLibraryDesugaring(libs.android.desugarJdkLibs)
-
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui.core)
     implementation(libs.androidx.compose.ui.util)
@@ -210,13 +121,6 @@ dependencies {
     gplayImplementation(libs.firebase.analytics)
 
     implementation(libs.google.material)
-
-    testImplementation(kotlin("test"))
-    androidTestImplementation(kotlin("test"))
-    testImplementation(projects.testing.core)
-    testImplementation(projects.testing.domain)
-    androidTestImplementation(projects.testing.core)
-    androidTestImplementation(projects.testing.domain)
 
     testImplementation(libs.robolectric)
 
