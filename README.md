@@ -8,13 +8,13 @@ information, enabling you to make informed decisions about future purchases.
 
 Install
 ---------
-<div style="display:flex;">
 
-<a href="https://play.google.com/store/apps/details?id=com.grappim.hateitorrateit">
-    <img alt="Get it on Google Play" height="80"
-        src="docs/graphics/google-badge.png" /></a>
-
-</div>
+[<img src="docs/graphics/google-badge.png"
+alt="Get it on Google Play"
+height="80">](https://play.google.com/store/apps/details?id=com.grappim.hateitorrateit)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+alt="Get it on F-Droid"
+height="80">](https://f-droid.org/en/packages/com.grappim.hateitorrateit.fdroid/)
 
 ## Why This App Can Be Helpful
 
