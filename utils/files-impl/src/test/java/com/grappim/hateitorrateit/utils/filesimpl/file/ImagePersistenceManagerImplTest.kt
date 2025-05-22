@@ -58,7 +58,7 @@ class ImagePersistenceManagerImplTest {
         )
 
         val expectedProductImages = listOf(
-            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+            ProductImage(
                 imageId = 1L,
                 name = "image.jpg",
                 mimeType = "image/jpeg",
@@ -68,7 +68,7 @@ class ImagePersistenceManagerImplTest {
                 md5 = "abc123",
                 isEdit = true
             ),
-            com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+            ProductImage(
                 imageId = 2L,
                 name = "image2.jpg",
                 mimeType = "image/jpeg",
@@ -83,7 +83,7 @@ class ImagePersistenceManagerImplTest {
         images.forEach { image ->
             coEvery {
                 imageDataMapper.toProductImageData(image)
-            } returns com.grappim.hateitorrateit.data.repoapi.models.ProductImage(
+            } returns ProductImage(
                 imageId = image.imageId,
                 name = image.name,
                 mimeType = image.mimeType,
