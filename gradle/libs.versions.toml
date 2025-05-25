@@ -39,7 +39,7 @@ room = "2.7.1"
 sqlite = "2.5.1"
 archCore = "2.2.0"
 
-accompanist = "0.37.2"
+accompanist = "0.37.3"
 
 coil = "2.7.0"
 timber = "5.0.1"
