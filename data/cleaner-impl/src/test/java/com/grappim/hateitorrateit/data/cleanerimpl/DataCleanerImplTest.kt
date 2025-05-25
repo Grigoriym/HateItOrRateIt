@@ -89,7 +89,7 @@ class DataCleanerImplTest {
             val productId = getRandomLong()
 
             coEvery { fileDeletionUtils.deleteFile(uriString = any()) } returns true
-            coEvery { productsRepository.deleteProductImage(any(), any()) } just Runs
+            coEvery { productsRepository.deleteProductImage(productId, any()) } just Runs
 
             val list = listOf(
                 ProductImage(
