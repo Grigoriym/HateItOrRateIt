@@ -18,7 +18,7 @@ detekt = "1.23.8"
 ktlint = "12.2.0"
 jacocoAggregation = "2.4.4"
 moduleGraphAssertion = "2.7.3"
-gradleDoctor = "0.10.0"
+gradleDoctor = "0.11.0"
 dependencyAnalysis = "2.10.1"
 
 gms = "4.4.2"
