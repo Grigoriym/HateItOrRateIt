@@ -17,7 +17,7 @@ ksp = "2.1.10-1.0.30"
 detekt = "1.23.8"
 ktlint = "12.2.0"
 jacocoAggregation = "2.4.4"
-moduleGraphAssertion = "2.7.3"
+moduleGraphAssertion = "2.9.0"
 gradleDoctor = "0.10.0"
 dependencyAnalysis = "2.10.1"
 
