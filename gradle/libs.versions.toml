@@ -12,7 +12,7 @@ androidDesugarJdkLibs = "2.1.5"
 
 kotlin = "2.1.10"
 coroutines = "1.10.2"
-ksp = "2.1.10-1.0.30"
+ksp = "2.2.0-2.0.2"
 
 detekt = "1.23.8"
 ktlint = "12.2.0"
