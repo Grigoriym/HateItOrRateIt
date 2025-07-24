@@ -37,12 +37,13 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 fun BottomNavigationScreen(
     goToHateOrRate: () -> Unit,
     goToDetails: (id: Long) -> Unit,
-    darkTheme: Boolean
+    darkTheme: Boolean,
+    modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
 
     Scaffold(
-        modifier = Modifier
+        modifier = modifier
             .statusBarsPadding()
             .navigationBarsPadding()
             .imePadding(),

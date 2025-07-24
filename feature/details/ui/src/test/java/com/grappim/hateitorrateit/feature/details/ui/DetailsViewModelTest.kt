@@ -2,6 +2,7 @@ package com.grappim.hateitorrateit.feature.details.ui
 
 import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
@@ -27,6 +28,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -215,7 +217,7 @@ class DetailsViewModelTest {
 
         assertNull(sut.viewState.value.shareImageIntent)
 
-        sut.viewState.value.onShareImageClicked(productImage)
+        sut.viewState.value.onShareImageClick(productImage)
 
         assertEquals(expected, sut.viewState.value.shareImageIntent)
 
@@ -235,7 +237,7 @@ class DetailsViewModelTest {
             )
         } returns expected
 
-        sut.viewState.value.onShareImageClicked(productImage)
+        sut.viewState.value.onShareImageClick(productImage)
 
         assertEquals(expected, sut.viewState.value.shareImageIntent)
     }
@@ -267,9 +269,11 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `om setSnackbarMessage should set correct message`() {
+    fun `on setSnackbarMessage should set correct message`() = runTest {
         val expected = NativeText.Simple("sdfsdfsdf")
-        sut.viewState.value.setSnackbarMessage(expected)
-        assertEquals(expected, sut.viewState.value.snackbarMessage?.data)
+        sut.snackBarMessage.test {
+            sut.viewState.value.setSnackbarMessage(expected)
+            assertEquals(expected, awaitItem())
+        }
     }
 }

@@ -31,8 +31,8 @@ class DetailsScreenKtTest {
                 DetailsScreen(
                     state = getState().copy(isLoading = true),
                     goBack = { },
-                    onImageClicked = { _, _ -> },
-                    onEditClicked = { _ -> },
+                    onImageClick = { _, _ -> },
+                    onEditClick = { _ -> },
                     isFromEdit = false
                 )
             }
@@ -52,8 +52,8 @@ class DetailsScreenKtTest {
                         type = HateRateType.HATE
                     ),
                     goBack = { },
-                    onImageClicked = { _, _ -> },
-                    onEditClicked = { _ -> },
+                    onImageClick = { _, _ -> },
+                    onEditClick = { _ -> },
                     isFromEdit = false
                 )
             }
@@ -100,7 +100,7 @@ class DetailsScreenKtTest {
         trackEditButtonClicked = {},
         appSettingsIntent = Intent(),
         clearShareImageIntent = {},
-        onShareImageClicked = {},
+        onShareImageClick = {},
         onShowPermissionsAlertDialog = { _, _ -> },
         resetSaveFileToGalleryState = {},
         saveFileToGallery = {},

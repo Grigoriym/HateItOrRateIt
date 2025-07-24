@@ -2,9 +2,9 @@
 compose-bom = "2025.07.00"
 firebase-bom = "34.0.0"
 
-compileSdk = "36"
+compileSdk = "35"
 minSdk = "24"
-targetSdk = "36"
+targetSdk = "35"
 
 agp = "8.11.1"
 androidTools = "31.11.1"
@@ -13,6 +13,7 @@ androidDesugarJdkLibs = "2.1.5"
 kotlin = "2.2.0"
 coroutines = "1.10.2"
 ksp = "2.2.0-2.0.2"
+kotlinx-collections = "0.4.0"
 
 detekt = "1.23.8"
 ktlint = "13.0.0"
@@ -130,6 +131,7 @@ firebase-config = { module = "com.google.firebase:firebase-config" }
 
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlinx-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 
@@ -164,4 +166,4 @@ hateitorrateit-android-app = { id = "hateitorrateit.android.app", version = "uns
 hateitorrateit-android-hilt = { id = "hateitorrateit.android.hilt", version = "unspecified" }
 hateitorrateit-android-library = { id = "hateitorrateit.android.library", version = "unspecified" }
 hateitorrateit-android-library-compose = { id = "hateitorrateit.android.library.compose", version = "unspecified" }
-hateitorrateit-java-library = { id = "hateitorrateit.java.library", version = "unspecified" }
+hateitorrateit-kotlin-library = { id = "hateitorrateit.kotlin.library", version = "unspecified" }

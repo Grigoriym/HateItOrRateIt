@@ -68,14 +68,12 @@ class RemoteConfigsListenerImpl @Inject constructor(
         key: String,
         value: () -> T,
         defaultValue: T
-    ): StateFlow<T> {
-        return remoteConfigUpdates
-            .filter { it.updatedKeys.contains(key) }
-            .onEach { firebaseRemoteConfig.activate().await() }
-            .map { value() }
-            .catch { Timber.e(it) }
-            .stateIn(scope, SharingStarted.Lazily, defaultValue)
-    }
+    ): StateFlow<T> = remoteConfigUpdates
+        .filter { it.updatedKeys.contains(key) }
+        .onEach { firebaseRemoteConfig.activate().await() }
+        .map { value() }
+        .catch { Timber.e(it) }
+        .stateIn(scope, SharingStarted.Lazily, defaultValue)
 
     private fun getGithubRepoUrlValue() = firebaseRemoteConfig[GITHUB_REPO_URL_KEY].asString()
 

@@ -15,6 +15,8 @@ import com.grappim.hateitorrateit.feature.settings.ui.optionsgenerator.LocaleOpt
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -49,52 +51,43 @@ class SettingsViewModel @Inject constructor(
     val viewState = _viewState.asStateFlow()
 
     init {
-        viewModelScope.launch {
-            launch {
-                localDataStorage.typeFlow.collect { value ->
-                    _viewState.update {
-                        it.copy(type = value)
-                    }
-                }
+        localDataStorage.typeFlow.onEach { value ->
+            _viewState.update {
+                it.copy(type = value)
             }
-            launch {
-                localDataStorage.crashesCollectionEnabled.collect { value ->
-                    analyticsController.toggleCrashesCollection(value)
-                    _viewState.update {
-                        it.copy(isCrashesCollectionEnabled = value)
-                    }
-                }
+        }.launchIn(viewModelScope)
+
+        localDataStorage.crashesCollectionEnabled.onEach { value ->
+            analyticsController.toggleCrashesCollection(value)
+            _viewState.update {
+                it.copy(isCrashesCollectionEnabled = value)
             }
-            launch {
-                localDataStorage.analyticsCollectionEnabled.collect { value ->
-                    analyticsController.toggleAnalyticsCollection(value)
-                    _viewState.update {
-                        it.copy(isAnalyticsCollectionEnabled = value)
-                    }
-                }
+        }.launchIn(viewModelScope)
+
+        localDataStorage.analyticsCollectionEnabled.onEach { value ->
+            analyticsController.toggleAnalyticsCollection(value)
+            _viewState.update {
+                it.copy(isAnalyticsCollectionEnabled = value)
             }
-            launch {
-                localDataStorage.darkThemeConfig.collect { value ->
-                    _viewState.update {
-                        it.copy(darkThemeConfig = value)
-                    }
-                }
+        }.launchIn(viewModelScope)
+
+        localDataStorage.darkThemeConfig.onEach { value ->
+            _viewState.update {
+                it.copy(darkThemeConfig = value)
             }
-            launch {
-                remoteConfigsListener.githubRepoLink.collect { value ->
-                    _viewState.update {
-                        it.copy(githubRepoLink = value)
-                    }
-                }
+        }.launchIn(viewModelScope)
+
+        remoteConfigsListener.githubRepoLink.onEach { value ->
+            _viewState.update {
+                it.copy(githubRepoLink = value)
             }
-            launch {
-                remoteConfigsListener.privacyPolicy.collect { value ->
-                    _viewState.update {
-                        it.copy(privacyPolicyLink = value)
-                    }
-                }
+        }.launchIn(viewModelScope)
+
+        remoteConfigsListener.privacyPolicy.onEach { value ->
+            _viewState.update {
+                it.copy(privacyPolicyLink = value)
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)

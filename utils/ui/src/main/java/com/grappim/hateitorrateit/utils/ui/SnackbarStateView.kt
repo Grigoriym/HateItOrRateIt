@@ -1,33 +1,19 @@
 package com.grappim.hateitorrateit.utils.ui
 
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.receiveAsFlow
 
 interface SnackbarStateViewModel {
-    val snackBarMessage: SharedFlow<LaunchedEffectResult<NativeText>>
-    suspend fun setSnackbarMessageSuspend(message: NativeText)
-    fun setSnackbarMessage(message: NativeText)
+    val snackBarMessage: Flow<NativeText>
+    suspend fun showSnackbarSuspend(message: NativeText)
 }
 
 class SnackbarStateViewModelImpl : SnackbarStateViewModel {
-    private val _snackBarMessage = MutableSharedFlow<LaunchedEffectResult<NativeText>>()
-    override val snackBarMessage: SharedFlow<LaunchedEffectResult<NativeText>>
-        get() = _snackBarMessage.asSharedFlow()
+    private val _snackBarMessage = Channel<NativeText>()
+    override val snackBarMessage: Flow<NativeText> = _snackBarMessage.receiveAsFlow()
 
-    override suspend fun setSnackbarMessageSuspend(message: NativeText) {
-        _snackBarMessage.emit(
-            LaunchedEffectResult(
-                data = message
-            )
-        )
-    }
-
-    override fun setSnackbarMessage(message: NativeText) {
-        _snackBarMessage.tryEmit(
-            LaunchedEffectResult(
-                data = message
-            )
-        )
+    override suspend fun showSnackbarSuspend(message: NativeText) {
+        _snackBarMessage.send(message)
     }
 }

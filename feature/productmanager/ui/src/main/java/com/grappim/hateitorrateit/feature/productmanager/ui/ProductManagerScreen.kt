@@ -28,6 +28,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Snackbar
 import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.SnackbarHost
 import androidx.compose.material.SnackbarHostState
@@ -36,7 +37,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -59,7 +59,7 @@ import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PlatoHateRat
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIconButton
@@ -67,24 +67,36 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.asString
+import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
 import kotlinx.coroutines.launch
 
 @Composable
 fun ProductManagerRoute(
     goBack: (isNewProduct: Boolean) -> Unit,
-    onProductDone: (isNewProduct: Boolean) -> Unit,
+    onProductFinish: (isNewProduct: Boolean) -> Unit,
     viewModel: ProductManagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    val snackBarMessage by viewModel.snackBarMessage.collectAsState(
-        initial = LaunchedEffectResult(
-            data = NativeText.Empty,
-            timestamp = 0L
-        )
-    )
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+
+    ObserverAsEvents(viewModel.snackBarMessage) { snackBarMessage ->
+        if (snackBarMessage !is NativeText.Empty) {
+            coroutineScope.launch {
+                val result = snackbarHostState.showSnackbar(
+                    message = snackBarMessage.asString(context),
+                    actionLabel = context.getString(R.string.close),
+                    duration = SnackbarDuration.Short
+                )
+                if (result == SnackbarResult.ActionPerformed) {
+                    snackbarHostState.currentSnackbarData?.dismiss()
+                }
+            }
+        }
+    }
 
     DisposableEffect(Unit) {
         state.trackOnScreenStart()
@@ -93,8 +105,8 @@ fun ProductManagerRoute(
     ProductManagerScreen(
         state = state,
         goBack = goBack,
-        onProductCreated = onProductDone,
-        snackBarMessage = snackBarMessage
+        onProductCreate = onProductFinish,
+        snackbarHostState = snackbarHostState
     )
 }
 
@@ -102,12 +114,12 @@ fun ProductManagerRoute(
 internal fun ProductManagerScreen(
     state: ProductManagerViewState,
     goBack: (isNewProduct: Boolean) -> Unit,
-    onProductCreated: (isNewProduct: Boolean) -> Unit,
-    snackBarMessage: LaunchedEffectResult<out NativeText>
+    onProductCreate: (isNewProduct: Boolean) -> Unit,
+    snackbarHostState: SnackbarHostState
 ) {
     LaunchedEffect(state.productSaved) {
         if (state.productSaved) {
-            onProductCreated.invoke(state.isNewProduct)
+            onProductCreate.invoke(state.isNewProduct)
         }
     }
 
@@ -132,21 +144,22 @@ internal fun ProductManagerScreen(
     PlatoAlertDialog(
         text = state.alertDialogText.asString(context = LocalContext.current),
         showAlertDialog = state.showAlertDialog,
-        confirmButtonText = stringResource(id = R.string.ok),
+        confirmButtonText = stringResource(id = R.string.proceed),
+        dismissButtonText = stringResource(id = R.string.dismiss),
         onDismissRequest = {
             state.onShowAlertDialog(false)
         },
-        onConfirmButtonClicked = {
+        onConfirmButtonClick = {
             state.onForceQuit()
         },
-        onDismissButtonClicked = {
+        onDismissButtonClick = {
             state.onShowAlertDialog(false)
         }
     )
 
     ProductManagerContent(
         state = state,
-        snackBarMessage = snackBarMessage
+        snackbarHostState = snackbarHostState
     )
 }
 
@@ -189,9 +202,8 @@ fun handleBackAction(state: ProductManagerViewState) {
 @Composable
 private fun ProductManagerContent(
     state: ProductManagerViewState,
-    snackBarMessage: LaunchedEffectResult<out NativeText>
+    snackbarHostState: SnackbarHostState
 ) {
-    val context = LocalContext.current
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var cameraTakePictureData by remember {
@@ -216,28 +228,15 @@ private fun ProductManagerContent(
         }
     }
 
-    val snackbarHostState = remember { SnackbarHostState() }
-
-    LaunchedEffect(snackBarMessage) {
-        if (snackBarMessage.data !is NativeText.Empty) {
-            val result = snackbarHostState.showSnackbar(
-                message = snackBarMessage.data.asString(context),
-                actionLabel = context.getString(R.string.close),
-                duration = SnackbarDuration.Short
-            )
-            if (result == SnackbarResult.ActionPerformed) {
-                snackbarHostState.currentSnackbarData?.dismiss()
-            }
-        }
-    }
-
     Scaffold(
         modifier = Modifier
             .imePadding()
             .statusBarsPadding()
             .navigationBarsPadding(),
         snackbarHost = {
-            SnackbarHost(snackbarHostState)
+            SnackbarHost(hostState = snackbarHostState) {
+                Snackbar(snackbarData = it)
+            }
         },
         topBar = {
             PlatoTopBar(
@@ -273,17 +272,17 @@ private fun ProductManagerContent(
 
             PlatoHateRateContent(
                 currentType = state.type,
-                onTypeClicked = state.onTypeClicked
+                onTypeClick = state.onTypeClicked
             )
 
             AddFromContent(
                 modifier = Modifier.padding(horizontal = 16.dp),
-                onCameraClicked = {
+                onCameraClick = {
                     keyboardController?.hide()
                     cameraTakePictureData = state.getCameraImageFileUri()
                     cameraLauncher.launch(cameraTakePictureData.uri)
                 },
-                onGalleryClicked = {
+                onGalleryClick = {
                     keyboardController?.hide()
                     galleryLauncher.launch(
                         PickVisualMediaRequest(
@@ -303,9 +302,9 @@ private fun ProductManagerContent(
 
 @Composable
 private fun AddFromContent(
-    modifier: Modifier = Modifier,
-    onCameraClicked: () -> Unit,
-    onGalleryClicked: () -> Unit
+    onCameraClick: () -> Unit,
+    onGalleryClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
         Text(
@@ -322,18 +321,18 @@ private fun AddFromContent(
         ) {
             PlatoTextButton(
                 text = stringResource(id = R.string.camera),
-                onClick = onCameraClicked
+                onClick = onCameraClick
             )
             PlatoTextButton(
                 text = stringResource(id = R.string.gallery),
-                onClick = onGalleryClicked
+                onClick = onGalleryClick
             )
         }
     }
 }
 
 @Composable
-private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewState) {
+private fun ImagesList(state: ProductManagerViewState, modifier: Modifier = Modifier) {
     val pagerState = rememberPagerState {
         state.images.size
     }
@@ -389,7 +388,7 @@ private fun ImagesList(modifier: Modifier = Modifier, state: ProductManagerViewS
 }
 
 @Composable
-private fun BottomBarButton(modifier: Modifier = Modifier, state: ProductManagerViewState) {
+private fun BottomBarButton(state: ProductManagerViewState, modifier: Modifier = Modifier) {
     PlatoTextButton(
         modifier = modifier.height(42.dp),
         text = state.bottomBarButtonText.asString(LocalContext.current),
@@ -398,10 +397,8 @@ private fun BottomBarButton(modifier: Modifier = Modifier, state: ProductManager
 }
 
 @Composable
-private fun TextFieldsContent(modifier: Modifier = Modifier, state: ProductManagerViewState) {
-    Column(
-        modifier = modifier
-    ) {
+private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
         OutlinedTextField(
             modifier = Modifier
                 .padding(top = 8.dp)
@@ -440,7 +437,7 @@ private fun TextFieldsContent(modifier: Modifier = Modifier, state: ProductManag
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun BottomBarButtonPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
@@ -451,7 +448,7 @@ private fun BottomBarButtonPreview(
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun TextFieldsContentPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
@@ -462,25 +459,22 @@ private fun TextFieldsContentPreview(
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun AddFromContentPreview() {
     HateItOrRateItTheme {
         AddFromContent(
-            onCameraClicked = {},
-            onGalleryClicked = {}
+            onCameraClick = {},
+            onGalleryClick = {}
         )
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun RateOrHateScreenContentPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
     HateItOrRateItTheme {
-        ProductManagerContent(
-            state = state,
-            snackBarMessage = LaunchedEffectResult(NativeText.Empty)
-        )
+        ProductManagerContent(state = state, snackbarHostState = remember { SnackbarHostState() })
     }
 }
 

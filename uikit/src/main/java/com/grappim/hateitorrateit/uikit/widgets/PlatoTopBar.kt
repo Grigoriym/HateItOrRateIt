@@ -17,15 +17,15 @@ import androidx.compose.ui.unit.Dp
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 
 const val PLATO_TOP_BAR_TAG = "plato_top_bar_tag"
 
 @Composable
 fun PlatoTopBar(
+    goBack: () -> Unit,
     modifier: Modifier = Modifier,
     text: String = "",
-    goBack: () -> Unit,
     defaultBackButton: Boolean = true,
     elevation: Dp = AppBarDefaults.TopAppBarElevation,
     backgroundColor: Color = MaterialTheme.colors.primarySurface,
@@ -62,7 +62,7 @@ fun PlatoTopBar(
     )
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoTopBarPreview() {
     HateItOrRateItTheme {
         PlatoTopBar(
@@ -72,7 +72,7 @@ private fun PlatoTopBarPreview() {
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoTopBarNotDefaultPreview() {
     HateItOrRateItTheme {
         PlatoTopBar(

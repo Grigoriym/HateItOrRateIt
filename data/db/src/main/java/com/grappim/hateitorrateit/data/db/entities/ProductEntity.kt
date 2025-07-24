@@ -15,7 +15,8 @@ const val PRODUCTS_TABLE = "products_table"
  * @param description - description of product
  * @param shop - shop where product was bought
  * @param type - type of product
- * @param isCreated - flag that shows if product was created or not. It is needed to show only created products in list
+ * @param isCreated - flag that shows if product was created or not. It is needed to
+ * show only created products in the list
  *
  * When we use a primary key of type Int or Long and pass 0 as its value,
  * Room will auto-generate a new value for the primary key colum

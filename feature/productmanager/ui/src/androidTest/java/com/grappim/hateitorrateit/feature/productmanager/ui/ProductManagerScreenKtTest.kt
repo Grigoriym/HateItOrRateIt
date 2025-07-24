@@ -9,7 +9,6 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PLATO_HATE_RATE_CONTENT_TAG
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
-import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import org.junit.Before
 import org.junit.Rule
@@ -57,8 +56,8 @@ class ProductManagerScreenKtTest {
                         alertDialogText = NativeText.Resource(R.string.if_quit_lose_data)
                     ),
                     goBack = {},
-                    onProductCreated = {},
-                    snackBarMessage = LaunchedEffectResult(NativeText.Empty)
+                    onProductCreate = {},
+                    snackBarMessage = NativeText.Empty
                 )
             }
 
@@ -87,8 +86,8 @@ class ProductManagerScreenKtTest {
                         alertDialogText = NativeText.Resource(R.string.if_quit_ensure_saved)
                     ),
                     goBack = {},
-                    onProductCreated = {},
-                    snackBarMessage = LaunchedEffectResult(NativeText.Empty)
+                    onProductCreate = {},
+                    snackBarMessage = NativeText.Empty
                 )
             }
 
@@ -122,8 +121,8 @@ class ProductManagerScreenKtTest {
                         shop = shop
                     ),
                     goBack = {},
-                    onProductCreated = {},
-                    snackBarMessage = LaunchedEffectResult(NativeText.Empty)
+                    onProductCreate = {},
+                    snackBarMessage = NativeText.Empty
                 )
             }
 

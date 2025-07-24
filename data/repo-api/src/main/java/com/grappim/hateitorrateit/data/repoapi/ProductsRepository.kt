@@ -6,6 +6,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 interface ProductsRepository {
@@ -33,7 +34,7 @@ interface ProductsRepository {
 
     suspend fun deleteProductImage(productId: Long, imageName: String)
 
-    fun getProductsFlow(query: String, type: HateRateType?): Flow<List<Product>>
+    fun getProductsFlow(query: String, type: HateRateType?): Flow<ImmutableList<Product>>
 
     suspend fun addProduct(product: CreateProduct)
 

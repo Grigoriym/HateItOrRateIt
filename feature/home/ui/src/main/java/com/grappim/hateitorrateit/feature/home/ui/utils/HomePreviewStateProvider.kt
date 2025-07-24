@@ -4,6 +4,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.HomeViewState
 import com.grappim.hateitorrateit.feature.home.ui.models.ProductListUI
+import kotlinx.collections.immutable.persistentListOf
 
 internal class HomePreviewStateProvider : PreviewParameterProvider<HomeViewState> {
     override val values: Sequence<HomeViewState>
@@ -12,7 +13,7 @@ internal class HomePreviewStateProvider : PreviewParameterProvider<HomeViewState
                 query = "namee",
                 onSearchQueryChanged = {},
                 onClearQueryClicked = {},
-                products = listOf(),
+                products = persistentListOf(),
                 selectedType = HateRateType.HATE,
                 onFilterSelected = {},
                 trackScreenStart = {},

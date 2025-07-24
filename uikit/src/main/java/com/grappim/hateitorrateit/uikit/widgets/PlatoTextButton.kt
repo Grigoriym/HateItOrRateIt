@@ -6,10 +6,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 
 @Composable
-fun PlatoTextButton(modifier: Modifier = Modifier, text: String, onClick: () -> Unit) {
+fun PlatoTextButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         modifier = modifier.testTag(text),
         onClick = onClick
@@ -18,7 +18,7 @@ fun PlatoTextButton(modifier: Modifier = Modifier, text: String, onClick: () -> 
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoTextButtonPreview() {
     HateItOrRateItTheme {
         PlatoTextButton(

@@ -22,8 +22,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    <string name="dismiss">Dismiss</string>
     <string name="cancel">Cancel</string>
     <string name="close">Close</string>
+    <string name="proceed">Proceed</string>
 
     <string name="delete_image">Delete Image</string>
 

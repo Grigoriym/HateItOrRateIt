@@ -37,7 +37,7 @@ fun NavGraphBuilder.productManagerScreen(navController: NavController) {
                     handleBackNavigation(isNewProduct)
                 }
             },
-            onProductDone = { isNewProduct: Boolean ->
+            onProductFinish = { isNewProduct: Boolean ->
                 navBackStackEntry.safeClick {
                     handleBackNavigation(isNewProduct)
                 }

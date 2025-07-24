@@ -20,11 +20,10 @@ fun NavGraphBuilder.detailsScreen(navController: NavController) {
             }
         )
     ) { navBackStackEntry ->
-        fun NavBackStackEntry.getIsFromEdit(defaultValue: Boolean = false): Boolean {
-            return this.savedStateHandle
+        fun NavBackStackEntry.getIsFromEdit(defaultValue: Boolean = false): Boolean =
+            this.savedStateHandle
                 .get<Boolean>(NavDestinations.Details.IS_FROM_EDIT)
                 ?: defaultValue
-        }
 
         val isFromEdit = navBackStackEntry.getIsFromEdit(false)
 
@@ -34,7 +33,7 @@ fun NavGraphBuilder.detailsScreen(navController: NavController) {
                     navController.popBackStack()
                 }
             },
-            onImageClicked = { productId, index ->
+            onImageClick = { productId, index ->
                 navBackStackEntry.safeClick {
                     navController.navigate(
                         NavDestinations.DetailsImage.getRouteToNavigate(
@@ -44,7 +43,7 @@ fun NavGraphBuilder.detailsScreen(navController: NavController) {
                     )
                 }
             },
-            onEditClicked = { id: Long ->
+            onEditClick = { id: Long ->
                 navBackStackEntry.safeClick {
                     navController.navigate(
                         NavDestinations.ProductManager.getRouteToNavigate(
