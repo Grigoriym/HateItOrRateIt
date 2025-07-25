@@ -68,8 +68,8 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoTextButton
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.asString
 import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
+import com.grappim.hateitorrateit.utils.ui.asString
 import kotlinx.coroutines.launch
 
 @Composable

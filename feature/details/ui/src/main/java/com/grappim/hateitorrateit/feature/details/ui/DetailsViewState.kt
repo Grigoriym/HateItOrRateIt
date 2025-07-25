@@ -3,7 +3,6 @@ package com.grappim.hateitorrateit.feature.details.ui
 import android.content.Intent
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
-import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import java.io.File
 

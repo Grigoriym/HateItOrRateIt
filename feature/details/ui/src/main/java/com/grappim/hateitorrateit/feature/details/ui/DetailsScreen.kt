@@ -78,8 +78,8 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoProgressIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.asString
 import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
+import com.grappim.hateitorrateit.utils.ui.asString
 import com.grappim.hateitorrateit.utils.ui.type.color
 import com.grappim.hateitorrateit.utils.ui.type.icon
 import kotlinx.coroutines.launch
@@ -199,7 +199,8 @@ private fun DetailsScreenContent(
         },
         onDismissButtonClick = {
             state.onShowAlertDialog(false)
-        })
+        }
+    )
 
     Scaffold(
         modifier = Modifier
@@ -232,7 +233,8 @@ private fun DetailsScreenContent(
                     .padding(top = 16.dp)
                     .weight(1f)
                     .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()), state = state
+                    .verticalScroll(rememberScrollState()),
+                state = state
             )
         }
     }
@@ -262,7 +264,9 @@ private fun TopAppBarContent(
         modifier = modifier.testTag(DETAILS_TOP_APP_BAR_TAG)
     ) {
         AppBarImageContent(
-            state = state, pagerState = pagerState, onImageClick = onImageClick
+            state = state,
+            pagerState = pagerState,
+            onImageClick = onImageClick
         )
 
         PlatoPagerIndicator(
@@ -273,7 +277,9 @@ private fun TopAppBarContent(
         )
 
         AppBarTopButtonsContent(
-            state = state, goBack = goBack, onEditClick = onEditClick
+            state = state,
+            goBack = goBack,
+            onEditClick = onEditClick
         )
 
         ImageInteractionsSection(state)
@@ -319,7 +325,8 @@ private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
             dismissButtonText = stringResource(id = R.string.cancel),
             onDismissButtonClick = {
                 state.onShowPermissionsAlertDialog(false, null)
-            })
+            }
+        )
 
         PlatoIconButton(
             modifier = Modifier
@@ -328,7 +335,8 @@ private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
             icon = PlatoIconType.Share.imageVector,
             onButtonClick = {
                 state.onShareImageClick(state.currentImage)
-            })
+            }
+        )
 
         PlatoIconButton(
             modifier = Modifier
@@ -341,7 +349,8 @@ private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
                     permissionState = permissionState,
                     text = context.getString(R.string.provide_permission)
                 )
-            })
+            }
+        )
     }
 }
 
@@ -352,7 +361,9 @@ private fun openAppSettings(activity: Activity, state: DetailsViewState) {
 
 @OptIn(ExperimentalPermissionsApi::class)
 private fun onDownloadClicked(
-    state: DetailsViewState, permissionState: PermissionState, text: String
+    state: DetailsViewState,
+    permissionState: PermissionState,
+    text: String
 ) {
     val image = requireNotNull(state.currentImage)
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -391,7 +402,9 @@ private fun ScrollToLastImageOnUpdate(state: DetailsViewState, pagerState: Pager
 
 @Composable
 private fun AppBarTopButtonsContent(
-    state: DetailsViewState, goBack: () -> Unit, onEditClick: (id: Long) -> Unit
+    state: DetailsViewState,
+    goBack: () -> Unit,
+    onEditClick: (id: Long) -> Unit
 ) {
     PlatoTopBar(
         modifier = Modifier.padding(top = 2.dp),
@@ -401,15 +414,19 @@ private fun AppBarTopButtonsContent(
         elevation = 0.dp,
         actions = {
             PlatoIconButton(
-                icon = PlatoIconType.Edit.imageVector, onButtonClick = {
+                icon = PlatoIconType.Edit.imageVector,
+                onButtonClick = {
                     state.trackEditButtonClicked()
                     onEditClick(state.productId.toLong())
-                })
+                }
+            )
             Spacer(modifier = Modifier.width(12.dp))
             PlatoIconButton(
-                icon = PlatoIconType.Delete.imageVector, onButtonClick = state.onDeleteProduct
+                icon = PlatoIconType.Delete.imageVector,
+                onButtonClick = state.onDeleteProduct
             )
-        })
+        }
+    )
 }
 
 @ExperimentalFoundationApi
@@ -423,18 +440,24 @@ private fun BoxScope.AppBarImageContent(
         HorizontalPager(
             modifier = Modifier
                 .fillMaxSize()
-                .align(Alignment.TopCenter), state = pagerState
+                .align(Alignment.TopCenter),
+            state = pagerState
         ) { index ->
             val productImage = state.images[index]
 
             PlatoCard(
-                modifier = Modifier.fillMaxSize(), shape = RoundedCornerShape(
-                    bottomEnd = 16.dp, bottomStart = 16.dp
-                ), onClick = {
+                modifier = Modifier.fillMaxSize(),
+                shape = RoundedCornerShape(
+                    bottomEnd = 16.dp,
+                    bottomStart = 16.dp
+                ),
+                onClick = {
                     onImageClick(
-                        state.productId, index
+                        state.productId,
+                        index
                     )
-                }) {
+                }
+            ) {
                 PlatoImage(
                     modifier = Modifier.fillMaxWidth(),
                     painter = rememberAsyncImagePainter(productImage.uriString),
@@ -473,18 +496,20 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
 
         if (state.createdDate.isNotEmpty()) {
             Text(
-                modifier = Modifier.padding(top = 8.dp), text = state.createdDate
+                modifier = Modifier.padding(top = 8.dp),
+                text = state.createdDate
             )
         }
 
         PlatoIcon(
-            imageVector = type.icon(), tint = type.color()
+            imageVector = type.icon(),
+            tint = type.color()
         )
     }
 }
 
-//@[Composable PreviewMulti]
-//private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: DetailsViewState) {
+// @[Composable PreviewMulti]
+// private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: DetailsViewState) {
 //    HateItOrRateItTheme {
 //        DetailsScreen(
 //            state = state,
@@ -495,12 +520,12 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
 //            snackbarMessage = NativeText.Empty
 //        )
 //    }
-//}
+// }
 //
-//@[Composable Preview(showBackground = true)]
-//private fun DetailsScreenWithLoadingPreview(
+// @[Composable Preview(showBackground = true)]
+// private fun DetailsScreenWithLoadingPreview(
 //    @PreviewParameter(StateProvider::class) state: DetailsViewState
-//) {
+// ) {
 //    HateItOrRateItTheme {
 //        DetailsScreen(
 //            state = state.copy(isLoading = true),
@@ -511,7 +536,7 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
 //            snackbarMessage = NativeText.Empty
 //        )
 //    }
-//}
+// }
 
 @[Composable PreviewMulti]
 private fun TopAppBarContentPreview(
