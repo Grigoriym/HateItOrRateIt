@@ -21,7 +21,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.productmanager.ui.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.utils.ui.type.color
@@ -32,9 +32,9 @@ const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 
 @Composable
 fun PlatoHateRateContent(
-    modifier: Modifier = Modifier,
     currentType: HateRateType,
-    onTypeClicked: (HateRateType) -> Unit
+    onTypeClick: (HateRateType) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val buttonsSize = 80.dp
     val hateColors = ButtonDefaults.buttonColors(
@@ -60,7 +60,7 @@ fun PlatoHateRateContent(
                 modifier = Modifier
                     .size(buttonsSize),
                 onClick = {
-                    onTypeClicked(HateRateType.HATE)
+                    onTypeClick(HateRateType.HATE)
                 },
                 shape = CircleShape,
                 colors = hateColors
@@ -79,7 +79,7 @@ fun PlatoHateRateContent(
                 modifier = Modifier
                     .size(buttonsSize),
                 onClick = {
-                    onTypeClicked(HateRateType.RATE)
+                    onTypeClick(HateRateType.RATE)
                 },
                 shape = CircleShape,
                 colors = rateColors
@@ -90,22 +90,22 @@ fun PlatoHateRateContent(
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoHateRateContentHatePreview() {
     HateItOrRateItTheme {
         PlatoHateRateContent(
             currentType = HateRateType.HATE,
-            onTypeClicked = {}
+            onTypeClick = {}
         )
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoHateRateContentRatePreview() {
     HateItOrRateItTheme {
         PlatoHateRateContent(
             currentType = HateRateType.RATE,
-            onTypeClicked = {}
+            onTypeClick = {}
         )
     }
 }

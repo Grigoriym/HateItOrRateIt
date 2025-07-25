@@ -15,9 +15,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class LocalDataStorageImpl @Inject constructor(
-    private val dataStore: DataStore<Preferences>
-) : LocalDataStorage {
+class LocalDataStorageImpl @Inject constructor(private val dataStore: DataStore<Preferences>) :
+    LocalDataStorage {
 
     private val typeKey = stringPreferencesKey("type_key")
     override val typeFlow: Flow<HateRateType> = dataStore.data

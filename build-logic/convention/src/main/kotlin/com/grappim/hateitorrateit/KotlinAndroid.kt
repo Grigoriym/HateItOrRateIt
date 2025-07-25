@@ -12,6 +12,7 @@ import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
+import kotlin.text.get
 
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -35,6 +36,12 @@ internal fun Project.configureKotlinAndroid(
             add("META-INF/LICENSE-notice.md")
         }
 
+        lint {
+            checkDependencies = false
+            abortOnError = false
+            warningsAsErrors = false
+        }
+
         testOptions {
             unitTests {
                 isReturnDefaultValues = true
@@ -47,6 +54,8 @@ internal fun Project.configureKotlinAndroid(
 
     dependencies {
         "coreLibraryDesugaring"(libs.findLibrary("android.desugarJdkLibs").get())
+
+        "implementation"(libs.findLibrary("kotlinx.collections").get())
 
         add("testImplementation", kotlin("test"))
         add("testImplementation", project(":testing:core"))

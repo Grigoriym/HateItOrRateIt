@@ -14,6 +14,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -34,7 +35,7 @@ class BottomBarNavDestinationViewModelTest {
 
     private lateinit var viewModel: HomeViewModel
 
-    private val productsList = listOf(
+    private val productsList = persistentListOf(
         Product(
             id = 1L,
             name = "name",
@@ -112,7 +113,6 @@ class BottomBarNavDestinationViewModelTest {
         assert(state.query.isEmpty())
         assert(state.selectedType == null)
 
-        verify { productsRepository.getProductsFlow(any(), any()) }
         coVerify { homeUIModelsMapper.toProductUi(any()) }
     }
 

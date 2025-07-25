@@ -7,8 +7,8 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import com.grappim.hateitorrateit.core.async.IoDispatcher
+import com.grappim.hateitorrateit.core.async.resultOf
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
-import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.transfer.FileTransferOperations
 import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
@@ -17,7 +17,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.io.File
-import java.io.IOException
 import javax.inject.Inject
 
 class GalleryInteractionsImpl @Inject constructor(
@@ -43,13 +42,13 @@ class GalleryInteractionsImpl @Inject constructor(
         name: String,
         mimeType: String,
         folderName: String
-    ): SaveImageState = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+    ): Result<Unit> = if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
         saveImageApi28(name, folderName)
     } else {
         saveImage(uriString, name, mimeType)
     }
 
-    private suspend fun saveImageApi28(name: String, folderName: String): SaveImageState =
+    private suspend fun saveImageApi28(name: String, folderName: String): Result<Unit> = resultOf {
         withContext(ioDispatcher) {
             val sourceFile = fileInfoRetriever.findFileInFolder(
                 fileName = name,
@@ -67,51 +66,35 @@ class GalleryInteractionsImpl @Inject constructor(
             if (targetFile.exists().not()) {
                 targetFile.mkdirs()
             }
-
-            try {
-                fileTransferOperations.writeSourceFileToTargetFile(sourceFile, targetFile)
-            } catch (e: NoSuchFileException) {
-                Timber.e(e)
-                return@withContext SaveImageState.Failure
-            } catch (e: FileAlreadyExistsException) {
-                Timber.e(e)
-                return@withContext SaveImageState.Failure
-            } catch (e: IOException) {
-                Timber.e(e)
-                return@withContext SaveImageState.Failure
-            }
-
-            SaveImageState.Success
+            fileTransferOperations.writeSourceFileToTargetFile(sourceFile, targetFile)
         }
+    }
 
     @TargetApi(Build.VERSION_CODES.Q)
-    private suspend fun saveImage(
-        uriString: String,
-        name: String,
-        mimeType: String
-    ): SaveImageState = withContext(ioDispatcher) {
-        val imagesCollection =
-            MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
-        val imageFileUri = uriParser.parse(uriString)
-        val destDir = File(Environment.DIRECTORY_PICTURES, GALLERY_FOLDER_NAME)
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, name)
-            put(MediaStore.Images.Media.MIME_TYPE, mimeType)
-            put(MediaStore.Images.Media.RELATIVE_PATH, "$destDir${File.separator}")
+    private suspend fun saveImage(uriString: String, name: String, mimeType: String): Result<Unit> =
+        resultOf {
+            withContext(ioDispatcher) {
+                val imagesCollection =
+                    MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY)
+                val imageFileUri = uriParser.parse(uriString)
+                val destDir = File(Environment.DIRECTORY_PICTURES, GALLERY_FOLDER_NAME)
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.Images.Media.DISPLAY_NAME, name)
+                    put(MediaStore.Images.Media.MIME_TYPE, mimeType)
+                    put(MediaStore.Images.Media.RELATIVE_PATH, "$destDir${File.separator}")
+                }
+                val contentResolver = context.contentResolver
+                val newImageUri = contentResolver
+                    .insert(imagesCollection, contentValues)
+                    ?: error("Error retrieving image uri")
+                val inputStream = contentResolver.openInputStream(imageFileUri)
+                    ?: error("Error retrieving input stream")
+                val outputStream = contentResolver.openOutputStream(newImageUri)
+                    ?: error("Error retrieving output stream")
+                inputStream.copyTo(outputStream)
+                inputStream.close()
+                outputStream.close()
+                Timber.d("newImageUri: $newImageUri")
+            }
         }
-        val contentResolver = context.contentResolver
-        val newImageUri = contentResolver
-            .insert(imagesCollection, contentValues)
-            ?: return@withContext SaveImageState.Failure
-        val inputStream = contentResolver.openInputStream(imageFileUri)
-            ?: return@withContext SaveImageState.Failure
-        val outputStream = contentResolver.openOutputStream(newImageUri)
-            ?: return@withContext SaveImageState.Failure
-        inputStream.copyTo(outputStream)
-        inputStream.close()
-        outputStream.close()
-        Timber.d("newImageUri: $newImageUri")
-
-        SaveImageState.Success
-    }
 }

@@ -46,7 +46,7 @@ import com.grappim.hateitorrateit.feature.home.ui.utils.HomePreviewStateProvider
 import com.grappim.hateitorrateit.feature.home.ui.utils.getPreviewProductListUI
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
@@ -94,7 +94,7 @@ private fun HomeScreenContent(state: HomeViewState, onProductClick: (id: Long) -
 }
 
 @Composable
-private fun SearchContent(modifier: Modifier = Modifier, state: HomeViewState) {
+private fun SearchContent(state: HomeViewState, modifier: Modifier = Modifier) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
@@ -225,7 +225,7 @@ private fun ProductItem(
 }
 
 @Composable
-private fun FilterChipsContent(modifier: Modifier = Modifier, state: HomeViewState) {
+private fun FilterChipsContent(state: HomeViewState, modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -271,7 +271,7 @@ private fun FilterChipsContent(modifier: Modifier = Modifier, state: HomeViewSta
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun ProductItemPreview(
     @PreviewParameter(HomePreviewStateProvider::class) state: HomeViewState
 ) {

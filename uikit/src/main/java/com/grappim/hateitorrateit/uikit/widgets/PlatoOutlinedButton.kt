@@ -17,23 +17,24 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun PlatoOutlinedButton(
-    imageVector: ImageVector? = null,
-    painter: Painter? = null,
     text: String,
-    onClicked: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    imageVector: ImageVector? = null,
+    painter: Painter? = null
 ) {
     assert(!(imageVector != null && painter != null)) {
         "Cannot define both imageVector(${imageVector?.name}) and " +
             "painter($painter) simultaneously; please choose only one."
     }
     OutlinedButton(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
         colors = ButtonDefaults.outlinedButtonColors(
             contentColor = MaterialTheme.colors.onPrimary
         ),
-        onClick = { onClicked() }
+        onClick = { onClick() }
     ) {
         if (painter != null) {
             PlatoIcon(

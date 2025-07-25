@@ -22,14 +22,12 @@ class LoggerInitializer : Initializer<Unit> {
 
 private class DevelopmentTree : Timber.DebugTree() {
 
-    override fun createStackElementTag(element: StackTraceElement): String {
-        return String.format(
-            Locale.US,
-            "HateItOrRateIt-${BuildConfig.BUILD_TYPE}:C:%s:%s",
-            super.createStackElementTag(element),
-            element.lineNumber
-        )
-    }
+    override fun createStackElementTag(element: StackTraceElement): String = String.format(
+        Locale.US,
+        "HateItOrRateIt-${BuildConfig.BUILD_TYPE}:C:%s:%s",
+        super.createStackElementTag(element),
+        element.lineNumber
+    )
 }
 
 private class ProductionTree : Timber.Tree() {

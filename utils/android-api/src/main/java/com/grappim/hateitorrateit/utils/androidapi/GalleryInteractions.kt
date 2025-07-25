@@ -6,7 +6,7 @@ interface GalleryInteractions {
         name: String,
         mimeType: String,
         folderName: String
-    ): SaveImageState
+    ): Result<Unit>
 }
 
 sealed interface SaveImageState {

@@ -9,9 +9,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FolderPathManagerImpl @Inject constructor(
-    @ApplicationContext private val context: Context
-) : FolderPathManager {
+class FolderPathManagerImpl @Inject constructor(@ApplicationContext private val context: Context) :
+    FolderPathManager {
 
     /**
      * /data/data/com.grappim.hateitorrateit/files/products/1_2024-01-23_20-04-41/

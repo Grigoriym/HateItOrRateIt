@@ -1,11 +1,11 @@
 package com.grappim.hateitorrateit.data.remoteconfigimpl
 
 import android.content.Context
+import com.google.firebase.Firebase
 import com.google.firebase.FirebaseApp
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfig
-import com.google.firebase.remoteconfig.ktx.remoteConfigSettings
+import com.google.firebase.remoteconfig.remoteConfig
+import com.google.firebase.remoteconfig.remoteConfigSettings
 import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigDefaults
 import com.grappim.hateitorrateit.data.remoteconfigapi.RemoteConfigManager

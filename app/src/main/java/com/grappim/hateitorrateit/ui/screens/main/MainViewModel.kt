@@ -10,6 +10,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -18,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val emptyFilesCleaner: EmptyFilesCleaner,
-    private val localDataStorage: LocalDataStorage,
+    localDataStorage: LocalDataStorage,
     remoteConfigsListener: RemoteConfigsListener
 ) : ViewModel() {
 
@@ -38,18 +40,14 @@ class MainViewModel @Inject constructor(
         )
 
     init {
-        viewModelScope.launch {
-            launch {
-                emptyFilesCleaner.clean()
+        localDataStorage.darkThemeConfig.onEach { value ->
+            _viewState.update {
+                it.copy(darkThemeConfig = value)
             }
+        }.launchIn(viewModelScope)
 
-            launch {
-                localDataStorage.darkThemeConfig.collect { value ->
-                    _viewState.update {
-                        it.copy(darkThemeConfig = value)
-                    }
-                }
-            }
+        viewModelScope.launch {
+            emptyFilesCleaner.clean()
         }
     }
 }

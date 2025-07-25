@@ -21,10 +21,7 @@ plugins {
 }
 
 doctor {
-    failOnEmptyDirectories.set(false)
     enableTestCaching.set(false)
-    failOnEmptyDirectories.set(true)
-    warnWhenNotUsingParallelGC.set(true)
     disallowCleanTaskDependencies.set(true)
     warnWhenJetifierEnabled.set(true)
     javaHome {
@@ -51,6 +48,7 @@ subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
         plugin("org.jlleitschuh.gradle.ktlint")
+        plugin("com.autonomousapps.dependency-analysis")
     }
 
     // https://github.com/cortinico/kotlin-android-template/
@@ -73,10 +71,11 @@ subprojects {
             reporter(ReporterType.HTML)
             reporter(ReporterType.JSON)
         }
-        filter {
-            exclude("**/generated/**")
-            include("**/kotlin/**")
-        }
+    }
+
+    dependencies {
+        ktlintRuleset("io.nlopez.compose.rules:ktlint:0.4.22")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.22")
     }
 }
 

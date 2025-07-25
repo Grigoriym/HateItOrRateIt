@@ -2,6 +2,7 @@ package com.grappim.hateitorrateit.feature.details.ui
 
 import android.content.Intent
 import androidx.lifecycle.SavedStateHandle
+import app.cash.turbine.test
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
@@ -11,6 +12,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.testException
 import com.grappim.hateitorrateit.testing.domain.NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_FOLDER_NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_ID
@@ -18,7 +20,6 @@ import com.grappim.hateitorrateit.testing.domain.createRandomProductImage
 import com.grappim.hateitorrateit.testing.domain.createRandomProductImageList
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
-import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -27,6 +28,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -170,7 +172,7 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `on resetSaveFileToGalleryState should make state Initial`() {
+    fun `on resetSaveFileToGalleryState should make state Initial`() = runTest {
         coEvery {
             galleryInteractions.saveImageInGallery(
                 any(),
@@ -178,18 +180,13 @@ class DetailsViewModelTest {
                 any(),
                 any()
             )
-        } returns SaveImageState.Failure
+        } returns Result.failure(testException)
 
-        val image = createRandomProductImage()
-        assertEquals(sut.viewState.value.saveFileToGalleryState, SaveImageState.Initial)
-
-        sut.viewState.value.saveFileToGallery(image)
-
-        assertEquals(sut.viewState.value.saveFileToGalleryState, SaveImageState.Failure)
-
-        sut.viewState.value.resetSaveFileToGalleryState()
-
-        assertEquals(sut.viewState.value.saveFileToGalleryState, SaveImageState.Initial)
+        sut.viewEvents.test {
+            val image = createRandomProductImage()
+            sut.viewState.value.saveFileToGallery(image)
+            assertEquals(DetailsEvents.SaveImageFailure, awaitItem())
+        }
     }
 
     @Test
@@ -215,7 +212,7 @@ class DetailsViewModelTest {
 
         assertNull(sut.viewState.value.shareImageIntent)
 
-        sut.viewState.value.onShareImageClicked(productImage)
+        sut.viewState.value.onShareImageClick(productImage)
 
         assertEquals(expected, sut.viewState.value.shareImageIntent)
 
@@ -235,15 +232,15 @@ class DetailsViewModelTest {
             )
         } returns expected
 
-        sut.viewState.value.onShareImageClicked(productImage)
+        sut.viewState.value.onShareImageClick(productImage)
 
         assertEquals(expected, sut.viewState.value.shareImageIntent)
     }
 
     @Test
-    fun `on saveFileToGallery should emit correct state`() {
+    fun `on saveFileToGallery should emit correct state`() = runTest {
         val image = createRandomProductImage()
-        val expected = SaveImageState.Success
+        val expected = DetailsEvents.SaveImageSuccess
         coEvery {
             galleryInteractions.saveImageInGallery(
                 any(),
@@ -251,11 +248,12 @@ class DetailsViewModelTest {
                 any(),
                 any()
             )
-        } returns expected
+        } returns Result.success(Unit)
 
-        sut.viewState.value.saveFileToGallery(image)
-        val actual = sut.viewState.value.saveFileToGalleryState
-        assertEquals(expected, actual)
+        sut.viewEvents.test {
+            sut.viewState.value.saveFileToGallery(image)
+            assertEquals(expected, awaitItem())
+        }
     }
 
     @Test
@@ -267,9 +265,11 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `om setSnackbarMessage should set correct message`() {
+    fun `on setSnackbarMessage should set correct message`() = runTest {
         val expected = NativeText.Simple("sdfsdfsdf")
-        sut.viewState.value.setSnackbarMessage(expected)
-        assertEquals(expected, sut.viewState.value.snackbarMessage?.data)
+        sut.snackBarMessage.test {
+            sut.viewState.value.setSnackbarMessage(expected)
+            assertEquals(expected, awaitItem())
+        }
     }
 }

@@ -15,6 +15,8 @@ import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQueryBuilder
 import com.grappim.hateitorrateit.data.repoimpl.mappers.ProductMapper
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -118,21 +120,22 @@ class ProductsRepositoryImpl @Inject constructor(
         )
     }
 
-    override fun getProductsFlow(query: String, type: HateRateType?): Flow<List<Product>> = flow {
-        emitAll(
-            if (query.isEmpty() && type == null) {
-                productsDao.getAllProductsFlow()
-            } else {
-                val sqLiteQuery = sqlQueryBuilder.buildSqlQuery(query, type)
-                productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
-            }.mapLatest { list ->
-                list.map {
-                    productsMapper.toProduct(
-                        productEntity = it.productEntity,
-                        images = it.files
-                    )
+    override fun getProductsFlow(query: String, type: HateRateType?): Flow<ImmutableList<Product>> =
+        flow {
+            emitAll(
+                if (query.isEmpty() && type == null) {
+                    productsDao.getAllProductsFlow()
+                } else {
+                    val sqLiteQuery = sqlQueryBuilder.buildSqlQuery(query, type)
+                    productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
+                }.mapLatest { list ->
+                    list.map {
+                        productsMapper.toProduct(
+                            productEntity = it.productEntity,
+                            images = it.files
+                        )
+                    }.toImmutableList()
                 }
-            }
-        )
-    }
+            )
+        }
 }

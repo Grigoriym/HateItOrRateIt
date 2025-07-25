@@ -7,12 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 
 @Composable
 fun TextH4(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE
 ) {
@@ -28,8 +28,8 @@ fun TextH4(
 
 @Composable
 fun TextH5(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE
 ) {
@@ -44,8 +44,8 @@ fun TextH5(
 
 @Composable
 fun TextH6(
-    modifier: Modifier = Modifier,
     text: String,
+    modifier: Modifier = Modifier,
     overflow: TextOverflow = TextOverflow.Clip,
     maxLines: Int = Int.MAX_VALUE
 ) {
@@ -58,21 +58,21 @@ fun TextH6(
     )
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun TextH4Preview() {
     HateItOrRateItTheme {
         TextH4(text = "Some Text")
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun TextH5Preview() {
     HateItOrRateItTheme {
         TextH5(text = "Some Text")
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun TextH6Preview() {
     HateItOrRateItTheme {
         TextH6(text = "Some Text")

@@ -9,8 +9,8 @@ import androidx.compose.ui.layout.ContentScale
 
 @Composable
 fun PlatoImage(
-    modifier: Modifier,
     painter: Painter,
+    modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String = painter.toString()
 ) {
@@ -24,8 +24,8 @@ fun PlatoImage(
 
 @Composable
 fun PlatoImage(
-    modifier: Modifier,
     imageVector: ImageVector,
+    modifier: Modifier = Modifier,
     contentScale: ContentScale = ContentScale.Fit,
     contentDescription: String = imageVector.name
 ) {

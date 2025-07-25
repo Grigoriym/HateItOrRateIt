@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.hateitorrateit.java.library)
+    alias(libs.plugins.hateitorrateit.kotlin.library)
 }
 
 dependencies {

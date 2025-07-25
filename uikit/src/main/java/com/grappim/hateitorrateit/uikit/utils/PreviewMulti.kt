@@ -22,4 +22,4 @@ import com.grappim.hateitorrateit.uikit.theme.DarkBackgroundColorForPreview
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     name = "Dark theme"
 )
-annotation class ThemePreviews
+annotation class PreviewMulti

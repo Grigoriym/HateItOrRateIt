@@ -153,29 +153,28 @@ class ProductsDaoTest {
     }
 
     @Test
-    fun insert_and_update_product_withValues_getProductById_should_return_updated_product() =
-        runTest {
-            val date = prepareDate()
+    fun insert_and_update_product_withValues_getProductById_should_return_updated_product() = runTest {
+        val date = prepareDate()
 
-            val (entity, id) = prepareEntityAndId(date)
+        val (entity, id) = prepareEntityAndId(date)
 
-            val newDate = prepareDate()
-            val newProduct = entity.copy(
-                productId = id,
-                name = "name_2",
-                createdDate = newDate,
-                productFolderName = "folder_2",
-                description = "description_2",
-                shop = "shop_2",
-                type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE,
-                isCreated = true
-            )
-            productsDao.updateProduct(newProduct)
+        val newDate = prepareDate()
+        val newProduct = entity.copy(
+            productId = id,
+            name = "name_2",
+            createdDate = newDate,
+            productFolderName = "folder_2",
+            description = "description_2",
+            shop = "shop_2",
+            type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE,
+            isCreated = true
+        )
+        productsDao.updateProduct(newProduct)
 
-            val actual = productsDao.getProductById(id).productEntity
+        val actual = productsDao.getProductById(id).productEntity
 
-            assertProductData(actual, newProduct)
-        }
+        assertProductData(actual, newProduct)
+    }
 
     @Test
     fun on_insert_getAllProductsFlow_emitsCorrectProducts() = runTest {
@@ -242,27 +241,26 @@ class ProductsDaoTest {
     }
 
     @Test
-    fun on_insertingProductAndImages_on_deleteProductAndImagesById_should_delete_correctly() =
-        runTest {
-            val date = prepareDate()
+    fun on_insertingProductAndImages_on_deleteProductAndImagesById_should_delete_correctly() = runTest {
+        val date = prepareDate()
 
-            val entity = createProductEntity().copy(createdDate = date)
-            val id = productsDao.insert(entity)
-            val images = getProductImageList(id)
-            productsDao.upsertImages(images)
+        val entity = createProductEntity().copy(createdDate = date)
+        val id = productsDao.insert(entity)
+        val images = getProductImageList(id)
+        productsDao.upsertImages(images)
 
-            productsDao.getAllProductsFlow().test {
-                val initialItem = awaitItem()
-                assertTrue(initialItem.size == 1)
-                assertTrue(initialItem.first().files?.size == 2)
+        productsDao.getAllProductsFlow().test {
+            val initialItem = awaitItem()
+            assertTrue(initialItem.size == 1)
+            assertTrue(initialItem.first().files?.size == 2)
 
-                productsDao.deleteProductAndImagesById(id)
+            productsDao.deleteProductAndImagesById(id)
 
-                assertTrue(awaitItem().isEmpty())
+            assertTrue(awaitItem().isEmpty())
 
-                cancelAndIgnoreRemainingEvents()
-            }
+            cancelAndIgnoreRemainingEvents()
         }
+    }
 
     @Test
     fun on_updateProductFolderName_should_correctly_update() = runTest {
@@ -424,10 +422,9 @@ class ProductsDaoTest {
         )
     }
 
-    private suspend fun getAllProducts(): List<ProductEntity> =
-        productsDao.getAllProductsFlow().firstOrNull()?.map {
-            it.productEntity
-        }.orEmpty()
+    private suspend fun getAllProducts(): List<ProductEntity> = productsDao.getAllProductsFlow().firstOrNull()?.map {
+        it.productEntity
+    }.orEmpty()
 
     private fun setupFormatter(date: OffsetDateTime) {
         every { dateTimeUtils.formatToStoreInDb(any()) } returns "dateTimeFormatter.format(date)"

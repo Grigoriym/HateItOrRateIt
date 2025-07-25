@@ -27,6 +27,8 @@ import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -81,13 +83,11 @@ class ProductManagerViewModel @Inject constructor(
         }
 
     init {
-        viewModelScope.launch {
-            localDataStorage.typeFlow.collect { value ->
-                _viewState.update {
-                    it.copy(type = value)
-                }
+        localDataStorage.typeFlow.onEach { value ->
+            _viewState.update {
+                it.copy(type = value)
             }
-        }
+        }.launchIn(viewModelScope)
 
         if (editProductId?.isNotEmpty() == true) {
             prepareProductForEdit()
@@ -296,11 +296,11 @@ class ProductManagerViewModel @Inject constructor(
         viewModelScope.launch {
             when {
                 _viewState.value.productName.isBlank() -> {
-                    setSnackbarMessageSuspend(NativeText.Resource(R.string.set_name))
+                    showSnackbarSuspend(NativeText.Resource(R.string.set_name))
                 }
 
                 _viewState.value.images.isEmpty() -> {
-                    setSnackbarMessageSuspend(NativeText.Resource(R.string.add_image))
+                    showSnackbarSuspend(NativeText.Resource(R.string.add_image))
                 }
 
                 else -> {

@@ -21,15 +21,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 
 @Composable
 fun PlatoPagerIndicator(
-    modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.surface,
     show: Boolean,
     size: Int,
-    pagerState: PagerState
+    pagerState: PagerState,
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colors.surface
 ) {
     if (show) {
         PlatoCard(
@@ -66,7 +66,7 @@ fun PlatoPagerIndicator(
     }
 }
 
-@[Composable ThemePreviews Suppress("MagicNumber")]
+@[Composable PreviewMulti Suppress("MagicNumber")]
 private fun PlatoPagerIndicatorPreview() {
     val pagerState = rememberPagerState {
         5

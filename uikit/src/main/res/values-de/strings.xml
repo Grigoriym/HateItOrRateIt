@@ -16,8 +16,10 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">Ok</string>
+    <string name="dismiss">Verwerfen</string>
     <string name="cancel">Abbrechen</string>
     <string name="close">Schließen</string>
+    <string name="proceed">Weiter</string>
 
     <string name="delete_image">Bild löschen</string>
 

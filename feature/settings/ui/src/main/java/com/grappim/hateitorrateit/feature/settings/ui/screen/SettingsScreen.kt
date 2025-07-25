@@ -107,10 +107,10 @@ private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) 
             onDismissRequest = {
                 state.onDismissDialog()
             },
-            onConfirmButtonClicked = {
+            onConfirmButtonClick = {
                 state.onAlertDialogConfirmButtonClicked()
             },
-            onDismissButtonClicked = {
+            onDismissButtonClick = {
                 state.onDismissDialog()
             }
         )
@@ -278,7 +278,7 @@ private fun GithubRepoContent(state: SettingsViewState) {
         PlatoOutlinedButton(
             painter = painterResource(id = R.drawable.github_mark),
             text = stringResource(id = R.string.github_repo_link),
-            onClicked = { uriHandler.openUri(state.githubRepoLink) }
+            onClick = { uriHandler.openUri(state.githubRepoLink) }
         )
     }
 }
@@ -291,7 +291,7 @@ private fun PrivacyPolicyContent(state: SettingsViewState) {
         PlatoOutlinedButton(
             imageVector = PlatoIconType.PrivacyPolicy.imageVector,
             text = stringResource(id = R.string.privacy_policy_link),
-            onClicked = { uriHandler.openUri(state.privacyPolicyLink) }
+            onClick = { uriHandler.openUri(state.privacyPolicyLink) }
         )
     }
 }
@@ -349,8 +349,9 @@ private fun PlatoRadioButton(selected: Boolean, onClick: () -> Unit, text: Strin
 }
 
 @Composable
-fun TypeIcon(state: SettingsViewState) {
+fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
     Crossfade(
+        modifier = modifier,
         targetState = state.type,
         label = "type_crossfade_icon",
         animationSpec = tween(ANIMATION_DURATION)
@@ -365,8 +366,9 @@ fun TypeIcon(state: SettingsViewState) {
 }
 
 @Composable
-fun FeatureEnabledIcon(state: Boolean) {
+fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
     Crossfade(
+        modifier = modifier,
         targetState = state,
         label = "custom_switch_label",
         animationSpec = tween(ANIMATION_DURATION)

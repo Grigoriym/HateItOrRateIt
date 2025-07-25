@@ -11,14 +11,17 @@ import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
-import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
-import com.grappim.hateitorrateit.utils.ui.LaunchedEffectResult
 import com.grappim.hateitorrateit.utils.ui.NativeText
+import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
+import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,10 +33,14 @@ class DetailsViewModel @Inject constructor(
     private val galleryInteractions: GalleryInteractions,
     private val intentGenerator: IntentGenerator,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : ViewModel(),
+    SnackbarStateViewModel by SnackbarStateViewModelImpl() {
 
     private val productId =
         requireNotNull(savedStateHandle.get<Long>(NavDestinations.Details.KEY))
+
+    private val _viewEvents = Channel<DetailsEvents>()
+    val viewEvents = _viewEvents.receiveAsFlow()
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(
@@ -47,10 +54,9 @@ class DetailsViewModel @Inject constructor(
             setCurrentDisplayedImageIndex = ::setCurrentDisplayedImageIndex,
             setSnackbarMessage = ::setSnackbarMessage,
             saveFileToGallery = ::saveFileToGallery,
-            onShareImageClicked = ::onShareImageClicked,
+            onShareImageClick = ::onShareImageClicked,
             clearShareImageIntent = ::clearShareImageIntent,
-            onShowPermissionsAlertDialog = ::onShowPermissionsAlertDialog,
-            resetSaveFileToGalleryState = ::resetSaveFileToGalleryState
+            onShowPermissionsAlertDialog = ::onShowPermissionsAlertDialog
         )
     )
 
@@ -58,12 +64,6 @@ class DetailsViewModel @Inject constructor(
 
     init {
         getProduct()
-    }
-
-    private fun resetSaveFileToGalleryState() {
-        _viewState.update {
-            it.copy(saveFileToGalleryState = SaveImageState.Initial)
-        }
     }
 
     private fun onShowPermissionsAlertDialog(show: Boolean, text: String?) {
@@ -96,14 +96,16 @@ class DetailsViewModel @Inject constructor(
 
     private fun saveFileToGallery(productImage: ProductImage) {
         viewModelScope.launch {
-            val state = galleryInteractions.saveImageInGallery(
+            galleryInteractions.saveImageInGallery(
                 uriString = productImage.uriString,
                 name = productImage.name,
                 mimeType = productImage.mimeType,
                 folderName = requireNotNull(viewState.value.productFolderName)
-            )
-            _viewState.update {
-                it.copy(saveFileToGalleryState = state)
+            ).onSuccess { result ->
+                _viewEvents.send(DetailsEvents.SaveImageSuccess)
+            }.onFailure { error ->
+                Timber.e(error)
+                _viewEvents.send(DetailsEvents.SaveImageFailure)
             }
         }
     }
@@ -169,8 +171,8 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun setSnackbarMessage(text: NativeText) {
-        _viewState.update {
-            it.copy(snackbarMessage = LaunchedEffectResult(text))
+        viewModelScope.launch {
+            showSnackbarSuspend(text)
         }
     }
 

@@ -8,9 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @[ProvidedTypeConverter Singleton]
-class DateTimeConverter @Inject constructor(
-    private val dateTimeUtils: DateTimeUtils
-) {
+class DateTimeConverter @Inject constructor(private val dateTimeUtils: DateTimeUtils) {
 
     @TypeConverter
     fun fromDateTime(offsetDateTime: OffsetDateTime): String =

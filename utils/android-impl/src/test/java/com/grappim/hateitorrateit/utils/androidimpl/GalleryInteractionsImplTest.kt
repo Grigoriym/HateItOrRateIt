@@ -8,7 +8,6 @@ import com.grappim.hateitorrateit.testing.core.getRandomFile
 import com.grappim.hateitorrateit.testing.core.getUriForFile
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
-import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.transfer.FileTransferOperations
 import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
@@ -33,6 +32,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 @Config(
@@ -101,7 +101,7 @@ class GalleryInteractionsImplTest {
 
         val result = sut.saveImageInGallery("", name, "", folderName)
 
-        assert(result is SaveImageState.Success)
+        assertTrue(result.isSuccess)
 
         coVerify {
             fileInfoRetriever.findFileInFolder(name, folderName)
@@ -133,7 +133,7 @@ class GalleryInteractionsImplTest {
 
             val result = sut.saveImageInGallery("", name, "", folderName)
 
-            assert(result is SaveImageState.Failure)
+            assertTrue(result.isFailure)
 
             coVerify {
                 fileInfoRetriever.findFileInFolder(name, folderName)
@@ -165,7 +165,7 @@ class GalleryInteractionsImplTest {
 
             val result = sut.saveImageInGallery("", name, "", folderName)
 
-            assert(result is SaveImageState.Failure)
+            assertTrue(result.isFailure)
 
             coVerify {
                 fileInfoRetriever.findFileInFolder(name, folderName)
@@ -197,7 +197,7 @@ class GalleryInteractionsImplTest {
 
             val result = sut.saveImageInGallery("", name, "", folderName)
 
-            assert(result is SaveImageState.Failure)
+            assertTrue(result.isFailure)
 
             coVerify {
                 fileInfoRetriever.findFileInFolder(name, folderName)
@@ -234,7 +234,7 @@ class GalleryInteractionsImplTest {
 
         val result = sut.saveImageInGallery(uriString, name, mimeType, folderName)
 
-        assert(result is SaveImageState.Success)
+        assertTrue(result.isSuccess)
     }
 
     private fun getPicturesDirectory() =

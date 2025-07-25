@@ -12,27 +12,27 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 
 const val PLATO_ALERT_DIALOG_TAG = "plato_alert_dialog_tag"
 
 @Composable
 fun PlatoAlertDialog(
-    modifier: Modifier = Modifier,
     text: String,
     showAlertDialog: Boolean,
+    onDismissRequest: () -> Unit,
+    onConfirmButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
     confirmButtonText: String = stringResource(id = R.string.yes),
     dismissButtonText: String? = null,
-    onDismissRequest: () -> Unit,
-    onConfirmButtonClicked: () -> Unit,
-    onDismissButtonClicked: (() -> Unit)? = null
+    onDismissButtonClick: (() -> Unit)? = null
 ) {
     if (showAlertDialog) {
         val dismissButton: @Composable (() -> Unit)? =
-            if (dismissButtonText != null && onDismissButtonClicked != null) {
+            if (dismissButtonText != null && onDismissButtonClick != null) {
                 {
                     Button(
-                        onClick = onDismissButtonClicked
+                        onClick = onDismissButtonClick
                     ) {
                         Text(dismissButtonText)
                     }
@@ -47,7 +47,7 @@ fun PlatoAlertDialog(
             title = { Text(text = text) },
             confirmButton = {
                 Button(
-                    onClick = onConfirmButtonClicked
+                    onClick = onConfirmButtonClick
                 ) {
                     Text(confirmButtonText)
                 }
@@ -57,27 +57,27 @@ fun PlatoAlertDialog(
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoAlertDialogPreview() {
     HateItOrRateItTheme {
         PlatoAlertDialog(
             text = "Some text",
             showAlertDialog = true,
             onDismissRequest = {},
-            onConfirmButtonClicked = {},
-            onDismissButtonClicked = {}
+            onConfirmButtonClick = {},
+            onDismissButtonClick = {}
         )
     }
 }
 
-@[Composable ThemePreviews]
+@[Composable PreviewMulti]
 private fun PlatoAlertDialogWithoutDismissPreview() {
     HateItOrRateItTheme {
         PlatoAlertDialog(
             text = "Some text",
             showAlertDialog = true,
             onDismissRequest = {},
-            onConfirmButtonClicked = {}
+            onConfirmButtonClick = {}
         )
     }
 }

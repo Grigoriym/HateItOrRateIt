@@ -10,6 +10,10 @@ import timber.log.Timber
 import java.util.concurrent.CancellationException
 import javax.inject.Inject
 
+/**
+ * This class cleans any empty/non-created files. e.g. when we started creating a product,
+ * but something happened and the app was closed
+ */
 @Suppress("TooGenericExceptionCaught")
 class EmptyFilesCleanerImpl @Inject constructor(
     @IoDispatcher private val dispatcher: CoroutineDispatcher,

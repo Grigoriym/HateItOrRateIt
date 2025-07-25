@@ -14,10 +14,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.ThemePreviews
+import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
 
 @Composable
-fun PlatoIconButton(modifier: Modifier = Modifier, icon: ImageVector, onButtonClick: () -> Unit) {
+fun PlatoIconButton(icon: ImageVector, onButtonClick: () -> Unit, modifier: Modifier = Modifier) {
     Button(
         modifier = modifier
             .size(50.dp)
@@ -34,8 +34,8 @@ fun PlatoIconButton(modifier: Modifier = Modifier, icon: ImageVector, onButtonCl
     }
 }
 
-@[Composable ThemePreviews]
-fun PlatoIconButtonPreview() {
+@[Composable PreviewMulti]
+private fun PlatoIconButtonPreview() {
     HateItOrRateItTheme {
         PlatoIconButton(
             icon = Icons.Filled.Abc,

@@ -9,6 +9,7 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.utils.HomeUIModelsMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,7 +69,7 @@ class HomeViewModel @Inject constructor(
                 ).map {
                     it.map { product ->
                         homeUIModelsMapper.toProductUi(product)
-                    }
+                    }.toPersistentList()
                 }.onEach { products ->
                     _viewState.update {
                         it.copy(
