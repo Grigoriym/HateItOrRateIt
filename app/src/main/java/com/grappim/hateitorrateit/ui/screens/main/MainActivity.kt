@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.google.android.material.snackbar.Snackbar
 import com.grappim.hateitorrateit.appupdateapi.AppUpdateChecker
+import com.grappim.hateitorrateit.appupdateapi.UpdateState
 import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
 import com.grappim.hateitorrateit.feature.details.ui.navigation.detailsScreen
@@ -26,6 +28,8 @@ import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.utils.ui.navigation.safeClick
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -36,14 +40,11 @@ class MainActivity : AppCompatActivity() {
     @Inject
     lateinit var appUpdateChecker: AppUpdateChecker
 
-    override fun onResume() {
-        super.onResume()
-        checkForAppUpdates()
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+        checkForAppUpdates()
+        observeUpdateState()
 
         setContent {
             val state by viewModel.viewState.collectAsStateWithLifecycle()
@@ -56,20 +57,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        appUpdateChecker.registerUpdateListener()
+        appUpdateChecker.checkUpdateStateOnResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        appUpdateChecker.unregisterUpdateListener()
+    }
+
+    private fun observeUpdateState() {
+        lifecycleScope.launch {
+            appUpdateChecker.updateState.collectLatest { state ->
+                when (state) {
+                    is UpdateState.UpdateDownloaded -> showRestartSnackbar()
+                }
+            }
+        }
+    }
+
+    private fun showRestartSnackbar() {
+        Snackbar.make(
+            window.decorView.rootView,
+            getString(R.string.app_update_downloaded),
+            Snackbar.LENGTH_INDEFINITE
+        ).apply {
+            setAction(getString(R.string.restart)) { appUpdateChecker.completeUpdate() }
+            show()
+        }
+    }
+
     private fun checkForAppUpdates() {
         if (viewModel.inAppUpdateEnabled.value.not()) {
             return
         }
-        appUpdateChecker.checkForUpdates {
-            Snackbar.make(
-                window.decorView.rootView,
-                getString(R.string.app_update_downloaded),
-                Snackbar.LENGTH_INDEFINITE
-            ).apply {
-                setAction(getString(R.string.restart)) { appUpdateChecker.completeUpdate() }
-                show()
-            }
-        }
+        appUpdateChecker.checkAndRequestUpdate()
     }
 
     @Composable

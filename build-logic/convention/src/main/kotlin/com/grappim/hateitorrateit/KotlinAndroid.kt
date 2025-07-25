@@ -12,7 +12,6 @@ import org.gradle.kotlin.dsl.project
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
-import kotlin.text.get
 
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -56,6 +55,7 @@ internal fun Project.configureKotlinAndroid(
         "coreLibraryDesugaring"(libs.findLibrary("android.desugarJdkLibs").get())
 
         "implementation"(libs.findLibrary("kotlinx.collections").get())
+        "implementation"(libs.findLibrary("kotlinx.coroutines.core").get())
 
         add("testImplementation", kotlin("test"))
         add("testImplementation", project(":testing:core"))
