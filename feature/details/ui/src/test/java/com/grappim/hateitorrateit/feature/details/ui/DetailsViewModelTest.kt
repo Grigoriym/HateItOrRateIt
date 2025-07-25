@@ -12,6 +12,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.testException
 import com.grappim.hateitorrateit.testing.domain.NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_FOLDER_NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_ID
@@ -19,7 +20,6 @@ import com.grappim.hateitorrateit.testing.domain.createRandomProductImage
 import com.grappim.hateitorrateit.testing.domain.createRandomProductImageList
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
-import com.grappim.hateitorrateit.utils.androidapi.SaveImageState
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -172,7 +172,7 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `on resetSaveFileToGalleryState should make state Initial`() {
+    fun `on resetSaveFileToGalleryState should make state Initial`() = runTest {
         coEvery {
             galleryInteractions.saveImageInGallery(
                 any(),
@@ -180,18 +180,13 @@ class DetailsViewModelTest {
                 any(),
                 any()
             )
-        } returns SaveImageState.Failure
+        } returns Result.failure(testException)
 
-        val image = createRandomProductImage()
-        assertEquals(sut.viewState.value.saveFileToGalleryState, SaveImageState.Initial)
-
-        sut.viewState.value.saveFileToGallery(image)
-
-        assertEquals(sut.viewState.value.saveFileToGalleryState, SaveImageState.Failure)
-
-        sut.viewState.value.resetSaveFileToGalleryState()
-
-        assertEquals(sut.viewState.value.saveFileToGalleryState, SaveImageState.Initial)
+        sut.viewEvents.test {
+            val image = createRandomProductImage()
+            sut.viewState.value.saveFileToGallery(image)
+            assertEquals(DetailsEvents.SaveImageFailure, awaitItem())
+        }
     }
 
     @Test
@@ -243,9 +238,9 @@ class DetailsViewModelTest {
     }
 
     @Test
-    fun `on saveFileToGallery should emit correct state`() {
+    fun `on saveFileToGallery should emit correct state`() = runTest {
         val image = createRandomProductImage()
-        val expected = SaveImageState.Success
+        val expected = DetailsEvents.SaveImageSuccess
         coEvery {
             galleryInteractions.saveImageInGallery(
                 any(),
@@ -253,11 +248,12 @@ class DetailsViewModelTest {
                 any(),
                 any()
             )
-        } returns expected
+        } returns Result.success(Unit)
 
-        sut.viewState.value.saveFileToGallery(image)
-        val actual = sut.viewState.value.saveFileToGalleryState
-        assertEquals(expected, actual)
+        sut.viewEvents.test {
+            sut.viewState.value.saveFileToGallery(image)
+            assertEquals(expected, awaitItem())
+        }
     }
 
     @Test
