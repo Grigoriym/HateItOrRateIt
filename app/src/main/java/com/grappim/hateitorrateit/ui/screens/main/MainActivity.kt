@@ -94,16 +94,6 @@ class MainActivity : AppCompatActivity() {
             return
         }
         appUpdateChecker.checkAndRequestUpdate()
-//        appUpdateChecker.checkForUpdates {
-//            Snackbar.make(
-//                window.decorView.rootView,
-//                getString(R.string.app_update_downloaded),
-//                Snackbar.LENGTH_INDEFINITE
-//            ).apply {
-//                setAction(getString(R.string.restart)) { appUpdateChecker.completeUpdate() }
-//                show()
-//            }
-//        }
     }
 
     @Composable
