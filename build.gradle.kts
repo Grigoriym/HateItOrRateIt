@@ -25,6 +25,8 @@ doctor {
     disallowCleanTaskDependencies.set(true)
     warnWhenJetifierEnabled.set(true)
     javaHome {
+        ensureJavaHomeMatches.set(false)
+        ensureJavaHomeIsSet.set(false)
         failOnError.set(false)
     }
 }
