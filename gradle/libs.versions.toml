@@ -52,7 +52,7 @@ turbine = "1.2.1"
 
 androidxTestCore = "1.6.1"
 androidx-junit = "1.2.1"
-androidxTestRunner = "1.6.2"
+androidxTestRunner = "1.7.0"
 androidxTestRules = "1.6.1"
 
 robolectric = "4.15.1"
