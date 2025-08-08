@@ -1,13 +1,13 @@
 [versions]
 compose-bom = "2025.07.00"
-firebase-bom = "34.0.0"
+firebase-bom = "34.1.0"
 
-compileSdk = "35"
+compileSdk = "36"
 minSdk = "24"
 targetSdk = "35"
 
-agp = "8.11.1"
-androidTools = "31.11.1"
+agp = "8.12.0"
+androidTools = "31.12.0"
 androidDesugarJdkLibs = "2.1.5"
 
 kotlin = "2.2.0"
@@ -24,12 +24,12 @@ dependencyAnalysis = "2.19.0"
 
 gms = "4.4.3"
 inAppUpdate = "2.1.0"
-firebaseCrashlytics = "3.0.5"
+firebaseCrashlytics = "3.0.6"
 material = "1.12.0"
 
 hilt = "2.57"
 androidx-hilt = "1.2.0"
-navigation = "2.9.2"
+navigation = "2.9.3"
 lifecycle = "2.9.2"
 appcompat = "1.7.1"
 core-ktx = "1.16.0"
@@ -46,14 +46,12 @@ coil = "2.7.0"
 timber = "5.0.1"
 mockk = "1.14.5"
 
-androidxEspresso = "3.6.1"
 junit4 = "4.13.2"
 turbine = "1.2.1"
 
-androidxTestCore = "1.6.1"
-androidx-junit = "1.2.1"
-androidxTestRunner = "1.6.2"
-androidxTestRules = "1.6.1"
+androidxTestCore = "1.7.0"
+androidxTestRunner = "1.7.0"
+androidxTestRules = "1.7.0"
 
 robolectric = "4.15.1"
 
@@ -103,14 +101,11 @@ androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-t
 
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "archCore" }
 androidx-test-core = { group = "androidx.test", name = "core", version.ref = "androidxTestCore" }
-androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
-androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
 androidx-test-runner = { group = "androidx.test", name = "runner", version.ref = "androidxTestRunner" }
 androidx-test-rules = { group = "androidx.test", name = "rules", version.ref = "androidxTestRules" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 
 google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 google-inAppUpdateKtx = { module = "com.google.android.play:app-update-ktx", version.ref = "inAppUpdate" }

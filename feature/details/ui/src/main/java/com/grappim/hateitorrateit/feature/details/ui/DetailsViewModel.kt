@@ -166,7 +166,7 @@ class DetailsViewModel @Inject constructor(
 
     private fun setCurrentDisplayedImageIndex(index: Int) {
         _viewState.update {
-            it.copy(currentImage = _viewState.value.images[index])
+            it.copy(currentImage = _viewState.value.images.getOrNull(index))
         }
     }
 

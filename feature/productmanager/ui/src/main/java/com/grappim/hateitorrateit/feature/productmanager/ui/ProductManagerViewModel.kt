@@ -38,7 +38,6 @@ import javax.inject.Inject
 class ProductManagerViewModel @Inject constructor(
     private val productsRepository: ProductsRepository,
     private val dataCleaner: DataCleaner,
-    private val localDataStorage: LocalDataStorage,
     private val backupImagesRepository: BackupImagesRepository,
     private val productImageManager: ProductImageManager,
     private val imageDataMapper: ImageDataMapper,
@@ -46,6 +45,7 @@ class ProductManagerViewModel @Inject constructor(
     private val fileDeletionUtils: FileDeletionUtils,
     private val fileUriManager: FileUriManager,
     private val imagePersistenceManager: ImagePersistenceManager,
+    localDataStorage: LocalDataStorage,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
@@ -297,10 +297,6 @@ class ProductManagerViewModel @Inject constructor(
             when {
                 _viewState.value.productName.isBlank() -> {
                     showSnackbarSuspend(NativeText.Resource(R.string.set_name))
-                }
-
-                _viewState.value.images.isEmpty() -> {
-                    showSnackbarSuspend(NativeText.Resource(R.string.add_image))
                 }
 
                 else -> {
