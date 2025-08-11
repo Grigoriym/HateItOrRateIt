@@ -5,9 +5,11 @@ permissions:
 
 on:
   pull_request:
-    branches: [ "master" ]
+    branches:
+        - dev
   push:
-    branches: [ "master" ]
+    branches:
+        - master
 
 jobs:
   code-analysis:
