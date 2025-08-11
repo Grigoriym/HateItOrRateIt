@@ -19,7 +19,7 @@ class UiModelsMapper @Inject constructor(
         val formattedCreatedDate = dateTimeUtils
             .formatToDemonstrate(product.createdDate)
         ProductDetailsUi(
-            id = product.id.toString(),
+            id = product.id,
             name = product.name,
             createdDate = formattedCreatedDate,
             images = product.images,

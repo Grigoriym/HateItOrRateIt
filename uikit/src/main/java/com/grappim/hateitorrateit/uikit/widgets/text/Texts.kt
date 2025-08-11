@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun TextH4(
@@ -58,21 +58,21 @@ fun TextH6(
     )
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextH4Preview() {
     HateItOrRateItTheme {
         TextH4(text = "Some Text")
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextH5Preview() {
     HateItOrRateItTheme {
         TextH5(text = "Some Text")
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextH6Preview() {
     HateItOrRateItTheme {
         TextH6(text = "Some Text")

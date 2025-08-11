@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun PlatoTextButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
@@ -18,7 +18,7 @@ fun PlatoTextButton(text: String, onClick: () -> Unit, modifier: Modifier = Modi
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoTextButtonPreview() {
     HateItOrRateItTheme {
         PlatoTextButton(

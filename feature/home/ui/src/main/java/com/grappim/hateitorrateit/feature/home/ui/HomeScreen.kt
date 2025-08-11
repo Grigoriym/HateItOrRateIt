@@ -26,6 +26,7 @@ import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -46,22 +47,34 @@ import com.grappim.hateitorrateit.feature.home.ui.utils.HomePreviewStateProvider
 import com.grappim.hateitorrateit.feature.home.ui.utils.getPreviewProductListUI
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.icon
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onProductClick: (id: Long) -> Unit) {
+    val topBarController = LocalTopBarConfig.current
     val state by viewModel.viewState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        topBarController.update(
+            TopBarConfig(
+                state = TopBarState.Hidden
+            )
+        )
+    }
+
     DisposableEffect(Unit) {
         state.trackScreenStart()
         onDispose { }
     }
-
     HomeScreenContent(
         state = state,
         onProductClick = onProductClick
@@ -271,7 +284,7 @@ private fun FilterChipsContent(state: HomeViewState, modifier: Modifier = Modifi
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun ProductItemPreview(
     @PreviewParameter(HomePreviewStateProvider::class) state: HomeViewState
 ) {

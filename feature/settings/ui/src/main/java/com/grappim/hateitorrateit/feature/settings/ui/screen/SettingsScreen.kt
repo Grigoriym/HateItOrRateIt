@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ExposedDropdownMenuBox
@@ -20,11 +19,11 @@ import androidx.compose.material.ExposedDropdownMenuDefaults
 import androidx.compose.material.Icon
 import androidx.compose.material.ListItem
 import androidx.compose.material.RadioButton
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +47,8 @@ import com.grappim.hateitorrateit.feature.settings.ui.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer16
@@ -56,11 +57,13 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer8
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoOutlinedButton
-import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarBackButtonState
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.asString
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.icon
 
 const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
 const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
@@ -68,155 +71,126 @@ const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
 private const val ANIMATION_DURATION = 500
 
 @Composable
-fun SettingsRoute(goBack: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val topBarController = LocalTopBarConfig.current
+
     DisposableEffect(Unit) {
         state.trackScreenStart()
         onDispose { }
     }
-    SettingsScreen(
-        state = state,
-        goBack = goBack
-    )
-}
 
-@Composable
-internal fun SettingsScreen(state: SettingsViewState, goBack: () -> Unit) {
-    SettingsScreenContent(
-        state = state,
-        goBack = goBack
-    )
-}
-
-@Composable
-private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            PlatoTopBar(
-                text = stringResource(id = R.string.settings),
-                goBack = goBack
+    LaunchedEffect(Unit) {
+        topBarController.update(
+            TopBarConfig(
+                state = TopBarState.Visible(
+                    title = NativeText.Resource(R.string.settings),
+                    topBarBackButtonState = TopBarBackButtonState.Visible()
+                )
             )
-        }
-    ) { padding ->
-        PlatoLoadingDialog(state.isLoading)
+        )
+    }
+    SettingsScreen(state = state)
+}
 
-        PlatoAlertDialog(
-            text = stringResource(id = R.string.are_you_sure_clear_all_data),
-            dismissButtonText = stringResource(id = R.string.no),
-            showAlertDialog = state.showAlertDialog,
-            onDismissRequest = {
-                state.onDismissDialog()
+@Composable
+internal fun SettingsScreen(state: SettingsViewState) {
+
+
+    PlatoLoadingDialog(state.isLoading)
+
+    PlatoAlertDialog(
+        text = stringResource(id = R.string.are_you_sure_clear_all_data),
+        dismissButtonText = stringResource(id = R.string.no),
+        showAlertDialog = state.showAlertDialog,
+        onDismissRequest = {
+            state.onDismissDialog()
+        },
+        onConfirmButtonClick = {
+            state.onAlertDialogConfirmButtonClicked()
+        },
+        onDismissButtonClick = {
+            state.onDismissDialog()
+        }
+    )
+
+    Column(modifier = Modifier.fillMaxSize()) {
+        PlatoHeightSpacer8()
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            LocaleDropdownMenu(state)
+        }
+
+        ListItem(
+            modifier = Modifier.clickable {
+                state.onClearDataClicked()
             },
-            onConfirmButtonClick = {
-                state.onAlertDialogConfirmButtonClicked()
-            },
-            onDismissButtonClick = {
-                state.onDismissDialog()
+            text = {
+                Text(text = stringResource(id = R.string.clear_data))
             }
         )
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-        ) {
-            item {
-                PlatoHeightSpacer8()
+        ListItem(
+            modifier = Modifier.clickable {
+                state.setNewType()
+            },
+            text = {
+                Text(text = stringResource(id = R.string.default_type))
+            },
+            trailing = {
+                TypeIcon(state = state)
             }
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    LocaleDropdownMenu(state)
-                }
-            }
+        )
 
-            item {
-                ListItem(
-                    modifier = Modifier.clickable {
-                        state.onClearDataClicked()
-                    },
-                    text = {
-                        Text(text = stringResource(id = R.string.clear_data))
+        if (!state.isFdroidBuild) {
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        state.onCrashlyticsToggle()
                     }
-                )
-            }
-            item {
-                ListItem(
-                    modifier = Modifier.clickable {
-                        state.setNewType()
-                    },
-                    text = {
-                        Text(text = stringResource(id = R.string.default_type))
-                    },
-                    trailing = {
-                        TypeIcon(state = state)
+                    .testTag(CRASHLYTICS_TILE_TAG),
+                text = {
+                    Text(text = stringResource(id = R.string.toggle_crashlytics))
+                },
+                trailing = {
+                    FeatureEnabledIcon(state.isCrashesCollectionEnabled)
+                },
+                secondaryText = {
+                    Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+                }
+            )
+
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        state.onAnalyticsToggle()
                     }
-                )
-            }
-
-            if (!state.isFdroidBuild) {
-                item {
-                    ListItem(
-                        modifier = Modifier
-                            .clickable {
-                                state.onCrashlyticsToggle()
-                            }
-                            .testTag(CRASHLYTICS_TILE_TAG),
-                        text = {
-                            Text(text = stringResource(id = R.string.toggle_crashlytics))
-                        },
-                        trailing = {
-                            FeatureEnabledIcon(state.isCrashesCollectionEnabled)
-                        },
-                        secondaryText = {
-                            Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
-                        }
-                    )
+                    .testTag(ANALYTICS_TILE_TAG),
+                text = {
+                    Text(text = stringResource(id = R.string.toggle_analytics))
+                },
+                trailing = {
+                    FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
+                },
+                secondaryText = {
+                    Text(text = stringResource(id = R.string.analytics_settings_subtitle))
                 }
-
-                item {
-                    ListItem(
-                        modifier = Modifier
-                            .clickable {
-                                state.onAnalyticsToggle()
-                            }
-                            .testTag(ANALYTICS_TILE_TAG),
-                        text = {
-                            Text(text = stringResource(id = R.string.toggle_analytics))
-                        },
-                        trailing = {
-                            FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
-                        },
-                        secondaryText = {
-                            Text(text = stringResource(id = R.string.analytics_settings_subtitle))
-                        }
-                    )
-                }
-            }
-            item {
-                PlatoHeightSpacer16()
-                DarkModePreferencesContent(state = state)
-            }
-
-            item {
-                GithubRepoContent(state = state)
-            }
-
-            item {
-                PrivacyPolicyContent(state = state)
-            }
-
-            item {
-                PlatoHeightSpacer16()
-                VersionContent(state = state)
-            }
-
-            item {
-                PlatoHeightSpacer32()
-            }
+            )
         }
+
+        PlatoHeightSpacer16()
+        DarkModePreferencesContent(state = state)
+
+        GithubRepoContent(state = state)
+
+        PrivacyPolicyContent(state = state)
+
+        PlatoHeightSpacer16()
+        VersionContent(state = state)
+
+        PlatoHeightSpacer32()
     }
 }
 

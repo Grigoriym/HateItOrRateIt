@@ -7,7 +7,7 @@ import com.grappim.hateitorrateit.utils.ui.NativeText
 import java.io.File
 
 data class DetailsViewState(
-    val productId: String = "",
+    val productId: Long,
     val name: String = "",
     val description: String = "",
     val shop: String = "",
@@ -23,16 +23,16 @@ data class DetailsViewState(
     val isLoading: Boolean = true,
 
     val showAlertDialog: Boolean = false,
-    val onShowAlertDialog: (show: Boolean) -> Unit,
-    val onDeleteProduct: () -> Unit,
+    val onShowAlertDialog: (show: Boolean) -> Unit = {},
+    val onDeleteProduct: () -> Unit = {},
 
     val productDeleted: Boolean = false,
-    val onDeleteProductConfirm: () -> Unit,
+    val onDeleteProductConfirm: () -> Unit = {},
 
-    val updateProduct: () -> Unit,
+    val updateProduct: () -> Unit = {},
 
-    val trackScreenStart: () -> Unit,
-    val trackEditButtonClicked: () -> Unit,
+    val trackScreenStart: () -> Unit = {},
+    val trackEditButtonClicked: () -> Unit = {},
 
     val setCurrentDisplayedImageIndex: (Int) -> Unit,
     val setSnackbarMessage: (NativeText) -> Unit,

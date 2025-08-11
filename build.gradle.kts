@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.ksp) apply false
     alias(libs.plugins.compose) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
 
     alias(libs.plugins.detekt)
     alias(libs.plugins.ktlint)
@@ -76,8 +77,8 @@ subprojects {
     }
 
     dependencies {
-        ktlintRuleset("io.nlopez.compose.rules:ktlint:0.4.22")
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.22")
+        ktlintRuleset("io.nlopez.compose.rules:ktlint:0.4.27")
+        detektPlugins("io.nlopez.compose.rules:detekt:0.4.27")
     }
 }
 

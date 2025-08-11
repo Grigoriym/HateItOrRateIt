@@ -21,7 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun PlatoPagerIndicator(
@@ -66,7 +66,7 @@ fun PlatoPagerIndicator(
     }
 }
 
-@[Composable PreviewMulti Suppress("MagicNumber")]
+@[Composable PreviewDarkLight Suppress("MagicNumber")]
 private fun PlatoPagerIndicatorPreview() {
     val pagerState = rememberPagerState {
         5

@@ -59,7 +59,7 @@ import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PlatoHateRat
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIconButton
@@ -164,8 +164,6 @@ internal fun ProductManagerScreen(
 }
 
 /**
- * Handles the back action for the HateOrRateScreen.
- *
  * This function determines the appropriate action when the back button is pressed
  * or when a back navigation event is triggered. It uses the current state of the
  * screen to decide whether to show a confirmation dialog, immediately quit the screen,
@@ -190,8 +188,8 @@ fun handleBackAction(state: ProductManagerViewState) {
         return
     }
 
-    if (state.images.isNotEmpty() || state.productName.isNotEmpty()) {
-        // If there are unsaved changes (indicated by non-empty product name or images),
+    if (state.productName.isNotEmpty()) {
+        // If there are unsaved changes (indicated by non-empty product name),
         // prompt the user with an alert dialog to confirm their intent to quit.
         state.onShowAlertDialog(true)
     } else {
@@ -437,7 +435,7 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun BottomBarButtonPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
@@ -448,7 +446,7 @@ private fun BottomBarButtonPreview(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextFieldsContentPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
@@ -459,7 +457,7 @@ private fun TextFieldsContentPreview(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun AddFromContentPreview() {
     HateItOrRateItTheme {
         AddFromContent(
@@ -469,7 +467,7 @@ private fun AddFromContentPreview() {
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun RateOrHateScreenContentPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {

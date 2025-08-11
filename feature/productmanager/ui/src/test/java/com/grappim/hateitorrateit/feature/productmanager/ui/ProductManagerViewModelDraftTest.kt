@@ -1,14 +1,14 @@
 package com.grappim.hateitorrateit.feature.productmanager.ui
 
-import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.ProductManagerNavDestination
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.SavedStateHandleRule
 import com.grappim.hateitorrateit.testing.core.createCameraTakePictureData
 import com.grappim.hateitorrateit.testing.core.createImageData
 import com.grappim.hateitorrateit.testing.core.createProduct
@@ -45,6 +45,11 @@ class ProductManagerViewModelDraftTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
+    private val route = ProductManagerNavDestination(null)
+
+    @get:Rule
+    val savedStateHandleRule = SavedStateHandleRule(route)
+
     private val productsRepository: ProductsRepository = mockk()
     private val dataCleaner: DataCleaner = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
@@ -55,15 +60,10 @@ class ProductManagerViewModelDraftTest {
     private val fileUriManager: FileUriManager = mockk()
     private val fileDeletionUtils: FileDeletionUtils = mockk()
     private val imagePersistenceManager: ImagePersistenceManager = mockk()
-
-    private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: ProductManagerViewModel
 
     @Before
     fun setup() {
-        savedStateHandle = SavedStateHandle()
-        savedStateHandle[NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID] = null
-
         coEvery { productsRepository.addDraftProduct() } returns draftProduct
         every { localDataStorage.typeFlow } returns flowOf(TYPE)
 
@@ -75,7 +75,7 @@ class ProductManagerViewModelDraftTest {
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
             productManagerAnalytics = productManagerAnalytics,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = savedStateHandleRule.savedStateHandleMock,
             fileUriManager = fileUriManager,
             fileDeletionUtils = fileDeletionUtils,
             imagePersistenceManager = imagePersistenceManager

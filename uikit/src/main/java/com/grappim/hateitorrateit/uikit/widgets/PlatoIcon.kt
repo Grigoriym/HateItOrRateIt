@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun PlatoIcon(
@@ -45,7 +45,7 @@ fun PlatoIcon(
     )
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoIconPreview() {
     HateItOrRateItTheme {
         PlatoIcon(

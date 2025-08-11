@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 const val PLATO_ALERT_DIALOG_TAG = "plato_alert_dialog_tag"
 
@@ -57,7 +57,7 @@ fun PlatoAlertDialog(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoAlertDialogPreview() {
     HateItOrRateItTheme {
         PlatoAlertDialog(
@@ -70,7 +70,7 @@ private fun PlatoAlertDialogPreview() {
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoAlertDialogWithoutDismissPreview() {
     HateItOrRateItTheme {
         PlatoAlertDialog(

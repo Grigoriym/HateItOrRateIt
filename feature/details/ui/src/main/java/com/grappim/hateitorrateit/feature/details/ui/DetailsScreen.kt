@@ -65,7 +65,7 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 import com.grappim.hateitorrateit.uikit.utils.RString
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
@@ -80,8 +80,8 @@ import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
 import com.grappim.hateitorrateit.utils.ui.asString
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.icon
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.icon
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -95,7 +95,7 @@ private const val TOP_APP_BAR_WEIGHT = 1.2f
 fun DetailsRoute(
     goBack: () -> Unit,
     onEditClick: (id: Long) -> Unit,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     isFromEdit: Boolean,
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
@@ -149,7 +149,7 @@ fun DetailsRoute(
 internal fun DetailsScreen(
     state: DetailsViewState,
     goBack: () -> Unit,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     onEditClick: (id: Long) -> Unit,
     isFromEdit: Boolean,
     snackbarHostState: SnackbarHostState
@@ -183,7 +183,7 @@ internal fun DetailsScreen(
 private fun DetailsScreenContent(
     state: DetailsViewState,
     goBack: () -> Unit,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     onEditClick: (id: Long) -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
@@ -243,7 +243,7 @@ private fun DetailsScreenContent(
 @Composable
 private fun TopAppBarContent(
     state: DetailsViewState,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     goBack: () -> Unit,
     onEditClick: (id: Long) -> Unit,
     modifier: Modifier = Modifier
@@ -434,7 +434,7 @@ private fun AppBarTopButtonsContent(
 private fun BoxScope.AppBarImageContent(
     state: DetailsViewState,
     pagerState: PagerState,
-    onImageClick: (productId: String, index: Int) -> Unit
+    onImageClick: (productId: Long, index: Int) -> Unit
 ) {
     if (state.images.isNotEmpty()) {
         HorizontalPager(
@@ -538,7 +538,7 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
 //    }
 // }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TopAppBarContentPreview(
     @PreviewParameter(StateProvider::class) state: DetailsViewState
 ) {
@@ -547,7 +547,7 @@ private fun TopAppBarContentPreview(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun DetailsDemonstrationContentPreview(
     @PreviewParameter(StateProvider::class) state: DetailsViewState
 ) {
@@ -562,7 +562,7 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
     override val values: Sequence<DetailsViewState>
         get() = sequenceOf(
             DetailsViewState(
-                productId = "accommodare",
+                productId = 1L,
                 name = "Darren Stanton fn89r qw089h890qwn qw9ej90qw qw90jeqwjn qwe9jqw90e",
                 description = "altera",
                 shop = "pulvinar",
@@ -570,15 +570,8 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
                 productFolderName = "Estelle Duke",
                 images = listOf(),
                 type = HateRateType.HATE,
-                isLoading = false,
                 showAlertDialog = false,
-                onShowAlertDialog = {},
-                onDeleteProduct = {},
                 productDeleted = false,
-                onDeleteProductConfirm = {},
-                updateProduct = {},
-                trackEditButtonClicked = {},
-                trackScreenStart = {},
                 setCurrentDisplayedImageIndex = {},
                 setSnackbarMessage = {},
                 saveFileToGallery = { _ -> },

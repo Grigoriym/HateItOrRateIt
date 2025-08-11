@@ -5,6 +5,10 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.hateColors
+import com.grappim.hateitorrateit.uikit.utils.icon
+import com.grappim.hateitorrateit.uikit.utils.rateColors
 import org.junit.Test
 import kotlin.test.assertEquals
 

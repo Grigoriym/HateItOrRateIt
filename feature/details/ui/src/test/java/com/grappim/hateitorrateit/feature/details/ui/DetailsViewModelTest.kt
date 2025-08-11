@@ -1,9 +1,7 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
 import android.content.Intent
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
@@ -11,7 +9,9 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
+import com.grappim.hateitorrateit.feature.details.ui.navigation.DetailsNavDestination
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.SavedStateHandleRule
 import com.grappim.hateitorrateit.testing.core.testException
 import com.grappim.hateitorrateit.testing.domain.NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_FOLDER_NAME
@@ -43,14 +43,17 @@ class DetailsViewModelTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
+    private val route = DetailsNavDestination(PRODUCT_ID)
+
+    @get:Rule
+    val savedStateHandleRule = SavedStateHandleRule(route)
+
     private val productsRepository: ProductsRepository = mockk()
     private val uiModelsMapper: UiModelsMapper = mockk()
     private val dataCleaner: DataCleaner = mockk()
     private val detailsAnalytics: DetailsAnalytics = mockk()
     private val galleryInteractions: GalleryInteractions = mockk()
     private val intentGenerator: IntentGenerator = mockk()
-
-    private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var sut: DetailsViewModel
 
@@ -78,9 +81,6 @@ class DetailsViewModelTest {
 
     @Before
     fun setup() {
-        savedStateHandle = SavedStateHandle().apply {
-            this[NavDestinations.Details.KEY] = PRODUCT_ID
-        }
         coEvery {
             productsRepository.getProductById(any())
         } returns product
@@ -93,7 +93,7 @@ class DetailsViewModelTest {
             uiModelsMapper = uiModelsMapper,
             dataCleaner = dataCleaner,
             detailsAnalytics = detailsAnalytics,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = savedStateHandleRule.savedStateHandleMock,
             galleryInteractions = galleryInteractions,
             intentGenerator = intentGenerator
         )

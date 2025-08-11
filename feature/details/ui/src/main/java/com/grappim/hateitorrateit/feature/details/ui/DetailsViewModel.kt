@@ -3,12 +3,13 @@ package com.grappim.hateitorrateit.feature.details.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import androidx.navigation.toRoute
 import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
+import com.grappim.hateitorrateit.feature.details.ui.navigation.DetailsNavDestination
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
 import com.grappim.hateitorrateit.utils.ui.NativeText
@@ -36,14 +37,16 @@ class DetailsViewModel @Inject constructor(
 ) : ViewModel(),
     SnackbarStateViewModel by SnackbarStateViewModelImpl() {
 
-    private val productId =
-        requireNotNull(savedStateHandle.get<Long>(NavDestinations.Details.KEY))
+    private val route = savedStateHandle.toRoute<DetailsNavDestination>()
+
+    private val productId = route.productId
 
     private val _viewEvents = Channel<DetailsEvents>()
     val viewEvents = _viewEvents.receiveAsFlow()
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(
+            productId = productId,
             appSettingsIntent = intentGenerator.generateAppSettingsIntent(),
             onDeleteProduct = ::deleteProduct,
             onShowAlertDialog = ::showAlertDialog,

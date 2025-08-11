@@ -2,14 +2,11 @@ plugins {
     alias(libs.plugins.hateitorrateit.android.library)
     alias(libs.plugins.hateitorrateit.android.library.compose)
     alias(libs.plugins.hateitorrateit.android.hilt)
+    alias(libs.plugins.hateitorrateit.kotlin.serialization)
 }
 
 android {
     namespace = "com.grappim.hateitorrateit.feature.settings.ui"
-
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
 }
 
 dependencies {
@@ -17,7 +14,6 @@ dependencies {
     implementation(projects.uikit)
     implementation(projects.data.analyticsApi)
     implementation(projects.core.async)
-    implementation(projects.core.navigation)
     implementation(projects.core.appinfoApi)
     implementation(projects.data.repoApi)
     implementation(projects.data.cleanerApi)

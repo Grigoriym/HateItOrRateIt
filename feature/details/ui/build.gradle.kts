@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.hateitorrateit.android.library)
     alias(libs.plugins.hateitorrateit.android.library.compose)
     alias(libs.plugins.hateitorrateit.android.hilt)
+    alias(libs.plugins.hateitorrateit.kotlin.serialization)
 }
 
 android {
@@ -15,7 +16,6 @@ dependencies {
     implementation(projects.uikit)
     implementation(projects.data.repoApi)
     implementation(projects.data.cleanerApi)
-    implementation(projects.core.navigation)
     implementation(projects.data.analyticsApi)
     implementation(projects.utils.ui)
     implementation(projects.core.async)

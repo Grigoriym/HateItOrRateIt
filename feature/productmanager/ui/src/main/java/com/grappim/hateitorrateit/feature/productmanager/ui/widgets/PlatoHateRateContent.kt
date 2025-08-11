@@ -21,12 +21,12 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.productmanager.ui.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.hateColors
-import com.grappim.hateitorrateit.utils.ui.type.rateColors
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.hateColors
+import com.grappim.hateitorrateit.uikit.utils.rateColors
 
 const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 
@@ -90,7 +90,7 @@ fun PlatoHateRateContent(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoHateRateContentHatePreview() {
     HateItOrRateItTheme {
         PlatoHateRateContent(
@@ -100,7 +100,7 @@ private fun PlatoHateRateContentHatePreview() {
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoHateRateContentRatePreview() {
     HateItOrRateItTheme {
         PlatoHateRateContent(

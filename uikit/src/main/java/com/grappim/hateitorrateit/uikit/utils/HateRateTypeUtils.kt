@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.ui.type
+package com.grappim.hateitorrateit.uikit.utils
 
 import androidx.compose.ui.graphics.Color
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
