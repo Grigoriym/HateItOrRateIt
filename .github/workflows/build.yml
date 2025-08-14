@@ -5,7 +5,12 @@ permissions:
 
 on:
   pull_request:
-    branches: [ "dev" ]
+    branches:
+        - dev
+
+concurrency:
+    group: build-${{ github.event.pull_request.number || github.ref }}
+    cancel-in-progress: true
 
 jobs:
   build:
