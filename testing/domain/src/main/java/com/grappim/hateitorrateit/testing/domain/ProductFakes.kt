@@ -1,5 +1,3 @@
-@file:Suppress("MagicNumber")
-
 package com.grappim.hateitorrateit.testing.domain
 
 import com.grappim.hateitorrateit.data.repoapi.models.DraftProduct

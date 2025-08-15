@@ -1,4 +1,4 @@
-package com.grappim.hateitorrateit.utils.ui.type
+package com.grappim.hateitorrateit.uikit
 
 import androidx.compose.ui.graphics.Color
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
@@ -26,7 +26,7 @@ class HateRateTypeUtilsTest {
     fun `hateColors returns correct colors for RATE type`() {
         assertEquals(
             HateRateType.RATE.hateColors(),
-            Color.LightGray
+            Color.Companion.LightGray
         )
     }
 
@@ -42,7 +42,7 @@ class HateRateTypeUtilsTest {
     fun `rateColors returns correct colors for HATE type`() {
         assertEquals(
             HateRateType.HATE.rateColors(),
-            Color.LightGray
+            Color.Companion.LightGray
         )
     }
 

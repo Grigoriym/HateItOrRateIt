@@ -69,7 +69,7 @@ class DetailsViewModelTest {
     )
 
     private val productUi = ProductDetailsUi(
-        id = PRODUCT_ID.toString(),
+        id = PRODUCT_ID,
         name = NAME,
         createdDate = "reque",
         images = createRandomProductImageList(),
@@ -125,7 +125,7 @@ class DetailsViewModelTest {
         sut.viewState.value.onDeleteProductConfirm()
 
         assertTrue(sut.viewState.value.isLoading)
-        assertEquals(sut.viewState.value.productId, PRODUCT_ID.toString())
+        assertEquals(sut.viewState.value.productId, PRODUCT_ID)
         coVerify {
             dataCleaner.deleteProductData(
                 productId = PRODUCT_ID,
@@ -165,7 +165,7 @@ class DetailsViewModelTest {
 
         val state = sut.viewState.value
 
-        assertEquals(state.productId, PRODUCT_ID.toString())
+        assertEquals(state.productId, PRODUCT_ID)
         assertEquals(state.name, NAME)
         assertFalse(state.isLoading)
         assertEquals(state.productFolderName, PRODUCT_FOLDER_NAME)

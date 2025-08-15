@@ -1,9 +1,9 @@
 package com.grappim.hateitorrateit.ui.widgets
 
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Text
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,10 +16,11 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 fun BottomBar(
     screens: List<BottomNavDestination>,
     currentBottomNavScreen: BottomNavDestination?,
+    modifier: Modifier = Modifier,
     onBottomNavItemClick: (BottomNavDestination) -> Unit = {}
 ) {
-    BottomNavigation(
-        modifier = Modifier
+    NavigationBar(
+        modifier = modifier
             .clip(
                 RoundedCornerShape(
                     topStart = 16.dp,
@@ -28,7 +29,7 @@ fun BottomBar(
             )
     ) {
         screens.forEach { screen ->
-            BottomNavigationItem(
+            NavigationBarItem(
                 selected = currentBottomNavScreen == screen,
                 label = {
                     Text(text = stringResource(screen.label))

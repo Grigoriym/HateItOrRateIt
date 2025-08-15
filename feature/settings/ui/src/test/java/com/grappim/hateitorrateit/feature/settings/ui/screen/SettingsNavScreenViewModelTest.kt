@@ -19,6 +19,7 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import junit.framework.TestCase.assertFalse
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -60,7 +61,7 @@ class SettingsNavScreenViewModelTest {
 
         every { remoteConfigsListener.githubRepoLink } returns flowOf("github")
         every { remoteConfigsListener.privacyPolicy } returns flowOf("privacy policy")
-        every { localeOptionsGenerator.getLocaleOptions() } returns mapOf()
+        every { localeOptionsGenerator.getLocaleOptions() } returns persistentMapOf()
 
         every { appInfoProvider.getAppInfo() } returns "appInfo"
 

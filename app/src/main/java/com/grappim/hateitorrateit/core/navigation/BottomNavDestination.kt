@@ -13,11 +13,7 @@ fun BottomNavDestination.navigate(navController: NavHostController, navOptions: 
     navController.navigate(route = route, navOptions = navOptions)
 }
 
-enum class BottomNavDestination(
-    val route: Any,
-    @StringRes val label: Int,
-    val icon: ImageVector
-) {
+enum class BottomNavDestination(val route: Any, @StringRes val label: Int, val icon: ImageVector) {
     HOME(
         route = HomeNavDestination,
         label = RString.home,

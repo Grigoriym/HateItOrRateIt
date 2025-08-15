@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.grappim.hateitorrateit.feature.settings.ui.screen
 
@@ -12,15 +12,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -47,6 +48,8 @@ import com.grappim.hateitorrateit.feature.settings.ui.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
+import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 import com.grappim.hateitorrateit.uikit.utils.color
 import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
@@ -61,6 +64,7 @@ import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
 import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarBackButtonState
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.asString
@@ -73,30 +77,29 @@ private const val ANIMATION_DURATION = 500
 @Composable
 fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    val topBarController = LocalTopBarConfig.current
-
-    DisposableEffect(Unit) {
-        state.trackScreenStart()
-        onDispose { }
-    }
+    val topBarController: TopBarController = LocalTopBarConfig.current
 
     LaunchedEffect(Unit) {
         topBarController.update(
             TopBarConfig(
                 state = TopBarState.Visible(
                     title = NativeText.Resource(R.string.settings),
-                    topBarBackButtonState = TopBarBackButtonState.Visible()
+                    topBarBackButtonState = TopBarBackButtonState.Hidden
                 )
             )
         )
     }
+
+    DisposableEffect(Unit) {
+        state.trackScreenStart()
+        onDispose {}
+    }
+
     SettingsScreen(state = state)
 }
 
 @Composable
-internal fun SettingsScreen(state: SettingsViewState) {
-
-
+private fun SettingsScreen(state: SettingsViewState) {
     PlatoLoadingDialog(state.isLoading)
 
     PlatoAlertDialog(
@@ -127,7 +130,7 @@ internal fun SettingsScreen(state: SettingsViewState) {
             modifier = Modifier.clickable {
                 state.onClearDataClicked()
             },
-            text = {
+            headlineContent = {
                 Text(text = stringResource(id = R.string.clear_data))
             }
         )
@@ -136,10 +139,10 @@ internal fun SettingsScreen(state: SettingsViewState) {
             modifier = Modifier.clickable {
                 state.setNewType()
             },
-            text = {
+            headlineContent = {
                 Text(text = stringResource(id = R.string.default_type))
             },
-            trailing = {
+            trailingContent = {
                 TypeIcon(state = state)
             }
         )
@@ -151,13 +154,13 @@ internal fun SettingsScreen(state: SettingsViewState) {
                         state.onCrashlyticsToggle()
                     }
                     .testTag(CRASHLYTICS_TILE_TAG),
-                text = {
+                headlineContent = {
                     Text(text = stringResource(id = R.string.toggle_crashlytics))
                 },
-                trailing = {
+                trailingContent = {
                     FeatureEnabledIcon(state.isCrashesCollectionEnabled)
                 },
-                secondaryText = {
+                supportingContent = {
                     Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
                 }
             )
@@ -168,13 +171,13 @@ internal fun SettingsScreen(state: SettingsViewState) {
                         state.onAnalyticsToggle()
                     }
                     .testTag(ANALYTICS_TILE_TAG),
-                text = {
+                headlineContent = {
                     Text(text = stringResource(id = R.string.toggle_analytics))
                 },
-                trailing = {
+                trailingContent = {
                     FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
                 },
-                secondaryText = {
+                supportingContent = {
                     Text(text = stringResource(id = R.string.analytics_settings_subtitle))
                 }
             )
@@ -218,16 +221,22 @@ private fun LocaleDropdownMenu(state: SettingsViewState) {
         }
     ) {
         TextField(
+            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
             value = stringResource(id = R.string.language),
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            }
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             state.localeOptions.keys.forEach { option ->
                 DropdownMenuItem(
+                    text = {
+                        Text(text = option.asString(LocalContext.current))
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                     onClick = {
                         expanded = false
                         AppCompatDelegate.setApplicationLocales(
@@ -236,9 +245,7 @@ private fun LocaleDropdownMenu(state: SettingsViewState) {
                             )
                         )
                     }
-                ) {
-                    Text(text = option.asString(LocalContext.current))
-                }
+                )
             }
         }
     }
@@ -323,7 +330,7 @@ private fun PlatoRadioButton(selected: Boolean, onClick: () -> Unit, text: Strin
 }
 
 @Composable
-fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
+private fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
     Crossfade(
         modifier = modifier,
         targetState = state.type,
@@ -340,7 +347,7 @@ fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
+private fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
     Crossfade(
         modifier = modifier,
         targetState = state,
@@ -362,6 +369,30 @@ fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
             } else {
                 AtomicTangerine
             }
+        )
+    }
+}
+
+@[Composable PreviewDarkLight]
+private fun SettingsScreenFdroidPreview() {
+    HateItOrRateItTheme {
+        SettingsScreen(
+            state = SettingsViewState(
+                appInfo = "appinfo",
+                isFdroidBuild = true
+            )
+        )
+    }
+}
+
+@[Composable PreviewDarkLight]
+private fun SettingsScreenGplayPreview() {
+    HateItOrRateItTheme {
+        SettingsScreen(
+            state = SettingsViewState(
+                appInfo = "appinfo",
+                isFdroidBuild = false
+            )
         )
     }
 }

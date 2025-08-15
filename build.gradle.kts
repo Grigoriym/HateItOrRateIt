@@ -63,6 +63,7 @@ subprojects {
     }
 
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
+        version.set("1.7.1")
         android.set(true)
         ignoreFailures.set(false)
         verbose.set(true)

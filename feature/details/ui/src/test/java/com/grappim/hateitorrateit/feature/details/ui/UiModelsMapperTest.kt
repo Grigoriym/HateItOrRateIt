@@ -34,7 +34,7 @@ class UiModelsMapperTest {
         coEvery { dateTimeUtils.formatToDemonstrate(any()) } returns date
 
         val expected = createProductDetailsUi().copy(
-            id = product.id.toString(),
+            id = product.id,
             name = product.name,
             createdDate = date,
             images = product.images,

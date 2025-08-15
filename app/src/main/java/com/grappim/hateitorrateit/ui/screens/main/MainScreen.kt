@@ -6,14 +6,15 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.FabPosition
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
@@ -56,7 +57,7 @@ private fun MainScreenContent(topBarConfig: TopBarConfig) {
             .imePadding()
             .statusBarsPadding()
             .navigationBarsPadding(),
-        contentColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colorScheme.background,
         topBar = {
             PlatoTopAppBar(
                 topBarConfig = topBarConfig,
@@ -83,7 +84,6 @@ private fun MainScreenContent(topBarConfig: TopBarConfig) {
             }
         },
         floatingActionButtonPosition = FabPosition.Center,
-        isFloatingActionButtonDocked = true,
         bottomBar = {
             if (appState.isBottomBarVisible) {
                 BottomBar(
@@ -99,13 +99,16 @@ private fun MainScreenContent(topBarConfig: TopBarConfig) {
         MainNavHost(
             modifier = Modifier.padding(paddingValues),
             navController = appState.navController,
-            showSnackbar = { text ->
+            showActionSnackbar = { text, action ->
                 scope.launch {
-                    snackbarHostState.showSnackbar(
+                    val result = snackbarHostState.showSnackbar(
                         message = text.asString(context),
-                        actionLabel = null,
+                        actionLabel = action,
                         duration = SnackbarDuration.Short
                     )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        snackbarHostState.currentSnackbarData?.dismiss()
+                    }
                 }
             }
         )

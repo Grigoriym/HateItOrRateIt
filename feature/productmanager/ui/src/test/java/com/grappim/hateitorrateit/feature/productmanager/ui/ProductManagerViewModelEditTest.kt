@@ -1,12 +1,12 @@
 package com.grappim.hateitorrateit.feature.productmanager.ui
 
-import com.grappim.hateitorrateit.core.navigation.ProductManagerNavDestination
 import com.grappim.hateitorrateit.data.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.ProductManagerNavDestination
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
 import com.grappim.hateitorrateit.testing.core.SavedStateHandleRule
 import com.grappim.hateitorrateit.testing.core.createCameraTakePictureData

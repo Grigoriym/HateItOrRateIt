@@ -43,7 +43,7 @@ class ProductImageViewModelTest {
         vm = ProductImageViewModel(
             productsRepository = productsRepository,
             uiModelsMapper = uiModelsMapper,
-            savedStateHandle = savedStateHandleRule.savedStateHandleMock,
+            savedStateHandle = savedStateHandleRule.savedStateHandleMock
         )
 
         coVerify { productsRepository.getProductById(PRODUCT_ID) }

@@ -2,9 +2,7 @@ package com.grappim.hateitorrateit.uikit.widgets.topbar
 
 import com.grappim.hateitorrateit.utils.ui.NativeText
 
-data class TopBarConfig(
-    val state: TopBarState = TopBarState.Hidden
-)
+data class TopBarConfig(val state: TopBarState = TopBarState.Hidden)
 
 sealed interface TopBarState {
     data object Hidden : TopBarState
@@ -16,7 +14,5 @@ sealed interface TopBarState {
 
 sealed interface TopBarBackButtonState {
     data object Hidden : TopBarBackButtonState
-    data class Visible(
-        val overrideBackHandlerAction: (() -> Unit)? = null
-    ) : TopBarBackButtonState
+    data class Visible(val overrideBackHandlerAction: (() -> Unit)? = null) : TopBarBackButtonState
 }

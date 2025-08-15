@@ -1,35 +1,33 @@
 package com.grappim.hateitorrateit.uikit.widgets
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Abc
+import androidx.compose.material.icons.filled.Camera
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun PlatoIconButton(icon: ImageVector, onButtonClick: () -> Unit, modifier: Modifier = Modifier) {
-    Button(
+    IconButton(
         modifier = modifier
-            .size(50.dp)
+            .clip(CircleShape)
+            .background(MaterialTheme.colorScheme.surfaceContainerHigh)
             .testTag(icon.name),
-        onClick = onButtonClick,
-        shape = CircleShape
+        onClick = onButtonClick
     ) {
         Icon(
-            modifier = Modifier.fillMaxSize(),
             imageVector = icon,
             contentDescription = "",
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.secondary
         )
     }
 }
@@ -38,7 +36,7 @@ fun PlatoIconButton(icon: ImageVector, onButtonClick: () -> Unit, modifier: Modi
 private fun PlatoIconButtonPreview() {
     HateItOrRateItTheme {
         PlatoIconButton(
-            icon = Icons.Filled.Abc,
+            icon = Icons.Filled.Camera,
             onButtonClick = {}
         )
     }

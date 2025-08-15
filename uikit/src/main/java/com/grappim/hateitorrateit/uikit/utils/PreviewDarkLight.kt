@@ -4,7 +4,6 @@ package com.grappim.hateitorrateit.uikit.utils
 
 import android.content.res.Configuration
 import androidx.compose.ui.tooling.preview.Preview
-import com.grappim.hateitorrateit.uikit.theme.DarkBackgroundColorForPreview
 
 /**
  * Multipreview annotation that represents light and dark themes. Add this annotation to a
@@ -18,7 +17,7 @@ import com.grappim.hateitorrateit.uikit.theme.DarkBackgroundColorForPreview
 )
 @Preview(
     showBackground = true,
-    backgroundColor = DarkBackgroundColorForPreview,
+    backgroundColor = 3355443L,
     uiMode = Configuration.UI_MODE_NIGHT_YES,
     name = "Dark theme"
 )

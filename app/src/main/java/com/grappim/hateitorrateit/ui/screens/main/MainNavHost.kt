@@ -1,5 +1,8 @@
 package com.grappim.hateitorrateit.ui.screens.main
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavBackStackEntry
@@ -21,25 +24,28 @@ import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.navigateT
 import com.grappim.hateitorrateit.feature.settings.ui.navigation.SettingsNavDestination
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsRoute
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.navigation.safeClick
 
 @Composable
 fun MainNavHost(
     navController: NavHostController,
-    showSnackbar: (NativeText) -> Unit,
+    showActionSnackbar: (NativeText, actionLabel: String?) -> Unit,
     modifier: Modifier = Modifier
 ) {
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = HomeNavDestination
+        startDestination = HomeNavDestination,
+        enterTransition = {
+            fadeIn(animationSpec = tween(100))
+        },
+        exitTransition = {
+            fadeOut(animationSpec = tween(100))
+        }
     ) {
         composable<HomeNavDestination> { navBackStackEntry ->
             HomeScreen(
                 onProductClick = { productId: Long ->
-                    navBackStackEntry.safeClick {
-                        navController.navigateToDetails(productId)
-                    }
+                    navController.navigateToDetails(productId)
                 }
             )
         }
@@ -56,15 +62,12 @@ fun MainNavHost(
 
             ProductManagerRoute(
                 goBack = { isNewProduct: Boolean ->
-                    navBackStackEntry.safeClick {
-                        handleBackNavigation(isNewProduct)
-                    }
+                    handleBackNavigation(isNewProduct)
                 },
                 onProductFinish = { isNewProduct: Boolean ->
-                    navBackStackEntry.safeClick {
-                        handleBackNavigation(isNewProduct)
-                    }
-                }
+                    handleBackNavigation(isNewProduct)
+                },
+                showActionSnackbar = showActionSnackbar
             )
         }
 
@@ -78,30 +81,23 @@ fun MainNavHost(
 
             DetailsRoute(
                 goBack = {
-                    navBackStackEntry.safeClick {
-                        navController.popBackStack()
-                    }
+                    navController.popBackStack()
                 },
                 onImageClick = { productId, index ->
-                    navBackStackEntry.safeClick {
-                        navController.navigateToProductImage(productId, index)
-                    }
+                    navController.navigateToProductImage(productId, index)
                 },
                 onEditClick = { id: Long ->
-                    navBackStackEntry.safeClick {
-                        navController.navigateToProductManager(id)
-                    }
+                    navController.navigateToProductManager(id)
                 },
-                isFromEdit = isFromEdit
+                isFromEdit = isFromEdit,
+                showSnackbar = showActionSnackbar
             )
         }
 
         composable<ProductImageNavDestination> { navBackStackEntry ->
             ProductImageScreen(
                 goBack = {
-                    navBackStackEntry.safeClick {
-                        navController.popBackStack()
-                    }
+                    navController.popBackStack()
                 }
             )
         }

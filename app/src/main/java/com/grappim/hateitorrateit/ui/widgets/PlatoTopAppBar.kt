@@ -21,7 +21,6 @@ fun PlatoTopAppBar(topBarConfig: TopBarConfig, goBack: () -> Unit) {
     val state = topBarConfig.state
     when (state) {
         is TopBarState.Hidden -> {
-
         }
 
         is TopBarState.Visible -> {
@@ -41,7 +40,6 @@ private fun VisibleTopAppBar(state: TopBarState.Visible, goBack: () -> Unit) {
             val backState = state.topBarBackButtonState
             when (backState) {
                 is TopBarBackButtonState.Hidden -> {
-
                 }
 
                 is TopBarBackButtonState.Visible -> {
