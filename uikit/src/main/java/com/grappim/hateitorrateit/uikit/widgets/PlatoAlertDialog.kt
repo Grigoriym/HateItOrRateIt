@@ -42,7 +42,6 @@ fun PlatoAlertDialog(
             }
         AlertDialog(
             modifier = modifier.testTag(PLATO_ALERT_DIALOG_TAG),
-            shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
             onDismissRequest = onDismissRequest,
             title = { Text(text = text) },
             confirmButton = {
@@ -66,18 +65,6 @@ private fun PlatoAlertDialogPreview() {
             onDismissRequest = {},
             onConfirmButtonClick = {},
             onDismissButtonClick = {}
-        )
-    }
-}
-
-@[Composable PreviewDarkLight]
-private fun PlatoAlertDialogWithoutDismissPreview() {
-    HateItOrRateItTheme {
-        PlatoAlertDialog(
-            text = "Some text",
-            showAlertDialog = true,
-            onDismissRequest = {},
-            onConfirmButtonClick = {}
         )
     }
 }

@@ -22,10 +22,13 @@ import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.productmanager.ProductImageManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
+import com.grappim.hateitorrateit.utils.ui.BackActionDelegate
+import com.grappim.hateitorrateit.utils.ui.BackActionDelegateImpl
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
 import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -49,7 +52,8 @@ class ProductManagerViewModel @Inject constructor(
     localDataStorage: LocalDataStorage,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    SnackbarStateViewModel by SnackbarStateViewModelImpl() {
+    SnackbarStateViewModel by SnackbarStateViewModelImpl(),
+    BackActionDelegate by BackActionDelegateImpl() {
 
     private val _viewState = MutableStateFlow(
         ProductManagerViewState(
@@ -59,13 +63,12 @@ class ProductManagerViewModel @Inject constructor(
             onDeleteImageClicked = ::deleteImage,
             onAddImageFromGalleryClicked = ::addImageFromGallery,
             onAddCameraPictureClicked = ::addCameraPicture,
-            onQuit = ::onQuit,
             onProductDone = ::onProductDone,
             getCameraImageFileUri = ::getCameraImageFileUri,
             onTypeClicked = ::onTypeClicked,
             onShowAlertDialog = ::onShowAlertDialog,
-            onForceQuit = ::onForceQuit,
-            trackOnScreenStart = ::trackOnScreenStart
+            trackOnScreenStart = ::trackOnScreenStart,
+            onGoBack = ::onGoBack
         )
     )
     val viewState = _viewState.asStateFlow()
@@ -101,17 +104,24 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
+    private fun onGoBack() {
+        viewModelScope.launch {
+            onQuit()
+            triggerBackAction()
+        }
+    }
+
+//    private fun onForceQuit() {
+//        _viewState.update {
+//            it.copy(forceQuit = true)
+//        }
+//    }
+
     private fun trackOnScreenStart() {
         if (productId != null) {
             productManagerAnalytics.trackProductManagerProductToEditStart()
         } else {
             productManagerAnalytics.trackProductManagerNewProductStart()
-        }
-    }
-
-    private fun onForceQuit() {
-        _viewState.update {
-            it.copy(forceQuit = true)
         }
     }
 
@@ -160,7 +170,7 @@ class ProductManagerViewModel @Inject constructor(
 
             _viewState.update {
                 it.copy(
-                    images = images,
+                    images = images.toPersistentList(),
                     productName = editProduct.name,
                     description = editProduct.description,
                     shop = editProduct.shop,
@@ -198,7 +208,7 @@ class ProductManagerViewModel @Inject constructor(
     }
 
     private fun addImageData(productImageUIData: ProductImageUIData) {
-        val result = _viewState.value.images + productImageUIData
+        val result = _viewState.value.images.add(productImageUIData)
         _viewState.update {
             it.copy(images = result)
         }
@@ -331,43 +341,34 @@ class ProductManagerViewModel @Inject constructor(
                 }
 
                 _viewState.update { currentState ->
-                    val updatedFilesUris =
-                        currentState.images.filterNot { it == productImageUIData }
+                    val updatedFilesUris = currentState.images
+                        .filterNot { it == productImageUIData }
+                        .toPersistentList()
                     currentState.copy(images = updatedFilesUris)
                 }
             }
         }
     }
 
-    private fun onQuit() {
-        viewModelScope.launch {
-            _viewState.update {
-                it.copy(quitStatus = QuitStatus.InProgress)
-            }
+    private suspend fun onQuit() {
+        if (_viewState.value.isNewProduct) {
+            val draftProduct = requireNotNull(viewState.value.draftProduct)
+            dataCleaner.deleteProductData(
+                productId = draftProduct.id,
+                productFolderName = productFolderName
+            )
+        } else {
+            val initialImages = backupImagesRepository.getAllByProductId(editProductId)
+            productsRepository.updateImagesInProduct(
+                id = editProductId,
+                images = initialImages
+            )
+            productImageManager.moveFromBackupToOriginalFolder(productFolderName)
 
-            if (_viewState.value.isNewProduct) {
-                val draftProduct = requireNotNull(viewState.value.draftProduct)
-                dataCleaner.deleteProductData(
-                    productId = draftProduct.id,
-                    productFolderName = productFolderName
-                )
-            } else {
-                val initialImages = backupImagesRepository.getAllByProductId(editProductId)
-                productsRepository.updateImagesInProduct(
-                    id = editProductId,
-                    images = initialImages
-                )
-                productImageManager.moveFromBackupToOriginalFolder(productFolderName)
+            dataCleaner.deleteTempFolder(productFolderName)
+            dataCleaner.deleteBackupFolder(productFolderName)
 
-                dataCleaner.deleteTempFolder(productFolderName)
-                dataCleaner.deleteBackupFolder(productFolderName)
-
-                backupImagesRepository.deleteImagesByProductId(editProductId)
-            }
-
-            _viewState.update {
-                it.copy(quitStatus = QuitStatus.Finish)
-            }
+            backupImagesRepository.deleteImagesByProductId(editProductId)
         }
     }
 }

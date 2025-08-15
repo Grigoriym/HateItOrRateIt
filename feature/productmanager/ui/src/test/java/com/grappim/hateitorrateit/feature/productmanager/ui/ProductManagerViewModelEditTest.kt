@@ -33,6 +33,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Before
 import org.junit.Rule
@@ -73,7 +74,7 @@ class ProductManagerViewModelEditTest {
         coEvery { productsRepository.getProductById(any()) } returns editProduct
         coEvery { productImageManager.copyToBackupFolder(any()) } just Runs
         coEvery { backupImagesRepository.insertImages(any(), any()) } just Runs
-        coEvery { imageDataMapper.toImageDataList(any()) } returns emptyList()
+        coEvery { imageDataMapper.toImageDataList(any()) } returns persistentListOf()
 
         viewModel = ProductManagerViewModel(
             productsRepository = productsRepository,
@@ -142,9 +143,7 @@ class ProductManagerViewModelEditTest {
         coEvery { dataCleaner.deleteBackupFolder(any()) } just Runs
         coEvery { backupImagesRepository.deleteImagesByProductId(any()) } just Runs
 
-        assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Initial)
-
-        viewModel.viewState.value.onQuit()
+        viewModel.viewState.value.onGoBack()
 
         val productFolderName = viewModel.viewState.value.editProduct!!.productFolderName
 
@@ -172,8 +171,6 @@ class ProductManagerViewModelEditTest {
         coVerify {
             backupImagesRepository.deleteImagesByProductId(getEditProductId())
         }
-
-        assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Finish)
     }
 
     @Test
@@ -195,13 +192,6 @@ class ProductManagerViewModelEditTest {
         viewModel.viewState.value.onShowAlertDialog(true)
 
         assertTrue(viewModel.viewState.value.showAlertDialog)
-    }
-
-    @Test
-    fun `with editProduct, on onForceQuit, forceQUit should be true`() {
-        viewModel.viewState.value.onForceQuit()
-
-        assertTrue(viewModel.viewState.value.forceQuit)
     }
 
     @Test

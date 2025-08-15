@@ -119,24 +119,6 @@ class ProductManagerViewModelDraftTest {
     }
 
     @Test
-    fun `with draftProduct, on onQuit calls dataCleaner`() {
-        coEvery { dataCleaner.deleteProductData(any(), any()) } just Runs
-
-        assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Initial)
-
-        viewModel.viewState.value.onQuit()
-
-        assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Finish)
-
-        coVerify {
-            dataCleaner.deleteProductData(
-                viewModel.viewState.value.draftProduct!!.id,
-                viewModel.viewState.value.draftProduct!!.productFolderName
-            )
-        }
-    }
-
-    @Test
     fun `with draftProduct, on onProductDone, new product is created`() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
@@ -205,13 +187,6 @@ class ProductManagerViewModelDraftTest {
         viewModel.viewState.value.onShowAlertDialog(true)
 
         assertTrue(viewModel.viewState.value.showAlertDialog)
-    }
-
-    @Test
-    fun `with draftProduct, on onForceQuit, forceQUit should be true`() {
-        viewModel.viewState.value.onForceQuit()
-
-        assertTrue(viewModel.viewState.value.forceQuit)
     }
 
     @Test

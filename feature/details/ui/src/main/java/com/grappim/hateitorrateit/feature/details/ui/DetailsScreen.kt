@@ -73,12 +73,11 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.PlatoProgressIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
-import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
 import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
+import com.grappim.hateitorrateit.utils.ui.ObserveAsEvents
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -105,13 +104,13 @@ fun DetailsRoute(
         topBarController.update(TopBarConfig(state = TopBarState.Hidden))
     }
 
-    ObserverAsEvents(viewModel.snackBarMessage) { snackbarMessage ->
+    ObserveAsEvents(viewModel.snackBarMessage) { snackbarMessage ->
         if (snackbarMessage !is NativeText.Empty) {
             showSnackbar(snackbarMessage, context.getString(RString.close))
         }
     }
 
-    ObserverAsEvents(viewModel.viewEvents) { event ->
+    ObserveAsEvents(viewModel.viewEvents) { event ->
         when (event) {
             is DetailsEvents.SaveImageSuccess -> {
                 state.setSnackbarMessage(NativeText.Resource(R.string.image_saved_in_gallery))
