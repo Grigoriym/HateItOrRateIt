@@ -111,12 +111,6 @@ class ProductManagerViewModel @Inject constructor(
         }
     }
 
-//    private fun onForceQuit() {
-//        _viewState.update {
-//            it.copy(forceQuit = true)
-//        }
-//    }
-
     private fun trackOnScreenStart() {
         if (productId != null) {
             productManagerAnalytics.trackProductManagerProductToEditStart()
