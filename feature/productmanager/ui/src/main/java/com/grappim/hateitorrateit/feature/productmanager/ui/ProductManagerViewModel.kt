@@ -25,8 +25,8 @@ import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
 import com.grappim.hateitorrateit.utils.ui.BackActionDelegate
 import com.grappim.hateitorrateit.utils.ui.BackActionDelegateImpl
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegate
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegateImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -52,7 +52,7 @@ class ProductManagerViewModel @Inject constructor(
     localDataStorage: LocalDataStorage,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    SnackbarStateViewModel by SnackbarStateViewModelImpl(),
+    SnackbarDelegate by SnackbarDelegateImpl(),
     BackActionDelegate by BackActionDelegateImpl() {
 
     private val _viewState = MutableStateFlow(
@@ -305,7 +305,7 @@ class ProductManagerViewModel @Inject constructor(
         viewModelScope.launch {
             when {
                 _viewState.value.productName.isBlank() -> {
-                    showSnackbarSuspend(NativeText.Resource(R.string.set_name))
+                    showSnackbar(NativeText.Resource(R.string.set_name))
                 }
 
                 else -> {

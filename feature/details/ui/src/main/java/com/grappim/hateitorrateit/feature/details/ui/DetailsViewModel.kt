@@ -13,8 +13,8 @@ import com.grappim.hateitorrateit.feature.details.ui.navigation.DetailsNavDestin
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegate
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegateImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,7 +35,7 @@ class DetailsViewModel @Inject constructor(
     private val intentGenerator: IntentGenerator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    SnackbarStateViewModel by SnackbarStateViewModelImpl() {
+    SnackbarDelegate by SnackbarDelegateImpl() {
 
     private val route = savedStateHandle.toRoute<DetailsNavDestination>()
 
@@ -175,7 +175,7 @@ class DetailsViewModel @Inject constructor(
 
     private fun setSnackbarMessage(text: NativeText) {
         viewModelScope.launch {
-            showSnackbarSuspend(text)
+            showSnackbar(text)
         }
     }
 

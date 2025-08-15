@@ -4,16 +4,16 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
 
-interface SnackbarStateViewModel {
+interface SnackbarDelegate {
     val snackBarMessage: Flow<NativeText>
-    suspend fun showSnackbarSuspend(message: NativeText)
+    suspend fun showSnackbar(message: NativeText)
 }
 
-class SnackbarStateViewModelImpl : SnackbarStateViewModel {
+class SnackbarDelegateImpl : SnackbarDelegate {
     private val _snackBarMessage = Channel<NativeText>()
     override val snackBarMessage: Flow<NativeText> = _snackBarMessage.receiveAsFlow()
 
-    override suspend fun showSnackbarSuspend(message: NativeText) {
+    override suspend fun showSnackbar(message: NativeText) {
         _snackBarMessage.send(message)
     }
 }
