@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.grappim.hateitorrateit.feature.home.ui
 
 import androidx.compose.foundation.Image
@@ -16,16 +14,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FilterChip
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -46,22 +44,35 @@ import com.grappim.hateitorrateit.feature.home.ui.utils.HomePreviewStateProvider
 import com.grappim.hateitorrateit.feature.home.ui.utils.getPreviewProductListUI
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.icon
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel(), onProductClick: (id: Long) -> Unit) {
     val state by viewModel.viewState.collectAsState()
-    DisposableEffect(Unit) {
-        state.trackScreenStart()
-        onDispose { }
+    val topBarController: TopBarController = LocalTopBarConfig.current
+
+    LaunchedEffect(Unit) {
+        topBarController.update(
+            TopBarConfig(
+                state = TopBarState.Hidden
+            )
+        )
     }
 
+    DisposableEffect(Unit) {
+        state.trackScreenStart()
+        onDispose {}
+    }
     HomeScreenContent(
         state = state,
         onProductClick = onProductClick
@@ -126,7 +137,7 @@ private fun SearchContent(state: HomeViewState, modifier: Modifier = Modifier) {
         placeholder = {
             Text(text = stringResource(id = R.string.search))
         },
-        colors = TextFieldDefaults.textFieldColors(
+        colors = TextFieldDefaults.colors(
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         ),
@@ -183,7 +194,7 @@ private fun ProductItem(
                     .align(Alignment.BottomCenter),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 0.dp,
-                backgroundColor = MaterialTheme.colors.surface.copy(
+                backgroundColor = MaterialTheme.colorScheme.surface.copy(
                     alpha = 0.4f
                 )
             ) {
@@ -246,10 +257,11 @@ private fun FilterChipsContent(state: HomeViewState, modifier: Modifier = Modifi
                 }
             } else {
                 null
+            },
+            label = {
+                Text(stringResource(id = R.string.hate))
             }
-        ) {
-            Text(stringResource(id = R.string.hate))
-        }
+        )
         FilterChip(
             selected = state.selectedType == HateRateType.RATE,
             onClick = {
@@ -264,14 +276,15 @@ private fun FilterChipsContent(state: HomeViewState, modifier: Modifier = Modifi
                 }
             } else {
                 null
+            },
+            label = {
+                Text(stringResource(id = R.string.rate))
             }
-        ) {
-            Text(stringResource(id = R.string.rate))
-        }
+        )
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun ProductItemPreview(
     @PreviewParameter(HomePreviewStateProvider::class) state: HomeViewState
 ) {

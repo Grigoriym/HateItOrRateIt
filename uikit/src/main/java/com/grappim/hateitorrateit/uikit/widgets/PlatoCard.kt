@@ -1,13 +1,12 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package com.grappim.hateitorrateit.uikit.widgets
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.contentColorFor
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,31 +21,39 @@ const val PLAT_CARD_TAG = "plato_card_tag"
 fun PlatoCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(16.dp),
-    backgroundColor: Color = MaterialTheme.colors.surface,
+    backgroundColor: Color = MaterialTheme.colorScheme.surface,
     contentColor: Color = contentColorFor(backgroundColor),
     border: BorderStroke? = null,
     elevation: Dp = 6.dp,
     onClick: (() -> Unit)? = null,
-    content: @Composable () -> Unit
+    content: @Composable ColumnScope.() -> Unit
 ) {
     if (onClick == null) {
         Card(
             modifier = modifier.testTag(PLAT_CARD_TAG),
             shape = shape,
-            backgroundColor = backgroundColor,
-            contentColor = contentColor,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = elevation
+            ),
+            colors = CardDefaults.cardColors(
+                containerColor = backgroundColor,
+                contentColor = contentColor
+            ),
             border = border,
-            elevation = elevation,
             content = content
         )
     } else {
         Card(
             modifier = modifier.testTag(PLAT_CARD_TAG),
             shape = shape,
-            backgroundColor = backgroundColor,
-            contentColor = contentColor,
+            colors = CardDefaults.cardColors(
+                containerColor = backgroundColor,
+                contentColor = contentColor
+            ),
             border = border,
-            elevation = elevation,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = elevation
+            ),
             onClick = onClick,
             content = content
         )

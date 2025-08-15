@@ -4,7 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import androidx.navigation.toRoute
 import com.grappim.hateitorrateit.data.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
@@ -13,6 +13,7 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
+import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.ProductManagerNavDestination
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
@@ -21,10 +22,13 @@ import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.productmanager.ProductImageManager
 import com.grappim.hateitorrateit.utils.filesapi.urimanager.FileUriManager
+import com.grappim.hateitorrateit.utils.ui.BackActionDelegate
+import com.grappim.hateitorrateit.utils.ui.BackActionDelegateImpl
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegate
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegateImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -48,7 +52,8 @@ class ProductManagerViewModel @Inject constructor(
     localDataStorage: LocalDataStorage,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    SnackbarStateViewModel by SnackbarStateViewModelImpl() {
+    SnackbarDelegate by SnackbarDelegateImpl(),
+    BackActionDelegate by BackActionDelegateImpl() {
 
     private val _viewState = MutableStateFlow(
         ProductManagerViewState(
@@ -58,22 +63,25 @@ class ProductManagerViewModel @Inject constructor(
             onDeleteImageClicked = ::deleteImage,
             onAddImageFromGalleryClicked = ::addImageFromGallery,
             onAddCameraPictureClicked = ::addCameraPicture,
-            onQuit = ::onQuit,
             onProductDone = ::onProductDone,
             getCameraImageFileUri = ::getCameraImageFileUri,
             onTypeClicked = ::onTypeClicked,
             onShowAlertDialog = ::onShowAlertDialog,
-            onForceQuit = ::onForceQuit,
-            trackOnScreenStart = ::trackOnScreenStart
+            trackOnScreenStart = ::trackOnScreenStart,
+            onGoBack = ::onGoBack
         )
     )
     val viewState = _viewState.asStateFlow()
 
-    private val editProductId: String? =
-        savedStateHandle[NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID]
+    private val route = savedStateHandle.toRoute<ProductManagerNavDestination>()
+    private val productId: Long?
+        get() = route.productId
 
-    private val editProductIdLong: Long
-        get() = requireNotNull(editProductId?.toLong())
+    /**
+     * If we know that we are in the edit product screen, then it is safe to use this to get the id
+     */
+    private val editProductId: Long
+        get() = requireNotNull(productId)
 
     private val productFolderName: String
         get() = if (_viewState.value.isNewProduct) {
@@ -89,24 +97,25 @@ class ProductManagerViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
 
-        if (editProductId?.isNotEmpty() == true) {
+        if (productId != null) {
             prepareProductForEdit()
         } else {
             prepareDraftProduct()
         }
     }
 
-    private fun trackOnScreenStart() {
-        if (editProductId?.isNotEmpty() == true) {
-            productManagerAnalytics.trackProductManagerProductToEditStart()
-        } else {
-            productManagerAnalytics.trackProductManagerNewProductStart()
+    private fun onGoBack() {
+        viewModelScope.launch {
+            onQuit()
+            triggerBackAction()
         }
     }
 
-    private fun onForceQuit() {
-        _viewState.update {
-            it.copy(forceQuit = true)
+    private fun trackOnScreenStart() {
+        if (productId != null) {
+            productManagerAnalytics.trackProductManagerProductToEditStart()
+        } else {
+            productManagerAnalytics.trackProductManagerNewProductStart()
         }
     }
 
@@ -141,13 +150,13 @@ class ProductManagerViewModel @Inject constructor(
 
     private fun prepareProductForEdit() {
         viewModelScope.launch {
-            val editProduct = productsRepository.getProductById(editProductIdLong)
+            val editProduct = productsRepository.getProductById(editProductId)
 
             productImageManager.copyToBackupFolder(
                 productFolderName = editProduct.productFolderName
             )
             backupImagesRepository.insertImages(
-                productId = editProductIdLong,
+                productId = editProductId,
                 images = editProduct.images
             )
 
@@ -155,7 +164,7 @@ class ProductManagerViewModel @Inject constructor(
 
             _viewState.update {
                 it.copy(
-                    images = images,
+                    images = images.toPersistentList(),
                     productName = editProduct.name,
                     description = editProduct.description,
                     shop = editProduct.shop,
@@ -175,7 +184,7 @@ class ProductManagerViewModel @Inject constructor(
             val imageData = fileUriManager.getFileUriFromGalleryUri(
                 uri = uri,
                 folderName = productFolderName,
-                isEdit = editProductId?.isNotEmpty() == true
+                isEdit = productId != null
             )
             addImageData(imageData)
         }
@@ -186,14 +195,14 @@ class ProductManagerViewModel @Inject constructor(
         viewModelScope.launch {
             val imageData = fileUriManager.getFileDataFromCameraPicture(
                 cameraTakePictureData = cameraTakePictureData,
-                isEdit = editProductId?.isNotEmpty() == true
+                isEdit = productId != null
             )
             addImageData(imageData)
         }
     }
 
     private fun addImageData(productImageUIData: ProductImageUIData) {
-        val result = _viewState.value.images + productImageUIData
+        val result = _viewState.value.images.add(productImageUIData)
         _viewState.update {
             it.copy(images = result)
         }
@@ -202,7 +211,7 @@ class ProductManagerViewModel @Inject constructor(
     private fun getCameraImageFileUri(): CameraTakePictureData =
         fileUriManager.getFileUriForTakePicture(
             folderName = productFolderName,
-            isEdit = editProductId?.isNotEmpty() == true
+            isEdit = productId != null
         )
 
     private fun setName(name: String) {
@@ -261,7 +270,7 @@ class ProductManagerViewModel @Inject constructor(
 
             val editProduct = requireNotNull(_viewState.value.editProduct)
             val product = Product(
-                id = editProductIdLong,
+                id = editProductId,
                 name = name,
                 images = editedImages,
                 createdDate = editProduct.createdDate,
@@ -279,7 +288,7 @@ class ProductManagerViewModel @Inject constructor(
             dataCleaner.deleteBackupFolder(
                 productFolderName = productFolderName
             )
-            backupImagesRepository.deleteImagesByProductId(editProductIdLong)
+            backupImagesRepository.deleteImagesByProductId(editProductId)
 
             productsRepository.updateProductWithImages(
                 product = product,
@@ -296,7 +305,7 @@ class ProductManagerViewModel @Inject constructor(
         viewModelScope.launch {
             when {
                 _viewState.value.productName.isBlank() -> {
-                    showSnackbarSuspend(NativeText.Resource(R.string.set_name))
+                    showSnackbar(NativeText.Resource(R.string.set_name))
                 }
 
                 else -> {
@@ -320,49 +329,40 @@ class ProductManagerViewModel @Inject constructor(
 
                 if (!_viewState.value.isNewProduct) {
                     productsRepository.deleteProductImage(
-                        productId = editProductIdLong,
+                        productId = editProductId,
                         imageName = productImageUIData.name
                     )
                 }
 
                 _viewState.update { currentState ->
-                    val updatedFilesUris =
-                        currentState.images.filterNot { it == productImageUIData }
+                    val updatedFilesUris = currentState.images
+                        .filterNot { it == productImageUIData }
+                        .toPersistentList()
                     currentState.copy(images = updatedFilesUris)
                 }
             }
         }
     }
 
-    private fun onQuit() {
-        viewModelScope.launch {
-            _viewState.update {
-                it.copy(quitStatus = QuitStatus.InProgress)
-            }
+    private suspend fun onQuit() {
+        if (_viewState.value.isNewProduct) {
+            val draftProduct = requireNotNull(viewState.value.draftProduct)
+            dataCleaner.deleteProductData(
+                productId = draftProduct.id,
+                productFolderName = productFolderName
+            )
+        } else {
+            val initialImages = backupImagesRepository.getAllByProductId(editProductId)
+            productsRepository.updateImagesInProduct(
+                id = editProductId,
+                images = initialImages
+            )
+            productImageManager.moveFromBackupToOriginalFolder(productFolderName)
 
-            if (_viewState.value.isNewProduct) {
-                val draftProduct = requireNotNull(viewState.value.draftProduct)
-                dataCleaner.deleteProductData(
-                    productId = draftProduct.id,
-                    productFolderName = productFolderName
-                )
-            } else {
-                val initialImages = backupImagesRepository.getAllByProductId(editProductIdLong)
-                productsRepository.updateImagesInProduct(
-                    id = editProductIdLong,
-                    images = initialImages
-                )
-                productImageManager.moveFromBackupToOriginalFolder(productFolderName)
+            dataCleaner.deleteTempFolder(productFolderName)
+            dataCleaner.deleteBackupFolder(productFolderName)
 
-                dataCleaner.deleteTempFolder(productFolderName)
-                dataCleaner.deleteBackupFolder(productFolderName)
-
-                backupImagesRepository.deleteImagesByProductId(editProductIdLong)
-            }
-
-            _viewState.update {
-                it.copy(quitStatus = QuitStatus.Finish)
-            }
+            backupImagesRepository.deleteImagesByProductId(editProductId)
         }
     }
 }

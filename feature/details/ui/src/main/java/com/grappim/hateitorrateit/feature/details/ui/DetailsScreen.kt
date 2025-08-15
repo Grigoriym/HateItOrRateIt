@@ -19,9 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
@@ -29,12 +27,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -65,8 +60,10 @@ import com.google.accompanist.permissions.shouldShowRationale
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 import com.grappim.hateitorrateit.uikit.utils.RString
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
@@ -76,12 +73,11 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoPagerIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoPlaceholderImage
 import com.grappim.hateitorrateit.uikit.widgets.PlatoProgressIndicator
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
-import com.grappim.hateitorrateit.uikit.widgets.text.TextH4
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
-import com.grappim.hateitorrateit.utils.ui.asString
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.icon
+import com.grappim.hateitorrateit.utils.ui.ObserveAsEvents
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -95,31 +91,26 @@ private const val TOP_APP_BAR_WEIGHT = 1.2f
 fun DetailsRoute(
     goBack: () -> Unit,
     onEditClick: (id: Long) -> Unit,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     isFromEdit: Boolean,
+    showSnackbar: (NativeText, actionLabel: String?) -> Unit,
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val topBarController = LocalTopBarConfig.current
 
-    ObserverAsEvents(viewModel.snackBarMessage) { snackbarMessage ->
+    LaunchedEffect(Unit) {
+        topBarController.update(TopBarConfig(state = TopBarState.Hidden))
+    }
+
+    ObserveAsEvents(viewModel.snackBarMessage) { snackbarMessage ->
         if (snackbarMessage !is NativeText.Empty) {
-            coroutineScope.launch {
-                val result = snackbarHostState.showSnackbar(
-                    message = snackbarMessage.asString(context),
-                    actionLabel = context.getString(RString.close)
-                )
-                if (result == SnackbarResult.ActionPerformed) {
-                    snackbarHostState.currentSnackbarData?.dismiss()
-                }
-                state.setSnackbarMessage(NativeText.Empty)
-            }
+            showSnackbar(snackbarMessage, context.getString(RString.close))
         }
     }
 
-    ObserverAsEvents(viewModel.viewEvents) { event ->
+    ObserveAsEvents(viewModel.viewEvents) { event ->
         when (event) {
             is DetailsEvents.SaveImageSuccess -> {
                 state.setSnackbarMessage(NativeText.Resource(R.string.image_saved_in_gallery))
@@ -133,15 +124,14 @@ fun DetailsRoute(
 
     DisposableEffect(Unit) {
         state.trackScreenStart
-        onDispose { }
+        onDispose {}
     }
     DetailsScreen(
         state = state,
         goBack = goBack,
         onImageClick = onImageClick,
         onEditClick = onEditClick,
-        isFromEdit = isFromEdit,
-        snackbarHostState = snackbarHostState
+        isFromEdit = isFromEdit
     )
 }
 
@@ -149,10 +139,9 @@ fun DetailsRoute(
 internal fun DetailsScreen(
     state: DetailsViewState,
     goBack: () -> Unit,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     onEditClick: (id: Long) -> Unit,
-    isFromEdit: Boolean,
-    snackbarHostState: SnackbarHostState
+    isFromEdit: Boolean
 ) {
     LaunchedEffect(state.productDeleted) {
         if (state.productDeleted) {
@@ -166,27 +155,6 @@ internal fun DetailsScreen(
         }
     }
 
-    if (state.isLoading.not()) {
-        DetailsScreenContent(
-            state = state,
-            goBack = goBack,
-            onImageClick = onImageClick,
-            onEditClick = onEditClick,
-            snackbarHostState = snackbarHostState
-        )
-    } else {
-        PlatoProgressIndicator(true)
-    }
-}
-
-@Composable
-private fun DetailsScreenContent(
-    state: DetailsViewState,
-    goBack: () -> Unit,
-    onImageClick: (productId: String, index: Int) -> Unit,
-    onEditClick: (id: Long) -> Unit,
-    snackbarHostState: SnackbarHostState
-) {
     PlatoAlertDialog(
         text = stringResource(id = R.string.are_you_sure_to_delete_product),
         showAlertDialog = state.showAlertDialog,
@@ -202,48 +170,56 @@ private fun DetailsScreenContent(
         }
     )
 
-    Scaffold(
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding()
-            .testTag(DETAILS_SCREEN_CONTENT_TAG),
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) {
-                Snackbar(snackbarData = it)
-            }
-        }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-        ) {
-            TopAppBarContent(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(TOP_APP_BAR_WEIGHT),
-                state = state,
-                onImageClick = onImageClick,
-                goBack = goBack,
-                onEditClick = onEditClick
-            )
+    if (state.isLoading.not()) {
+        DetailsScreenContent(
+            state = state,
+            goBack = goBack,
+            onImageClick = onImageClick,
+            onEditClick = onEditClick
+        )
+    } else {
+        PlatoProgressIndicator(true)
+    }
+}
 
-            DetailsDemonstrationContent(
-                modifier = Modifier
-                    .padding(top = 16.dp)
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .verticalScroll(rememberScrollState()),
-                state = state
-            )
-        }
+@Composable
+private fun DetailsScreenContent(
+    state: DetailsViewState,
+    goBack: () -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
+    onEditClick: (id: Long) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .testTag(DETAILS_SCREEN_CONTENT_TAG),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        TopAppBarContent(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(TOP_APP_BAR_WEIGHT),
+            state = state,
+            onImageClick = onImageClick,
+            goBack = goBack,
+            onEditClick = onEditClick
+        )
+
+        DetailsDemonstrationContent(
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .weight(1f)
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
+            state = state
+        )
     }
 }
 
 @Composable
 private fun TopAppBarContent(
     state: DetailsViewState,
-    onImageClick: (productId: String, index: Int) -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
     goBack: () -> Unit,
     onEditClick: (id: Long) -> Unit,
     modifier: Modifier = Modifier
@@ -411,13 +387,12 @@ private fun AppBarTopButtonsContent(
         goBack = goBack,
         defaultBackButton = false,
         backgroundColor = Color.Transparent,
-        elevation = 0.dp,
         actions = {
             PlatoIconButton(
                 icon = PlatoIconType.Edit.imageVector,
                 onButtonClick = {
                     state.trackEditButtonClicked()
-                    onEditClick(state.productId.toLong())
+                    onEditClick(state.productId)
                 }
             )
             Spacer(modifier = Modifier.width(12.dp))
@@ -434,7 +409,7 @@ private fun AppBarTopButtonsContent(
 private fun BoxScope.AppBarImageContent(
     state: DetailsViewState,
     pagerState: PagerState,
-    onImageClick: (productId: String, index: Int) -> Unit
+    onImageClick: (productId: Long, index: Int) -> Unit
 ) {
     if (state.images.isNotEmpty()) {
         HorizontalPager(
@@ -476,69 +451,80 @@ private fun BoxScope.AppBarImageContent(
 
 @Composable
 private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modifier = Modifier) {
-    Column(
+    Surface(
         modifier = modifier
             .padding(horizontal = 16.dp)
-            .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+            .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG)
     ) {
-        val type = requireNotNull(state.type)
-        TextH4(text = state.name)
-
-        if (state.description.isNotEmpty()) {
-            Text(text = state.description)
-        }
-
-        if (state.shop.isNotEmpty()) {
-            Text(text = state.shop)
-        }
-
-        if (state.createdDate.isNotEmpty()) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Top
+        ) {
+            val type = requireNotNull(state.type)
             Text(
-                modifier = Modifier.padding(top = 8.dp),
-                text = state.createdDate
+                text = state.name,
+                style = MaterialTheme.typography.headlineMedium
+            )
+
+            if (state.description.isNotEmpty()) {
+                Text(
+                    text = state.description,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            if (state.shop.isNotEmpty()) {
+                Text(
+                    text = state.shop,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            if (state.createdDate.isNotEmpty()) {
+                Text(
+                    modifier = Modifier.padding(top = 8.dp),
+                    text = state.createdDate,
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
+
+            PlatoIcon(
+                imageVector = type.icon(),
+                tint = type.color()
             )
         }
+    }
+}
 
-        PlatoIcon(
-            imageVector = type.icon(),
-            tint = type.color()
+@[Composable PreviewDarkLight]
+private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: DetailsViewState) {
+    HateItOrRateItTheme {
+        DetailsScreen(
+            state = state,
+            goBack = {},
+            onImageClick = { _, _ -> },
+            onEditClick = {},
+            isFromEdit = false
         )
     }
 }
 
-// @[Composable PreviewMulti]
-// private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: DetailsViewState) {
-//    HateItOrRateItTheme {
-//        DetailsScreen(
-//            state = state,
-//            goBack = {},
-//            onImageClick = { _, _ -> },
-//            onEditClick = {},
-//            isFromEdit = false,
-//            snackbarMessage = NativeText.Empty
-//        )
-//    }
-// }
-//
-// @[Composable Preview(showBackground = true)]
-// private fun DetailsScreenWithLoadingPreview(
-//    @PreviewParameter(StateProvider::class) state: DetailsViewState
-// ) {
-//    HateItOrRateItTheme {
-//        DetailsScreen(
-//            state = state.copy(isLoading = true),
-//            goBack = {},
-//            onImageClick = { _, _ -> },
-//            onEditClick = {},
-//            isFromEdit = false,
-//            snackbarMessage = NativeText.Empty
-//        )
-//    }
-// }
+@[Composable PreviewDarkLight]
+private fun DetailsScreenWithLoadingPreview(
+    @PreviewParameter(StateProvider::class) state: DetailsViewState
+) {
+    HateItOrRateItTheme {
+        DetailsScreen(
+            state = state.copy(isLoading = true),
+            goBack = {},
+            onImageClick = { _, _ -> },
+            onEditClick = {},
+            isFromEdit = false
+        )
+    }
+}
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TopAppBarContentPreview(
     @PreviewParameter(StateProvider::class) state: DetailsViewState
 ) {
@@ -547,7 +533,7 @@ private fun TopAppBarContentPreview(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun DetailsDemonstrationContentPreview(
     @PreviewParameter(StateProvider::class) state: DetailsViewState
 ) {
@@ -562,7 +548,7 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
     override val values: Sequence<DetailsViewState>
         get() = sequenceOf(
             DetailsViewState(
-                productId = "accommodare",
+                productId = 1L,
                 name = "Darren Stanton fn89r qw089h890qwn qw9ej90qw qw90jeqwjn qwe9jqw90e",
                 description = "altera",
                 shop = "pulvinar",
@@ -570,15 +556,8 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
                 productFolderName = "Estelle Duke",
                 images = listOf(),
                 type = HateRateType.HATE,
-                isLoading = false,
                 showAlertDialog = false,
-                onShowAlertDialog = {},
-                onDeleteProduct = {},
                 productDeleted = false,
-                onDeleteProductConfirm = {},
-                updateProduct = {},
-                trackEditButtonClicked = {},
-                trackScreenStart = {},
                 setCurrentDisplayedImageIndex = {},
                 setSnackbarMessage = {},
                 saveFileToGallery = { _ -> },

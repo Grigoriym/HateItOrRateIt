@@ -17,23 +17,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.imePadding
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Snackbar
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.SnackbarResult
-import androidx.compose.material.Text
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -59,16 +51,18 @@ import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PlatoHateRat
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIconButton
-import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTextButton
-import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarBackButtonState
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.ObserverAsEvents
+import com.grappim.hateitorrateit.utils.ui.ObserveAsEvents
 import com.grappim.hateitorrateit.utils.ui.asString
 import kotlinx.coroutines.launch
 
@@ -76,70 +70,52 @@ import kotlinx.coroutines.launch
 fun ProductManagerRoute(
     goBack: (isNewProduct: Boolean) -> Unit,
     onProductFinish: (isNewProduct: Boolean) -> Unit,
+    showActionSnackbar: (NativeText, actionLabel: String?) -> Unit,
     viewModel: ProductManagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
+    val topBarController = LocalTopBarConfig.current
 
-    ObserverAsEvents(viewModel.snackBarMessage) { snackBarMessage ->
-        if (snackBarMessage !is NativeText.Empty) {
-            coroutineScope.launch {
-                val result = snackbarHostState.showSnackbar(
-                    message = snackBarMessage.asString(context),
-                    actionLabel = context.getString(R.string.close),
-                    duration = SnackbarDuration.Short
+    LaunchedEffect(Unit) {
+        topBarController.update(
+            TopBarConfig(
+                state = TopBarState.Visible(
+                    title = NativeText.Resource(R.string.hate_or_rate),
+                    topBarBackButtonState = TopBarBackButtonState.Visible(
+                        overrideBackHandlerAction = {
+                            state.onShowAlertDialog(true)
+                        }
+                    )
                 )
-                if (result == SnackbarResult.ActionPerformed) {
-                    snackbarHostState.currentSnackbarData?.dismiss()
-                }
-            }
+            )
+        )
+    }
+
+    ObserveAsEvents(viewModel.onBackAction) {
+        goBack(state.isNewProduct)
+    }
+
+    ObserveAsEvents(viewModel.snackBarMessage) { snackBarMessage ->
+        if (snackBarMessage !is NativeText.Empty) {
+            showActionSnackbar(snackBarMessage, context.getString(R.string.close))
         }
     }
 
-    DisposableEffect(Unit) {
-        state.trackOnScreenStart()
-        onDispose { }
-    }
-    ProductManagerScreen(
-        state = state,
-        goBack = goBack,
-        onProductCreate = onProductFinish,
-        snackbarHostState = snackbarHostState
-    )
-}
-
-@Composable
-internal fun ProductManagerScreen(
-    state: ProductManagerViewState,
-    goBack: (isNewProduct: Boolean) -> Unit,
-    onProductCreate: (isNewProduct: Boolean) -> Unit,
-    snackbarHostState: SnackbarHostState
-) {
     LaunchedEffect(state.productSaved) {
         if (state.productSaved) {
-            onProductCreate.invoke(state.isNewProduct)
+            onProductFinish.invoke(state.isNewProduct)
         }
     }
 
     BackHandler(enabled = true) {
-        handleBackAction(state)
+        state.onShowAlertDialog(true)
     }
 
-    LaunchedEffect(state.forceQuit) {
-        if (state.forceQuit) {
-            handleBackAction(state)
-        }
+    DisposableEffect(Unit) {
+        state.trackOnScreenStart()
+        onDispose {}
     }
-
-    LaunchedEffect(state.quitStatus) {
-        if (state.quitStatus is QuitStatus.Finish) {
-            goBack(state.isNewProduct)
-        }
-    }
-
-    PlatoLoadingDialog(isLoading = state.quitStatus is QuitStatus.InProgress)
 
     PlatoAlertDialog(
         text = state.alertDialogText.asString(context = LocalContext.current),
@@ -150,60 +126,18 @@ internal fun ProductManagerScreen(
             state.onShowAlertDialog(false)
         },
         onConfirmButtonClick = {
-            state.onForceQuit()
+            state.onGoBack()
         },
         onDismissButtonClick = {
             state.onShowAlertDialog(false)
         }
     )
 
-    ProductManagerContent(
-        state = state,
-        snackbarHostState = snackbarHostState
-    )
-}
-
-/**
- * Handles the back action for the HateOrRateScreen.
- *
- * This function determines the appropriate action when the back button is pressed
- * or when a back navigation event is triggered. It uses the current state of the
- * screen to decide whether to show a confirmation dialog, immediately quit the screen,
- * or perform other actions.
- */
-fun handleBackAction(state: ProductManagerViewState) {
-    /**
-     * Performs actions associated with quitting the screen.
-     *
-     * This inner function encapsulates the logic for quitting the screen,
-     * including hiding the alert dialog and invoking the onQuit callback
-     * from the screen's state. This function is called when it's determined
-     * that the user can safely exit the screen without additional confirmation.
-     */
-    fun doOnQuit() {
-        state.onShowAlertDialog(false)
-        state.onQuit()
-    }
-
-    if (state.forceQuit) {
-        doOnQuit()
-        return
-    }
-
-    if (state.images.isNotEmpty() || state.productName.isNotEmpty()) {
-        // If there are unsaved changes (indicated by non-empty product name or images),
-        // prompt the user with an alert dialog to confirm their intent to quit.
-        state.onShowAlertDialog(true)
-    } else {
-        doOnQuit()
-    }
+    ProductManagerContent(state = state)
 }
 
 @Composable
-private fun ProductManagerContent(
-    state: ProductManagerViewState,
-    snackbarHostState: SnackbarHostState
-) {
+private fun ProductManagerContent(state: ProductManagerViewState) {
     val keyboardController = LocalSoftwareKeyboardController.current
 
     var cameraTakePictureData by remember {
@@ -228,25 +162,52 @@ private fun ProductManagerContent(
         }
     }
 
-    Scaffold(
-        modifier = Modifier
-            .imePadding()
-            .statusBarsPadding()
-            .navigationBarsPadding(),
-        snackbarHost = {
-            SnackbarHost(hostState = snackbarHostState) {
-                Snackbar(snackbarData = it)
-            }
-        },
-        topBar = {
-            PlatoTopBar(
-                text = stringResource(id = R.string.hate_or_rate),
-                goBack = {
-                    handleBackAction(state)
+    Surface {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier.weight(1f),
+                contentAlignment = Alignment.Center
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(rememberScrollState())
+                ) {
+                    TextFieldsContent(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        state = state
+                    )
+
+                    PlatoHateRateContent(
+                        currentType = state.type,
+                        onTypeClick = state.onTypeClicked
+                    )
+
+                    AddFromContent(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        onCameraClick = {
+                            keyboardController?.hide()
+                            cameraTakePictureData = state.getCameraImageFileUri()
+                            cameraLauncher.launch(cameraTakePictureData.uri)
+                        },
+                        onGalleryClick = {
+                            keyboardController?.hide()
+                            galleryLauncher.launch(
+                                PickVisualMediaRequest(
+                                    ActivityResultContracts.PickVisualMedia.ImageOnly
+                                )
+                            )
+                        }
+                    )
+
+                    ImagesList(
+                        modifier = Modifier,
+                        state = state
+                    )
                 }
-            )
-        },
-        bottomBar = {
+            }
             BottomBarButton(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -255,45 +216,6 @@ private fun ProductManagerContent(
                         bottom = 16.dp
                     )
                     .padding(horizontal = 16.dp),
-                state = state
-            )
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(it)
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-        ) {
-            TextFieldsContent(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                state = state
-            )
-
-            PlatoHateRateContent(
-                currentType = state.type,
-                onTypeClick = state.onTypeClicked
-            )
-
-            AddFromContent(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                onCameraClick = {
-                    keyboardController?.hide()
-                    cameraTakePictureData = state.getCameraImageFileUri()
-                    cameraLauncher.launch(cameraTakePictureData.uri)
-                },
-                onGalleryClick = {
-                    keyboardController?.hide()
-                    galleryLauncher.launch(
-                        PickVisualMediaRequest(
-                            ActivityResultContracts.PickVisualMedia.ImageOnly
-                        )
-                    )
-                }
-            )
-
-            ImagesList(
-                modifier = Modifier,
                 state = state
             )
         }
@@ -309,7 +231,6 @@ private fun AddFromContent(
     Column(modifier = modifier) {
         Text(
             modifier = Modifier
-                .padding(top = 16.dp)
                 .align(Alignment.CenterHorizontally),
             text = stringResource(id = R.string.add_picture_from)
         )
@@ -437,7 +358,7 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun BottomBarButtonPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
@@ -448,7 +369,7 @@ private fun BottomBarButtonPreview(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextFieldsContentPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
@@ -459,7 +380,7 @@ private fun TextFieldsContentPreview(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun AddFromContentPreview() {
     HateItOrRateItTheme {
         AddFromContent(
@@ -469,12 +390,12 @@ private fun AddFromContentPreview() {
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun RateOrHateScreenContentPreview(
     @PreviewParameter(StateProvider::class) state: ProductManagerViewState
 ) {
     HateItOrRateItTheme {
-        ProductManagerContent(state = state, snackbarHostState = remember { SnackbarHostState() })
+        ProductManagerContent(state = state)
     }
 }
 
@@ -482,30 +403,14 @@ private class StateProvider : PreviewParameterProvider<ProductManagerViewState> 
     override val values: Sequence<ProductManagerViewState>
         get() = sequenceOf(
             ProductManagerViewState(
-                images = listOf(),
                 productName = "Josefina Guzman",
                 description = "persius",
                 shop = "libris",
                 type = HateRateType.RATE,
                 draftProduct = null,
-                setDescription = {},
-                setName = {},
-                setShop = {},
-                productSaved = false,
-                onDeleteImageClicked = {},
-                onAddImageFromGalleryClicked = {},
-                onAddCameraPictureClicked = {},
-                onQuit = {},
-                onProductDone = {},
                 getCameraImageFileUri = {
                     CameraTakePictureData.empty()
-                },
-                onTypeClicked = {},
-                forceQuit = false,
-                onForceQuit = {},
-                showAlertDialog = false,
-                onShowAlertDialog = {},
-                trackOnScreenStart = {}
+                }
             )
         )
 }

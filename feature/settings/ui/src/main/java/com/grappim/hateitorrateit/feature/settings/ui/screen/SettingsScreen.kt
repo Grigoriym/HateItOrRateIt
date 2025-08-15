@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalMaterialApi::class)
+@file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.grappim.hateitorrateit.feature.settings.ui.screen
 
@@ -12,19 +12,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.DropdownMenuItem
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ExposedDropdownMenuBox
-import androidx.compose.material.ExposedDropdownMenuDefaults
-import androidx.compose.material.Icon
-import androidx.compose.material.ListItem
-import androidx.compose.material.RadioButton
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MenuAnchorType
+import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +48,10 @@ import com.grappim.hateitorrateit.feature.settings.ui.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
 import com.grappim.hateitorrateit.uikit.theme.Feijoa
+import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer16
@@ -56,11 +60,14 @@ import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer8
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
 import com.grappim.hateitorrateit.uikit.widgets.PlatoOutlinedButton
-import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
 import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarBackButtonState
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.asString
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.icon
 
 const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
 const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
@@ -68,155 +75,125 @@ const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
 private const val ANIMATION_DURATION = 500
 
 @Composable
-fun SettingsRoute(goBack: () -> Unit, viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val topBarController: TopBarController = LocalTopBarConfig.current
+
+    LaunchedEffect(Unit) {
+        topBarController.update(
+            TopBarConfig(
+                state = TopBarState.Visible(
+                    title = NativeText.Resource(R.string.settings),
+                    topBarBackButtonState = TopBarBackButtonState.Hidden
+                )
+            )
+        )
+    }
+
     DisposableEffect(Unit) {
         state.trackScreenStart()
-        onDispose { }
+        onDispose {}
     }
-    SettingsScreen(
-        state = state,
-        goBack = goBack
-    )
+
+    SettingsScreen(state = state)
 }
 
 @Composable
-internal fun SettingsScreen(state: SettingsViewState, goBack: () -> Unit) {
-    SettingsScreenContent(
-        state = state,
-        goBack = goBack
-    )
-}
+private fun SettingsScreen(state: SettingsViewState) {
+    PlatoLoadingDialog(state.isLoading)
 
-@Composable
-private fun SettingsScreenContent(state: SettingsViewState, goBack: () -> Unit) {
-    Scaffold(
-        topBar = {
-            PlatoTopBar(
-                text = stringResource(id = R.string.settings),
-                goBack = goBack
-            )
+    PlatoAlertDialog(
+        text = stringResource(id = R.string.are_you_sure_clear_all_data),
+        dismissButtonText = stringResource(id = R.string.no),
+        showAlertDialog = state.showAlertDialog,
+        onDismissRequest = {
+            state.onDismissDialog()
+        },
+        onConfirmButtonClick = {
+            state.onAlertDialogConfirmButtonClicked()
+        },
+        onDismissButtonClick = {
+            state.onDismissDialog()
         }
-    ) { padding ->
-        PlatoLoadingDialog(state.isLoading)
+    )
 
-        PlatoAlertDialog(
-            text = stringResource(id = R.string.are_you_sure_clear_all_data),
-            dismissButtonText = stringResource(id = R.string.no),
-            showAlertDialog = state.showAlertDialog,
-            onDismissRequest = {
-                state.onDismissDialog()
+    Column(modifier = Modifier.fillMaxSize()) {
+        PlatoHeightSpacer8()
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center
+        ) {
+            LocaleDropdownMenu(state)
+        }
+
+        ListItem(
+            modifier = Modifier.clickable {
+                state.onClearDataClicked()
             },
-            onConfirmButtonClick = {
-                state.onAlertDialogConfirmButtonClicked()
-            },
-            onDismissButtonClick = {
-                state.onDismissDialog()
+            headlineContent = {
+                Text(text = stringResource(id = R.string.clear_data))
             }
         )
 
-        LazyColumn(
-            modifier = Modifier
-                .padding(padding)
-                .fillMaxSize()
-        ) {
-            item {
-                PlatoHeightSpacer8()
+        ListItem(
+            modifier = Modifier.clickable {
+                state.setNewType()
+            },
+            headlineContent = {
+                Text(text = stringResource(id = R.string.default_type))
+            },
+            trailingContent = {
+                TypeIcon(state = state)
             }
-            item {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    LocaleDropdownMenu(state)
-                }
-            }
+        )
 
-            item {
-                ListItem(
-                    modifier = Modifier.clickable {
-                        state.onClearDataClicked()
-                    },
-                    text = {
-                        Text(text = stringResource(id = R.string.clear_data))
+        if (!state.isFdroidBuild) {
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        state.onCrashlyticsToggle()
                     }
-                )
-            }
-            item {
-                ListItem(
-                    modifier = Modifier.clickable {
-                        state.setNewType()
-                    },
-                    text = {
-                        Text(text = stringResource(id = R.string.default_type))
-                    },
-                    trailing = {
-                        TypeIcon(state = state)
+                    .testTag(CRASHLYTICS_TILE_TAG),
+                headlineContent = {
+                    Text(text = stringResource(id = R.string.toggle_crashlytics))
+                },
+                trailingContent = {
+                    FeatureEnabledIcon(state.isCrashesCollectionEnabled)
+                },
+                supportingContent = {
+                    Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
+                }
+            )
+
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        state.onAnalyticsToggle()
                     }
-                )
-            }
-
-            if (!state.isFdroidBuild) {
-                item {
-                    ListItem(
-                        modifier = Modifier
-                            .clickable {
-                                state.onCrashlyticsToggle()
-                            }
-                            .testTag(CRASHLYTICS_TILE_TAG),
-                        text = {
-                            Text(text = stringResource(id = R.string.toggle_crashlytics))
-                        },
-                        trailing = {
-                            FeatureEnabledIcon(state.isCrashesCollectionEnabled)
-                        },
-                        secondaryText = {
-                            Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
-                        }
-                    )
+                    .testTag(ANALYTICS_TILE_TAG),
+                headlineContent = {
+                    Text(text = stringResource(id = R.string.toggle_analytics))
+                },
+                trailingContent = {
+                    FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
+                },
+                supportingContent = {
+                    Text(text = stringResource(id = R.string.analytics_settings_subtitle))
                 }
-
-                item {
-                    ListItem(
-                        modifier = Modifier
-                            .clickable {
-                                state.onAnalyticsToggle()
-                            }
-                            .testTag(ANALYTICS_TILE_TAG),
-                        text = {
-                            Text(text = stringResource(id = R.string.toggle_analytics))
-                        },
-                        trailing = {
-                            FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
-                        },
-                        secondaryText = {
-                            Text(text = stringResource(id = R.string.analytics_settings_subtitle))
-                        }
-                    )
-                }
-            }
-            item {
-                PlatoHeightSpacer16()
-                DarkModePreferencesContent(state = state)
-            }
-
-            item {
-                GithubRepoContent(state = state)
-            }
-
-            item {
-                PrivacyPolicyContent(state = state)
-            }
-
-            item {
-                PlatoHeightSpacer16()
-                VersionContent(state = state)
-            }
-
-            item {
-                PlatoHeightSpacer32()
-            }
+            )
         }
+
+        PlatoHeightSpacer16()
+        DarkModePreferencesContent(state = state)
+
+        GithubRepoContent(state = state)
+
+        PrivacyPolicyContent(state = state)
+
+        PlatoHeightSpacer16()
+        VersionContent(state = state)
+
+        PlatoHeightSpacer32()
     }
 }
 
@@ -244,16 +221,22 @@ private fun LocaleDropdownMenu(state: SettingsViewState) {
         }
     ) {
         TextField(
+            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
             value = stringResource(id = R.string.language),
             onValueChange = {},
             readOnly = true,
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            }
+            },
+            colors = ExposedDropdownMenuDefaults.textFieldColors()
         )
         ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             state.localeOptions.keys.forEach { option ->
                 DropdownMenuItem(
+                    text = {
+                        Text(text = option.asString(LocalContext.current))
+                    },
+                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
                     onClick = {
                         expanded = false
                         AppCompatDelegate.setApplicationLocales(
@@ -262,9 +245,7 @@ private fun LocaleDropdownMenu(state: SettingsViewState) {
                             )
                         )
                     }
-                ) {
-                    Text(text = option.asString(LocalContext.current))
-                }
+                )
             }
         }
     }
@@ -349,7 +330,7 @@ private fun PlatoRadioButton(selected: Boolean, onClick: () -> Unit, text: Strin
 }
 
 @Composable
-fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
+private fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
     Crossfade(
         modifier = modifier,
         targetState = state.type,
@@ -366,7 +347,7 @@ fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
+private fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
     Crossfade(
         modifier = modifier,
         targetState = state,
@@ -388,6 +369,30 @@ fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
             } else {
                 AtomicTangerine
             }
+        )
+    }
+}
+
+@[Composable PreviewDarkLight]
+private fun SettingsScreenFdroidPreview() {
+    HateItOrRateItTheme {
+        SettingsScreen(
+            state = SettingsViewState(
+                appInfo = "appinfo",
+                isFdroidBuild = true
+            )
+        )
+    }
+}
+
+@[Composable PreviewDarkLight]
+private fun SettingsScreenGplayPreview() {
+    HateItOrRateItTheme {
+        SettingsScreen(
+            state = SettingsViewState(
+                appInfo = "appinfo",
+                isFdroidBuild = false
+            )
         )
     }
 }

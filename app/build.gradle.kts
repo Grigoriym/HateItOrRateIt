@@ -56,8 +56,8 @@ if (isGooglePlayBuild) {
 }
 
 dependencies {
-    implementation(projects.core.navigation)
     implementation(projects.uikit)
+    implementation(projects.strings)
 
     implementation(projects.utils.ui)
     implementation(projects.utils.dateTimeApi)
@@ -109,7 +109,7 @@ dependencies {
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material.core)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
 
@@ -129,6 +129,6 @@ dependencies {
 }
 
 moduleGraphAssert {
-    maxHeight = 3
+    maxHeight = 5
     assertOnAnyBuild = true
 }

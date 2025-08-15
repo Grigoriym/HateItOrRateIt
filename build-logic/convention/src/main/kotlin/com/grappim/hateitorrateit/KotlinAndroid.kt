@@ -80,6 +80,7 @@ internal fun Project.configureKotlinJvm() {
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_17)
             allWarningsAsErrors.set(false)
+            freeCompilerArgs.add("-Xannotation-default-target=first-only")
         }
     }
 }

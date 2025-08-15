@@ -8,7 +8,7 @@ import com.grappim.hateitorrateit.testing.domain.getImages
 const val DATE = "123,231.23"
 
 fun createProductDetailsUi() = ProductDetailsUi(
-    id = "1",
+    id = 1,
     name = "Test Product",
     createdDate = DATE,
     productFolderName = "folderName",

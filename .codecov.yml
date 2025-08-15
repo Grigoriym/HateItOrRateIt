@@ -8,3 +8,6 @@ coverage:
     project:
       default:
         informational: true
+
+codecov:
+    branch: dev

@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,12 +21,12 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.productmanager.ui.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
+import com.grappim.hateitorrateit.uikit.utils.color
+import com.grappim.hateitorrateit.uikit.utils.hateColors
+import com.grappim.hateitorrateit.uikit.utils.rateColors
 import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
 import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
-import com.grappim.hateitorrateit.utils.ui.type.color
-import com.grappim.hateitorrateit.utils.ui.type.hateColors
-import com.grappim.hateitorrateit.utils.ui.type.rateColors
 
 const val PLATO_HATE_RATE_CONTENT_TAG = "plato_hate_rate_content_tag"
 
@@ -38,10 +38,10 @@ fun PlatoHateRateContent(
 ) {
     val buttonsSize = 80.dp
     val hateColors = ButtonDefaults.buttonColors(
-        backgroundColor = currentType.hateColors()
+        containerColor = currentType.hateColors()
     )
     val rateColors = ButtonDefaults.buttonColors(
-        backgroundColor = currentType.rateColors()
+        containerColor = currentType.rateColors()
     )
     PlatoCard(
         modifier = modifier
@@ -53,6 +53,7 @@ fun PlatoHateRateContent(
         border = BorderStroke(8.dp, currentType.color())
     ) {
         Row(
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -90,7 +91,7 @@ fun PlatoHateRateContent(
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoHateRateContentHatePreview() {
     HateItOrRateItTheme {
         PlatoHateRateContent(
@@ -100,7 +101,7 @@ private fun PlatoHateRateContentHatePreview() {
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun PlatoHateRateContentRatePreview() {
     HateItOrRateItTheme {
         PlatoHateRateContent(
