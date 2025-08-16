@@ -141,7 +141,8 @@ private val coverageExclusions = listOf(
     "**/MainAppState",
     "**/TopBarController",
     "**/ObserveAsEvents",
-    "**/BottomBar"
+    "**/BottomBar",
+    "**/*NavDestination"
 ).flatMap {
     listOf(
         "$it.class",

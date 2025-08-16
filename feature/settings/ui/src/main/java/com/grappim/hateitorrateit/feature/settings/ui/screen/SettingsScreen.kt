@@ -2,80 +2,52 @@
 
 package com.grappim.hateitorrateit.feature.settings.ui.screen
 
-import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.outlined.Analytics
+import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Storage
+import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
-import androidx.compose.material3.MenuAnchorType
-import androidx.compose.material3.RadioButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.core.os.LocaleListCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
-import com.grappim.hateitorrateit.data.localdatastorageapi.models.isDark
-import com.grappim.hateitorrateit.data.localdatastorageapi.models.isLight
-import com.grappim.hateitorrateit.data.localdatastorageapi.models.isSystemDefault
-import com.grappim.hateitorrateit.feature.settings.ui.R
-import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
-import com.grappim.hateitorrateit.uikit.theme.AtomicTangerine
-import com.grappim.hateitorrateit.uikit.theme.Feijoa
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
-import com.grappim.hateitorrateit.uikit.utils.color
-import com.grappim.hateitorrateit.uikit.utils.icon
-import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog
-import com.grappim.hateitorrateit.uikit.widgets.PlatoCard
-import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer16
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer32
 import com.grappim.hateitorrateit.uikit.widgets.PlatoHeightSpacer8
-import com.grappim.hateitorrateit.uikit.widgets.PlatoIcon
-import com.grappim.hateitorrateit.uikit.widgets.PlatoLoadingDialog
-import com.grappim.hateitorrateit.uikit.widgets.PlatoOutlinedButton
-import com.grappim.hateitorrateit.uikit.widgets.text.TextH5
 import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarBackButtonState
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.asString
-
-const val CRASHLYTICS_TILE_TAG = "crashlytics_tile_tag"
-const val ANALYTICS_TILE_TAG = "analytics_tile_tag"
-
-private const val ANIMATION_DURATION = 500
 
 @Composable
-fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
+fun SettingsRoute(
+    goToAboutScreen: () -> Unit,
+    goToInterfaceScreen: () -> Unit,
+    goToDatabaseScreen: () -> Unit,
+    goToAnalyticsScreen: () -> Unit,
+    goToProductScreen: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
+) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val topBarController: TopBarController = LocalTopBarConfig.current
 
@@ -83,7 +55,7 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
         topBarController.update(
             TopBarConfig(
                 state = TopBarState.Visible(
-                    title = NativeText.Resource(R.string.settings),
+                    title = NativeText.Resource(RString.settings),
                     topBarBackButtonState = TopBarBackButtonState.Hidden
                 )
             )
@@ -95,281 +67,114 @@ fun SettingsRoute(viewModel: SettingsViewModel = hiltViewModel()) {
         onDispose {}
     }
 
-    SettingsScreen(state = state)
-}
-
-@Composable
-private fun SettingsScreen(state: SettingsViewState) {
-    PlatoLoadingDialog(state.isLoading)
-
-    PlatoAlertDialog(
-        text = stringResource(id = R.string.are_you_sure_clear_all_data),
-        dismissButtonText = stringResource(id = R.string.no),
-        showAlertDialog = state.showAlertDialog,
-        onDismissRequest = {
-            state.onDismissDialog()
-        },
-        onConfirmButtonClick = {
-            state.onAlertDialogConfirmButtonClicked()
-        },
-        onDismissButtonClick = {
-            state.onDismissDialog()
-        }
+    SettingsScreen(
+        state = state,
+        goToAboutScreen = goToAboutScreen,
+        goToInterfaceScreen = goToInterfaceScreen,
+        goToDatabaseScreen = goToDatabaseScreen,
+        goToAnalyticsScreen = goToAnalyticsScreen,
+        goToProductScreen = goToProductScreen
     )
+}
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        PlatoHeightSpacer8()
-        Box(
-            modifier = Modifier.fillMaxWidth(),
-            contentAlignment = Alignment.Center
+@Composable
+private fun SettingsScreen(
+    state: SettingsViewState,
+    goToAboutScreen: () -> Unit = {},
+    goToInterfaceScreen: () -> Unit = {},
+    goToDatabaseScreen: () -> Unit = {},
+    goToAnalyticsScreen: () -> Unit = {},
+    goToProductScreen: () -> Unit = {}
+) {
+    Surface {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
         ) {
-            LocaleDropdownMenu(state)
-        }
-
-        ListItem(
-            modifier = Modifier.clickable {
-                state.onClearDataClicked()
-            },
-            headlineContent = {
-                Text(text = stringResource(id = R.string.clear_data))
-            }
-        )
-
-        ListItem(
-            modifier = Modifier.clickable {
-                state.setNewType()
-            },
-            headlineContent = {
-                Text(text = stringResource(id = R.string.default_type))
-            },
-            trailingContent = {
-                TypeIcon(state = state)
-            }
-        )
-
-        if (!state.isFdroidBuild) {
-            ListItem(
-                modifier = Modifier
-                    .clickable {
-                        state.onCrashlyticsToggle()
-                    }
-                    .testTag(CRASHLYTICS_TILE_TAG),
-                headlineContent = {
-                    Text(text = stringResource(id = R.string.toggle_crashlytics))
-                },
-                trailingContent = {
-                    FeatureEnabledIcon(state.isCrashesCollectionEnabled)
-                },
-                supportingContent = {
-                    Text(text = stringResource(id = R.string.crashlytics_settings_subtitle))
-                }
-            )
+            PlatoHeightSpacer8()
 
             ListItem(
                 modifier = Modifier
                     .clickable {
-                        state.onAnalyticsToggle()
-                    }
-                    .testTag(ANALYTICS_TILE_TAG),
-                headlineContent = {
-                    Text(text = stringResource(id = R.string.toggle_analytics))
-                },
-                trailingContent = {
-                    FeatureEnabledIcon(state.isAnalyticsCollectionEnabled)
-                },
-                supportingContent = {
-                    Text(text = stringResource(id = R.string.analytics_settings_subtitle))
-                }
-            )
-        }
-
-        PlatoHeightSpacer16()
-        DarkModePreferencesContent(state = state)
-
-        GithubRepoContent(state = state)
-
-        PrivacyPolicyContent(state = state)
-
-        PlatoHeightSpacer16()
-        VersionContent(state = state)
-
-        PlatoHeightSpacer32()
-    }
-}
-
-@Composable
-private fun VersionContent(state: SettingsViewState) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = state.appInfo)
-    }
-}
-
-@Composable
-private fun LocaleDropdownMenu(state: SettingsViewState) {
-    var expanded by remember {
-        mutableStateOf(false)
-    }
-    ExposedDropdownMenuBox(
-        modifier = Modifier,
-        expanded = expanded,
-        onExpandedChange = {
-            expanded = !expanded
-        }
-    ) {
-        TextField(
-            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable),
-            value = stringResource(id = R.string.language),
-            onValueChange = {},
-            readOnly = true,
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            },
-            colors = ExposedDropdownMenuDefaults.textFieldColors()
-        )
-        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            state.localeOptions.keys.forEach { option ->
-                DropdownMenuItem(
-                    text = {
-                        Text(text = option.asString(LocalContext.current))
+                        goToProductScreen()
                     },
-                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding,
-                    onClick = {
-                        expanded = false
-                        AppCompatDelegate.setApplicationLocales(
-                            LocaleListCompat.forLanguageTags(
-                                state.localeOptions[option]
-                            )
+                headlineContent = {
+                    Text(text = stringResource(RString.product_settings))
+                },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Outlined.Category,
+                        contentDescription = "Product Settings"
+                    )
+                }
+            )
+
+            if (!state.isFdroidBuild) {
+                ListItem(
+                    modifier = Modifier
+                        .clickable {
+                            goToAnalyticsScreen()
+                        },
+                    headlineContent = {
+                        Text(text = stringResource(RString.analytics_settings))
+                    },
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.Outlined.Analytics,
+                            contentDescription = "Analytics Settings"
                         )
                     }
                 )
             }
-        }
-    }
-}
 
-@Composable
-private fun GithubRepoContent(state: SettingsViewState) {
-    if (state.githubRepoLink.isNotEmpty()) {
-        val uriHandler = LocalUriHandler.current
-        PlatoHeightSpacer16()
-        PlatoOutlinedButton(
-            painter = painterResource(id = R.drawable.github_mark),
-            text = stringResource(id = R.string.github_repo_link),
-            onClick = { uriHandler.openUri(state.githubRepoLink) }
-        )
-    }
-}
-
-@Composable
-private fun PrivacyPolicyContent(state: SettingsViewState) {
-    if (state.privacyPolicyLink.isNotEmpty()) {
-        val uriHandler = LocalUriHandler.current
-        PlatoHeightSpacer16()
-        PlatoOutlinedButton(
-            imageVector = PlatoIconType.PrivacyPolicy.imageVector,
-            text = stringResource(id = R.string.privacy_policy_link),
-            onClick = { uriHandler.openUri(state.privacyPolicyLink) }
-        )
-    }
-}
-
-@Composable
-private fun DarkModePreferencesContent(state: SettingsViewState) {
-    PlatoCard(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp)
-    ) {
-        Column {
-            PlatoHeightSpacer8()
-            TextH5(
+            ListItem(
                 modifier = Modifier
-                    .align(Alignment.CenterHorizontally),
-                text = stringResource(id = R.string.dark_mode_preferences)
-            )
-            PlatoRadioButton(
-                selected = state.darkThemeConfig.isSystemDefault(),
-                onClick = {
-                    state.onDarkThemeConfigClicked(DarkThemeConfig.FOLLOW_SYSTEM)
+                    .clickable {
+                        goToDatabaseScreen()
+                    },
+                headlineContent = {
+                    Text(text = stringResource(RString.database_settings))
                 },
-                text = stringResource(id = R.string.system_default)
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Outlined.Storage,
+                        contentDescription = "Database Settings"
+                    )
+                }
             )
-            PlatoRadioButton(
-                selected = state.darkThemeConfig.isLight(),
-                onClick = {
-                    state.onDarkThemeConfigClicked(DarkThemeConfig.LIGHT)
+
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        goToInterfaceScreen()
+                    },
+                headlineContent = {
+                    Text(text = stringResource(RString.interface_screen_name))
                 },
-                text = stringResource(id = R.string.light)
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Outlined.TouchApp,
+                        contentDescription = "Interface Screen"
+                    )
+                }
             )
-            PlatoRadioButton(
-                selected = state.darkThemeConfig.isDark(),
-                onClick = {
-                    state.onDarkThemeConfigClicked(DarkThemeConfig.DARK)
+
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        goToAboutScreen()
+                    },
+                headlineContent = {
+                    Text(text = stringResource(RString.about))
                 },
-                text = stringResource(id = R.string.dark)
+                leadingContent = {
+                    Icon(imageVector = Icons.Filled.Info, contentDescription = "About Screen")
+                }
             )
+
+            PlatoHeightSpacer32()
         }
-    }
-}
-
-@Composable
-private fun PlatoRadioButton(selected: Boolean, onClick: () -> Unit, text: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable { onClick.invoke() },
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        RadioButton(selected = selected, onClick = onClick)
-        Text(text = text)
-    }
-}
-
-@Composable
-private fun TypeIcon(state: SettingsViewState, modifier: Modifier = Modifier) {
-    Crossfade(
-        modifier = modifier,
-        targetState = state.type,
-        label = "type_crossfade_icon",
-        animationSpec = tween(ANIMATION_DURATION)
-    ) { type ->
-        PlatoIcon(
-            modifier = Modifier
-                .testTag(type.icon().name),
-            imageVector = type.icon(),
-            tint = type.color()
-        )
-    }
-}
-
-@Composable
-private fun FeatureEnabledIcon(state: Boolean, modifier: Modifier = Modifier) {
-    Crossfade(
-        modifier = modifier,
-        targetState = state,
-        label = "custom_switch_label",
-        animationSpec = tween(ANIMATION_DURATION)
-    ) { enabled ->
-        val imageVector = if (enabled) {
-            PlatoIconType.CheckCircleOutline.imageVector
-        } else {
-            PlatoIconType.HighlightOff.imageVector
-        }
-        Icon(
-            modifier = Modifier
-                .testTag(imageVector.name),
-            imageVector = imageVector,
-            contentDescription = null,
-            tint = if (enabled) {
-                Feijoa
-            } else {
-                AtomicTangerine
-            }
-        )
     }
 }
 
@@ -378,7 +183,6 @@ private fun SettingsScreenFdroidPreview() {
     HateItOrRateItTheme {
         SettingsScreen(
             state = SettingsViewState(
-                appInfo = "appinfo",
                 isFdroidBuild = true
             )
         )
@@ -390,7 +194,6 @@ private fun SettingsScreenGplayPreview() {
     HateItOrRateItTheme {
         SettingsScreen(
             state = SettingsViewState(
-                appInfo = "appinfo",
                 isFdroidBuild = false
             )
         )

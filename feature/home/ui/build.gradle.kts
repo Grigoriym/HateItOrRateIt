@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.core.async)
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.ui)
+    implementation(projects.strings)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.core.ktx)

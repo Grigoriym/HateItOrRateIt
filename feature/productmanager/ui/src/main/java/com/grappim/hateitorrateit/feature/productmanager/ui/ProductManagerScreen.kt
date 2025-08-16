@@ -48,7 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.productmanager.ui.widgets.PlatoHateRateContent
-import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
@@ -81,7 +81,7 @@ fun ProductManagerRoute(
         topBarController.update(
             TopBarConfig(
                 state = TopBarState.Visible(
-                    title = NativeText.Resource(R.string.hate_or_rate),
+                    title = NativeText.Resource(RString.hate_or_rate),
                     topBarBackButtonState = TopBarBackButtonState.Visible(
                         overrideBackHandlerAction = {
                             state.onShowAlertDialog(true)
@@ -98,7 +98,7 @@ fun ProductManagerRoute(
 
     ObserveAsEvents(viewModel.snackBarMessage) { snackBarMessage ->
         if (snackBarMessage !is NativeText.Empty) {
-            showActionSnackbar(snackBarMessage, context.getString(R.string.close))
+            showActionSnackbar(snackBarMessage, context.getString(RString.close))
         }
     }
 
@@ -120,8 +120,8 @@ fun ProductManagerRoute(
     PlatoAlertDialog(
         text = state.alertDialogText.asString(context = LocalContext.current),
         showAlertDialog = state.showAlertDialog,
-        confirmButtonText = stringResource(id = R.string.proceed),
-        dismissButtonText = stringResource(id = R.string.dismiss),
+        confirmButtonText = stringResource(id = RString.proceed),
+        dismissButtonText = stringResource(id = RString.dismiss),
         onDismissRequest = {
             state.onShowAlertDialog(false)
         },
@@ -232,7 +232,7 @@ private fun AddFromContent(
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
-            text = stringResource(id = R.string.add_picture_from)
+            text = stringResource(id = RString.add_picture_from)
         )
         Row(
             modifier = Modifier
@@ -241,11 +241,11 @@ private fun AddFromContent(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             PlatoTextButton(
-                text = stringResource(id = R.string.camera),
+                text = stringResource(id = RString.camera),
                 onClick = onCameraClick
             )
             PlatoTextButton(
-                text = stringResource(id = R.string.gallery),
+                text = stringResource(id = RString.gallery),
                 onClick = onGalleryClick
             )
         }
@@ -328,7 +328,7 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
             onValueChange = state.setName,
             singleLine = true,
             label = {
-                Text(text = stringResource(id = R.string.name_obligatory))
+                Text(text = stringResource(id = RString.name_obligatory))
             }
         )
 
@@ -340,7 +340,7 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
             onValueChange = state.setDescription,
             singleLine = true,
             label = {
-                Text(text = stringResource(id = R.string.description))
+                Text(text = stringResource(id = RString.description))
             }
         )
 
@@ -352,7 +352,7 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
             onValueChange = state.setShop,
             singleLine = true,
             label = {
-                Text(text = stringResource(id = R.string.shop))
+                Text(text = stringResource(id = RString.shop))
             }
         )
     }

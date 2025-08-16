@@ -10,6 +10,7 @@ android {
 dependencies {
     implementation(projects.data.repoApi)
     implementation(projects.utils.ui)
+    implementation(projects.strings)
 
     implementation(libs.androidx.activity.compose)
 

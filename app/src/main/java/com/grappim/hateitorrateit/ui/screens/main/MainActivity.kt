@@ -14,7 +14,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.grappim.hateitorrateit.appupdateapi.AppUpdateChecker
 import com.grappim.hateitorrateit.appupdateapi.UpdateState
 import com.grappim.hateitorrateit.data.localdatastorageapi.models.DarkThemeConfig
-import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -68,10 +68,10 @@ class MainActivity : AppCompatActivity() {
     private fun showRestartSnackbar() {
         Snackbar.make(
             window.decorView.rootView,
-            getString(R.string.app_update_downloaded),
+            getString(RString.app_update_downloaded),
             Snackbar.LENGTH_INDEFINITE
         ).apply {
-            setAction(getString(R.string.restart)) { appUpdateChecker.completeUpdate() }
+            setAction(getString(RString.restart)) { appUpdateChecker.completeUpdate() }
             show()
         }
     }

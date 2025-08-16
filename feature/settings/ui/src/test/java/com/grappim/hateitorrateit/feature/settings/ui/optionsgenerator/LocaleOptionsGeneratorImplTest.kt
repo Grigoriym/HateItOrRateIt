@@ -1,6 +1,6 @@
 package com.grappim.hateitorrateit.feature.settings.ui.optionsgenerator
 
-import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import org.junit.Before
 import org.junit.Test
@@ -25,8 +25,8 @@ class LocaleOptionsGeneratorImplTest {
         val localeOptions = localeOptionsGenerator.getLocaleOptions()
 
         assertEquals(3, localeOptions.size)
-        assertEquals("en", localeOptions[NativeText.Resource(R.string.en)])
-        assertEquals("fr", localeOptions[NativeText.Resource(R.string.fr)])
-        assertEquals("de", localeOptions[NativeText.Resource(R.string.de)])
+        assertEquals("en", localeOptions[NativeText.Resource(RString.en)])
+        assertEquals("fr", localeOptions[NativeText.Resource(RString.fr)])
+        assertEquals("de", localeOptions[NativeText.Resource(RString.de)])
     }
 }

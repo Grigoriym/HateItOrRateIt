@@ -12,6 +12,7 @@ android {
 dependencies {
     implementation(projects.utils.ui)
     implementation(projects.uikit)
+    implementation(projects.strings)
     implementation(projects.data.analyticsApi)
     implementation(projects.core.async)
     implementation(projects.core.appinfoApi)
@@ -30,6 +31,7 @@ dependencies {
 
     implementation(libs.androidx.compose.ui.core)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.timber)

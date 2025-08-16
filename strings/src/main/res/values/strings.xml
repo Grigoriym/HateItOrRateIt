@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="home">Home</string>
+    <string name="about">About</string>
+    <string name="interface_screen_name">Interface</string>
+    <string name="database_settings">Database</string>
+    <string name="analytics_settings">Analytics</string>
+    <string name="product_settings">Product</string>
+
+    <string name="app_name" translatable="false">Hate Rate</string>
+    <string name="app_name_debug" translatable="false">Dbg Hate Rate</string>
+    <string name="app_name_fdroid_debug" translatable="false">Fdbg Hate Rate</string>
+    <string name="app_name_gplay_debug" translatable="false">Gdbg Hate Rate</string>
+    <string name="app_name_gplay" translatable="false">Hate Rate</string>
+
+    <string name="en" translatable="false">English</string>
+    <string name="fr" translatable="false">Français</string>
+    <string name="de" translatable="false">Deutsch</string>
+
+    <string name="add_image">Please add an image</string>
+    <string name="set_name">Please enter a product name</string>
+    <string name="add_picture_from">Add picture from:</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+    <string name="shop">Shop</string>
+    <string name="description">Description</string>
+    <string name="name_obligatory">Name *</string>
+    <string name="create">Create</string>
+    <string name="save">Save</string>
+    <string name="hate_or_rate">Hate Or Rate</string>
+    <string name="save_changes_before_exit">Save changes before exiting?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="cancel">Cancel</string>
+    <string name="close">Close</string>
+    <string name="proceed">Proceed</string>
+
+    <string name="delete_image">Delete Image</string>
+
+    <string name="if_quit_lose_data">Warning: Quitting will result in data loss.</string>
+    <string name="if_quit_ensure_saved">Warning: Please ensure you saved the data.</string>
+
+    <string name="i_rate_it">I Rate It</string>
+    <string name="i_hate_it">I Hate It</string>
+
+    <string name="app_update_downloaded">An update has just been downloaded</string>
+    <string name="restart">Restart</string>
+
+    <string name="language">English</string>
+
     <string name="settings">Settings</string>
+    <string name="are_you_sure_clear_all_data">Confirm data deletion</string>
+
+    <string name="clear_data">Clear All Data</string>
+    <string name="clear_data_description">Permanently removes all products, images, and app data. This action cannot be undone.</string>
+    <string name="default_type">Default Type</string>
+    <string name="default_type_description">Choose the default rating type for new products</string>
+
+    <string name="toggle_crashlytics">Do you allow crash reports to be sent?</string>
+    <string name="crashlytics_settings_subtitle">This is needed to diagnose and resolve any crashes</string>
+
+    <string name="toggle_analytics">Do you consent to analytics data being collected?</string>
+    <string name="analytics_settings_subtitle">Collecting usage data helps us improve your experience with the app.</string>
+
+    <string name="dark_mode_preferences">Dark mode preferences</string>
+    <string name="system_default">System Default</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
+
+    <string name="github_repo_link">Github Link</string>
+    <string name="privacy_policy_link">Privacy Policy</string>
+
+    <string name="content_description_back_button">Going back</string>
 </resources>

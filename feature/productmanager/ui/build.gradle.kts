@@ -21,6 +21,7 @@ dependencies {
     implementation(projects.utils.ui)
     implementation(projects.utils.filesApi)
     implementation(projects.data.analyticsApi)
+    implementation(projects.strings)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.core)

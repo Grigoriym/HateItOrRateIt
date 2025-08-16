@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.uikit.widgets
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -15,7 +16,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-const val PLAT_CARD_TAG = "plato_card_tag"
+const val PLATO_CARD_TAG = "plato_card_tag"
 
 @Composable
 fun PlatoCard(
@@ -28,9 +29,18 @@ fun PlatoCard(
     onClick: (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit
 ) {
+    val defaultBorder = border ?: if (isSystemInDarkTheme()) {
+        BorderStroke(
+            width = 1.dp,
+            color = MaterialTheme.colorScheme.outline.copy(alpha = 0.3f)
+        )
+    } else {
+        null
+    }
+
     if (onClick == null) {
         Card(
-            modifier = modifier.testTag(PLAT_CARD_TAG),
+            modifier = modifier.testTag(PLATO_CARD_TAG),
             shape = shape,
             elevation = CardDefaults.cardElevation(
                 defaultElevation = elevation
@@ -39,18 +49,18 @@ fun PlatoCard(
                 containerColor = backgroundColor,
                 contentColor = contentColor
             ),
-            border = border,
+            border = defaultBorder,
             content = content
         )
     } else {
         Card(
-            modifier = modifier.testTag(PLAT_CARD_TAG),
+            modifier = modifier.testTag(PLATO_CARD_TAG),
             shape = shape,
             colors = CardDefaults.cardColors(
                 containerColor = backgroundColor,
                 contentColor = contentColor
             ),
-            border = border,
+            border = defaultBorder,
             elevation = CardDefaults.cardElevation(
                 defaultElevation = elevation
             ),

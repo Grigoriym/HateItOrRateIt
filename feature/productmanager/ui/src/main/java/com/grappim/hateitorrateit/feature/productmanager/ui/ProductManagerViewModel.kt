@@ -14,7 +14,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.ProductManagerNavDestination
-import com.grappim.hateitorrateit.uikit.R
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.utils.filesapi.deletion.FileDeletionUtils
 import com.grappim.hateitorrateit.utils.filesapi.images.ImagePersistenceManager
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
@@ -141,8 +141,8 @@ class ProductManagerViewModel @Inject constructor(
                 it.copy(
                     type = draftProduct.type,
                     draftProduct = draftProduct,
-                    bottomBarButtonText = NativeText.Resource(R.string.create),
-                    alertDialogText = NativeText.Resource(R.string.if_quit_lose_data)
+                    bottomBarButtonText = NativeText.Resource(RString.create),
+                    alertDialogText = NativeText.Resource(RString.if_quit_lose_data)
                 )
             }
         }
@@ -170,8 +170,8 @@ class ProductManagerViewModel @Inject constructor(
                     shop = editProduct.shop,
                     type = editProduct.type,
                     isNewProduct = false,
-                    bottomBarButtonText = NativeText.Resource(R.string.save),
-                    alertDialogText = NativeText.Resource(R.string.if_quit_ensure_saved),
+                    bottomBarButtonText = NativeText.Resource(RString.save),
+                    alertDialogText = NativeText.Resource(RString.if_quit_ensure_saved),
                     editProduct = editProduct
                 )
             }
@@ -305,7 +305,7 @@ class ProductManagerViewModel @Inject constructor(
         viewModelScope.launch {
             when {
                 _viewState.value.productName.isBlank() -> {
-                    showSnackbar(NativeText.Resource(R.string.set_name))
+                    showSnackbar(NativeText.Resource(RString.set_name))
                 }
 
                 else -> {
