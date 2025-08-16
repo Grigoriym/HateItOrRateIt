@@ -58,10 +58,10 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
-import com.grappim.hateitorrateit.uikit.utils.RString
 import com.grappim.hateitorrateit.uikit.utils.color
 import com.grappim.hateitorrateit.uikit.utils.icon
 import com.grappim.hateitorrateit.uikit.widgets.PlatoAlertDialog

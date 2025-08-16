@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
 import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
@@ -23,7 +24,7 @@ fun PlatoAlertDialog(
     onDismissRequest: () -> Unit,
     onConfirmButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    confirmButtonText: String = stringResource(id = R.string.yes),
+    confirmButtonText: String = stringResource(id = RString.yes),
     dismissButtonText: String? = null,
     onDismissButtonClick: (() -> Unit)? = null
 ) {

@@ -8,6 +8,12 @@ import com.grappim.hateitorrateit.uikit.theme.Feijoa
 
 fun deactivatedColor() = Color.LightGray
 
+fun getColor(isEnabled: Boolean): Color = if (isEnabled) {
+    Feijoa
+} else {
+    AtomicTangerine
+}
+
 fun HateRateType.hateColors() = if (this == HateRateType.HATE) {
     AtomicTangerine
 } else {

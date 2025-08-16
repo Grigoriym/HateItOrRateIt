@@ -17,28 +17,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 
-// val LightColorPalette = lightColorScheme(
-//    primary = Color(0xFFE8B98E),
-//    secondary = Color(0xFFA48775),
-//    background = Color(0xFFF2E9DF),
-//    surface = Color(0xFFCEC7BF),
-//    onPrimary = Color.Black,
-//    onSecondary = Color.White,
-//    onBackground = Color.Black,
-//    onSurface = Color.Black
-// )
-//
-// val DarkColorPalette = darkColorScheme(
-//    primary = Color(0xFFE8B98E),
-//    secondary = Color(0xFFA48775),
-//    background = Color(0xFF333333),
-//    surface = Color(0xFF1C1C1C),
-//    onPrimary = Color.White,
-//    onSecondary = Color.White,
-//    onBackground = Color.White,
-//    onSurface = Color.White
-// )
-
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
     onPrimary = onPrimaryLight,

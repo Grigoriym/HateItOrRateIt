@@ -22,6 +22,7 @@ dependencies {
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.filesApi)
     implementation(projects.utils.androidApi)
+    implementation(projects.strings)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)

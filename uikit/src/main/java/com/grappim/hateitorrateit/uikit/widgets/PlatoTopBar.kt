@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.uikit.R
 import com.grappim.hateitorrateit.uikit.icons.PlatoIconType
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
@@ -46,7 +47,7 @@ fun PlatoTopBar(
                             .testTag(icon.name),
                         imageVector = icon,
                         contentDescription = stringResource(
-                            id = R.string.content_description_back_button
+                            id = RString.content_description_back_button
                         )
                     )
                 }

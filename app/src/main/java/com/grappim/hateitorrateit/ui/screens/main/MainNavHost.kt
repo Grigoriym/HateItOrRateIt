@@ -23,6 +23,21 @@ import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.ProductMa
 import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.navigateToProductManager
 import com.grappim.hateitorrateit.feature.settings.ui.navigation.SettingsNavDestination
 import com.grappim.hateitorrateit.feature.settings.ui.screen.SettingsRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.about.SettingsAboutScreenRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.about.SettingsAboutScreenRouteNavDestination
+import com.grappim.hateitorrateit.feature.settings.ui.screen.about.goToSettingsAboutScreen
+import com.grappim.hateitorrateit.feature.settings.ui.screen.analytics.SettingsAnalyticsScreenRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.analytics.SettingsAnalyticsScreenRouteNavDestination
+import com.grappim.hateitorrateit.feature.settings.ui.screen.analytics.goToSettingsAnalyticsScreen
+import com.grappim.hateitorrateit.feature.settings.ui.screen.database.SettingsDatabaseScreenRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.database.SettingsDatabaseScreenRouteNavDestination
+import com.grappim.hateitorrateit.feature.settings.ui.screen.database.goToSettingsDatabaseScreen
+import com.grappim.hateitorrateit.feature.settings.ui.screen.interfacescreen.SettingsInterfaceScreenRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.interfacescreen.SettingsInterfaceScreenRouteNavDestination
+import com.grappim.hateitorrateit.feature.settings.ui.screen.interfacescreen.goToSettingsInterfaceScreen
+import com.grappim.hateitorrateit.feature.settings.ui.screen.product.SettingsProductScreenRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.product.SettingsProductScreenRouteNavDestination
+import com.grappim.hateitorrateit.feature.settings.ui.screen.product.goToSettingsProductScreen
 import com.grappim.hateitorrateit.utils.ui.NativeText
 
 @Composable
@@ -103,7 +118,39 @@ fun MainNavHost(
         }
 
         composable<SettingsNavDestination> { navBackStackEntry ->
-            SettingsRoute()
+            SettingsRoute(
+                goToAboutScreen = {
+                    navController.goToSettingsAboutScreen()
+                },
+                goToInterfaceScreen = {
+                    navController.goToSettingsInterfaceScreen()
+                },
+                goToDatabaseScreen = {
+                    navController.goToSettingsDatabaseScreen()
+                },
+                goToAnalyticsScreen = {
+                    navController.goToSettingsAnalyticsScreen()
+                },
+                goToProductScreen = {
+                    navController.goToSettingsProductScreen()
+                }
+            )
+        }
+
+        composable<SettingsAboutScreenRouteNavDestination> {
+            SettingsAboutScreenRoute()
+        }
+        composable<SettingsInterfaceScreenRouteNavDestination> {
+            SettingsInterfaceScreenRoute()
+        }
+        composable<SettingsDatabaseScreenRouteNavDestination> {
+            SettingsDatabaseScreenRoute()
+        }
+        composable<SettingsAnalyticsScreenRouteNavDestination> {
+            SettingsAnalyticsScreenRoute()
+        }
+        composable<SettingsProductScreenRouteNavDestination> {
+            SettingsProductScreenRoute()
         }
     }
 }
