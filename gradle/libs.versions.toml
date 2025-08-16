@@ -7,7 +7,7 @@ minSdk = "24"
 targetSdk = "35"
 
 # before bumping make sure that fdroid supports it https://gitlab.com/fdroid/admin/-/issues/593
-agp = "8.11.1"
+agp = "8.12.0"
 androidTools = "31.12.0"
 androidDesugarJdkLibs = "2.1.5"
 
