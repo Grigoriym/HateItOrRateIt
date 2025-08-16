@@ -20,7 +20,7 @@ height="80">](https://f-droid.org/en/packages/com.grappim.hateitorrateit.fdroid/
 
 There are times when you purchase a product that you either like or dislike, only to realize later that you can't remember its name. This is particularly true for items like cheese, ham, etc., where there are countless variations and it's challenging to keep up with all the names. This app aims to solve that problem, enabling you to recall the exact product the next time you need it.
 
-https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/de24f8f3-ed42-4944-af75-548de1988259
+<https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/de24f8f3-ed42-4944-af75-548de1988259>
 
 |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/d745e722-9e59-4a81-a5ba-bdb1b614ab02" alt="drawing" width="400" height="900"/> | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/902d61c4-ab54-43dc-a51c-1d8b87a6ac56" alt="drawing" width="400" height="900"/>  |
 |---|---|
