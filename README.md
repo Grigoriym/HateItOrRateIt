@@ -26,9 +26,3 @@ There are times when you purchase a product that you either like or dislike, onl
 |---|---|
 | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3e79ad35-7b87-43d0-b7fe-8adb5bcdd212" alt="drawing" width="400" height="900"/>  |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/ec249ed8-fa86-4aac-9c72-70bdc9e862f5" alt="drawing" width="400" height="900"/> |
 | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/c8acad80-5211-4d1f-94ff-2fba5bfdff1e" alt="drawing" width="400" height="900"/>  | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3a76cb2c-1a87-4492-9d4f-930efe0d840e" alt="drawing" width="400" height="900"/>  |
-
-## Learnings
-
-1. No need to pass data to viewModel by hand. SavedStateHandle can do all the work
-2. Android Navigation does not support nullable Long values. More info
-   [here](https://developer.android.com/guide/navigation/use-graph/pass-data#supported_argument_types)
