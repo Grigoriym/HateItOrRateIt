@@ -38,5 +38,7 @@ interface ProductsRepository {
 
     suspend fun addProduct(product: CreateProduct)
 
+    suspend fun importProduct(product: CreateProduct): Long
+
     suspend fun deleteProductById(productId: Long)
 }

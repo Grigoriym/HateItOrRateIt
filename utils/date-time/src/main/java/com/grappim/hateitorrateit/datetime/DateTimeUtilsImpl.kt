@@ -12,7 +12,8 @@ import javax.inject.Singleton
 class DateTimeUtilsImpl @Inject constructor(
     @DtfToStore private val dtfToStore: DateTimeFormatter,
     @DtfToDemonstrate private val dtfToDemonstrate: DateTimeFormatter,
-    @DtfDocumentFolder private val dtfDocumentFolder: DateTimeFormatter
+    @DtfDocumentFolder private val dtfDocumentFolder: DateTimeFormatter,
+    @DtfBackupFolderTimestamp private val dtfBackupFolderTimestamp: DateTimeFormatter
 ) : DateTimeUtils {
 
     override fun formatToStoreInDb(offsetDateTime: OffsetDateTime): String =
@@ -30,4 +31,7 @@ class DateTimeUtilsImpl @Inject constructor(
     override fun getDateTimeUTCNow(): OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC)
 
     override fun getInstantNow(): Instant = Instant.now()
+
+    override fun getBackupFolderNowTimestamp(): String =
+        dtfBackupFolderTimestamp.format(getDateTimeUTCNow())
 }

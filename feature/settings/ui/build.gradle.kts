@@ -11,6 +11,7 @@ android {
 
 dependencies {
     implementation(projects.utils.ui)
+    implementation(projects.utils.androidApi)
     implementation(projects.uikit)
     implementation(projects.strings)
     implementation(projects.data.analyticsApi)
@@ -20,6 +21,7 @@ dependencies {
     implementation(projects.data.cleanerApi)
     implementation(projects.data.localDatastorageApi)
     implementation(projects.data.remoteConfigApi)
+    implementation(projects.data.backupApi)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)

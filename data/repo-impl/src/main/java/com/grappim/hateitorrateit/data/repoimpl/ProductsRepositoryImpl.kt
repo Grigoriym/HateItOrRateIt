@@ -120,6 +120,18 @@ class ProductsRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun importProduct(product: CreateProduct): Long {
+        val productEntityWithoutId = productsMapper
+            .toProductEntity(product)
+            .copy(productId = 0L)
+        val productId = productsDao.insert(productEntityWithoutId)
+        val images = productsMapper.toProductImageDataEntityList(product).map {
+            it.copy(productId = productId)
+        }
+        productsDao.upsertImages(images)
+        return productId
+    }
+
     override fun getProductsFlow(query: String, type: HateRateType?): Flow<ImmutableList<Product>> =
         flow {
             emitAll(

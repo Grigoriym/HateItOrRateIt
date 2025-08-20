@@ -29,6 +29,9 @@ import com.grappim.hateitorrateit.feature.settings.ui.screen.about.goToSettingsA
 import com.grappim.hateitorrateit.feature.settings.ui.screen.analytics.SettingsAnalyticsScreenRoute
 import com.grappim.hateitorrateit.feature.settings.ui.screen.analytics.SettingsAnalyticsScreenRouteNavDestination
 import com.grappim.hateitorrateit.feature.settings.ui.screen.analytics.goToSettingsAnalyticsScreen
+import com.grappim.hateitorrateit.feature.settings.ui.screen.backup.SettingsBackupNavDestination
+import com.grappim.hateitorrateit.feature.settings.ui.screen.backup.SettingsBackupRoute
+import com.grappim.hateitorrateit.feature.settings.ui.screen.backup.navigateToSettingsBackup
 import com.grappim.hateitorrateit.feature.settings.ui.screen.database.SettingsDatabaseScreenRoute
 import com.grappim.hateitorrateit.feature.settings.ui.screen.database.SettingsDatabaseScreenRouteNavDestination
 import com.grappim.hateitorrateit.feature.settings.ui.screen.database.goToSettingsDatabaseScreen
@@ -133,6 +136,9 @@ fun MainNavHost(
                 },
                 goToProductScreen = {
                     navController.goToSettingsProductScreen()
+                },
+                goToBackupScreen = {
+                    navController.navigateToSettingsBackup()
                 }
             )
         }
@@ -151,6 +157,9 @@ fun MainNavHost(
         }
         composable<SettingsProductScreenRouteNavDestination> {
             SettingsProductScreenRoute()
+        }
+        composable<SettingsBackupNavDestination> {
+            SettingsBackupRoute()
         }
     }
 }

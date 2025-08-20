@@ -8,4 +8,8 @@ interface FolderPathManager {
     fun getTempFolderName(folder: String): String
 
     fun getBackupFolderName(folder: String): String
+
+    fun getBackupParentFolder(): File
+
+    fun getBackupChildFolderName(): String
 }

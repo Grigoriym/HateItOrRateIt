@@ -84,6 +84,8 @@ dependencies {
     implementation(projects.data.remoteConfigImpl)
     implementation(projects.data.localDatastorageApi)
     implementation(projects.data.localDatastorageImpl)
+    implementation(projects.data.backupApi)
+    implementation(projects.data.backupImpl)
 
     implementation(projects.feature.home.ui)
     implementation(projects.feature.productmanager.ui)
