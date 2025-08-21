@@ -198,14 +198,7 @@ private fun ImportDataWidget(state: SettingsBackupViewState) {
                         text = state.currentImportOperation,
                         style = MaterialTheme.typography.bodySmall
                     )
-                    LinearProgressIndicator(
-                        progress = { state.importProgressPercent / 100f },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Text(
-                        text = "${state.importProgressPercent}%",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                 }
             } else {
                 OutlinedButton(

@@ -55,7 +55,6 @@ enum class ImportError {
 }
 
 enum class ImportPhase {
-    INITIALIZING,
     VALIDATING_BACKUP,
     EXTRACTING_DATA,
     IMPORTING_PRODUCTS,
@@ -65,16 +64,7 @@ enum class ImportPhase {
     COMPLETED
 }
 
-data class ImportProgress(
-    val phase: ImportPhase,
-    val itemsProcessed: Int? = null,
-    val totalItems: Int? = null,
-    val percentComplete: Int = if (totalItems != null && totalItems > 0 && itemsProcessed != null) {
-        (itemsProcessed * 100) / totalItems
-    } else {
-        0
-    }
-)
+data class ImportProgress(val phase: ImportPhase, val percentComplete: Int = 0)
 
 sealed class ImportState {
     data class Progress(val progress: ImportProgress) : ImportState()

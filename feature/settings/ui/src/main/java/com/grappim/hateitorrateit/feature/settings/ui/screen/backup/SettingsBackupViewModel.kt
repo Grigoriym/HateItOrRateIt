@@ -131,7 +131,6 @@ class SettingsBackupViewModel @Inject constructor(
                 when (state) {
                     is ImportState.Progress -> {
                         val currentImportOperation = when (state.progress.phase) {
-                            ImportPhase.INITIALIZING -> "Initializing import..."
                             ImportPhase.VALIDATING_BACKUP -> "Validating backup file..."
                             ImportPhase.EXTRACTING_DATA -> "Extracting data..."
                             ImportPhase.IMPORTING_PRODUCTS -> "Importing products..."
@@ -142,8 +141,7 @@ class SettingsBackupViewModel @Inject constructor(
                         }
                         _viewState.update {
                             it.copy(
-                                currentImportOperation = currentImportOperation,
-                                importProgressPercent = state.progress.percentComplete
+                                currentImportOperation = currentImportOperation
                             )
                         }
                     }

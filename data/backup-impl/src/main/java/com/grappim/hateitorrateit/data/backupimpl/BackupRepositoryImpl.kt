@@ -24,6 +24,7 @@ import com.grappim.hateitorrateit.data.backupapi.models.ExportMetadata
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
 import com.grappim.hateitorrateit.data.backupapi.models.ProductImageExport
 import com.grappim.hateitorrateit.data.backupapi.models.SettingsExport
+import com.grappim.hateitorrateit.data.backupimpl.Constants.BACKUP_DATA_JSON
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.Product
@@ -33,10 +34,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
@@ -56,10 +59,6 @@ class BackupRepositoryImpl @Inject constructor(
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val dateTimeUtils: DateTimeUtils
 ) : BackupRepository {
-
-    companion object {
-        private const val BACKUP_DATA_JSON = "backup_data.json"
-    }
 
     override suspend fun createBackupWithProgress(): Flow<BackupState> = channelFlow {
         try {
@@ -155,6 +154,9 @@ class BackupRepositoryImpl @Inject constructor(
         var totalSize = 1024L
 
         products.forEach { product ->
+            if (!currentCoroutineContext().isActive) {
+                return@forEach
+            }
             product.images.forEach { image ->
                 val imageFile =
                     File(
@@ -316,8 +318,11 @@ class BackupRepositoryImpl @Inject constructor(
         zipOut.closeEntry()
     }
 
-    private fun addImagesToZip(zipOut: ZipOutputStream, products: ImmutableList<Product>) {
+    private suspend fun addImagesToZip(zipOut: ZipOutputStream, products: ImmutableList<Product>) {
         products.forEach { product ->
+            if (!currentCoroutineContext().isActive) {
+                return@forEach
+            }
             val productFolder = folderPathManager.getMainFolder(product.productFolderName)
 
             product.images.forEach { image ->

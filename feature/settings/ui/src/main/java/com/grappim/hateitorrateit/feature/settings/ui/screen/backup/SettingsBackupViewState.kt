@@ -8,7 +8,6 @@ data class SettingsBackupViewState(
     val lastBackupResult: String? = null,
     val isImportInProgress: Boolean = false,
     val currentImportOperation: String = "",
-    val importProgressPercent: Int = 0,
     val lastImportResult: String? = null,
     val onCreateBackup: () -> Unit = {},
     val onOpenDownloadsFolder: () -> Unit = {},

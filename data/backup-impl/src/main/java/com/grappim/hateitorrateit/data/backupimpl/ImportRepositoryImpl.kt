@@ -14,6 +14,7 @@ import com.grappim.hateitorrateit.data.backupapi.models.ImportProgress
 import com.grappim.hateitorrateit.data.backupapi.models.ImportResult
 import com.grappim.hateitorrateit.data.backupapi.models.ImportState
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
+import com.grappim.hateitorrateit.data.backupimpl.Constants.BACKUP_DATA_JSON
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
@@ -22,9 +23,11 @@ import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
@@ -45,12 +48,6 @@ class ImportRepositoryImpl @Inject constructor(
     override suspend fun importBackupWithProgress(backupFileUri: Uri): Flow<ImportState> =
         channelFlow {
             try {
-                send(
-                    ImportState.Progress(
-                        ImportProgress(phase = ImportPhase.INITIALIZING)
-                    )
-                )
-
                 send(
                     ImportState.Progress(
                         ImportProgress(phase = ImportPhase.VALIDATING_BACKUP)
@@ -89,8 +86,8 @@ class ImportRepositoryImpl @Inject constructor(
             ZipInputStream(inputStream).use { zipIn ->
                 var hasDataFile = false
                 var entry = zipIn.nextEntry
-                while (entry != null) {
-                    if (entry.name == "backup_data.json") {
+                while (entry != null && currentCoroutineContext().isActive) {
+                    if (entry.name == BACKUP_DATA_JSON) {
                         hasDataFile = true
                         break
                     }
@@ -114,25 +111,18 @@ class ImportRepositoryImpl @Inject constructor(
 
         try {
             progressCallback(
-                ImportProgress(
-                    phase = ImportPhase.VALIDATING_BACKUP,
-                    itemsProcessed = 0,
-                    totalItems = 1
-                )
+                ImportProgress(phase = ImportPhase.VALIDATING_BACKUP)
             )
 
             val backupContent = extractBackupContent(backupFileUri)
 
             progressCallback(
-                ImportProgress(
-                    phase = ImportPhase.VALIDATING_BACKUP,
-                    itemsProcessed = 0,
-                    totalItems = 1
-                )
+                ImportProgress(phase = ImportPhase.VALIDATING_BACKUP)
             )
 
-            val versionCheckResult =
-                validateBackupVersion(backupContent.exportData.metadata.version)
+            val versionCheckResult = validateBackupVersion(
+                backupVersion = backupContent.exportData.metadata.version
+            )
             if (!versionCheckResult.isValid) {
                 return ImportResult.Failure(
                     ImportError.UNSUPPORTED_VERSION,
@@ -140,23 +130,15 @@ class ImportRepositoryImpl @Inject constructor(
                 )
             }
 
-            val totalItems = backupContent.exportData.products.size + 1
-            var processedItems = 0
-
             val importedSettings = importSettingsFromExportData(
                 backupContent.exportData,
                 progressCallback,
-                warnings,
-                totalItems,
-                processedItems
+                warnings
             )
-            processedItems++
 
             val productImportResult = importProductsBasedOnVersion(
                 backupContent,
-                progressCallback,
-                totalItems,
-                processedItems
+                progressCallback
             )
 
             return createImportResult(
@@ -182,9 +164,9 @@ class ImportRepositoryImpl @Inject constructor(
                 val images = mutableMapOf<String, ByteArray>()
 
                 var entry = zipIn.nextEntry
-                while (entry != null) {
+                while (entry != null && currentCoroutineContext().isActive) {
                     when {
-                        entry.name == "backup_data.json" -> {
+                        entry.name == BACKUP_DATA_JSON -> {
                             val jsonData = zipIn.readBytes().toString(Charsets.UTF_8)
                             exportData = json.decodeFromString<ExportData>(jsonData)
                         }
@@ -209,17 +191,9 @@ class ImportRepositoryImpl @Inject constructor(
     private suspend fun importSettingsFromExportData(
         exportData: ExportData,
         progressCallback: suspend (ImportProgress) -> Unit,
-        warnings: MutableList<String>,
-        totalItems: Int,
-        processedItems: Int
+        warnings: MutableList<String>
     ): Boolean {
-        progressCallback(
-            ImportProgress(
-                phase = ImportPhase.IMPORTING_SETTINGS,
-                itemsProcessed = processedItems,
-                totalItems = totalItems
-            )
-        )
+        progressCallback(ImportProgress(phase = ImportPhase.IMPORTING_SETTINGS))
 
         return try {
             exportData.settings.let { settings ->
@@ -228,13 +202,6 @@ class ImportRepositoryImpl @Inject constructor(
                 localDataStorage.setAnalyticsCollectionEnabled(settings.analyticsEnabled)
                 localDataStorage.setCrashesCollectionEnabled(settings.crashesEnabled)
             }
-            progressCallback(
-                ImportProgress(
-                    phase = ImportPhase.IMPORTING_SETTINGS,
-                    itemsProcessed = processedItems + 1,
-                    totalItems = totalItems
-                )
-            )
             true
         } catch (e: Exception) {
             Timber.w(e, "Failed to import settings")
@@ -252,19 +219,11 @@ class ImportRepositoryImpl @Inject constructor(
 
     private data class VersionCheckResult(val isValid: Boolean, val errorMessage: String = "")
 
-    private fun validateBackupVersion(backupVersion: String): VersionCheckResult = when {
+    private fun validateBackupVersion(backupVersion: Int): VersionCheckResult = when {
         !BackupVersion.isVersionSupported(backupVersion) -> {
             VersionCheckResult(
                 isValid = false,
                 errorMessage = "Backup version $backupVersion is not supported. " +
-                    "Supported versions: ${BackupVersion.SUPPORTED_VERSIONS.joinToString(", ")}"
-            )
-        }
-
-        !BackupVersion.isVersionCompatible(backupVersion) -> {
-            VersionCheckResult(
-                isValid = false,
-                errorMessage = "Backup version $backupVersion is too old and not compatible. " +
                     "Minimum supported version: ${BackupVersion.MIN_SUPPORTED_VERSION}"
             )
         }
@@ -274,18 +233,14 @@ class ImportRepositoryImpl @Inject constructor(
 
     private suspend fun importProductsBasedOnVersion(
         backupContent: BackupContent,
-        progressCallback: suspend (ImportProgress) -> Unit,
-        totalItems: Int,
-        processedItems: Int
+        progressCallback: suspend (ImportProgress) -> Unit
     ): ProductImportResult {
         val version = backupContent.exportData.metadata.version
 
-        return when {
-            version.startsWith("1.0") -> importProductsFromBackupV1(
+        return when (version) {
+            1 -> importProductsFromBackupV1(
                 backupContent,
-                progressCallback,
-                totalItems,
-                processedItems
+                progressCallback
             )
 
             else -> error("Unsupported version: $version")
@@ -294,30 +249,22 @@ class ImportRepositoryImpl @Inject constructor(
 
     private suspend fun importProductsFromBackupV1(
         backupContent: BackupContent,
-        progressCallback: suspend (ImportProgress) -> Unit,
-        totalItems: Int,
-        processedItems: Int
+        progressCallback: suspend (ImportProgress) -> Unit
     ): ProductImportResult {
         var importedProducts = 0
         var importedImages = 0
         val failedImages = mutableListOf<String>()
         val warnings = mutableListOf<String>()
 
-        progressCallback(
-            ImportProgress(
-                phase = ImportPhase.IMPORTING_PRODUCTS,
-                itemsProcessed = processedItems,
-                totalItems = totalItems
-            )
-        )
+        progressCallback(ImportProgress(phase = ImportPhase.IMPORTING_PRODUCTS))
 
-        backupContent.exportData.products.forEachIndexed { _, productExport ->
+        backupContent.exportData.products.forEach { productExport ->
+            if (!currentCoroutineContext().isActive) {
+                return@forEach
+            }
             val productResult = importSingleProduct(
                 productExport,
-                backupContent.images,
-                progressCallback,
-                processedItems + importedProducts,
-                totalItems
+                backupContent.images
             )
             if (productResult.success) {
                 importedProducts++
@@ -339,19 +286,8 @@ class ImportRepositoryImpl @Inject constructor(
 
     private suspend fun importSingleProduct(
         productExport: ProductExport,
-        imageMap: Map<String, ByteArray>,
-        progressCallback: suspend (ImportProgress) -> Unit,
-        currentItemIndex: Int,
-        totalItems: Int
+        imageMap: Map<String, ByteArray>
     ): SingleProductImportResult = try {
-        progressCallback(
-            ImportProgress(
-                phase = ImportPhase.IMPORTING_PRODUCTS,
-                itemsProcessed = currentItemIndex,
-                totalItems = totalItems
-            )
-        )
-
         val productFolder = folderPathManager.getMainFolder(productExport.productFolderName)
         if (!productFolder.exists()) {
             productFolder.mkdirs()
