@@ -121,14 +121,7 @@ private fun ExportDataWidget(state: SettingsBackupViewState) {
                         text = state.currentOperation,
                         style = MaterialTheme.typography.bodySmall
                     )
-                    LinearProgressIndicator(
-                        progress = { state.progressPercent / 100f },
-                        modifier = Modifier.fillMaxWidth()
-                    )
-                    Text(
-                        text = "${state.progressPercent}%",
-                        style = MaterialTheme.typography.bodySmall
-                    )
+                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                 }
             } else {
                 Row(

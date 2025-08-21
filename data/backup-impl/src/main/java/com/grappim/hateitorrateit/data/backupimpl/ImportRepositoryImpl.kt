@@ -47,18 +47,13 @@ class ImportRepositoryImpl @Inject constructor(
             try {
                 send(
                     ImportState.Progress(
-                        ImportProgress(ImportPhase.INITIALIZING, 0, 1, "Starting import")
+                        ImportProgress(phase = ImportPhase.INITIALIZING)
                     )
                 )
 
                 send(
                     ImportState.Progress(
-                        ImportProgress(
-                            ImportPhase.VALIDATING_BACKUP,
-                            0,
-                            1,
-                            "Validating backup file"
-                        )
+                        ImportProgress(phase = ImportPhase.VALIDATING_BACKUP)
                     )
                 )
 
@@ -68,12 +63,7 @@ class ImportRepositoryImpl @Inject constructor(
 
                 send(
                     ImportState.Progress(
-                        ImportProgress(
-                            phase = ImportPhase.COMPLETED,
-                            itemsProcessed = 1,
-                            totalItems = 1,
-                            currentItem = "Import completed"
-                        )
+                        ImportProgress(phase = ImportPhase.COMPLETED)
                     )
                 )
                 send(ImportState.Completed(result))
@@ -127,8 +117,7 @@ class ImportRepositoryImpl @Inject constructor(
                 ImportProgress(
                     phase = ImportPhase.VALIDATING_BACKUP,
                     itemsProcessed = 0,
-                    totalItems = 1,
-                    currentItem = "Reading backup file"
+                    totalItems = 1
                 )
             )
 
@@ -138,8 +127,7 @@ class ImportRepositoryImpl @Inject constructor(
                 ImportProgress(
                     phase = ImportPhase.VALIDATING_BACKUP,
                     itemsProcessed = 0,
-                    totalItems = 1,
-                    currentItem = "Validating backup version"
+                    totalItems = 1
                 )
             )
 
@@ -229,8 +217,7 @@ class ImportRepositoryImpl @Inject constructor(
             ImportProgress(
                 phase = ImportPhase.IMPORTING_SETTINGS,
                 itemsProcessed = processedItems,
-                totalItems = totalItems,
-                currentItem = "Importing settings"
+                totalItems = totalItems
             )
         )
 
@@ -245,8 +232,7 @@ class ImportRepositoryImpl @Inject constructor(
                 ImportProgress(
                     phase = ImportPhase.IMPORTING_SETTINGS,
                     itemsProcessed = processedItems + 1,
-                    totalItems = totalItems,
-                    currentItem = "Settings imported"
+                    totalItems = totalItems
                 )
             )
             true
@@ -321,8 +307,7 @@ class ImportRepositoryImpl @Inject constructor(
             ImportProgress(
                 phase = ImportPhase.IMPORTING_PRODUCTS,
                 itemsProcessed = processedItems,
-                totalItems = totalItems,
-                currentItem = "Starting product import"
+                totalItems = totalItems
             )
         )
 
@@ -363,8 +348,7 @@ class ImportRepositoryImpl @Inject constructor(
             ImportProgress(
                 phase = ImportPhase.IMPORTING_PRODUCTS,
                 itemsProcessed = currentItemIndex,
-                totalItems = totalItems,
-                currentItem = "Importing ${productExport.name}"
+                totalItems = totalItems
             )
         )
 

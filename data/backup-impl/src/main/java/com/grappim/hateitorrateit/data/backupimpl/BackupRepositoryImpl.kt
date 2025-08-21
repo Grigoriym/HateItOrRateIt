@@ -1,5 +1,3 @@
-@file:Suppress("NestedBlockDepth")
-
 package com.grappim.hateitorrateit.data.backupimpl
 
 import android.content.ContentValues
@@ -32,6 +30,7 @@ import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.Flow
@@ -42,9 +41,6 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
-import java.io.OutputStream
-import java.time.OffsetDateTime
-import java.time.format.DateTimeFormatter
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
@@ -61,16 +57,15 @@ class BackupRepositoryImpl @Inject constructor(
     private val dateTimeUtils: DateTimeUtils
 ) : BackupRepository {
 
+    companion object {
+        private const val BACKUP_DATA_JSON = "backup_data.json"
+    }
+
     override suspend fun createBackupWithProgress(): Flow<BackupState> = channelFlow {
         try {
             send(
                 BackupState.Progress(
-                    BackupProgress(
-                        phase = INITIALIZING,
-                        itemsProcessed = 0,
-                        totalItems = 1,
-                        currentItem = "Starting backup"
-                    )
+                    BackupProgress(phase = INITIALIZING)
                 )
             )
 
@@ -86,88 +81,39 @@ class BackupRepositoryImpl @Inject constructor(
                 return@channelFlow
             }
 
-            val (outputStream, backupInfo) = createBackupOutputStream()
             send(
                 BackupState.Progress(
-                    BackupProgress(
-                        phase = INITIALIZING,
-                        itemsProcessed = 1,
-                        totalItems = 1,
-                        currentItem = "Initializing"
-                    )
+                    BackupProgress(phase = INITIALIZING)
                 )
             )
 
-            outputStream.use { stream ->
-                send(
-                    BackupState.Progress(
-                        BackupProgress(
-                            COLLECTING_DATABASE_DATA,
-                            0,
-                            1,
-                            "Loading products"
-                        )
-                    )
+            send(
+                BackupState.Progress(
+                    BackupProgress(phase = COLLECTING_DATABASE_DATA)
                 )
-                val products = productsRepository.getProductsFlow("", null).first()
+            )
+            val products = productsRepository.getAllProducts()
 
-                send(
-                    BackupState.Progress(
-                        BackupProgress(
-                            COLLECTING_DATABASE_DATA,
-                            1,
-                            1,
-                            "Collecting settings"
-                        )
-                    )
+            send(
+                BackupState.Progress(
+                    BackupProgress(phase = COLLECTING_DATABASE_DATA)
                 )
-                val exportData = collectExportData(products.toList())
+            )
+            val exportData = collectExportData(products)
 
-                send(
-                    BackupState.Progress(
-                        BackupProgress(
-                            CREATING_BACKUP_FILE,
-                            0,
-                            2,
-                            "Creating ZIP file"
-                        )
-                    )
+            send(
+                BackupState.Progress(
+                    BackupProgress(phase = CREATING_BACKUP_FILE)
                 )
+            )
 
-                ZipOutputStream(stream).use { zipOut ->
-                    addDataToZip(zipOut, exportData)
-                    send(
-                        BackupState.Progress(
-                            BackupProgress(
-                                CREATING_BACKUP_FILE,
-                                1,
-                                2,
-                                "Adding images"
-                            )
-                        )
-                    )
-                    addImagesToZip(zipOut, products.toList())
-                    send(
-                        BackupState.Progress(
-                            BackupProgress(
-                                CREATING_BACKUP_FILE,
-                                2,
-                                2,
-                                "Finalizing"
-                            )
-                        )
-                    )
-                }
+            val backupInfo = writeBackupData(exportData, products) { progress ->
+                send(BackupState.Progress(progress))
             }
 
             send(
                 BackupState.Progress(
-                    BackupProgress(
-                        phase = COMPLETED,
-                        itemsProcessed = 1,
-                        totalItems = 1,
-                        currentItem = "Backup completed"
-                    )
+                    BackupProgress(phase = COMPLETED)
                 )
             )
             send(BackupState.Completed(BackupResult.Success(backupInfo.file)))
@@ -205,13 +151,18 @@ class BackupRepositoryImpl @Inject constructor(
         }
 
     override suspend fun estimateBackupSize(): Long = try {
-        val products = productsRepository.getProductsFlow("", null).first()
+        val products = productsRepository.getAllProducts()
         var totalSize = 1024L
 
         products.forEach { product ->
             product.images.forEach { image ->
                 val imageFile =
-                    File(folderPathManager.getMainFolder(product.productFolderName), image.name)
+                    File(
+                        folderPathManager.getMainFolder(
+                            productFolder = product.productFolderName
+                        ),
+                        image.name
+                    )
                 if (imageFile.exists()) {
                     totalSize += imageFile.length()
                 }
@@ -226,19 +177,28 @@ class BackupRepositoryImpl @Inject constructor(
 
     private data class BackupInfo(val file: File, val uri: Uri?)
 
-    private fun createBackupOutputStream(): Pair<OutputStream, BackupInfo> {
+    private suspend fun writeBackupData(
+        exportData: ExportData,
+        products: ImmutableList<Product>,
+        progressCallback: suspend (BackupProgress) -> Unit
+    ): BackupInfo {
         val timestamp = dateTimeUtils.getBackupFolderNowTimestamp()
         val filename = "hateitorrateit_backup_$timestamp.zip"
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            createBackupOutputStreamApi29(filename)
+            writeBackupDataApi29(filename, exportData, products, progressCallback)
         } else {
-            createBackupOutputStreamLegacy(filename)
+            writeBackupDataLegacy(filename, exportData, products, progressCallback)
         }
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
-    private fun createBackupOutputStreamApi29(filename: String): Pair<OutputStream, BackupInfo> {
+    private suspend fun writeBackupDataApi29(
+        filename: String,
+        exportData: ExportData,
+        products: ImmutableList<Product>,
+        progressCallback: suspend (BackupProgress) -> Unit
+    ): BackupInfo {
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
             put(MediaStore.MediaColumns.MIME_TYPE, "application/zip")
@@ -259,12 +219,27 @@ class BackupRepositoryImpl @Inject constructor(
             ),
             filename
         )
-        return outputStream to BackupInfo(file, uri)
+
+        outputStream.use { stream ->
+            ZipOutputStream(stream).use { zipOut ->
+                addDataToZip(zipOut, exportData)
+                progressCallback(BackupProgress(phase = CREATING_BACKUP_FILE))
+                addImagesToZip(zipOut, products)
+            }
+        }
+
+        return BackupInfo(file, uri)
     }
 
-    private fun createBackupOutputStreamLegacy(filename: String): Pair<OutputStream, BackupInfo> {
+    private suspend fun writeBackupDataLegacy(
+        filename: String,
+        exportData: ExportData,
+        products: ImmutableList<Product>,
+        progressCallback: suspend (BackupProgress) -> Unit
+    ): BackupInfo {
         val downloadsDir = folderPathManager.getBackupParentFolder()
         val childFolder = folderPathManager.getBackupChildFolderName()
+
         if (!downloadsDir.exists()) {
             downloadsDir.mkdirs()
         }
@@ -275,11 +250,19 @@ class BackupRepositoryImpl @Inject constructor(
         }
 
         val file = File(hiorDir, filename)
-        val outputStream = FileOutputStream(file)
-        return outputStream to BackupInfo(file, null)
+
+        FileOutputStream(file).use { stream ->
+            ZipOutputStream(stream).use { zipOut ->
+                addDataToZip(zipOut, exportData)
+                progressCallback(BackupProgress(phase = CREATING_BACKUP_FILE))
+                addImagesToZip(zipOut, products)
+            }
+        }
+
+        return BackupInfo(file, null)
     }
 
-    private suspend fun collectExportData(products: List<Product>): ExportData {
+    private suspend fun collectExportData(products: ImmutableList<Product>): ExportData {
         val settings = SettingsExport(
             defaultType = localDataStorage.typeFlow.first(),
             darkThemeConfig = localDataStorage.darkThemeConfig.first(),
@@ -289,9 +272,8 @@ class BackupRepositoryImpl @Inject constructor(
 
         val metadata = ExportMetadata(
             version = BackupVersion.CURRENT_VERSION,
-            appVersionCode = appInfoProvider.getAppInfo().hashCode(),
             appVersionName = appInfoProvider.getAppInfo(),
-            exportTimestamp = System.currentTimeMillis(),
+            exportTimestamp = dateTimeUtils.getInstantNow().toEpochMilli(),
             deviceInfo = Build.MODEL,
             totalProducts = products.size,
             totalImages = products.sumOf { it.images.size }
@@ -328,13 +310,13 @@ class BackupRepositoryImpl @Inject constructor(
 
     private fun addDataToZip(zipOut: ZipOutputStream, exportData: ExportData) {
         val jsonData = json.encodeToString(exportData)
-        val entry = ZipEntry("backup_data.json")
+        val entry = ZipEntry(BACKUP_DATA_JSON)
         zipOut.putNextEntry(entry)
         zipOut.write(jsonData.toByteArray())
         zipOut.closeEntry()
     }
 
-    private fun addImagesToZip(zipOut: ZipOutputStream, products: List<Product>) {
+    private fun addImagesToZip(zipOut: ZipOutputStream, products: ImmutableList<Product>) {
         products.forEach { product ->
             val productFolder = folderPathManager.getMainFolder(product.productFolderName)
 

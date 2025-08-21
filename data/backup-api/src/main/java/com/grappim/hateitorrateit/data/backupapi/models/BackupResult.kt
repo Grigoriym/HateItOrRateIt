@@ -67,10 +67,13 @@ enum class ImportPhase {
 
 data class ImportProgress(
     val phase: ImportPhase,
-    val itemsProcessed: Int,
-    val totalItems: Int,
-    val currentItem: String = "",
-    val percentComplete: Int = if (totalItems > 0) (itemsProcessed * 100) / totalItems else 0
+    val itemsProcessed: Int? = null,
+    val totalItems: Int? = null,
+    val percentComplete: Int = if (totalItems != null && totalItems > 0 && itemsProcessed != null) {
+        (itemsProcessed * 100) / totalItems
+    } else {
+        0
+    }
 )
 
 sealed class ImportState {

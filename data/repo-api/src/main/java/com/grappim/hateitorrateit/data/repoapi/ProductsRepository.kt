@@ -36,6 +36,8 @@ interface ProductsRepository {
 
     fun getProductsFlow(query: String, type: HateRateType?): Flow<ImmutableList<Product>>
 
+    suspend fun getAllProducts(): ImmutableList<Product>
+
     suspend fun addProduct(product: CreateProduct)
 
     suspend fun importProduct(product: CreateProduct): Long

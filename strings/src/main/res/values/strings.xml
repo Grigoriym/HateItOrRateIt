@@ -78,7 +78,7 @@
     <string name="export_data">Export Data</string>
     <string name="export_data_description">Create a backup of all your products, images, and settings in a ZIP file that you can restore later or transfer to another device.</string>
     <string name="create_backup">Create Backup</string>
-    <string name="open_downloads">Open Downloads</string>
+    <string name="open_downloads">Open Storage</string>
     <string name="import_data">Import Data</string>
     <string name="import_data_description">Restore your products, images, and settings from a previously created backup file.</string>
     <string name="select_backup_file">Select Backup File</string>

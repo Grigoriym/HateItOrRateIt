@@ -14,7 +14,6 @@ data class ExportData(
 @Serializable
 data class ExportMetadata(
     val version: String,
-    val appVersionCode: Int,
     val appVersionName: String,
     val exportTimestamp: Long,
     val deviceInfo: String,

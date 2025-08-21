@@ -1,14 +1,6 @@
 package com.grappim.hateitorrateit.data.backupapi.models
 
-import java.io.File
-
-data class BackupProgress(
-    val phase: BackupPhase,
-    val itemsProcessed: Int,
-    val totalItems: Int,
-    val currentItem: String = "",
-    val percentComplete: Int = if (totalItems > 0) (itemsProcessed * 100) / totalItems else 0
-)
+data class BackupProgress(val phase: BackupPhase)
 
 enum class BackupPhase {
     INITIALIZING,

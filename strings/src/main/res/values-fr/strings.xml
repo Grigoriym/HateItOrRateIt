@@ -67,7 +67,7 @@
     <string name="export_data">Exporter les données</string>
     <string name="export_data_description">Créez une sauvegarde de tous vos produits, images et paramètres dans un fichier ZIP que vous pourrez restaurer plus tard ou transférer sur un autre appareil.</string>
     <string name="create_backup">Créer une sauvegarde</string>
-    <string name="open_downloads">Ouvrir Téléchargements</string>
+    <string name="open_downloads">Ouvrir Stockage</string>
     <string name="import_data">Importer des données</string>
     <string name="import_data_description">Restaurez vos produits, images et paramètres à partir d\'un fichier de sauvegarde créé précédemment.</string>
     <string name="select_backup_file">Sélectionner le fichier de sauvegarde</string>

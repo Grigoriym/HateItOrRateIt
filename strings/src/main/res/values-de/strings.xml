@@ -66,7 +66,7 @@
     <string name="export_data">Daten exportieren</string>
     <string name="export_data_description">Erstellen Sie ein Backup aller Ihrer Produkte, Bilder und Einstellungen in einer ZIP-Datei, die Sie später wiederherstellen oder auf ein anderes Gerät übertragen können.</string>
     <string name="create_backup">Backup erstellen</string>
-    <string name="open_downloads">Downloads öffnen</string>
+    <string name="open_downloads">Speicher öffnen</string>
     <string name="import_data">Daten importieren</string>
     <string name="import_data_description">Stellen Sie Ihre Produkte, Bilder und Einstellungen aus einer zuvor erstellten Backup-Datei wieder her.</string>
     <string name="select_backup_file">Backup-Datei auswählen</string>

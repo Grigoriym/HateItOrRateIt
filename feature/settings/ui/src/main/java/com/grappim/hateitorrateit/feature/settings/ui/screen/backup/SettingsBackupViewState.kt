@@ -5,7 +5,6 @@ import android.net.Uri
 data class SettingsBackupViewState(
     val isBackupInProgress: Boolean = false,
     val currentOperation: String = "",
-    val progressPercent: Int = 0,
     val lastBackupResult: String? = null,
     val isImportInProgress: Boolean = false,
     val currentImportOperation: String = "",

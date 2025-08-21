@@ -68,8 +68,7 @@ class SettingsBackupViewModel @Inject constructor(
                         }
                         _viewState.update {
                             it.copy(
-                                currentOperation = currentOperation,
-                                progressPercent = state.progress.percentComplete
+                                currentOperation = currentOperation
                             )
                         }
                     }
