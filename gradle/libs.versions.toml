@@ -57,7 +57,7 @@ androidxTestCore = "1.7.0"
 androidxTestRunner = "1.7.0"
 androidxTestRules = "1.7.0"
 
-robolectric = "4.15.1"
+robolectric = "4.16"
 junit = "1.3.0"
 espressoCore = "3.7.0"
 
