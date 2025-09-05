@@ -16,10 +16,4 @@ interface BackupRepository {
      * @return True if backup can be created, false otherwise
      */
     suspend fun canCreateBackup(): Boolean
-
-    /**
-     * Estimates the size of the backup that would be created
-     * @return Estimated size in bytes
-     */
-    suspend fun estimateBackupSize(): Long
 }

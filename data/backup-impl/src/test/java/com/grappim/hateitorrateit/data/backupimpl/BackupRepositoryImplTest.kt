@@ -40,29 +40,4 @@ class BackupRepositoryImplTest {
         ioDispatcher = ioDispatcher,
         dateTimeUtils = dateTimeUtils
     )
-
-    @Test
-    fun `estimateBackupSize returns base size when no products`() = runTest {
-        // Given: No products
-        coEvery { productsRepository.getAllProducts() } returns persistentListOf()
-        every { folderPathManager.getMainFolder(any()) } returns mockk<File>(relaxed = true)
-
-        // When: estimating backup size
-        val result = repository.estimateBackupSize()
-
-        // Then: should return base size only
-        assertEquals(1024L, result)
-    }
-
-    @Test
-    fun `estimateBackupSize returns 0 when exception occurs`() = runTest {
-        // Given: Exception when getting products
-        coEvery { productsRepository.getAllProducts() } throws RuntimeException("Database error")
-
-        // When: estimating backup size
-        val result = repository.estimateBackupSize()
-
-        // Then: should return 0
-        assertEquals(0L, result)
-    }
 }

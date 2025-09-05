@@ -4,7 +4,6 @@ package com.grappim.hateitorrateit.data.backupimpl
 
 import android.content.ContentValues
 import android.content.Context
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
@@ -25,6 +24,7 @@ import com.grappim.hateitorrateit.data.backupapi.models.ExportMetadata
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
 import com.grappim.hateitorrateit.data.backupapi.models.ProductImageExport
 import com.grappim.hateitorrateit.data.backupapi.models.SettingsExport
+import com.grappim.hateitorrateit.data.backupimpl.models.BackupInfo
 import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.BACKUP_DATA_JSON
 import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.IMAGES_ZIP_FOLDER
 import com.grappim.hateitorrateit.data.backupimpl.utils.ImportVersionChecker
@@ -151,36 +151,6 @@ class BackupRepositoryImpl @Inject constructor(
                 false
             }
         }
-
-    override suspend fun estimateBackupSize(): Long = try {
-        val products = productsRepository.getAllProducts()
-        var totalSize = 1024L
-
-        products.forEach { product ->
-            if (!currentCoroutineContext().isActive) {
-                return@forEach
-            }
-            product.images.forEach { image ->
-                val imageFile =
-                    File(
-                        folderPathManager.getMainFolder(
-                            productFolder = product.productFolderName
-                        ),
-                        image.name
-                    )
-                if (imageFile.exists()) {
-                    totalSize += imageFile.length()
-                }
-            }
-        }
-
-        totalSize
-    } catch (e: Exception) {
-        Timber.e(e, "Failed to estimate backup size")
-        0L
-    }
-
-    private data class BackupInfo(val file: File, val uri: Uri?)
 
     private suspend fun writeBackupData(
         exportData: ExportData,

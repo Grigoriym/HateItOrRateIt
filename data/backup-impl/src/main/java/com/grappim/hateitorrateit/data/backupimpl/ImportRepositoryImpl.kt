@@ -15,6 +15,7 @@ import com.grappim.hateitorrateit.data.backupapi.models.ImportResult
 import com.grappim.hateitorrateit.data.backupapi.models.ImportState
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
 import com.grappim.hateitorrateit.data.backupimpl.models.BackupContent
+import com.grappim.hateitorrateit.data.backupimpl.models.ImageImportResult
 import com.grappim.hateitorrateit.data.backupimpl.models.ProductImportResult
 import com.grappim.hateitorrateit.data.backupimpl.models.SingleProductImportResult
 import com.grappim.hateitorrateit.data.backupimpl.models.VersionCheckResult
@@ -353,12 +354,6 @@ class ImportRepositoryImpl @Inject constructor(
         Timber.w(e, "Failed to import product ${productExport.name}")
         SingleProductImportResult(false, 0, emptyList())
     }
-
-    private data class ImageImportResult(
-        val productImages: List<ProductImage>,
-        val importedCount: Int,
-        val failedImages: List<String>
-    )
 
     private fun importProductImages(
         productExport: ProductExport,
