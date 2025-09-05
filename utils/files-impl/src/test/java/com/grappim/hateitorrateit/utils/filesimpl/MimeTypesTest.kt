@@ -6,17 +6,17 @@ import org.junit.Test
 
 class MimeTypesTest {
 
-    private lateinit var mimeTypes: MimeTypes
+    private lateinit var mimeTypesMapper: MimeTypesMapper
 
     @Before
     fun setup() {
-        mimeTypes = MimeTypes()
+        mimeTypesMapper = MimeTypesMapper()
     }
 
     @Test
     fun `on formatMimeType with png should return correct type`() {
         val mimeType = "image/png"
-        val actual = mimeTypes.formatMimeType(mimeType)
+        val actual = mimeTypesMapper.formatMimeType(mimeType)
 
         assertEquals(actual, "png")
     }
@@ -24,7 +24,7 @@ class MimeTypesTest {
     @Test
     fun `on formatMimeType with jpg should return correct type`() {
         val mimeType = "image/jpeg"
-        val actual = mimeTypes.formatMimeType(mimeType)
+        val actual = mimeTypesMapper.formatMimeType(mimeType)
 
         assertEquals(actual, "jpg")
     }
@@ -32,7 +32,7 @@ class MimeTypesTest {
     @Test
     fun `on formatMimeType with incorrect type should return unknown`() {
         val mimeType = "image/pof"
-        val actual = mimeTypes.formatMimeType(mimeType)
+        val actual = mimeTypesMapper.formatMimeType(mimeType)
 
         assertEquals(actual, "unknown")
     }

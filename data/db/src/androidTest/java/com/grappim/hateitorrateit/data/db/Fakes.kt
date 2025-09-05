@@ -16,7 +16,7 @@ fun createProductEntity(): ProductEntity = ProductEntity(
     productFolderName = "Sophia House",
     description = "sale",
     shop = "quis",
-    type = com.grappim.hateitorrateit.data.repoapi.models.HateRateType.RATE,
+    type = HateRateType.RATE,
     isCreated = true
 )
 

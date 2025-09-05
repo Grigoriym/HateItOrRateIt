@@ -23,6 +23,9 @@ interface ProductsDao {
     @[Transaction Query("SELECT * FROM products_table WHERE isCreated=1 ORDER BY createdDate DESC")]
     fun getAllProductsFlow(): Flow<List<ProductWithImagesEntity>>
 
+    @[Transaction Query("SELECT * FROM products_table WHERE isCreated=1 ORDER BY createdDate DESC")]
+    suspend fun getAllProducts(): List<ProductWithImagesEntity>
+
     @[Transaction RawQuery]
     fun getAllProductsByRawQueryFlow(query: SupportSQLiteQuery): Flow<List<ProductWithImagesEntity>>
 

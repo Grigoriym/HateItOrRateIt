@@ -73,6 +73,8 @@ include(":utils:android-api")
 include(":core:app-update-api")
 include(":core:app-update-impl")
 include(":strings")
+include(":data:backup-api")
+include(":data:backup-impl")
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """

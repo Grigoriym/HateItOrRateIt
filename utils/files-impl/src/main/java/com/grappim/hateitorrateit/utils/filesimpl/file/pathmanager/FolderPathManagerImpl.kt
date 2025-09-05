@@ -1,6 +1,7 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.pathmanager
 
 import android.content.Context
+import android.os.Environment
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import dagger.hilt.android.qualifiers.ApplicationContext
 import timber.log.Timber
@@ -33,4 +34,9 @@ class FolderPathManagerImpl @Inject constructor(@ApplicationContext private val 
      * /data/data/com.grappim.hateitorrateit/files/products/1_2024-01-23_20-04-41_backup/
      */
     override fun getBackupFolderName(folder: String): String = "${folder}_backup"
+
+    override fun getBackupParentFolder(): File =
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+
+    override fun getBackupChildFolderName(): String = "hior"
 }

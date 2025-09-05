@@ -7,7 +7,7 @@ import com.grappim.hateitorrateit.testing.core.ShadowFileProvider
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
-import com.grappim.hateitorrateit.utils.filesimpl.MimeTypes
+import com.grappim.hateitorrateit.utils.filesimpl.MimeTypesMapper
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -37,7 +37,7 @@ class FileInfoRetrieverImplTest {
     private lateinit var sut: FileInfoRetriever
 
     private val context = RuntimeEnvironment.getApplication()
-    private val mimeTypes: MimeTypes = mockk()
+    private val mimeTypesMapper: MimeTypesMapper = mockk()
     private val dateTimeUtils: DateTimeUtils = mockk()
     private val folderPathManager: FolderPathManager = mockk()
 
@@ -49,7 +49,7 @@ class FileInfoRetrieverImplTest {
     fun setUp() {
         sut = FileInfoRetrieverImpl(
             context = context,
-            mimeTypes = mimeTypes,
+            mimeTypesMapper = mimeTypesMapper,
             dateTimeUtils = dateTimeUtils,
             ioDispatcher = UnconfinedTestDispatcher(),
             folderPathManager = folderPathManager
@@ -61,7 +61,7 @@ class FileInfoRetrieverImplTest {
 
     @Test
     fun `on getFileExtension should return correct extension`() {
-        every { mimeTypes.formatMimeType(any()) } returns jpgMimeType
+        every { mimeTypesMapper.formatMimeType(any()) } returns jpgMimeType
 
         val file = File(context.filesDir, "testimage.jpg")
         val uri = FileProvider.getUriForFile(

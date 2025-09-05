@@ -6,6 +6,7 @@
     <string name="database_settings">Database</string>
     <string name="analytics_settings">Analytics</string>
     <string name="product_settings">Product</string>
+    <string name="backup_settings">Backup &amp; Export</string>
 
     <string name="app_name" translatable="false">Hate Rate</string>
     <string name="app_name_debug" translatable="false">Dbg Hate Rate</string>
@@ -73,4 +74,65 @@
     <string name="privacy_policy_link">Privacy Policy</string>
 
     <string name="content_description_back_button">Going back</string>
+
+    <string name="export_data">Export Data</string>
+    <string name="export_data_description">Create a backup of all your products, images, and settings in a ZIP file that you can restore later or transfer to another device.</string>
+    <string name="create_backup">Create Backup</string>
+    <string name="import_data">Import Data</string>
+    <string name="import_data_description">Restore your products, images, and settings from a previously created backup file.</string>
+    <string name="select_backup_file">Select Backup File</string>
+    
+    <!-- Import Mode Dialog -->
+    <string name="choose_import_mode">Choose Import Mode</string>
+    <string name="import_mode_question">How would you like to handle existing products during import?</string>
+    <string name="create_new">Create New</string>
+    <string name="create_new_description">Always import as new products</string>
+    <string name="replace_existing">Replace Existing</string>
+    <string name="replace_existing_description">Replace matching products</string>
+    <string name="skip_conflicts">Skip Conflicts</string>
+    <string name="skip_conflicts_description">Skip conflicting products, import only new ones</string>
+    <string name="tap_for_details">Tap for details</string>
+    
+    <!-- Import Result Dialog -->
+    <string name="import_completed_successfully">Import Completed Successfully</string>
+    <string name="import_completed_with_warnings">Import Completed with Warnings</string>
+    <string name="import_failed">Import Failed</string>
+    <string name="backup_file_selection_cancelled">Backup file selection was cancelled</string>
+    <string name="successfully_imported">Successfully imported:</string>
+    <string name="products_count">%1$d products</string>
+    <string name="images_count">%1$d images</string>
+    <string name="app_settings">App settings</string>
+    <string name="skipped_products">Skipped Products:</string>
+    <string name="failed_images">Failed Images:</string>
+    <string name="warnings">Warnings:</string>
+    <string name="import_failed_message">Import failed:</string>
+    <string name="error_type">Error type: %1$s</string>
+    
+    <!-- Import Summary -->
+    <string name="imported_summary_success">Imported %1$d products, %2$d images</string>
+    <string name="imported_summary_warnings">Imported %1$d products, %2$d images (with warnings)</string>
+    
+    <!-- Backup Progress -->
+    <string name="backup_initializing">Initializing backup…</string>
+    <string name="backup_collecting_data">Collecting data…</string>
+    <string name="backup_collecting_images">Collecting images…</string>
+    <string name="backup_creating_file">Creating backup file…</string>
+    <string name="backup_finalizing">Finalizing…</string>
+    <string name="backup_completed">Completed</string>
+    
+    <!-- Backup Result Messages -->
+    <string name="backup_success">Success: Backup saved successfully</string>
+    <string name="backup_partial_success">Partial Success: Backup created with %1$d warnings</string>
+    <string name="backup_failed">Error: %1$s</string>
+    
+    <!-- Import Progress -->
+    <string name="import_validating_backup">Validating backup file…</string>
+    <string name="import_extracting_data">Extracting data…</string>
+    <string name="import_importing_products">Importing products…</string>
+    <string name="import_importing_images">Importing images…</string>
+    <string name="import_importing_settings">Importing settings…</string>
+    <string name="import_finalizing">Finalizing…</string>
+    <string name="import_completed">Completed</string>
+    <string name="import_detecting_conflicts">Detecting conflicts…</string>
+    <string name="import_resolving_conflicts">Resolving conflicts…</string>
 </resources>

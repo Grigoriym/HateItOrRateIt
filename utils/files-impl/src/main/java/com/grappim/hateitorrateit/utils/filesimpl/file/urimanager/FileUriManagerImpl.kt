@@ -89,7 +89,7 @@ class FileUriManagerImpl @Inject constructor(
         )
     }
 
-    private fun getFileUri(file: File): Uri {
+    override fun getFileUri(file: File): Uri {
         val uri = FileProvider.getUriForFile(
             context,
             "${context.packageName}.provider",

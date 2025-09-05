@@ -8,17 +8,20 @@ import com.grappim.hateitorrateit.data.repoapi.models.DraftProduct
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQueryBuilder
 import com.grappim.hateitorrateit.data.repoimpl.mappers.ProductMapper
+import com.grappim.hateitorrateit.testing.domain.getRandomLong
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.Runs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -216,7 +219,6 @@ class ProductsRepositoryImplTest {
             assertEquals(listOf(product), awaitItem())
 
             coVerify { sqlQueryBuilder.buildSqlQuery(query, type) }
-            coVerify(exactly = 0) { productsDao.getAllProductsFlow() }
             awaitComplete()
         }
     }
@@ -240,7 +242,6 @@ class ProductsRepositoryImplTest {
             assertEquals(listOf(product), awaitItem())
 
             coVerify { sqlQueryBuilder.buildSqlQuery(query, type) }
-            coVerify(exactly = 0) { productsDao.getAllProductsFlow() }
             awaitComplete()
         }
     }
@@ -264,7 +265,6 @@ class ProductsRepositoryImplTest {
             assertEquals(listOf(product), awaitItem())
 
             coVerify { sqlQueryBuilder.buildSqlQuery(query, type) }
-            coVerify(exactly = 0) { productsDao.getAllProductsFlow() }
             awaitComplete()
         }
     }
@@ -285,9 +285,7 @@ class ProductsRepositoryImplTest {
         repository.getProductsFlow(query, type).test {
             assertEquals(listOf(product), awaitItem())
 
-            coVerify { productsDao.getAllProductsFlow() }
             coVerify(exactly = 0) { sqlQueryBuilder.buildSqlQuery(query, type) }
-            coVerify(exactly = 0) { productsDao.getAllProductsByRawQueryFlow(any()) }
             coVerify {
                 productsMapper.toProduct(
                     productEntity = productWithImages.productEntity,
@@ -334,5 +332,68 @@ class ProductsRepositoryImplTest {
                 images = entityImages
             )
         }
+    }
+
+    @Test
+    fun `on importProduct without id, should return correct product id`() = runTest {
+        val createProduct = getCreateProduct().copy(id = 0L)
+        val entity = getProductEntity().copy(productId = 0L)
+        val expected = getRandomLong()
+        val entityImages = getProductImageDataEntityList().map {
+            it.copy(productId = expected)
+        }
+
+        coEvery { productsMapper.toProductEntity(createProduct) } returns entity
+        coEvery { productsDao.insert(entity) } returns expected
+        coEvery { productsMapper.toProductImageDataEntityList(createProduct) } returns entityImages
+        coEvery { productsDao.upsertImages(entityImages) } just Runs
+
+        val actual = repository.importProduct(createProduct)
+
+        assertEquals(expected, actual)
+
+        coVerify { productsMapper.toProductEntity(createProduct) }
+        coVerify { productsDao.insert(entity) }
+        coVerify(exactly = 0) { productsDao.deleteImagesByProductId(expected) }
+    }
+
+    @Test
+    fun `on importProduct with id, should return correct product id`() = runTest {
+        val createProduct = getCreateProduct()
+        val entity = getProductEntity()
+        val expected = getRandomLong()
+        val entityImages = getProductImageDataEntityList().map {
+            it.copy(productId = expected)
+        }
+
+        coEvery { productsMapper.toProductEntity(createProduct) } returns entity
+        coEvery { productsDao.insert(entity) } returns expected
+        coEvery { productsMapper.toProductImageDataEntityList(createProduct) } returns entityImages
+        coEvery { productsDao.upsertImages(entityImages) } just Runs
+        coEvery { productsDao.deleteImagesByProductId(expected) } just Runs
+
+        val actual = repository.importProduct(createProduct)
+
+        assertEquals(expected, actual)
+
+        coVerify { productsMapper.toProductEntity(createProduct) }
+        coVerify { productsDao.insert(entity) }
+        coVerify { productsDao.deleteImagesByProductId(expected) }
+    }
+
+    @Test
+    fun `on getAllProducts returns correct data`() = runTest {
+        val entities = listOf(getProductWithImagesEntity(), getProductWithImagesEntity())
+        val expected = persistentListOf(getProduct(), getProduct())
+
+        coEvery { productsDao.getAllProducts() } returns entities
+        coEvery { productsMapper.toProductList(entities) } returns expected
+
+        val actual = repository.getAllProducts()
+
+        assertContentEquals(expected, actual)
+
+        coVerify { productsDao.getAllProducts() }
+        coVerify { productsMapper.toProductList(entities) }
     }
 }

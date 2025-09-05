@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.Analytics
 import androidx.compose.material.icons.outlined.Category
+import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Storage
 import androidx.compose.material.icons.outlined.TouchApp
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -46,6 +47,7 @@ fun SettingsRoute(
     goToDatabaseScreen: () -> Unit,
     goToAnalyticsScreen: () -> Unit,
     goToProductScreen: () -> Unit,
+    goToBackupScreen: () -> Unit,
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
@@ -73,18 +75,20 @@ fun SettingsRoute(
         goToInterfaceScreen = goToInterfaceScreen,
         goToDatabaseScreen = goToDatabaseScreen,
         goToAnalyticsScreen = goToAnalyticsScreen,
-        goToProductScreen = goToProductScreen
+        goToProductScreen = goToProductScreen,
+        goToBackupScreen = goToBackupScreen
     )
 }
 
 @Composable
-private fun SettingsScreen(
+internal fun SettingsScreen(
     state: SettingsViewState,
     goToAboutScreen: () -> Unit = {},
     goToInterfaceScreen: () -> Unit = {},
     goToDatabaseScreen: () -> Unit = {},
     goToAnalyticsScreen: () -> Unit = {},
-    goToProductScreen: () -> Unit = {}
+    goToProductScreen: () -> Unit = {},
+    goToBackupScreen: () -> Unit = {}
 ) {
     Surface {
         Column(
@@ -140,6 +144,22 @@ private fun SettingsScreen(
                     Icon(
                         imageVector = Icons.Outlined.Storage,
                         contentDescription = "Database Settings"
+                    )
+                }
+            )
+
+            ListItem(
+                modifier = Modifier
+                    .clickable {
+                        goToBackupScreen()
+                    },
+                headlineContent = {
+                    Text(text = stringResource(RString.backup_settings))
+                },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Outlined.Save,
+                        contentDescription = "Backup & Export"
                     )
                 }
             )

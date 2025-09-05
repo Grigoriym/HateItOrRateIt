@@ -101,12 +101,14 @@ private val coverageExclusions = listOf(
     "**/*_ComponentTreeDeps",
     "**/*_Impl*",
     "**/*DefaultImpls*",
+    "**/*_AppInfoProviderFactory",
 
     "**/*Screen",
     "**/*Activity",
     "**/*Screen*",
     "**/*Application",
     "**/*StateProvider",
+    "**/*Widget",
 
     "**/*Plato*",
     "**/*Button*",

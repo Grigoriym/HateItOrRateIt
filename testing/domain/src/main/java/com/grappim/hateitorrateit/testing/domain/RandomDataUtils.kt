@@ -4,7 +4,7 @@ import kotlin.random.Random
 
 fun getRandomLong(): Long = Random.nextLong()
 
-fun getRandomString(): String = List(15) { // Generate a list of 10 characters
+fun getRandomString(): String = List(20) {
     Random.nextInt(97, 123) // ASCII range for lowercase letters a-z
         .toChar() // Convert ASCII value to char
 }.joinToString("")

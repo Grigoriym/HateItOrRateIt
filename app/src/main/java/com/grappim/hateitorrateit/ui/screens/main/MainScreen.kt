@@ -96,7 +96,7 @@ private fun MainScreenContent(topBarConfig: TopBarConfig) {
             }
         }
     ) { paddingValues ->
-        MainNavHost(
+        MainNavHostWidget(
             modifier = Modifier.padding(paddingValues),
             navController = appState.navController,
             showActionSnackbar = { text, action ->
