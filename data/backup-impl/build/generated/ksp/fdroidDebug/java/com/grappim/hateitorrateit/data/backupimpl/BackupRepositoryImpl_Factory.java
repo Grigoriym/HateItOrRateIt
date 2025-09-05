@@ -2,7 +2,6 @@ package com.grappim.hateitorrateit.data.backupimpl;
 
 import android.content.Context;
 import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider;
-import com.grappim.hateitorrateit.data.backupimpl.utils.BackupEligibilityChecker;
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage;
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository;
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils;
@@ -52,16 +51,13 @@ public final class BackupRepositoryImpl_Factory implements Factory<BackupReposit
 
   private final Provider<DateTimeUtils> dateTimeUtilsProvider;
 
-  private final Provider<BackupEligibilityChecker> backupEligibilityCheckerProvider;
-
   private BackupRepositoryImpl_Factory(Provider<Context> contextProvider,
       Provider<ProductsRepository> productsRepositoryProvider,
       Provider<LocalDataStorage> localDataStorageProvider,
       Provider<AppInfoProvider> appInfoProvider,
       Provider<FolderPathManager> folderPathManagerProvider, Provider<Json> jsonProvider,
       Provider<CoroutineDispatcher> ioDispatcherProvider,
-      Provider<DateTimeUtils> dateTimeUtilsProvider,
-      Provider<BackupEligibilityChecker> backupEligibilityCheckerProvider) {
+      Provider<DateTimeUtils> dateTimeUtilsProvider) {
     this.contextProvider = contextProvider;
     this.productsRepositoryProvider = productsRepositoryProvider;
     this.localDataStorageProvider = localDataStorageProvider;
@@ -70,12 +66,11 @@ public final class BackupRepositoryImpl_Factory implements Factory<BackupReposit
     this.jsonProvider = jsonProvider;
     this.ioDispatcherProvider = ioDispatcherProvider;
     this.dateTimeUtilsProvider = dateTimeUtilsProvider;
-    this.backupEligibilityCheckerProvider = backupEligibilityCheckerProvider;
   }
 
   @Override
   public BackupRepositoryImpl get() {
-    return newInstance(contextProvider.get(), productsRepositoryProvider.get(), localDataStorageProvider.get(), appInfoProvider.get(), folderPathManagerProvider.get(), jsonProvider.get(), ioDispatcherProvider.get(), dateTimeUtilsProvider.get(), backupEligibilityCheckerProvider.get());
+    return newInstance(contextProvider.get(), productsRepositoryProvider.get(), localDataStorageProvider.get(), appInfoProvider.get(), folderPathManagerProvider.get(), jsonProvider.get(), ioDispatcherProvider.get(), dateTimeUtilsProvider.get());
   }
 
   public static BackupRepositoryImpl_Factory create(Provider<Context> contextProvider,
@@ -84,16 +79,14 @@ public final class BackupRepositoryImpl_Factory implements Factory<BackupReposit
       Provider<AppInfoProvider> appInfoProvider,
       Provider<FolderPathManager> folderPathManagerProvider, Provider<Json> jsonProvider,
       Provider<CoroutineDispatcher> ioDispatcherProvider,
-      Provider<DateTimeUtils> dateTimeUtilsProvider,
-      Provider<BackupEligibilityChecker> backupEligibilityCheckerProvider) {
-    return new BackupRepositoryImpl_Factory(contextProvider, productsRepositoryProvider, localDataStorageProvider, appInfoProvider, folderPathManagerProvider, jsonProvider, ioDispatcherProvider, dateTimeUtilsProvider, backupEligibilityCheckerProvider);
+      Provider<DateTimeUtils> dateTimeUtilsProvider) {
+    return new BackupRepositoryImpl_Factory(contextProvider, productsRepositoryProvider, localDataStorageProvider, appInfoProvider, folderPathManagerProvider, jsonProvider, ioDispatcherProvider, dateTimeUtilsProvider);
   }
 
   public static BackupRepositoryImpl newInstance(Context context,
       ProductsRepository productsRepository, LocalDataStorage localDataStorage,
       AppInfoProvider appInfoProvider, FolderPathManager folderPathManager, Json json,
-      CoroutineDispatcher ioDispatcher, DateTimeUtils dateTimeUtils,
-      BackupEligibilityChecker backupEligibilityChecker) {
-    return new BackupRepositoryImpl(context, productsRepository, localDataStorage, appInfoProvider, folderPathManager, json, ioDispatcher, dateTimeUtils, backupEligibilityChecker);
+      CoroutineDispatcher ioDispatcher, DateTimeUtils dateTimeUtils) {
+    return new BackupRepositoryImpl(context, productsRepository, localDataStorage, appInfoProvider, folderPathManager, json, ioDispatcher, dateTimeUtils);
   }
 }

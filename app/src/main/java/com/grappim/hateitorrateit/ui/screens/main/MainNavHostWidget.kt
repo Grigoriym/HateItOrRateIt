@@ -159,7 +159,9 @@ fun MainNavHostWidget(
             SettingsProductScreenRoute()
         }
         composable<SettingsBackupNavDestination> {
-            SettingsBackupRoute()
+            SettingsBackupRoute(
+                showActionSnackbar = showActionSnackbar
+            )
         }
     }
 }

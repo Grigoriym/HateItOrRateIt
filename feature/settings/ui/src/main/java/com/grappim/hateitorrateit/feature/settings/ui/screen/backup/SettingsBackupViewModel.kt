@@ -12,10 +12,10 @@ import com.grappim.hateitorrateit.data.backupapi.models.ImportMode
 import com.grappim.hateitorrateit.data.backupapi.models.ImportPhase
 import com.grappim.hateitorrateit.data.backupapi.models.ImportState
 import com.grappim.hateitorrateit.strings.RString
-import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
-import com.grappim.hateitorrateit.utils.ui.IntentActionDelegate
-import com.grappim.hateitorrateit.utils.ui.IntentActionDelegateImpl
+import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import com.grappim.hateitorrateit.utils.ui.NativeText
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegate
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegateImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -28,31 +28,38 @@ import javax.inject.Inject
 class SettingsBackupViewModel @Inject constructor(
     private val backupRepository: BackupRepository,
     private val importRepository: ImportRepository,
-    private val intentGenerator: IntentGenerator
+    private val dateTimeUtils: DateTimeUtils
 ) : ViewModel(),
-    IntentActionDelegate by IntentActionDelegateImpl() {
+    SnackbarDelegate by SnackbarDelegateImpl() {
 
     private val _viewState = MutableStateFlow(
         SettingsBackupViewState(
-            onCreateBackup = ::createBackup,
-            onOpenDownloadsFolder = ::openDownloadsFolder,
+            onCreateBackup = ::selectBackupLocation,
             onSelectBackupFile = ::selectBackupFile,
             onFilePickerDismissed = ::onFilePickerDismissed,
             onFileSelected = ::onFileSelected,
             onImportModeSelected = ::onImportModeSelected,
             onImportModeDialogDismissed = ::onImportModeDialogDismissed,
             onImportResultDialogDismissed = ::onImportResultDialogDismissed,
-            onShowImportResultDialog = ::onShowImportResultDialog
+            onShowImportResultDialog = ::onShowImportResultDialog,
+            onBackupFileSelected = ::createBackup,
+            onSaveBackupPickerDismissed = ::onSaveBackupPickerDismissed
         )
     )
 
     val viewState = _viewState.asStateFlow()
 
-    fun createBackup() {
+    fun createBackup(backupFileUri: Uri) {
         viewModelScope.launch {
-            _viewState.update { it.copy(isBackupInProgress = true, lastBackupResult = null) }
+            _viewState.update {
+                it.copy(
+                    isBackupInProgress = true,
+                    lastBackupResult = null,
+                    shouldShowSaveBackupPicker = false
+                )
+            }
 
-            backupRepository.createBackupWithProgress().collect { state ->
+            backupRepository.createBackupWithProgress(backupFileUri).collect { state ->
                 Timber.d("createBackupWithProgress state: $state")
                 when (state) {
                     is BackupState.Progress -> {
@@ -60,15 +67,19 @@ class SettingsBackupViewModel @Inject constructor(
                             BackupPhase.INITIALIZING -> NativeText.Resource(
                                 RString.backup_initializing
                             )
+
                             BackupPhase.COLLECTING_DATABASE_DATA -> NativeText.Resource(
                                 RString.backup_collecting_data
                             )
+
                             BackupPhase.COLLECTING_IMAGES -> NativeText.Resource(
                                 RString.backup_collecting_images
                             )
+
                             BackupPhase.CREATING_BACKUP_FILE -> NativeText.Resource(
                                 RString.backup_creating_file
                             )
+
                             BackupPhase.FINALIZING -> NativeText.Resource(RString.backup_finalizing)
                             BackupPhase.COMPLETED -> NativeText.Resource(RString.backup_completed)
                         }
@@ -82,15 +93,21 @@ class SettingsBackupViewModel @Inject constructor(
                     is BackupState.Completed -> {
                         val result = when (val backupResult = state.result) {
                             is BackupResult.Success -> {
-                                "Success: Backup saved to ${backupResult.backupFile.name}"
+                                NativeText.Resource(RString.backup_success)
                             }
 
                             is BackupResult.PartialSuccess -> {
-                                "Partial Success: Backup created with ${backupResult.warnings.size} warnings"
+                                NativeText.Arguments(
+                                    RString.backup_partial_success,
+                                    listOf(backupResult.warnings.size)
+                                )
                             }
 
                             is BackupResult.Failure -> {
-                                "Error: ${backupResult.message}"
+                                NativeText.Arguments(
+                                    RString.backup_failed,
+                                    listOf(backupResult.message)
+                                )
                             }
                         }
                         _viewState.update {
@@ -105,10 +122,22 @@ class SettingsBackupViewModel @Inject constructor(
         }
     }
 
-    private fun openDownloadsFolder() {
+    private fun selectBackupLocation() {
+        val timestamp = dateTimeUtils.getBackupFolderNowTimestamp()
+        val filename = "hateitorrateit_backup_$timestamp.zip"
+        _viewState.update {
+            it.copy(
+                shouldShowSaveBackupPicker = true,
+                backupFilename = filename
+            )
+        }
+    }
+
+    private fun onSaveBackupPickerDismissed() {
         viewModelScope.launch {
-            val intent = intentGenerator.generateOpenDownloadsFolderIntent()
-            useIntentAction(intent)
+            _viewState.update { it.copy(shouldShowSaveBackupPicker = false) }
+
+            showSnackbar(NativeText.Resource(RString.backup_file_selection_cancelled))
         }
     }
 
@@ -181,23 +210,29 @@ class SettingsBackupViewModel @Inject constructor(
                             ImportPhase.VALIDATING_BACKUP -> NativeText.Resource(
                                 RString.import_validating_backup
                             )
+
                             ImportPhase.EXTRACTING_DATA -> NativeText.Resource(
                                 RString.import_extracting_data
                             )
+
                             ImportPhase.IMPORTING_PRODUCTS -> NativeText.Resource(
                                 RString.import_importing_products
                             )
+
                             ImportPhase.IMPORTING_IMAGES -> NativeText.Resource(
                                 RString.import_importing_images
                             )
+
                             ImportPhase.IMPORTING_SETTINGS -> NativeText.Resource(
                                 RString.import_importing_settings
                             )
+
                             ImportPhase.FINALIZING -> NativeText.Resource(RString.import_finalizing)
                             ImportPhase.COMPLETED -> NativeText.Resource(RString.import_completed)
                             ImportPhase.DETECTING_CONFLICTS -> NativeText.Resource(
                                 RString.import_detecting_conflicts
                             )
+
                             ImportPhase.RESOLVING_CONFLICTS -> NativeText.Resource(
                                 RString.import_resolving_conflicts
                             )

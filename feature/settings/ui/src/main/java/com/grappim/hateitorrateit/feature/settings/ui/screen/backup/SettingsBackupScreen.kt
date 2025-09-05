@@ -2,27 +2,16 @@
 
 package com.grappim.hateitorrateit.feature.settings.ui.screen.backup
 
-import android.app.Activity
-import android.content.ActivityNotFoundException
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Upload
 import androidx.compose.material3.AlertDialog
@@ -38,7 +27,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -56,13 +44,16 @@ import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarBackButtonState
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
+import com.grappim.hateitorrateit.utils.filesapi.MimeTypes
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.ObserveAsEvents
 import com.grappim.hateitorrateit.utils.ui.asString
-import timber.log.Timber
 
 @Composable
-fun SettingsBackupRoute(viewModel: SettingsBackupViewModel = hiltViewModel()) {
+fun SettingsBackupRoute(
+    showActionSnackbar: (NativeText, actionLabel: String?) -> Unit,
+    viewModel: SettingsBackupViewModel = hiltViewModel()
+) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val topBarController: TopBarController = LocalTopBarConfig.current
     val context = LocalContext.current
@@ -70,23 +61,38 @@ fun SettingsBackupRoute(viewModel: SettingsBackupViewModel = hiltViewModel()) {
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
-        uri?.let { state.onFileSelected(it) }
-            ?: state.onFilePickerDismissed()
+        if (uri != null) {
+            state.onFileSelected(uri)
+        } else {
+            state.onFilePickerDismissed()
+        }
     }
 
-    ObserveAsEvents(viewModel.intentAction) { intent ->
-        val activity = context as Activity
-
-        try {
-            activity.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            Timber.e(e)
+    val saveBackupLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument(MimeTypes.ZIP)
+    ) { uri: Uri? ->
+        if (uri != null) {
+            state.onBackupFileSelected(uri)
+        } else {
+            state.onSaveBackupPickerDismissed()
         }
     }
 
     LaunchedEffect(state.shouldShowFilePicker) {
         if (state.shouldShowFilePicker) {
-            filePickerLauncher.launch("application/zip")
+            filePickerLauncher.launch(MimeTypes.ZIP)
+        }
+    }
+
+    LaunchedEffect(state.shouldShowSaveBackupPicker) {
+        if (state.shouldShowSaveBackupPicker) {
+            saveBackupLauncher.launch(state.backupFilename)
+        }
+    }
+
+    ObserveAsEvents(viewModel.snackBarMessage) { snackbarMessage ->
+        if (snackbarMessage !is NativeText.Empty) {
+            showActionSnackbar(snackbarMessage, context.getString(RString.close))
         }
     }
 
@@ -170,46 +176,24 @@ private fun ExportDataWidget(state: SettingsBackupViewState) {
                     LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                 }
             } else {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp, Alignment.End)
+                OutlinedButton(
+                    onClick = state.onCreateBackup,
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    OutlinedButton(
-                        onClick = state.onOpenDownloadsFolder,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Folder,
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(RString.open_downloads))
-                    }
-
-                    OutlinedButton(
-                        onClick = state.onCreateBackup,
-                        modifier = Modifier.weight(1f)
-                    ) {
-                        Icon(
-                            imageVector = Icons.Outlined.Save,
-                            contentDescription = null
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(text = stringResource(RString.create_backup))
-                    }
+                    Icon(
+                        imageVector = Icons.Outlined.Save,
+                        contentDescription = null
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(text = stringResource(RString.create_backup))
                 }
             }
 
             state.lastBackupResult?.let { result ->
                 PlatoHeightSpacer16()
                 Text(
-                    text = result,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = if (result.contains("Success")) {
-                        MaterialTheme.colorScheme.primary
-                    } else {
-                        MaterialTheme.colorScheme.error
-                    }
+                    text = result.asString(context),
+                    style = MaterialTheme.typography.bodySmall
                 )
             }
         }

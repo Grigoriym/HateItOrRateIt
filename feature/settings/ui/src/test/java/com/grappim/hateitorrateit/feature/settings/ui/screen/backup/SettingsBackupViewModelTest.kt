@@ -3,7 +3,7 @@ package com.grappim.hateitorrateit.feature.settings.ui.screen.backup
 import com.grappim.hateitorrateit.data.backupapi.BackupRepository
 import com.grappim.hateitorrateit.data.backupapi.ImportRepository
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
-import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
+import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
@@ -19,8 +19,8 @@ class SettingsBackupViewModelTest {
 
     private val backupRepository: BackupRepository = mockk()
     private val importRepository: ImportRepository = mockk()
-    private val intentGenerator: IntentGenerator = mockk()
 
+    private val dateTimeUtils: DateTimeUtils = mockk()
     lateinit var sut: SettingsBackupViewModel
 
     @Before
@@ -28,7 +28,7 @@ class SettingsBackupViewModelTest {
         sut = SettingsBackupViewModel(
             backupRepository = backupRepository,
             importRepository = importRepository,
-            intentGenerator = intentGenerator
+            dateTimeUtils = dateTimeUtils
         )
     }
 

@@ -67,7 +67,6 @@
     <string name="export_data">Exporter les données</string>
     <string name="export_data_description">Créez une sauvegarde de tous vos produits, images et paramètres dans un fichier ZIP que vous pourrez restaurer plus tard ou transférer sur un autre appareil.</string>
     <string name="create_backup">Créer une sauvegarde</string>
-    <string name="open_downloads">Ouvrir Stockage</string>
     <string name="import_data">Importer des données</string>
     <string name="import_data_description">Restaurez vos produits, images et paramètres à partir d\'un fichier de sauvegarde créé précédemment.</string>
     <string name="select_backup_file">Sélectionner le fichier de sauvegarde</string>
@@ -87,6 +86,7 @@
     <string name="import_completed_successfully">Importation terminée avec succès</string>
     <string name="import_completed_with_warnings">Importation terminée avec avertissements</string>
     <string name="import_failed">Importation échouée</string>
+    <string name="backup_file_selection_cancelled">Sélection du fichier de sauvegarde annulée</string>
     <string name="successfully_imported">Importé avec succès :</string>
     <string name="products_count">%1$d produits</string>
     <string name="images_count">%1$d images</string>
@@ -108,6 +108,11 @@
     <string name="backup_creating_file">Création du fichier de sauvegarde…</string>
     <string name="backup_finalizing">Finalisation…</string>
     <string name="backup_completed">Terminé</string>
+    
+    <!-- Backup Result Messages -->
+    <string name="backup_success">Succès : Sauvegarde enregistrée avec succès</string>
+    <string name="backup_partial_success">Succès partiel : Sauvegarde créée avec %1$d avertissements</string>
+    <string name="backup_failed">Erreur : %1$s</string>
     
     <!-- Import Progress -->
     <string name="import_validating_backup">Validation du fichier de sauvegarde…</string>

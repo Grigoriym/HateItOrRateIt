@@ -9,7 +9,7 @@ private const val JPEG = PREFIX + "jpeg"
 private const val PNG = PREFIX + "png"
 
 @Singleton
-class MimeTypes @Inject constructor() {
+class MimeTypesMapper @Inject constructor() {
 
     fun formatMimeType(mimeType: String): String = when (mimeType) {
         PNG -> "png"

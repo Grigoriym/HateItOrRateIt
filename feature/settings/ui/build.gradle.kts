@@ -12,6 +12,8 @@ android {
 dependencies {
     implementation(projects.utils.ui)
     implementation(projects.utils.androidApi)
+    implementation(projects.utils.filesApi)
+    implementation(projects.utils.dateTimeApi)
     implementation(projects.uikit)
     implementation(projects.strings)
     implementation(projects.data.analyticsApi)

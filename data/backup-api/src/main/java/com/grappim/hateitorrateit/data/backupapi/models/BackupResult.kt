@@ -1,15 +1,10 @@
 package com.grappim.hateitorrateit.data.backupapi.models
 
-import java.io.File
-
 sealed class BackupResult {
-    data class Success(val backupFile: File) : BackupResult()
+    data object Success : BackupResult()
 
-    data class PartialSuccess(
-        val backupFile: File,
-        val missingImages: List<String>,
-        val warnings: List<String>
-    ) : BackupResult()
+    data class PartialSuccess(val missingImages: List<String>, val warnings: List<String>) :
+        BackupResult()
 
     data class Failure(val error: BackupError, val message: String) : BackupResult()
 }

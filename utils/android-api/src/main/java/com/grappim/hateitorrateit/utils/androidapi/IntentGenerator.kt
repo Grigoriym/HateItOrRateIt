@@ -5,6 +5,4 @@ import android.content.Intent
 interface IntentGenerator {
     fun generateIntentToShareImage(uriString: String, mimeType: String): Intent
     fun generateAppSettingsIntent(): Intent
-
-    fun generateOpenDownloadsFolderIntent(): Intent
 }

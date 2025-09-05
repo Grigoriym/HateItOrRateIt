@@ -78,7 +78,6 @@
     <string name="export_data">Export Data</string>
     <string name="export_data_description">Create a backup of all your products, images, and settings in a ZIP file that you can restore later or transfer to another device.</string>
     <string name="create_backup">Create Backup</string>
-    <string name="open_downloads">Open Storage</string>
     <string name="import_data">Import Data</string>
     <string name="import_data_description">Restore your products, images, and settings from a previously created backup file.</string>
     <string name="select_backup_file">Select Backup File</string>
@@ -98,6 +97,7 @@
     <string name="import_completed_successfully">Import Completed Successfully</string>
     <string name="import_completed_with_warnings">Import Completed with Warnings</string>
     <string name="import_failed">Import Failed</string>
+    <string name="backup_file_selection_cancelled">Backup file selection was cancelled</string>
     <string name="successfully_imported">Successfully imported:</string>
     <string name="products_count">%1$d products</string>
     <string name="images_count">%1$d images</string>
@@ -119,6 +119,11 @@
     <string name="backup_creating_file">Creating backup file…</string>
     <string name="backup_finalizing">Finalizing…</string>
     <string name="backup_completed">Completed</string>
+    
+    <!-- Backup Result Messages -->
+    <string name="backup_success">Success: Backup saved successfully</string>
+    <string name="backup_partial_success">Partial Success: Backup created with %1$d warnings</string>
+    <string name="backup_failed">Error: %1$s</string>
     
     <!-- Import Progress -->
     <string name="import_validating_backup">Validating backup file…</string>

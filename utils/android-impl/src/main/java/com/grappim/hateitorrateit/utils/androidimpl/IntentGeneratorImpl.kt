@@ -1,6 +1,5 @@
 package com.grappim.hateitorrateit.utils.androidimpl
 
-import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -28,9 +27,4 @@ class IntentGeneratorImpl @Inject constructor(
         Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
         Uri.fromParts("package", context.packageName, null)
     )
-
-    override fun generateOpenDownloadsFolderIntent(): Intent =
-        Intent(DownloadManager.ACTION_VIEW_DOWNLOADS).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
 }

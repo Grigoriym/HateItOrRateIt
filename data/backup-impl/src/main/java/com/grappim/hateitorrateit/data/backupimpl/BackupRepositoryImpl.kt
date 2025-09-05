@@ -2,12 +2,9 @@
 
 package com.grappim.hateitorrateit.data.backupimpl
 
-import android.content.ContentValues
 import android.content.Context
+import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
-import androidx.annotation.RequiresApi
 import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.backupapi.BackupRepository
@@ -24,8 +21,6 @@ import com.grappim.hateitorrateit.data.backupapi.models.ExportMetadata
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
 import com.grappim.hateitorrateit.data.backupapi.models.ProductImageExport
 import com.grappim.hateitorrateit.data.backupapi.models.SettingsExport
-import com.grappim.hateitorrateit.data.backupimpl.models.BackupInfo
-import com.grappim.hateitorrateit.data.backupimpl.utils.BackupEligibilityChecker
 import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.BACKUP_DATA_JSON
 import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.IMAGES_ZIP_FOLDER
 import com.grappim.hateitorrateit.data.backupimpl.utils.ImportVersionChecker
@@ -38,7 +33,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -48,7 +42,6 @@ import kotlinx.coroutines.isActive
 import kotlinx.serialization.json.Json
 import timber.log.Timber
 import java.io.File
-import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipOutputStream
 import javax.inject.Inject
@@ -62,119 +55,73 @@ class BackupRepositoryImpl @Inject constructor(
     private val folderPathManager: FolderPathManager,
     private val json: Json,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val dateTimeUtils: DateTimeUtils,
-    private val backupEligibilityChecker: BackupEligibilityChecker
+    private val dateTimeUtils: DateTimeUtils
 ) : BackupRepository {
 
-    override suspend fun createBackupWithProgress(): Flow<BackupState> = channelFlow {
-        try {
-            send(
-                BackupState.Progress(
-                    BackupProgress(phase = INITIALIZING)
+    override suspend fun createBackupWithProgress(backupFileUri: Uri): Flow<BackupState> =
+        channelFlow {
+            try {
+                send(
+                    BackupState.Progress(
+                        BackupProgress(phase = INITIALIZING)
+                    )
                 )
-            )
 
-            if (!backupEligibilityChecker.canCreateBackup()) {
+                send(
+                    BackupState.Progress(
+                        BackupProgress(phase = COLLECTING_DATABASE_DATA)
+                    )
+                )
+                val products = productsRepository.getAllProducts()
+
+                send(
+                    BackupState.Progress(
+                        BackupProgress(phase = COLLECTING_DATABASE_DATA)
+                    )
+                )
+                val exportData = collectExportData(products)
+
+                send(
+                    BackupState.Progress(
+                        BackupProgress(phase = CREATING_BACKUP_FILE)
+                    )
+                )
+
+                writeBackupData(exportData, products, backupFileUri) { progress ->
+                    send(BackupState.Progress(progress))
+                }
+
+                send(
+                    BackupState.Progress(
+                        BackupProgress(phase = COMPLETED)
+                    )
+                )
+                send(BackupState.Completed(BackupResult.Success))
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: TimeoutCancellationException) {
+                throw e
+            } catch (e: Exception) {
+                Timber.e(e, "Backup creation failed")
                 send(
                     BackupState.Completed(
                         BackupResult.Failure(
-                            BackupError.STORAGE_PERMISSION_DENIED,
-                            "Cannot access storage location for backup"
+                            BackupError.UNKNOWN_ERROR,
+                            e.message ?: "Unknown error"
                         )
                     )
                 )
-                return@channelFlow
             }
-
-            send(
-                BackupState.Progress(
-                    BackupProgress(phase = COLLECTING_DATABASE_DATA)
-                )
-            )
-            val products = productsRepository.getAllProducts()
-
-            send(
-                BackupState.Progress(
-                    BackupProgress(phase = COLLECTING_DATABASE_DATA)
-                )
-            )
-            val exportData = collectExportData(products)
-
-            send(
-                BackupState.Progress(
-                    BackupProgress(phase = CREATING_BACKUP_FILE)
-                )
-            )
-
-            val backupInfo = writeBackupData(exportData, products) { progress ->
-                send(BackupState.Progress(progress))
-            }
-
-            send(
-                BackupState.Progress(
-                    BackupProgress(phase = COMPLETED)
-                )
-            )
-            send(BackupState.Completed(BackupResult.Success(backupInfo.file)))
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: TimeoutCancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Timber.e(e, "Backup creation failed")
-            send(
-                BackupState.Completed(
-                    BackupResult.Failure(
-                        BackupError.UNKNOWN_ERROR,
-                        e.message ?: "Unknown error"
-                    )
-                )
-            )
-        }
-    }.flowOn(ioDispatcher)
+        }.flowOn(ioDispatcher)
 
     private suspend fun writeBackupData(
         exportData: ExportData,
         products: ImmutableList<Product>,
+        backupFileUri: Uri,
         progressCallback: suspend (BackupProgress) -> Unit
-    ): BackupInfo {
-        val timestamp = dateTimeUtils.getBackupFolderNowTimestamp()
-        val filename = "hateitorrateit_backup_$timestamp.zip"
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            writeBackupDataApi29(filename, exportData, products, progressCallback)
-        } else {
-            writeBackupDataLegacy(filename, exportData, products, progressCallback)
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private suspend fun writeBackupDataApi29(
-        filename: String,
-        exportData: ExportData,
-        products: ImmutableList<Product>,
-        progressCallback: suspend (BackupProgress) -> Unit
-    ): BackupInfo {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-            put(MediaStore.MediaColumns.MIME_TYPE, "application/zip")
-            put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/hior")
-        }
-
-        val resolver = context.contentResolver
-        val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
-            ?: error("Failed to create MediaStore entry")
-
-        val outputStream = resolver.openOutputStream(uri)
-            ?: error("Failed to open output stream")
-
-        val file = File(
-            File(
-                folderPathManager.getBackupParentFolder(),
-                folderPathManager.getBackupChildFolderName()
-            ),
-            filename
-        )
+    ) {
+        val outputStream = context.contentResolver.openOutputStream(backupFileUri)
+            ?: error("Failed to open output stream for user-selected location")
 
         outputStream.use { stream ->
             ZipOutputStream(stream).use { zipOut ->
@@ -183,39 +130,6 @@ class BackupRepositoryImpl @Inject constructor(
                 addImagesToZip(zipOut, products)
             }
         }
-
-        return BackupInfo(file, uri)
-    }
-
-    private suspend fun writeBackupDataLegacy(
-        filename: String,
-        exportData: ExportData,
-        products: ImmutableList<Product>,
-        progressCallback: suspend (BackupProgress) -> Unit
-    ): BackupInfo {
-        val downloadsDir = folderPathManager.getBackupParentFolder()
-        val childFolder = folderPathManager.getBackupChildFolderName()
-
-        if (!downloadsDir.exists()) {
-            downloadsDir.mkdirs()
-        }
-
-        val hiorDir = File(downloadsDir, childFolder)
-        if (!hiorDir.exists()) {
-            hiorDir.mkdirs()
-        }
-
-        val file = File(hiorDir, filename)
-
-        FileOutputStream(file).use { stream ->
-            ZipOutputStream(stream).use { zipOut ->
-                addDataToZip(zipOut, exportData)
-                progressCallback(BackupProgress(phase = CREATING_BACKUP_FILE))
-                addImagesToZip(zipOut, products)
-            }
-        }
-
-        return BackupInfo(file, null)
     }
 
     private suspend fun collectExportData(products: ImmutableList<Product>): ExportData {

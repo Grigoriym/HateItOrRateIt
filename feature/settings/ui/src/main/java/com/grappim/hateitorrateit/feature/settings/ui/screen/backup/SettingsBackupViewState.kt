@@ -8,13 +8,14 @@ import com.grappim.hateitorrateit.utils.ui.NativeText
 data class SettingsBackupViewState(
     val isBackupInProgress: Boolean = false,
     val currentOperation: NativeText = NativeText.Empty,
-    val lastBackupResult: String? = null,
+    val lastBackupResult: NativeText? = null,
     val isImportInProgress: Boolean = false,
     val currentImportOperation: NativeText = NativeText.Empty,
     val lastImportResult: ImportResult? = null,
     val shouldShowImportResultDialog: Boolean = false,
+    val shouldShowSaveBackupPicker: Boolean = false,
+    val backupFilename: String = "",
     val onCreateBackup: () -> Unit = {},
-    val onOpenDownloadsFolder: () -> Unit = {},
     val onSelectBackupFile: () -> Unit = {},
     val shouldShowFilePicker: Boolean = false,
     val onFilePickerDismissed: () -> Unit = {},
@@ -24,5 +25,7 @@ data class SettingsBackupViewState(
     val onImportModeSelected: (ImportMode) -> Unit = {},
     val onImportModeDialogDismissed: () -> Unit = {},
     val onImportResultDialogDismissed: () -> Unit = {},
-    val onShowImportResultDialog: () -> Unit = {}
+    val onShowImportResultDialog: () -> Unit = {},
+    val onBackupFileSelected: (Uri) -> Unit = {},
+    val onSaveBackupPickerDismissed: () -> Unit = {}
 )
