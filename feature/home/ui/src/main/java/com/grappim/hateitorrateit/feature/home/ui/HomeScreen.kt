@@ -190,8 +190,8 @@ private fun ProductItem(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
-                    .padding(bottom = 12.dp)
-                    .align(Alignment.BottomCenter),
+                    .padding(top = 12.dp)
+                    .align(Alignment.TopCenter),
                 shape = RoundedCornerShape(20.dp),
                 elevation = 0.dp,
                 backgroundColor = MaterialTheme.colorScheme.surface.copy(
