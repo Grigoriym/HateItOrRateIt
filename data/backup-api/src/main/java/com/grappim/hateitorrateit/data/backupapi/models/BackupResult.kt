@@ -54,9 +54,17 @@ enum class ImportError {
     UNKNOWN_ERROR
 }
 
+enum class ImportMode {
+    CREATE_NEW, // Always create new products
+    REPLACE_EXISTING, // Replace matching products
+    SKIP_CONFLICTS // Skip conflicting products, import only new ones
+}
+
 enum class ImportPhase {
     VALIDATING_BACKUP,
     EXTRACTING_DATA,
+    DETECTING_CONFLICTS,
+    RESOLVING_CONFLICTS,
     IMPORTING_PRODUCTS,
     IMPORTING_IMAGES,
     IMPORTING_SETTINGS,

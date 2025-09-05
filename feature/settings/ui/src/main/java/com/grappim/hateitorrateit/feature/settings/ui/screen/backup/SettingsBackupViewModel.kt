@@ -1,17 +1,15 @@
 package com.grappim.hateitorrateit.feature.settings.ui.screen.backup
 
-import android.app.DownloadManager
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.data.analyticsapi.SettingsAnalytics
 import com.grappim.hateitorrateit.data.backupapi.BackupRepository
 import com.grappim.hateitorrateit.data.backupapi.ImportRepository
 import com.grappim.hateitorrateit.data.backupapi.models.BackupPhase
 import com.grappim.hateitorrateit.data.backupapi.models.BackupResult
 import com.grappim.hateitorrateit.data.backupapi.models.BackupState
+import com.grappim.hateitorrateit.data.backupapi.models.ImportMode
 import com.grappim.hateitorrateit.data.backupapi.models.ImportPhase
 import com.grappim.hateitorrateit.data.backupapi.models.ImportResult
 import com.grappim.hateitorrateit.data.backupapi.models.ImportState
@@ -19,15 +17,10 @@ import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,7 +37,11 @@ class SettingsBackupViewModel @Inject constructor(
             onOpenDownloadsFolder = ::openDownloadsFolder,
             onSelectBackupFile = ::selectBackupFile,
             onFilePickerDismissed = ::onFilePickerDismissed,
-            onFileSelected = ::importBackup
+            onFileSelected = ::onFileSelected,
+            onImportModeSelected = ::onImportModeSelected,
+            onImportModeDialogDismissed = ::onImportModeDialogDismissed,
+            onImportResultDialogDismissed = ::onImportResultDialogDismissed,
+            onShowImportResultDialog = ::onShowImportResultDialog
         )
     )
 
@@ -116,8 +113,51 @@ class SettingsBackupViewModel @Inject constructor(
         _viewState.update { it.copy(shouldShowFilePicker = false) }
     }
 
-    fun importBackup(backupFileUri: Uri) {
-        _viewState.update { it.copy(shouldShowFilePicker = false) }
+    fun onFileSelected(backupFileUri: Uri) {
+        _viewState.update {
+            it.copy(
+                shouldShowFilePicker = false,
+                shouldShowImportModeDialog = true,
+                selectedBackupFileUri = backupFileUri
+            )
+        }
+    }
+
+    fun onImportModeSelected(importMode: ImportMode) {
+        val backupFileUri = _viewState.value.selectedBackupFileUri
+        if (backupFileUri != null) {
+            _viewState.update {
+                it.copy(
+                    shouldShowImportModeDialog = false,
+                    selectedBackupFileUri = null
+                )
+            }
+            importBackup(backupFileUri, importMode)
+        }
+    }
+
+    fun onImportModeDialogDismissed() {
+        _viewState.update {
+            it.copy(
+                shouldShowImportModeDialog = false,
+                selectedBackupFileUri = null
+            )
+        }
+    }
+
+    fun onImportResultDialogDismissed() {
+        _viewState.update {
+            it.copy(shouldShowImportResultDialog = false)
+        }
+    }
+
+    fun onShowImportResultDialog() {
+        _viewState.update {
+            it.copy(shouldShowImportResultDialog = true)
+        }
+    }
+
+    private fun importBackup(backupFileUri: Uri, importMode: ImportMode) {
         viewModelScope.launch {
             _viewState.update {
                 it.copy(
@@ -126,7 +166,7 @@ class SettingsBackupViewModel @Inject constructor(
                 )
             }
 
-            importRepository.importBackupWithProgress(backupFileUri).collect { state ->
+            importRepository.importBackupWithProgress(backupFileUri, importMode).collect { state ->
                 Timber.d("importBackupWithProgress state: $state")
                 when (state) {
                     is ImportState.Progress -> {
@@ -138,6 +178,8 @@ class SettingsBackupViewModel @Inject constructor(
                             ImportPhase.IMPORTING_SETTINGS -> "Importing settings..."
                             ImportPhase.FINALIZING -> "Finalizing..."
                             ImportPhase.COMPLETED -> "Completed"
+                            ImportPhase.DETECTING_CONFLICTS -> "Detecting conflicts..."
+                            ImportPhase.RESOLVING_CONFLICTS -> "Resolving conflicts..."
                         }
                         _viewState.update {
                             it.copy(
@@ -147,22 +189,10 @@ class SettingsBackupViewModel @Inject constructor(
                     }
 
                     is ImportState.Completed -> {
-                        val result = when (val importResult = state.result) {
-                            is ImportResult.Success -> {
-                                "Success: Imported ${importResult.importedProducts} products and ${importResult.importedImages} images"
-                            }
-
-                            is ImportResult.PartialSuccess -> {
-                                "Partial Success: Imported ${importResult.importedProducts} products, ${importResult.importedImages} images with ${importResult.warnings.size} warnings"
-                            }
-
-                            is ImportResult.Failure -> {
-                                "Error: ${importResult.message}"
-                            }
-                        }
                         _viewState.update {
                             it.copy(
-                                lastImportResult = result,
+                                lastImportResult = state.result,
+                                shouldShowImportResultDialog = true,
                                 isImportInProgress = false
                             )
                         }

@@ -121,10 +121,14 @@ class ProductsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun importProduct(product: CreateProduct): Long {
-        val productEntityWithoutId = productsMapper
-            .toProductEntity(product)
-            .copy(productId = 0L)
-        val productId = productsDao.insert(productEntityWithoutId)
+        val productEntity = productsMapper.toProductEntity(product)
+        val productId = productsDao.insert(productEntity)
+        
+        // If we're reusing an existing ID (non-zero), clear old images first
+        if (productEntity.productId != 0L) {
+            productsDao.deleteImagesByProductId(productId)
+        }
+        
         val images = productsMapper.toProductImageDataEntityList(product).map {
             it.copy(productId = productId)
         }

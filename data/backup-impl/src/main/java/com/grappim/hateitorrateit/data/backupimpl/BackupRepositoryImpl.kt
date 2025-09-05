@@ -12,7 +12,6 @@ import androidx.annotation.RequiresApi
 import com.grappim.hateitorrateit.core.appinfoapi.AppInfoProvider
 import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.data.backupapi.BackupRepository
-import com.grappim.hateitorrateit.data.backupapi.BackupVersion
 import com.grappim.hateitorrateit.data.backupapi.models.BackupError
 import com.grappim.hateitorrateit.data.backupapi.models.BackupPhase.COLLECTING_DATABASE_DATA
 import com.grappim.hateitorrateit.data.backupapi.models.BackupPhase.COMPLETED
@@ -26,7 +25,9 @@ import com.grappim.hateitorrateit.data.backupapi.models.ExportMetadata
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
 import com.grappim.hateitorrateit.data.backupapi.models.ProductImageExport
 import com.grappim.hateitorrateit.data.backupapi.models.SettingsExport
-import com.grappim.hateitorrateit.data.backupimpl.Constants.BACKUP_DATA_JSON
+import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.BACKUP_DATA_JSON
+import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.IMAGES_ZIP_FOLDER
+import com.grappim.hateitorrateit.data.backupimpl.utils.ImportVersionChecker
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.Product
@@ -275,7 +276,7 @@ class BackupRepositoryImpl @Inject constructor(
         )
 
         val metadata = ExportMetadata(
-            version = BackupVersion.CURRENT_VERSION,
+            version = ImportVersionChecker.CURRENT_VERSION,
             appVersionName = appInfoProvider.getAppInfo(),
             exportTimestamp = dateTimeUtils.getInstantNow().toEpochMilli(),
             deviceInfo = Build.MODEL,
@@ -316,7 +317,7 @@ class BackupRepositoryImpl @Inject constructor(
         val jsonData = json.encodeToString(exportData)
         val entry = ZipEntry(BACKUP_DATA_JSON)
         zipOut.putNextEntry(entry)
-        zipOut.write(jsonData.toByteArray())
+        zipOut.write(jsonData.toByteArray(Charsets.UTF_8))
         zipOut.closeEntry()
     }
 
@@ -331,7 +332,10 @@ class BackupRepositoryImpl @Inject constructor(
                 val imageFile = File(productFolder, image.name)
                 if (imageFile.exists()) {
                     try {
-                        val entry = ZipEntry("images/${product.productFolderName}/${image.name}")
+                        val entry =
+                            ZipEntry(
+                                "$IMAGES_ZIP_FOLDER/${product.productFolderName}/${image.name}"
+                            )
                         zipOut.putNextEntry(entry)
                         imageFile.inputStream().use { input ->
                             input.copyTo(zipOut)
