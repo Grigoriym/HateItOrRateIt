@@ -100,4 +100,23 @@
     <!-- Import Summary -->
     <string name="imported_summary_success">%1$d produits, %2$d images importés</string>
     <string name="imported_summary_warnings">%1$d produits, %2$d images importés (avec avertissements)</string>
+    
+    <!-- Backup Progress -->
+    <string name="backup_initializing">Initialisation de la sauvegarde…</string>
+    <string name="backup_collecting_data">Collecte des données…</string>
+    <string name="backup_collecting_images">Collecte des images…</string>
+    <string name="backup_creating_file">Création du fichier de sauvegarde…</string>
+    <string name="backup_finalizing">Finalisation…</string>
+    <string name="backup_completed">Terminé</string>
+    
+    <!-- Import Progress -->
+    <string name="import_validating_backup">Validation du fichier de sauvegarde…</string>
+    <string name="import_extracting_data">Extraction des données…</string>
+    <string name="import_importing_products">Importation des produits…</string>
+    <string name="import_importing_images">Importation des images…</string>
+    <string name="import_importing_settings">Importation des paramètres…</string>
+    <string name="import_finalizing">Finalisation…</string>
+    <string name="import_completed">Terminé</string>
+    <string name="import_detecting_conflicts">Détection des conflits…</string>
+    <string name="import_resolving_conflicts">Résolution des conflits…</string>
 </resources>

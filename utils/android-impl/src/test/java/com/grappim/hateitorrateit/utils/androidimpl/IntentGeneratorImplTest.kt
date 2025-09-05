@@ -1,5 +1,6 @@
 package com.grappim.hateitorrateit.utils.androidimpl
 
+import android.app.DownloadManager
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
@@ -58,5 +59,14 @@ class IntentGeneratorImplTest {
 
         assert(intent.action == Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
         assert(intent.data == Uri.fromParts("package", context.packageName, null))
+    }
+
+    @Test
+    fun `on generateOpenDownloadsFolderIntent, should return correct Intent`() {
+        val intent = sut.generateOpenDownloadsFolderIntent()
+        val sharingIntent = intent.getParcelableExtra(Intent.EXTRA_INTENT, Intent::class.java)
+
+        assert(intent.action == DownloadManager.ACTION_VIEW_DOWNLOADS)
+        assert(sharingIntent?.flags?.and(Intent.FLAG_GRANT_READ_URI_PERMISSION) != 0)
     }
 }

@@ -44,7 +44,7 @@ import com.grappim.hateitorrateit.feature.settings.ui.screen.product.goToSetting
 import com.grappim.hateitorrateit.utils.ui.NativeText
 
 @Composable
-fun MainNavHost(
+fun MainNavHostWidget(
     navController: NavHostController,
     showActionSnackbar: (NativeText, actionLabel: String?) -> Unit,
     modifier: Modifier = Modifier

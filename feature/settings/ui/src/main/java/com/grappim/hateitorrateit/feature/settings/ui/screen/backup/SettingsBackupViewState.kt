@@ -3,13 +3,14 @@ package com.grappim.hateitorrateit.feature.settings.ui.screen.backup
 import android.net.Uri
 import com.grappim.hateitorrateit.data.backupapi.models.ImportMode
 import com.grappim.hateitorrateit.data.backupapi.models.ImportResult
+import com.grappim.hateitorrateit.utils.ui.NativeText
 
 data class SettingsBackupViewState(
     val isBackupInProgress: Boolean = false,
-    val currentOperation: String = "",
+    val currentOperation: NativeText = NativeText.Empty,
     val lastBackupResult: String? = null,
     val isImportInProgress: Boolean = false,
-    val currentImportOperation: String = "",
+    val currentImportOperation: NativeText = NativeText.Empty,
     val lastImportResult: ImportResult? = null,
     val shouldShowImportResultDialog: Boolean = false,
     val onCreateBackup: () -> Unit = {},

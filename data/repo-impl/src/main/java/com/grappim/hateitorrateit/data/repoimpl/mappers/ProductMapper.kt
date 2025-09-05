@@ -9,6 +9,8 @@ import com.grappim.hateitorrateit.data.repoapi.models.CreateProduct
 import com.grappim.hateitorrateit.data.repoapi.models.EmptyFile
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -35,6 +37,16 @@ class ProductMapper @Inject constructor(
                 shop = entity.shop,
                 type = entity.type
             )
+        }
+
+    suspend fun toProductList(list: List<ProductWithImagesEntity>): ImmutableList<Product> =
+        withContext(ioDispatcher) {
+            list.map { product ->
+                toProduct(
+                    productEntity = product.productEntity,
+                    images = product.files
+                )
+            }.toImmutableList()
         }
 
     suspend fun toProduct(

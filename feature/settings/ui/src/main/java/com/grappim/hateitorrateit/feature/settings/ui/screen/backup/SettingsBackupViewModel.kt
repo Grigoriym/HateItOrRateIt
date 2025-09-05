@@ -1,6 +1,5 @@
 package com.grappim.hateitorrateit.feature.settings.ui.screen.backup
 
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,11 +10,13 @@ import com.grappim.hateitorrateit.data.backupapi.models.BackupResult
 import com.grappim.hateitorrateit.data.backupapi.models.BackupState
 import com.grappim.hateitorrateit.data.backupapi.models.ImportMode
 import com.grappim.hateitorrateit.data.backupapi.models.ImportPhase
-import com.grappim.hateitorrateit.data.backupapi.models.ImportResult
 import com.grappim.hateitorrateit.data.backupapi.models.ImportState
+import com.grappim.hateitorrateit.strings.RString
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
+import com.grappim.hateitorrateit.utils.ui.IntentActionDelegate
+import com.grappim.hateitorrateit.utils.ui.IntentActionDelegateImpl
+import com.grappim.hateitorrateit.utils.ui.NativeText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -25,11 +26,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsBackupViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
     private val backupRepository: BackupRepository,
     private val importRepository: ImportRepository,
     private val intentGenerator: IntentGenerator
-) : ViewModel() {
+) : ViewModel(),
+    IntentActionDelegate by IntentActionDelegateImpl() {
 
     private val _viewState = MutableStateFlow(
         SettingsBackupViewState(
@@ -56,12 +57,20 @@ class SettingsBackupViewModel @Inject constructor(
                 when (state) {
                     is BackupState.Progress -> {
                         val currentOperation = when (state.progress.phase) {
-                            BackupPhase.INITIALIZING -> "Initializing backup..."
-                            BackupPhase.COLLECTING_DATABASE_DATA -> "Collecting data..."
-                            BackupPhase.COLLECTING_IMAGES -> "Collecting images..."
-                            BackupPhase.CREATING_BACKUP_FILE -> "Creating backup file..."
-                            BackupPhase.FINALIZING -> "Finalizing..."
-                            BackupPhase.COMPLETED -> "Completed"
+                            BackupPhase.INITIALIZING -> NativeText.Resource(
+                                RString.backup_initializing
+                            )
+                            BackupPhase.COLLECTING_DATABASE_DATA -> NativeText.Resource(
+                                RString.backup_collecting_data
+                            )
+                            BackupPhase.COLLECTING_IMAGES -> NativeText.Resource(
+                                RString.backup_collecting_images
+                            )
+                            BackupPhase.CREATING_BACKUP_FILE -> NativeText.Resource(
+                                RString.backup_creating_file
+                            )
+                            BackupPhase.FINALIZING -> NativeText.Resource(RString.backup_finalizing)
+                            BackupPhase.COMPLETED -> NativeText.Resource(RString.backup_completed)
                         }
                         _viewState.update {
                             it.copy(
@@ -96,24 +105,22 @@ class SettingsBackupViewModel @Inject constructor(
         }
     }
 
-    fun openDownloadsFolder() {
-        try {
+    private fun openDownloadsFolder() {
+        viewModelScope.launch {
             val intent = intentGenerator.generateOpenDownloadsFolderIntent()
-            context.startActivity(intent)
-        } catch (e: Exception) {
-            Timber.e(e, "Failed to open Downloads folder")
+            useIntentAction(intent)
         }
     }
 
-    fun selectBackupFile() {
+    private fun selectBackupFile() {
         _viewState.update { it.copy(shouldShowFilePicker = true) }
     }
 
-    fun onFilePickerDismissed() {
+    private fun onFilePickerDismissed() {
         _viewState.update { it.copy(shouldShowFilePicker = false) }
     }
 
-    fun onFileSelected(backupFileUri: Uri) {
+    private fun onFileSelected(backupFileUri: Uri) {
         _viewState.update {
             it.copy(
                 shouldShowFilePicker = false,
@@ -123,7 +130,7 @@ class SettingsBackupViewModel @Inject constructor(
         }
     }
 
-    fun onImportModeSelected(importMode: ImportMode) {
+    private fun onImportModeSelected(importMode: ImportMode) {
         val backupFileUri = _viewState.value.selectedBackupFileUri
         if (backupFileUri != null) {
             _viewState.update {
@@ -136,7 +143,7 @@ class SettingsBackupViewModel @Inject constructor(
         }
     }
 
-    fun onImportModeDialogDismissed() {
+    private fun onImportModeDialogDismissed() {
         _viewState.update {
             it.copy(
                 shouldShowImportModeDialog = false,
@@ -145,13 +152,13 @@ class SettingsBackupViewModel @Inject constructor(
         }
     }
 
-    fun onImportResultDialogDismissed() {
+    private fun onImportResultDialogDismissed() {
         _viewState.update {
             it.copy(shouldShowImportResultDialog = false)
         }
     }
 
-    fun onShowImportResultDialog() {
+    private fun onShowImportResultDialog() {
         _viewState.update {
             it.copy(shouldShowImportResultDialog = true)
         }
@@ -171,15 +178,29 @@ class SettingsBackupViewModel @Inject constructor(
                 when (state) {
                     is ImportState.Progress -> {
                         val currentImportOperation = when (state.progress.phase) {
-                            ImportPhase.VALIDATING_BACKUP -> "Validating backup file..."
-                            ImportPhase.EXTRACTING_DATA -> "Extracting data..."
-                            ImportPhase.IMPORTING_PRODUCTS -> "Importing products..."
-                            ImportPhase.IMPORTING_IMAGES -> "Importing images..."
-                            ImportPhase.IMPORTING_SETTINGS -> "Importing settings..."
-                            ImportPhase.FINALIZING -> "Finalizing..."
-                            ImportPhase.COMPLETED -> "Completed"
-                            ImportPhase.DETECTING_CONFLICTS -> "Detecting conflicts..."
-                            ImportPhase.RESOLVING_CONFLICTS -> "Resolving conflicts..."
+                            ImportPhase.VALIDATING_BACKUP -> NativeText.Resource(
+                                RString.import_validating_backup
+                            )
+                            ImportPhase.EXTRACTING_DATA -> NativeText.Resource(
+                                RString.import_extracting_data
+                            )
+                            ImportPhase.IMPORTING_PRODUCTS -> NativeText.Resource(
+                                RString.import_importing_products
+                            )
+                            ImportPhase.IMPORTING_IMAGES -> NativeText.Resource(
+                                RString.import_importing_images
+                            )
+                            ImportPhase.IMPORTING_SETTINGS -> NativeText.Resource(
+                                RString.import_importing_settings
+                            )
+                            ImportPhase.FINALIZING -> NativeText.Resource(RString.import_finalizing)
+                            ImportPhase.COMPLETED -> NativeText.Resource(RString.import_completed)
+                            ImportPhase.DETECTING_CONFLICTS -> NativeText.Resource(
+                                RString.import_detecting_conflicts
+                            )
+                            ImportPhase.RESOLVING_CONFLICTS -> NativeText.Resource(
+                                RString.import_resolving_conflicts
+                            )
                         }
                         _viewState.update {
                             it.copy(

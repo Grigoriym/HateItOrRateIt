@@ -2,6 +2,7 @@ package com.grappim.hateitorrateit.data.backupimpl.utils
 
 import android.os.Build
 import android.os.Environment
+import com.grappim.hateitorrateit.testing.core.testException
 import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import io.mockk.every
@@ -12,6 +13,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
@@ -61,5 +63,25 @@ class BackupEligibilityCheckerTest {
         val actual = sut.canCreateBackup()
 
         assertTrue(actual)
+    }
+
+    @Test
+    @Config(
+        sdk = [
+            Build.VERSION_CODES.N,
+            Build.VERSION_CODES.N_MR1,
+            Build.VERSION_CODES.O,
+            Build.VERSION_CODES.O_MR1,
+            Build.VERSION_CODES.P
+        ]
+    )
+    fun `on canCreateBackup for API less than 29, with errors, returns false`() = runTest {
+        val file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+        every { folderPathManager.getBackupParentFolder() } returns file
+        every { folderPathManager.getBackupChildFolderName() } throws testException
+
+        val actual = sut.canCreateBackup()
+
+        assertFalse(actual)
     }
 }

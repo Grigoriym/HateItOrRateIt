@@ -81,7 +81,7 @@ fun SettingsRoute(
 }
 
 @Composable
-private fun SettingsScreen(
+internal fun SettingsScreen(
     state: SettingsViewState,
     goToAboutScreen: () -> Unit = {},
     goToInterfaceScreen: () -> Unit = {},

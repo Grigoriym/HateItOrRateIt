@@ -2,6 +2,8 @@
 
 package com.grappim.hateitorrateit.feature.settings.ui.screen.backup
 
+import android.app.Activity
+import android.content.ActivityNotFoundException
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +40,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -54,17 +57,31 @@ import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.ui.NativeText
+import com.grappim.hateitorrateit.utils.ui.ObserveAsEvents
+import com.grappim.hateitorrateit.utils.ui.asString
+import timber.log.Timber
 
 @Composable
 fun SettingsBackupRoute(viewModel: SettingsBackupViewModel = hiltViewModel()) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val topBarController: TopBarController = LocalTopBarConfig.current
+    val context = LocalContext.current
 
     val filePickerLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri ->
         uri?.let { state.onFileSelected(it) }
             ?: state.onFilePickerDismissed()
+    }
+
+    ObserveAsEvents(viewModel.intentAction) { intent ->
+        val activity = context as Activity
+
+        try {
+            activity.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Timber.e(e)
+        }
     }
 
     LaunchedEffect(state.shouldShowFilePicker) {
@@ -122,6 +139,8 @@ private fun SettingsBackupScreen(state: SettingsBackupViewState) {
 
 @Composable
 private fun ExportDataWidget(state: SettingsBackupViewState) {
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -145,7 +164,7 @@ private fun ExportDataWidget(state: SettingsBackupViewState) {
             if (state.isBackupInProgress) {
                 Column {
                     Text(
-                        text = state.currentOperation,
+                        text = state.currentOperation.asString(context),
                         style = MaterialTheme.typography.bodySmall
                     )
                     LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -199,6 +218,7 @@ private fun ExportDataWidget(state: SettingsBackupViewState) {
 
 @Composable
 private fun ImportDataWidget(state: SettingsBackupViewState) {
+    val context = LocalContext.current
     Card(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -222,7 +242,7 @@ private fun ImportDataWidget(state: SettingsBackupViewState) {
             if (state.isImportInProgress) {
                 Column {
                     Text(
-                        text = state.currentImportOperation,
+                        text = state.currentImportOperation.asString(context),
                         style = MaterialTheme.typography.bodySmall
                     )
                     LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
@@ -249,11 +269,13 @@ private fun ImportDataWidget(state: SettingsBackupViewState) {
                         result.importedProducts,
                         result.importedImages
                     )
+
                     is ImportResult.PartialSuccess -> stringResource(
                         RString.imported_summary_warnings,
                         result.importedProducts,
                         result.importedImages
                     )
+
                     is ImportResult.Failure -> stringResource(RString.import_failed)
                 }
                 TextButton(

@@ -156,11 +156,7 @@ class ProductsRepositoryImpl @Inject constructor(
         }
 
     override suspend fun getAllProducts(): ImmutableList<Product> = withContext(ioDispatcher) {
-        productsDao.getAllProducts().map {
-            productsMapper.toProduct(
-                productEntity = it.productEntity,
-                images = it.files
-            )
-        }.toImmutableList()
+        val allProducts = productsDao.getAllProducts()
+        productsMapper.toProductList(allProducts)
     }
 }
