@@ -25,6 +25,7 @@ import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
 import com.grappim.hateitorrateit.data.backupapi.models.ProductImageExport
 import com.grappim.hateitorrateit.data.backupapi.models.SettingsExport
 import com.grappim.hateitorrateit.data.backupimpl.models.BackupInfo
+import com.grappim.hateitorrateit.data.backupimpl.utils.BackupEligibilityChecker
 import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.BACKUP_DATA_JSON
 import com.grappim.hateitorrateit.data.backupimpl.utils.Constants.IMAGES_ZIP_FOLDER
 import com.grappim.hateitorrateit.data.backupimpl.utils.ImportVersionChecker
@@ -37,6 +38,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.channelFlow
@@ -60,7 +62,8 @@ class BackupRepositoryImpl @Inject constructor(
     private val folderPathManager: FolderPathManager,
     private val json: Json,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val dateTimeUtils: DateTimeUtils
+    private val dateTimeUtils: DateTimeUtils,
+    private val backupEligibilityChecker: BackupEligibilityChecker
 ) : BackupRepository {
 
     override suspend fun createBackupWithProgress(): Flow<BackupState> = channelFlow {
@@ -71,7 +74,7 @@ class BackupRepositoryImpl @Inject constructor(
                 )
             )
 
-            if (!canCreateBackup()) {
+            if (!backupEligibilityChecker.canCreateBackup()) {
                 send(
                     BackupState.Completed(
                         BackupResult.Failure(
@@ -82,12 +85,6 @@ class BackupRepositoryImpl @Inject constructor(
                 )
                 return@channelFlow
             }
-
-            send(
-                BackupState.Progress(
-                    BackupProgress(phase = INITIALIZING)
-                )
-            )
 
             send(
                 BackupState.Progress(
@@ -135,22 +132,6 @@ class BackupRepositoryImpl @Inject constructor(
             )
         }
     }.flowOn(ioDispatcher)
-
-    override suspend fun canCreateBackup(): Boolean =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            true
-        } else {
-            try {
-                val downloadsDir = folderPathManager.getBackupParentFolder()
-                val backupChildFolder = folderPathManager.getBackupChildFolderName()
-                val hiorDir = File(downloadsDir, backupChildFolder)
-                (downloadsDir.exists() || downloadsDir.mkdirs()) &&
-                    (hiorDir.exists() || hiorDir.mkdirs())
-            } catch (e: Exception) {
-                Timber.e(e, "Cannot access Downloads/hior directory")
-                false
-            }
-        }
 
     private suspend fun writeBackupData(
         exportData: ExportData,

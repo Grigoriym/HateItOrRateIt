@@ -1,7 +1,6 @@
-package com.grappim.hateitorrateit.data.backupimpl.conflict
+package com.grappim.hateitorrateit.data.backupimpl.utils
 
 import com.grappim.hateitorrateit.data.backupapi.models.ProductExport
-import com.grappim.hateitorrateit.data.backupimpl.utils.ProductConflictDetector
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.testing.domain.getFakeProduct
@@ -11,8 +10,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Test
 import java.time.OffsetDateTime
 
@@ -28,7 +26,7 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(productsToImport)
 
-        assertTrue("Should return empty map when no existing products", result.isEmpty())
+        Assert.assertTrue("Should return empty map when no existing products", result.isEmpty())
     }
 
     @Test
@@ -39,7 +37,7 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(productsToImport)
 
-        assertTrue("Should return empty map when no matching products", result.isEmpty())
+        Assert.assertTrue("Should return empty map when no matching products", result.isEmpty())
     }
 
     @Test
@@ -66,8 +64,8 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(listOf(productToImport))
 
-        assertEquals("Should find one conflict", 1, result.size)
-        assertEquals(
+        Assert.assertEquals("Should find one conflict", 1, result.size)
+        Assert.assertEquals(
             "Should map import product to existing product",
             existingProduct,
             result[productToImport]
@@ -94,8 +92,8 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(listOf(productToImport))
 
-        assertEquals("Should find conflict despite case difference", 1, result.size)
-        assertEquals(
+        Assert.assertEquals("Should find conflict despite case difference", 1, result.size)
+        Assert.assertEquals(
             "Should map import product to existing product",
             existingProduct,
             result[productToImport]
@@ -124,7 +122,7 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(listOf(productToImport))
 
-        assertTrue("Should not match when types differ", result.isEmpty())
+        Assert.assertTrue("Should not match when types differ", result.isEmpty())
     }
 
     @Test
@@ -146,7 +144,7 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(listOf(productToImport))
 
-        assertTrue("Should not match when shops differ", result.isEmpty())
+        Assert.assertTrue("Should not match when shops differ", result.isEmpty())
     }
 
     @Test
@@ -168,7 +166,7 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(listOf(productToImport))
 
-        assertTrue("Should not match when descriptions differ", result.isEmpty())
+        Assert.assertTrue("Should not match when descriptions differ", result.isEmpty())
     }
 
     @Test
@@ -193,13 +191,13 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(productsToImport)
 
-        assertEquals("Should find exactly one conflict", 1, result.size)
-        assertEquals(
+        Assert.assertEquals("Should find exactly one conflict", 1, result.size)
+        Assert.assertEquals(
             "Should map conflicting product correctly",
             existingProduct,
             result[conflictingProduct]
         )
-        assertTrue(
+        Assert.assertTrue(
             "Non-conflicting product should not be in results",
             !result.containsKey(nonConflictingProduct)
         )
@@ -235,8 +233,8 @@ internal class ProductConflictDetectorTest {
 
         val result = sut.detectConflicts(listOf(productToImport))
 
-        assertEquals("Should find exactly one conflict", 1, result.size)
-        assertEquals(
+        Assert.assertEquals("Should find exactly one conflict", 1, result.size)
+        Assert.assertEquals(
             "Should match with first existing product",
             existingProduct1,
             result[productToImport]

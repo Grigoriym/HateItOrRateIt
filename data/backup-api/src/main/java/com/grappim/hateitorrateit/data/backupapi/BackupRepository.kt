@@ -10,10 +10,4 @@ interface BackupRepository {
      * @return Flow of backup state including progress updates and final result
      */
     suspend fun createBackupWithProgress(): Flow<BackupState>
-
-    /**
-     * Validates if backup can be created (checks permissions, storage space, etc.)
-     * @return True if backup can be created, false otherwise
-     */
-    suspend fun canCreateBackup(): Boolean
 }
