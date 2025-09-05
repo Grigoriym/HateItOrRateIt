@@ -82,4 +82,33 @@
     <string name="import_data">Import Data</string>
     <string name="import_data_description">Restore your products, images, and settings from a previously created backup file.</string>
     <string name="select_backup_file">Select Backup File</string>
+    
+    <!-- Import Mode Dialog -->
+    <string name="choose_import_mode">Choose Import Mode</string>
+    <string name="import_mode_question">How would you like to handle existing products during import?</string>
+    <string name="create_new">Create New</string>
+    <string name="create_new_description">Always import as new products</string>
+    <string name="replace_existing">Replace Existing</string>
+    <string name="replace_existing_description">Replace matching products</string>
+    <string name="skip_conflicts">Skip Conflicts</string>
+    <string name="skip_conflicts_description">Skip conflicting products, import only new ones</string>
+    <string name="tap_for_details">Tap for details</string>
+    
+    <!-- Import Result Dialog -->
+    <string name="import_completed_successfully">Import Completed Successfully</string>
+    <string name="import_completed_with_warnings">Import Completed with Warnings</string>
+    <string name="import_failed">Import Failed</string>
+    <string name="successfully_imported">Successfully imported:</string>
+    <string name="products_count">%1$d products</string>
+    <string name="images_count">%1$d images</string>
+    <string name="app_settings">App settings</string>
+    <string name="skipped_products">Skipped Products:</string>
+    <string name="failed_images">Failed Images:</string>
+    <string name="warnings">Warnings:</string>
+    <string name="import_failed_message">Import failed:</string>
+    <string name="error_type">Error type: %1$s</string>
+    
+    <!-- Import Summary -->
+    <string name="imported_summary_success">Imported %1$d products, %2$d images</string>
+    <string name="imported_summary_warnings">Imported %1$d products, %2$d images (with warnings)</string>
 </resources>

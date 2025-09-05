@@ -275,7 +275,13 @@ class ImportRepositoryImpl @Inject constructor(
             }
         }
 
-        return ProductImportResult(importedProducts, importedImages, failedImages, warnings, skippedProducts)
+        return ProductImportResult(
+            importedProducts,
+            importedImages,
+            failedImages,
+            warnings,
+            skippedProducts
+        )
     }
 
     private suspend fun importSingleProduct(
@@ -409,7 +415,7 @@ class ImportRepositoryImpl @Inject constructor(
         // In SKIP_CONFLICTS mode, skipped products are expected behavior, not failures
         val hasRealWarnings = warnings.isNotEmpty()
         val hasFailures = failedImages.isNotEmpty()
-        
+
         return when {
             // Complete success: no warnings, no failures
             !hasRealWarnings && !hasFailures -> {
@@ -419,7 +425,7 @@ class ImportRepositoryImpl @Inject constructor(
                     importedSettings = importedSettings
                 )
             }
-            
+
             // Partial success: has warnings or failures, but some imports succeeded
             else -> {
                 ImportResult.PartialSuccess(

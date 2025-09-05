@@ -70,4 +70,33 @@
     <string name="import_data">Daten importieren</string>
     <string name="import_data_description">Stellen Sie Ihre Produkte, Bilder und Einstellungen aus einer zuvor erstellten Backup-Datei wieder her.</string>
     <string name="select_backup_file">Backup-Datei auswählen</string>
+    
+    <!-- Import Mode Dialog -->
+    <string name="choose_import_mode">Import-Modus auswählen</string>
+    <string name="import_mode_question">Wie möchten Sie mit vorhandenen Produkten beim Import umgehen?</string>
+    <string name="create_new">Neue erstellen</string>
+    <string name="create_new_description">Immer als neue Produkte importieren</string>
+    <string name="replace_existing">Vorhandene ersetzen</string>
+    <string name="replace_existing_description">Übereinstimmende Produkte ersetzen</string>
+    <string name="skip_conflicts">Konflikte überspringen</string>
+    <string name="skip_conflicts_description">Konfliktprodukte überspringen, nur neue importieren</string>
+    <string name="tap_for_details">Für Details antippen</string>
+    
+    <!-- Import Result Dialog -->
+    <string name="import_completed_successfully">Import erfolgreich abgeschlossen</string>
+    <string name="import_completed_with_warnings">Import mit Warnungen abgeschlossen</string>
+    <string name="import_failed">Import fehlgeschlagen</string>
+    <string name="successfully_imported">Erfolgreich importiert:</string>
+    <string name="products_count">%1$d Produkte</string>
+    <string name="images_count">%1$d Bilder</string>
+    <string name="app_settings">App-Einstellungen</string>
+    <string name="skipped_products">Übersprungene Produkte:</string>
+    <string name="failed_images">Fehlgeschlagene Bilder:</string>
+    <string name="warnings">Warnungen:</string>
+    <string name="import_failed_message">Import fehlgeschlagen:</string>
+    <string name="error_type">Fehlertyp: %1$s</string>
+    
+    <!-- Import Summary -->
+    <string name="imported_summary_success">%1$d Produkte, %2$d Bilder importiert</string>
+    <string name="imported_summary_warnings">%1$d Produkte, %2$d Bilder importiert (mit Warnungen)</string>
 </resources>

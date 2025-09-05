@@ -71,4 +71,33 @@
     <string name="import_data">Importer des données</string>
     <string name="import_data_description">Restaurez vos produits, images et paramètres à partir d\'un fichier de sauvegarde créé précédemment.</string>
     <string name="select_backup_file">Sélectionner le fichier de sauvegarde</string>
+    
+    <!-- Import Mode Dialog -->
+    <string name="choose_import_mode">Choisir le mode d\'importation</string>
+    <string name="import_mode_question">Comment souhaitez-vous gérer les produits existants lors de l\'importation ?</string>
+    <string name="create_new">Créer nouveau</string>
+    <string name="create_new_description">Toujours importer comme nouveaux produits</string>
+    <string name="replace_existing">Remplacer existants</string>
+    <string name="replace_existing_description">Remplacer les produits correspondants</string>
+    <string name="skip_conflicts">Ignorer conflits</string>
+    <string name="skip_conflicts_description">Ignorer les produits en conflit, importer seulement les nouveaux</string>
+    <string name="tap_for_details">Appuyer pour les détails</string>
+    
+    <!-- Import Result Dialog -->
+    <string name="import_completed_successfully">Importation terminée avec succès</string>
+    <string name="import_completed_with_warnings">Importation terminée avec avertissements</string>
+    <string name="import_failed">Importation échouée</string>
+    <string name="successfully_imported">Importé avec succès :</string>
+    <string name="products_count">%1$d produits</string>
+    <string name="images_count">%1$d images</string>
+    <string name="app_settings">Paramètres de l\'app</string>
+    <string name="skipped_products">Produits ignorés :</string>
+    <string name="failed_images">Images échouées :</string>
+    <string name="warnings">Avertissements :</string>
+    <string name="import_failed_message">Importation échouée :</string>
+    <string name="error_type">Type d\'erreur : %1$s</string>
+    
+    <!-- Import Summary -->
+    <string name="imported_summary_success">%1$d produits, %2$d images importés</string>
+    <string name="imported_summary_warnings">%1$d produits, %2$d images importés (avec avertissements)</string>
 </resources>

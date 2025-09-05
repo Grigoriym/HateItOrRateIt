@@ -17,6 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.Save
 import androidx.compose.material.icons.outlined.Upload
@@ -241,16 +244,24 @@ private fun ImportDataWidget(state: SettingsBackupViewState) {
             state.lastImportResult?.let { result ->
                 PlatoHeightSpacer16()
                 val summaryText = when (result) {
-                    is ImportResult.Success -> "✅ Imported ${result.importedProducts} products, ${result.importedImages} images"
-                    is ImportResult.PartialSuccess -> "⚠️ Imported ${result.importedProducts} products, ${result.importedImages} images (with warnings)"
-                    is ImportResult.Failure -> "❌ Import failed"
+                    is ImportResult.Success -> stringResource(
+                        RString.imported_summary_success,
+                        result.importedProducts,
+                        result.importedImages
+                    )
+                    is ImportResult.PartialSuccess -> stringResource(
+                        RString.imported_summary_warnings,
+                        result.importedProducts,
+                        result.importedImages
+                    )
+                    is ImportResult.Failure -> stringResource(RString.import_failed)
                 }
                 TextButton(
                     onClick = state.onShowImportResultDialog,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(
-                        text = "$summaryText - Tap for details",
+                        text = "$summaryText - ${stringResource(RString.tap_for_details)}",
                         style = MaterialTheme.typography.bodySmall
                     )
                 }
@@ -274,12 +285,12 @@ private fun ImportModeDialog(onImportModeSelect: (ImportMode) -> Unit, onDismiss
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text("Choose Import Mode")
+            Text(stringResource(RString.choose_import_mode))
         },
         text = {
             Column {
                 Text(
-                    text = "How would you like to handle existing products during import?",
+                    text = stringResource(RString.import_mode_question),
                     style = MaterialTheme.typography.bodyMedium
                 )
 
@@ -289,10 +300,10 @@ private fun ImportModeDialog(onImportModeSelect: (ImportMode) -> Unit, onDismiss
                     onClick = { onImportModeSelect(ImportMode.CREATE_NEW) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Create New")
+                    Text(stringResource(RString.create_new))
                 }
                 Text(
-                    text = "Always import as new products",
+                    text = stringResource(RString.create_new_description),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                 )
@@ -301,10 +312,10 @@ private fun ImportModeDialog(onImportModeSelect: (ImportMode) -> Unit, onDismiss
                     onClick = { onImportModeSelect(ImportMode.REPLACE_EXISTING) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Replace Existing")
+                    Text(stringResource(RString.replace_existing))
                 }
                 Text(
-                    text = "Replace matching products",
+                    text = stringResource(RString.replace_existing_description),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp, bottom = 8.dp)
                 )
@@ -313,10 +324,10 @@ private fun ImportModeDialog(onImportModeSelect: (ImportMode) -> Unit, onDismiss
                     onClick = { onImportModeSelect(ImportMode.SKIP_CONFLICTS) },
                     modifier = Modifier.fillMaxWidth()
                 ) {
-                    Text("Skip Conflicts")
+                    Text(stringResource(RString.skip_conflicts))
                 }
                 Text(
-                    text = "Skip conflicting products, import only new ones",
+                    text = stringResource(RString.skip_conflicts_description),
                     style = MaterialTheme.typography.bodySmall,
                     modifier = Modifier.padding(start = 16.dp)
                 )
@@ -325,27 +336,46 @@ private fun ImportModeDialog(onImportModeSelect: (ImportMode) -> Unit, onDismiss
         confirmButton = {},
         dismissButton = {
             TextButton(onClick = onDismiss) {
-                Text("Cancel")
+                Text(stringResource(RString.cancel))
             }
         }
     )
 }
 
 @Composable
-private fun ImportResultDialog(
-    importResult: ImportResult,
-    onDismiss: () -> Unit
-) {
+private fun ImportResultDialog(importResult: ImportResult, onDismiss: () -> Unit) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = {
-            Text(
-                text = when (importResult) {
-                    is ImportResult.Success -> "✅ Import Completed Successfully"
-                    is ImportResult.PartialSuccess -> "⚠️ Import Completed with Warnings"
-                    is ImportResult.Failure -> "❌ Import Failed"
-                }
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = when (importResult) {
+                        is ImportResult.Success -> Icons.Filled.CheckCircle
+                        is ImportResult.PartialSuccess -> Icons.Filled.Warning
+                        is ImportResult.Failure -> Icons.Filled.Error
+                    },
+                    contentDescription = null,
+                    tint = when (importResult) {
+                        is ImportResult.Success -> MaterialTheme.colorScheme.primary
+                        is ImportResult.PartialSuccess -> MaterialTheme.colorScheme.secondary
+                        is ImportResult.Failure -> MaterialTheme.colorScheme.error
+                    }
+                )
+                Text(
+                    text = when (importResult) {
+                        is ImportResult.Success -> stringResource(
+                            RString.import_completed_successfully
+                        )
+                        is ImportResult.PartialSuccess -> stringResource(
+                            RString.import_completed_with_warnings
+                        )
+                        is ImportResult.Failure -> stringResource(RString.import_failed)
+                    }
+                )
+            }
         },
         text = {
             LazyColumn(
@@ -356,43 +386,63 @@ private fun ImportResultDialog(
                         item {
                             Column {
                                 Text(
-                                    text = "Successfully imported:",
+                                    text = stringResource(RString.successfully_imported),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Text("• ${importResult.importedProducts} products")
-                                Text("• ${importResult.importedImages} images")
+                                Text(
+                                    "• ${stringResource(
+                                        RString.products_count,
+                                        importResult.importedProducts
+                                    )}"
+                                )
+                                Text(
+                                    "• ${stringResource(
+                                        RString.images_count,
+                                        importResult.importedImages
+                                    )}"
+                                )
                                 if (importResult.importedSettings) {
-                                    Text("• App settings")
+                                    Text("• ${stringResource(RString.app_settings)}")
                                 }
                             }
                         }
                     }
-                    
+
                     is ImportResult.PartialSuccess -> {
                         item {
                             Column {
                                 Text(
-                                    text = "Successfully imported:",
+                                    text = stringResource(RString.successfully_imported),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.primary
                                 )
                                 Spacer(modifier = Modifier.height(8.dp))
-                                Text("• ${importResult.importedProducts} products")
-                                Text("• ${importResult.importedImages} images")
+                                Text(
+                                    "• ${stringResource(
+                                        RString.products_count,
+                                        importResult.importedProducts
+                                    )}"
+                                )
+                                Text(
+                                    "• ${stringResource(
+                                        RString.images_count,
+                                        importResult.importedImages
+                                    )}"
+                                )
                                 if (importResult.importedSettings) {
-                                    Text("• App settings")
+                                    Text("• ${stringResource(RString.app_settings)}")
                                 }
-                                
+
                                 Spacer(modifier = Modifier.height(16.dp))
                             }
                         }
-                        
+
                         if (importResult.skippedProducts.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Skipped Products:",
+                                    text = stringResource(RString.skipped_products),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
@@ -407,11 +457,11 @@ private fun ImportResultDialog(
                             }
                             item { Spacer(modifier = Modifier.height(8.dp)) }
                         }
-                        
+
                         if (importResult.failedImages.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Failed Images:",
+                                    text = stringResource(RString.failed_images),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.error
                                 )
@@ -427,11 +477,11 @@ private fun ImportResultDialog(
                             }
                             item { Spacer(modifier = Modifier.height(8.dp)) }
                         }
-                        
+
                         if (importResult.warnings.isNotEmpty()) {
                             item {
                                 Text(
-                                    text = "Warnings:",
+                                    text = stringResource(RString.warnings),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.onSurface
                                 )
@@ -453,12 +503,12 @@ private fun ImportResultDialog(
                             }
                         }
                     }
-                    
+
                     is ImportResult.Failure -> {
                         item {
                             Column {
                                 Text(
-                                    text = "Import failed:",
+                                    text = stringResource(RString.import_failed_message),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.error
                                 )
@@ -476,7 +526,7 @@ private fun ImportResultDialog(
                                 }
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Text(
-                                    text = "Error type: ${importResult.error}",
+                                    text = stringResource(RString.error_type, importResult.error),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant
                                 )
@@ -488,7 +538,7 @@ private fun ImportResultDialog(
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text("OK")
+                Text(stringResource(RString.ok))
             }
         }
     )
