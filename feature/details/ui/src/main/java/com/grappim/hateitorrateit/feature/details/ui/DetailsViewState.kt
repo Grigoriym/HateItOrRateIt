@@ -40,8 +40,6 @@ data class DetailsViewState(
     val saveFileToGallery: (ProductImage) -> Unit,
 
     val onShareImageClick: (productImage: ProductImage) -> Unit,
-    val shareImageIntent: Intent? = null,
-    val clearShareImageIntent: () -> Unit,
     val showProvidePermissionsAlertDialog: Boolean = false,
     val permissionsAlertDialogText: String = "",
     val onShowPermissionsAlertDialog: (show: Boolean, text: String?) -> Unit

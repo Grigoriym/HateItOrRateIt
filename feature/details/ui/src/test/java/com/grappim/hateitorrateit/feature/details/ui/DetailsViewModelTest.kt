@@ -35,7 +35,6 @@ import org.junit.Test
 import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class DetailsViewModelTest {
@@ -196,45 +195,6 @@ class DetailsViewModelTest {
         sut.viewState.value.onShowPermissionsAlertDialog(true, text)
         assertTrue(sut.viewState.value.showProvidePermissionsAlertDialog)
         assertEquals(text, sut.viewState.value.permissionsAlertDialogText)
-    }
-
-    @Test
-    fun `on clearShareImageIntent should make the intent null`() {
-        val productImage = createRandomProductImage()
-        val expected = Intent("someAction")
-
-        every {
-            intentGenerator.generateIntentToShareImage(
-                productImage.uriString,
-                productImage.mimeType
-            )
-        } returns expected
-
-        assertNull(sut.viewState.value.shareImageIntent)
-
-        sut.viewState.value.onShareImageClick(productImage)
-
-        assertEquals(expected, sut.viewState.value.shareImageIntent)
-
-        sut.viewState.value.clearShareImageIntent()
-
-        assertNull(sut.viewState.value.shareImageIntent)
-    }
-
-    @Test
-    fun `on onShareImageClicked should generate the intent`() {
-        val productImage = createRandomProductImage()
-        val expected = Intent("someAction")
-        every {
-            intentGenerator.generateIntentToShareImage(
-                productImage.uriString,
-                productImage.mimeType
-            )
-        } returns expected
-
-        sut.viewState.value.onShareImageClick(productImage)
-
-        assertEquals(expected, sut.viewState.value.shareImageIntent)
     }
 
     @Test
