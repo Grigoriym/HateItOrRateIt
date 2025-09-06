@@ -83,7 +83,7 @@ private fun MainScreenContent(topBarConfig: TopBarConfig) {
                 }
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButtonPosition = FabPosition.End,
         bottomBar = {
             if (appState.isBottomBarVisible) {
                 BottomBar(
