@@ -12,6 +12,8 @@ import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.navigation.DetailsNavDestination
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
+import com.grappim.hateitorrateit.utils.ui.IntentActionDelegate
+import com.grappim.hateitorrateit.utils.ui.IntentActionDelegateImpl
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.SnackbarDelegate
 import com.grappim.hateitorrateit.utils.ui.SnackbarDelegateImpl
@@ -35,7 +37,8 @@ class DetailsViewModel @Inject constructor(
     private val intentGenerator: IntentGenerator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    SnackbarDelegate by SnackbarDelegateImpl() {
+    SnackbarDelegate by SnackbarDelegateImpl(),
+    IntentActionDelegate by IntentActionDelegateImpl() {
 
     private val route = savedStateHandle.toRoute<DetailsNavDestination>()
 
@@ -58,7 +61,6 @@ class DetailsViewModel @Inject constructor(
             setSnackbarMessage = ::setSnackbarMessage,
             saveFileToGallery = ::saveFileToGallery,
             onShareImageClick = ::onShareImageClicked,
-            clearShareImageIntent = ::clearShareImageIntent,
             onShowPermissionsAlertDialog = ::onShowPermissionsAlertDialog
         )
     )
@@ -78,22 +80,13 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * To fix the issue when we navigate back to this screen and intent is called again
-     */
-    private fun clearShareImageIntent() {
-        _viewState.update {
-            it.copy(shareImageIntent = null)
-        }
-    }
-
     private fun onShareImageClicked(productImage: ProductImage) {
-        val intent = intentGenerator.generateIntentToShareImage(
-            uriString = productImage.uriString,
-            mimeType = productImage.mimeType
-        )
-        _viewState.update {
-            it.copy(shareImageIntent = intent)
+        viewModelScope.launch {
+            val intent = intentGenerator.generateIntentToShareImage(
+                uriString = productImage.uriString,
+                mimeType = productImage.mimeType
+            )
+            useIntentAction(intent)
         }
     }
 

@@ -122,6 +122,16 @@ fun DetailsRoute(
         }
     }
 
+    ObserveAsEvents(viewModel.intentAction) { intent ->
+        val activity = context as Activity
+        try {
+            activity.startActivity(intent)
+        } catch (e: ActivityNotFoundException) {
+            Timber.e(e)
+            state.setSnackbarMessage(NativeText.Resource(R.string.share_image_error))
+        }
+    }
+
     DisposableEffect(Unit) {
         state.trackScreenStart
         onDispose {}
@@ -272,19 +282,6 @@ private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
     val permissionState = rememberPermissionState(
         permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
-
-    LaunchedEffect(state.shareImageIntent) {
-        if (state.shareImageIntent != null) {
-            try {
-                activity.startActivity(state.shareImageIntent)
-            } catch (e: ActivityNotFoundException) {
-                Timber.e(e)
-                state.setSnackbarMessage(NativeText.Resource(R.string.share_image_error))
-            } finally {
-                state.clearShareImageIntent()
-            }
-        }
-    }
 
     if (state.currentImage != null) {
         PlatoAlertDialog(
@@ -562,7 +559,6 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
                 setSnackbarMessage = {},
                 saveFileToGallery = { _ -> },
                 onShareImageClick = { _ -> },
-                clearShareImageIntent = {},
                 onShowPermissionsAlertDialog = { _, _ -> },
                 appSettingsIntent = Intent()
             )
