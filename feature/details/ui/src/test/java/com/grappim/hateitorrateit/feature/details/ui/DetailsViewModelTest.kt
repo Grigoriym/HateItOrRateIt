@@ -1,9 +1,7 @@
 package com.grappim.hateitorrateit.feature.details.ui
 
 import android.content.Intent
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
@@ -11,7 +9,9 @@ import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.data.repoapi.models.Product
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.model.ProductDetailsUi
+import com.grappim.hateitorrateit.feature.details.ui.navigation.DetailsNavDestination
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.SavedStateHandleRule
 import com.grappim.hateitorrateit.testing.core.testException
 import com.grappim.hateitorrateit.testing.domain.NAME
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_FOLDER_NAME
@@ -35,7 +35,6 @@ import org.junit.Test
 import java.time.OffsetDateTime
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
-import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 class DetailsViewModelTest {
@@ -43,14 +42,17 @@ class DetailsViewModelTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
+    private val route = DetailsNavDestination(PRODUCT_ID)
+
+    @get:Rule
+    val savedStateHandleRule = SavedStateHandleRule(route)
+
     private val productsRepository: ProductsRepository = mockk()
     private val uiModelsMapper: UiModelsMapper = mockk()
     private val dataCleaner: DataCleaner = mockk()
     private val detailsAnalytics: DetailsAnalytics = mockk()
     private val galleryInteractions: GalleryInteractions = mockk()
     private val intentGenerator: IntentGenerator = mockk()
-
-    private lateinit var savedStateHandle: SavedStateHandle
 
     private lateinit var sut: DetailsViewModel
 
@@ -66,7 +68,7 @@ class DetailsViewModelTest {
     )
 
     private val productUi = ProductDetailsUi(
-        id = PRODUCT_ID.toString(),
+        id = PRODUCT_ID,
         name = NAME,
         createdDate = "reque",
         images = createRandomProductImageList(),
@@ -78,9 +80,6 @@ class DetailsViewModelTest {
 
     @Before
     fun setup() {
-        savedStateHandle = SavedStateHandle().apply {
-            this[NavDestinations.Details.KEY] = PRODUCT_ID
-        }
         coEvery {
             productsRepository.getProductById(any())
         } returns product
@@ -93,7 +92,7 @@ class DetailsViewModelTest {
             uiModelsMapper = uiModelsMapper,
             dataCleaner = dataCleaner,
             detailsAnalytics = detailsAnalytics,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = savedStateHandleRule.savedStateHandleMock,
             galleryInteractions = galleryInteractions,
             intentGenerator = intentGenerator
         )
@@ -125,7 +124,7 @@ class DetailsViewModelTest {
         sut.viewState.value.onDeleteProductConfirm()
 
         assertTrue(sut.viewState.value.isLoading)
-        assertEquals(sut.viewState.value.productId, PRODUCT_ID.toString())
+        assertEquals(sut.viewState.value.productId, PRODUCT_ID)
         coVerify {
             dataCleaner.deleteProductData(
                 productId = PRODUCT_ID,
@@ -165,7 +164,7 @@ class DetailsViewModelTest {
 
         val state = sut.viewState.value
 
-        assertEquals(state.productId, PRODUCT_ID.toString())
+        assertEquals(state.productId, PRODUCT_ID)
         assertEquals(state.name, NAME)
         assertFalse(state.isLoading)
         assertEquals(state.productFolderName, PRODUCT_FOLDER_NAME)
@@ -196,45 +195,6 @@ class DetailsViewModelTest {
         sut.viewState.value.onShowPermissionsAlertDialog(true, text)
         assertTrue(sut.viewState.value.showProvidePermissionsAlertDialog)
         assertEquals(text, sut.viewState.value.permissionsAlertDialogText)
-    }
-
-    @Test
-    fun `on clearShareImageIntent should make the intent null`() {
-        val productImage = createRandomProductImage()
-        val expected = Intent("someAction")
-
-        every {
-            intentGenerator.generateIntentToShareImage(
-                productImage.uriString,
-                productImage.mimeType
-            )
-        } returns expected
-
-        assertNull(sut.viewState.value.shareImageIntent)
-
-        sut.viewState.value.onShareImageClick(productImage)
-
-        assertEquals(expected, sut.viewState.value.shareImageIntent)
-
-        sut.viewState.value.clearShareImageIntent()
-
-        assertNull(sut.viewState.value.shareImageIntent)
-    }
-
-    @Test
-    fun `on onShareImageClicked should generate the intent`() {
-        val productImage = createRandomProductImage()
-        val expected = Intent("someAction")
-        every {
-            intentGenerator.generateIntentToShareImage(
-                productImage.uriString,
-                productImage.mimeType
-            )
-        } returns expected
-
-        sut.viewState.value.onShareImageClick(productImage)
-
-        assertEquals(expected, sut.viewState.value.shareImageIntent)
     }
 
     @Test

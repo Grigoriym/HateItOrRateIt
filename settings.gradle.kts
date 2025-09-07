@@ -53,7 +53,6 @@ include(":feature:settings:ui")
 
 include(
     ":core:appinfo-api",
-    ":core:navigation",
     ":core:async"
 )
 
@@ -73,6 +72,9 @@ include(":utils:android-impl")
 include(":utils:android-api")
 include(":core:app-update-api")
 include(":core:app-update-impl")
+include(":strings")
+include(":data:backup-api")
+include(":data:backup-impl")
 
 check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
     """

@@ -23,7 +23,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class RemoteConfigsListenerImpl @Inject constructor(
     private val firebaseRemoteConfig: FirebaseRemoteConfig,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher

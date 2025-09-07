@@ -1,11 +1,11 @@
 package com.grappim.hateitorrateit.utils.androidimpl
 
-import android.annotation.TargetApi
 import android.content.ContentValues
 import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
 import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.core.async.resultOf
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
@@ -70,7 +70,7 @@ class GalleryInteractionsImpl @Inject constructor(
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.Q)
+    @RequiresApi(Build.VERSION_CODES.Q)
     private suspend fun saveImage(uriString: String, name: String, mimeType: String): Result<Unit> =
         resultOf {
             withContext(ioDispatcher) {

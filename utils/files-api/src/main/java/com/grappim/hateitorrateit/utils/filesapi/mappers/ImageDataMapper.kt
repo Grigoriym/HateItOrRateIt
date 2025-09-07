@@ -2,6 +2,7 @@ package com.grappim.hateitorrateit.utils.filesapi.mappers
 
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
+import kotlinx.collections.immutable.ImmutableList
 
 interface ImageDataMapper {
     suspend fun toProductImageData(productImageUIData: ProductImageUIData): ProductImage
@@ -10,5 +11,5 @@ interface ImageDataMapper {
 
     suspend fun toImageData(productImage: ProductImage): ProductImageUIData
 
-    suspend fun toImageDataList(list: List<ProductImage>): List<ProductImageUIData>
+    suspend fun toImageDataList(list: List<ProductImage>): ImmutableList<ProductImageUIData>
 }

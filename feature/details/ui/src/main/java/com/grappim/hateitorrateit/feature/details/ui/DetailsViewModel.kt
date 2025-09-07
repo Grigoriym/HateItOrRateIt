@@ -3,17 +3,20 @@ package com.grappim.hateitorrateit.feature.details.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import androidx.navigation.toRoute
 import com.grappim.hateitorrateit.data.analyticsapi.DetailsAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
+import com.grappim.hateitorrateit.feature.details.ui.navigation.DetailsNavDestination
 import com.grappim.hateitorrateit.utils.androidapi.GalleryInteractions
 import com.grappim.hateitorrateit.utils.androidapi.IntentGenerator
+import com.grappim.hateitorrateit.utils.ui.IntentActionDelegate
+import com.grappim.hateitorrateit.utils.ui.IntentActionDelegateImpl
 import com.grappim.hateitorrateit.utils.ui.NativeText
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModel
-import com.grappim.hateitorrateit.utils.ui.SnackbarStateViewModelImpl
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegate
+import com.grappim.hateitorrateit.utils.ui.SnackbarDelegateImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,16 +37,19 @@ class DetailsViewModel @Inject constructor(
     private val intentGenerator: IntentGenerator,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(),
-    SnackbarStateViewModel by SnackbarStateViewModelImpl() {
+    SnackbarDelegate by SnackbarDelegateImpl(),
+    IntentActionDelegate by IntentActionDelegateImpl() {
 
-    private val productId =
-        requireNotNull(savedStateHandle.get<Long>(NavDestinations.Details.KEY))
+    private val route = savedStateHandle.toRoute<DetailsNavDestination>()
+
+    private val productId = route.productId
 
     private val _viewEvents = Channel<DetailsEvents>()
     val viewEvents = _viewEvents.receiveAsFlow()
 
     private val _viewState = MutableStateFlow(
         DetailsViewState(
+            productId = productId,
             appSettingsIntent = intentGenerator.generateAppSettingsIntent(),
             onDeleteProduct = ::deleteProduct,
             onShowAlertDialog = ::showAlertDialog,
@@ -55,7 +61,6 @@ class DetailsViewModel @Inject constructor(
             setSnackbarMessage = ::setSnackbarMessage,
             saveFileToGallery = ::saveFileToGallery,
             onShareImageClick = ::onShareImageClicked,
-            clearShareImageIntent = ::clearShareImageIntent,
             onShowPermissionsAlertDialog = ::onShowPermissionsAlertDialog
         )
     )
@@ -75,22 +80,13 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    /**
-     * To fix the issue when we navigate back to this screen and intent is called again
-     */
-    private fun clearShareImageIntent() {
-        _viewState.update {
-            it.copy(shareImageIntent = null)
-        }
-    }
-
     private fun onShareImageClicked(productImage: ProductImage) {
-        val intent = intentGenerator.generateIntentToShareImage(
-            uriString = productImage.uriString,
-            mimeType = productImage.mimeType
-        )
-        _viewState.update {
-            it.copy(shareImageIntent = intent)
+        viewModelScope.launch {
+            val intent = intentGenerator.generateIntentToShareImage(
+                uriString = productImage.uriString,
+                mimeType = productImage.mimeType
+            )
+            useIntentAction(intent)
         }
     }
 
@@ -172,7 +168,7 @@ class DetailsViewModel @Inject constructor(
 
     private fun setSnackbarMessage(text: NativeText) {
         viewModelScope.launch {
-            showSnackbarSuspend(text)
+            showSnackbar(text)
         }
     }
 

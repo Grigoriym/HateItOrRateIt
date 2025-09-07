@@ -18,8 +18,8 @@ android {
         applicationId = "com.grappim.hateitorrateit"
         testApplicationId = "com.grappim.hateitorrateit.tests"
 
-        versionCode = 28
-        versionName = "1.4.1"
+        versionCode = 29
+        versionName = "1.5.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -56,8 +56,8 @@ if (isGooglePlayBuild) {
 }
 
 dependencies {
-    implementation(projects.core.navigation)
     implementation(projects.uikit)
+    implementation(projects.strings)
 
     implementation(projects.utils.ui)
     implementation(projects.utils.dateTimeApi)
@@ -84,6 +84,8 @@ dependencies {
     implementation(projects.data.remoteConfigImpl)
     implementation(projects.data.localDatastorageApi)
     implementation(projects.data.localDatastorageImpl)
+    implementation(projects.data.backupApi)
+    implementation(projects.data.backupImpl)
 
     implementation(projects.feature.home.ui)
     implementation(projects.feature.productmanager.ui)
@@ -95,6 +97,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.core.splashScreen)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -109,7 +112,7 @@ dependencies {
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material.core)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material.icons.core)
     implementation(libs.androidx.compose.material.icons.extended)
 
@@ -129,6 +132,6 @@ dependencies {
 }
 
 moduleGraphAssert {
-    maxHeight = 3
+    maxHeight = 5
     assertOnAnyBuild = true
 }

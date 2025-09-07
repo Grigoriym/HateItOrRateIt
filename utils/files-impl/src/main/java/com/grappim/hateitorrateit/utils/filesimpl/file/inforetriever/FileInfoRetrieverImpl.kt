@@ -8,7 +8,7 @@ import com.grappim.hateitorrateit.core.async.IoDispatcher
 import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import com.grappim.hateitorrateit.utils.filesapi.inforetriever.FileInfoRetriever
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
-import com.grappim.hateitorrateit.utils.filesimpl.MimeTypes
+import com.grappim.hateitorrateit.utils.filesimpl.MimeTypesMapper
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
@@ -20,7 +20,7 @@ import javax.inject.Singleton
 @Singleton
 class FileInfoRetrieverImpl @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val mimeTypes: MimeTypes,
+    private val mimeTypesMapper: MimeTypesMapper,
     private val dateTimeUtils: DateTimeUtils,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val folderPathManager: FolderPathManager
@@ -36,7 +36,7 @@ class FileInfoRetrieverImpl @Inject constructor(
 
     override fun getFileExtension(uri: Uri): String {
         val mimeType = getMimeType(uri)
-        return mimeTypes.formatMimeType(mimeType)
+        return mimeTypesMapper.formatMimeType(mimeType)
     }
 
     override fun getMimeType(uri: Uri): String {

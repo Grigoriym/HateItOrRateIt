@@ -14,14 +14,14 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun PlatoPagerIndicator(
@@ -29,7 +29,7 @@ fun PlatoPagerIndicator(
     size: Int,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colors.surface
+    backgroundColor: Color = MaterialTheme.colorScheme.surface
 ) {
     if (show) {
         PlatoCard(
@@ -48,7 +48,7 @@ fun PlatoPagerIndicator(
                         if (pagerState.currentPage == iteration) {
                             Color.DarkGray
                         } else {
-                            MaterialTheme.colors.primary
+                            MaterialTheme.colorScheme.primary
                         }
                     Box(
                         modifier = Modifier
@@ -66,7 +66,7 @@ fun PlatoPagerIndicator(
     }
 }
 
-@[Composable PreviewMulti Suppress("MagicNumber")]
+@[Composable PreviewDarkLight]
 private fun PlatoPagerIndicatorPreview() {
     val pagerState = rememberPagerState {
         5

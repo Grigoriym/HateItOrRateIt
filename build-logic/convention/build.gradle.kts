@@ -30,24 +30,28 @@ dependencies{
 gradlePlugin {
     plugins {
         register("androidHilt") {
-            id = "hateitorrateit.android.hilt"
+            id = libs.plugins.hateitorrateit.android.hilt.get().pluginId
             implementationClass = "AndroidHiltConventionPlugin"
         }
         register("androidLibrary") {
-            id = "hateitorrateit.android.library"
+            id = libs.plugins.hateitorrateit.android.library.asProvider().get().pluginId
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidLibraryCompose") {
-            id = "hateitorrateit.android.library.compose"
+            id = libs.plugins.hateitorrateit.android.library.compose.get().pluginId
             implementationClass = "AndroidLibraryComposeConventionPlugin"
         }
         register("kotlinLibrary") {
-            id = "hateitorrateit.kotlin.library"
+            id = libs.plugins.hateitorrateit.kotlin.library.get().pluginId
             implementationClass = "KotlinLibraryConventionPlugin"
         }
         register("androidApp") {
-            id = "hateitorrateit.android.app"
+            id = libs.plugins.hateitorrateit.android.app.get().pluginId
             implementationClass = "AndroidApplicationConventionPlugin"
+        }
+        register("kotlinSerialization") {
+            id = libs.plugins.hateitorrateit.kotlin.serialization.get().pluginId
+            implementationClass = "KotlinSerializationConventionPlugin"
         }
     }
 }

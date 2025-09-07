@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <!-- Splash Screen Theme -->
+    <style name="Theme.HateItOrRateIt.SplashScreen" parent="Theme.SplashScreen">
+        <!-- Set the splash screen background color -->
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        
+        <!-- Set the splash screen icon -->
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        
+        <!-- Optional: Set the theme for after splash screen -->
+        <item name="postSplashScreenTheme">@style/Theme.HateItOrRateIt.Main</item>
+    </style>
+    
+    <!-- Main App Theme -->
+    <style name="Theme.HateItOrRateIt.Main" parent="Theme.Material3.DayNight.NoActionBar">
+
+    </style>
+
+    <style name="Theme.HateItOrRateIt" parent="Theme.Material3.DayNight.NoActionBar" />
+
+</resources>

@@ -1,14 +1,14 @@
 package com.grappim.hateitorrateit.feature.productmanager.ui
 
-import androidx.lifecycle.SavedStateHandle
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
 import com.grappim.hateitorrateit.data.analyticsapi.ProductManagerAnalytics
 import com.grappim.hateitorrateit.data.cleanerapi.DataCleaner
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.BackupImagesRepository
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.ProductManagerNavDestination
 import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
+import com.grappim.hateitorrateit.testing.core.SavedStateHandleRule
 import com.grappim.hateitorrateit.testing.core.createCameraTakePictureData
 import com.grappim.hateitorrateit.testing.core.createImageData
 import com.grappim.hateitorrateit.testing.domain.DESCRIPTION
@@ -33,8 +33,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
-import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -50,6 +50,11 @@ class ProductManagerViewModelEditTest {
     @get:Rule
     val coroutineRule = MainDispatcherRule()
 
+    private val route = ProductManagerNavDestination(PRODUCT_ID)
+
+    @get:Rule
+    val savedStateHandleRule = SavedStateHandleRule(route)
+
     private val productsRepository: ProductsRepository = mockk()
     private val dataCleaner: DataCleaner = mockk()
     private val localDataStorage: LocalDataStorage = mockk()
@@ -60,22 +65,16 @@ class ProductManagerViewModelEditTest {
     private val imagePersistenceManager: ImagePersistenceManager = mockk()
     private val fileDeletionUtils: FileDeletionUtils = mockk()
     private val fileUriManager: FileUriManager = mockk()
-
-    private lateinit var savedStateHandle: SavedStateHandle
     private lateinit var viewModel: ProductManagerViewModel
 
     @Before
     fun setup() {
-        savedStateHandle = SavedStateHandle()
         every { localDataStorage.typeFlow } returns flowOf(TYPE)
-
-        savedStateHandle[NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID] =
-            PRODUCT_ID.toString()
 
         coEvery { productsRepository.getProductById(any()) } returns editProduct
         coEvery { productImageManager.copyToBackupFolder(any()) } just Runs
         coEvery { backupImagesRepository.insertImages(any(), any()) } just Runs
-        coEvery { imageDataMapper.toImageDataList(any()) } returns emptyList()
+        coEvery { imageDataMapper.toImageDataList(any()) } returns persistentListOf()
 
         viewModel = ProductManagerViewModel(
             productsRepository = productsRepository,
@@ -85,16 +84,11 @@ class ProductManagerViewModelEditTest {
             productImageManager = productImageManager,
             imageDataMapper = imageDataMapper,
             productManagerAnalytics = productManagerAnalytics,
-            savedStateHandle = savedStateHandle,
+            savedStateHandle = savedStateHandleRule.savedStateHandleMock,
             imagePersistenceManager = imagePersistenceManager,
             fileDeletionUtils = fileDeletionUtils,
             fileUriManager = fileUriManager
         )
-    }
-
-    @After
-    fun clear() {
-        savedStateHandle.remove<Long>(NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)
     }
 
     @Test
@@ -149,9 +143,7 @@ class ProductManagerViewModelEditTest {
         coEvery { dataCleaner.deleteBackupFolder(any()) } just Runs
         coEvery { backupImagesRepository.deleteImagesByProductId(any()) } just Runs
 
-        assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Initial)
-
-        viewModel.viewState.value.onQuit()
+        viewModel.viewState.value.onGoBack()
 
         val productFolderName = viewModel.viewState.value.editProduct!!.productFolderName
 
@@ -179,8 +171,6 @@ class ProductManagerViewModelEditTest {
         coVerify {
             backupImagesRepository.deleteImagesByProductId(getEditProductId())
         }
-
-        assertEquals(viewModel.viewState.value.quitStatus, QuitStatus.Finish)
     }
 
     @Test
@@ -202,13 +192,6 @@ class ProductManagerViewModelEditTest {
         viewModel.viewState.value.onShowAlertDialog(true)
 
         assertTrue(viewModel.viewState.value.showAlertDialog)
-    }
-
-    @Test
-    fun `with editProduct, on onForceQuit, forceQUit should be true`() {
-        viewModel.viewState.value.onForceQuit()
-
-        assertTrue(viewModel.viewState.value.forceQuit)
     }
 
     @Test
@@ -415,7 +398,5 @@ class ProductManagerViewModelEditTest {
     private fun getProductFolderName(): String =
         requireNotNull(viewModel.viewState.value.editProduct).productFolderName
 
-    private fun getEditProductId(): Long =
-        savedStateHandle.get<String?>(NavDestinations.ProductManager.KEY_EDIT_PRODUCT_ID)!!
-            .toLong()
+    private fun getEditProductId(): Long = requireNotNull(route.productId)
 }

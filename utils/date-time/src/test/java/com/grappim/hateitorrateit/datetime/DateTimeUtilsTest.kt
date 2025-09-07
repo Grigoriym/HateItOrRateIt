@@ -15,14 +15,17 @@ class DateTimeUtilsTest {
     private val dtfToDemonstrate: DateTimeFormatter = mockk()
     private val dtfDocumentFolder: DateTimeFormatter = mockk()
 
+    private val dtfBackupFolderTimestamp: DateTimeFormatter = mockk()
+
     private lateinit var sut: DateTimeUtilsImpl
 
     @Before
     fun setUp() {
         sut = DateTimeUtilsImpl(
-            dtfToStore,
-            dtfToDemonstrate,
-            dtfDocumentFolder
+            dtfToStore = dtfToStore,
+            dtfToDemonstrate = dtfToDemonstrate,
+            dtfDocumentFolder = dtfDocumentFolder,
+            dtfBackupFolderTimestamp = dtfBackupFolderTimestamp
         )
     }
 

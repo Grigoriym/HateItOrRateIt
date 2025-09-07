@@ -1,13 +1,13 @@
 package com.grappim.hateitorrateit.uikit.widgets.text
 
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import com.grappim.hateitorrateit.uikit.theme.HateItOrRateItTheme
-import com.grappim.hateitorrateit.uikit.utils.PreviewMulti
+import com.grappim.hateitorrateit.uikit.utils.PreviewDarkLight
 
 @Composable
 fun TextH4(
@@ -19,7 +19,7 @@ fun TextH4(
     Text(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.h4,
+        style = MaterialTheme.typography.headlineMedium,
         overflow = overflow,
         maxLines = maxLines,
         textAlign = TextAlign.Center
@@ -36,7 +36,7 @@ fun TextH5(
     Text(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.h5,
+        style = MaterialTheme.typography.headlineSmall,
         overflow = overflow,
         maxLines = maxLines
     )
@@ -52,27 +52,27 @@ fun TextH6(
     Text(
         modifier = modifier,
         text = text,
-        style = MaterialTheme.typography.h6,
+        style = MaterialTheme.typography.titleLarge,
         overflow = overflow,
         maxLines = maxLines
     )
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextH4Preview() {
     HateItOrRateItTheme {
         TextH4(text = "Some Text")
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextH5Preview() {
     HateItOrRateItTheme {
         TextH5(text = "Some Text")
     }
 }
 
-@[Composable PreviewMulti]
+@[Composable PreviewDarkLight]
 private fun TextH6Preview() {
     HateItOrRateItTheme {
         TextH6(text = "Some Text")

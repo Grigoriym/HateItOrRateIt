@@ -13,6 +13,7 @@ dependencies {
     implementation(projects.data.repoApi)
 
     implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.robolectric)
 
     api(libs.junit4)

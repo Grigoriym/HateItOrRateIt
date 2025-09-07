@@ -3,9 +3,10 @@ package com.grappim.hateitorrateit.feature.details.ui.productimage
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.grappim.hateitorrateit.core.navigation.NavDestinations
+import androidx.navigation.toRoute
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
+import com.grappim.hateitorrateit.feature.details.ui.navigation.ProductImageNavDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,13 +21,11 @@ class ProductImageViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val productId = checkNotNull(
-        savedStateHandle.get<String>(NavDestinations.DetailsImage.KEY_PRODUCT_ID)
-    )
+    private val route = savedStateHandle.toRoute<ProductImageNavDestination>()
 
-    private val index = checkNotNull(
-        savedStateHandle.get<Int>(NavDestinations.DetailsImage.KEY_INDEX)
-    )
+    private val productId = route.productId
+
+    private val index = route.index
 
     private val _viewState = MutableStateFlow(
         ImageViewModelState()
@@ -39,7 +38,7 @@ class ProductImageViewModel @Inject constructor(
 
     private fun getProduct() {
         viewModelScope.launch {
-            val product = productsRepository.getProductById(productId.toLong())
+            val product = productsRepository.getProductById(productId)
             val productUi = uiModelsMapper.toProductDetailsImageUI(product)
             val uri = productUi.images[index]
             _viewState.update {

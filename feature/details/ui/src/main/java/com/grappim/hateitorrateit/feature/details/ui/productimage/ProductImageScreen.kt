@@ -4,11 +4,9 @@ import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -27,6 +25,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.uikit.widgets.PlatoImage
 import com.grappim.hateitorrateit.uikit.widgets.PlatoTopBar
+import com.grappim.hateitorrateit.uikit.widgets.topbar.LocalTopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
+import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import kotlin.math.max
 
 private const val SCALE_COERCE_MAXIMUM_VALUE = 3f
@@ -34,6 +35,15 @@ private const val SCALE_COERCE_MAXIMUM_VALUE = 3f
 @Composable
 fun ProductImageScreen(viewModel: ProductImageViewModel = hiltViewModel(), goBack: () -> Unit) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
+    val topBarController = LocalTopBarConfig.current
+
+    LaunchedEffect(Unit) {
+        topBarController.update(
+            TopBarConfig(
+                state = TopBarState.Hidden
+            )
+        )
+    }
 
     if (state.uri.isNotEmpty()) {
         ProductImageContent(
@@ -45,30 +55,24 @@ fun ProductImageScreen(viewModel: ProductImageViewModel = hiltViewModel(), goBac
 
 @Composable
 private fun ProductImageContent(state: ImageViewModelState, goBack: () -> Unit) {
-    Scaffold(
-        modifier = Modifier
-            .statusBarsPadding()
-            .navigationBarsPadding()
+    Box(
+        modifier = Modifier.fillMaxSize()
     ) {
-        Box {
-            Box(
-                modifier = Modifier
-                    .padding(it)
-                    .fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                ImageContent(
-                    uriString = state.uri
-                )
-            }
-            PlatoTopBar(
-                modifier = Modifier.padding(top = 2.dp),
-                goBack = goBack,
-                defaultBackButton = false,
-                backgroundColor = Color.Transparent,
-                elevation = 0.dp
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            ImageContent(
+                uriString = state.uri
             )
         }
+        PlatoTopBar(
+            modifier = Modifier.padding(top = 2.dp),
+            goBack = goBack,
+            defaultBackButton = false,
+            backgroundColor = Color.Transparent
+        )
     }
 }
 

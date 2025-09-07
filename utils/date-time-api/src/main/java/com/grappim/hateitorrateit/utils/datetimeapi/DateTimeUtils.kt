@@ -15,4 +15,6 @@ interface DateTimeUtils {
     fun getDateTimeUTCNow(): OffsetDateTime
 
     fun getInstantNow(): Instant
+
+    fun getBackupFolderNowTimestamp(): String
 }

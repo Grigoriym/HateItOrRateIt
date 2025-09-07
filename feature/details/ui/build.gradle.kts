@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.hateitorrateit.android.library)
     alias(libs.plugins.hateitorrateit.android.library.compose)
     alias(libs.plugins.hateitorrateit.android.hilt)
+    alias(libs.plugins.hateitorrateit.kotlin.serialization)
 }
 
 android {
@@ -15,13 +16,13 @@ dependencies {
     implementation(projects.uikit)
     implementation(projects.data.repoApi)
     implementation(projects.data.cleanerApi)
-    implementation(projects.core.navigation)
     implementation(projects.data.analyticsApi)
     implementation(projects.utils.ui)
     implementation(projects.core.async)
     implementation(projects.utils.dateTimeApi)
     implementation(projects.utils.filesApi)
     implementation(projects.utils.androidApi)
+    implementation(projects.strings)
 
     implementation(libs.androidx.lifecycle.runtime.core)
     implementation(libs.androidx.lifecycle.runtime.compose)
@@ -30,7 +31,7 @@ dependencies {
 
     implementation(libs.androidx.compose.ui.core)
     implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material.core)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.coil)

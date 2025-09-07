@@ -5,6 +5,8 @@ import com.grappim.hateitorrateit.data.repoapi.models.ProductImage
 import com.grappim.hateitorrateit.utils.filesapi.mappers.ImageDataMapper
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
 import com.grappim.hateitorrateit.utils.filesapi.uri.UriParser
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -50,10 +52,11 @@ class ImageDataMapperImpl @Inject constructor(
             )
         }
 
-    override suspend fun toImageDataList(list: List<ProductImage>): List<ProductImageUIData> =
-        withContext(ioDispatcher) {
-            list.map { productImage: ProductImage ->
-                toImageData(productImage)
-            }
-        }
+    override suspend fun toImageDataList(
+        list: List<ProductImage>
+    ): ImmutableList<ProductImageUIData> = withContext(ioDispatcher) {
+        list.map { productImage: ProductImage ->
+            toImageData(productImage)
+        }.toImmutableList()
+    }
 }

@@ -8,6 +8,7 @@ ktlint_code_style=android_studio
 ktlint_function_naming_ignore_when_annotated_with = Composable, Test
 ij_kotlin_imports_layout = *,java.**,javax.**,kotlin.**,^
 ktlint_compose_lambda-param-in-effect=disabled
+compose_allowed_composition_locals = LocalTopBarConfig
 
 [**/uikit/theme/*.kt]
 ktlint_standard_property-naming = disabled
