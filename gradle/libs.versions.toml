@@ -32,7 +32,7 @@ material = "1.13.0"
 
 hilt = "2.57.1"
 androidx-hilt = "1.2.0"
-navigation = "2.9.3"
+navigation = "2.9.6"
 lifecycle = "2.9.3"
 appcompat = "1.7.1"
 core-ktx = "1.17.0"
