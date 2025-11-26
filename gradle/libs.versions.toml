@@ -23,7 +23,7 @@ ktlint = "13.1.0"
 jacocoAggregation = "2.4.6"
 moduleGraphAssertion = "2.9.0"
 gradleDoctor = "0.12.1"
-dependencyAnalysis = "2.19.0"
+dependencyAnalysis = "3.5.1"
 
 gms = "4.4.3"
 inAppUpdate = "2.1.0"
