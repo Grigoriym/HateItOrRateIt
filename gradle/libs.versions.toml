@@ -17,12 +17,13 @@ kotlinx-collections = "0.4.0"
 kotlin-serialization-plugin = "2.3.0"
 kotlin-serialization-json = "1.9.0"
 
-detekt = "1.23.8"
+detekt = "2.0.0-alpha.1"
 ktlint = "14.0.1"
 jacocoAggregation = "2.4.7"
 moduleGraphAssertion = "2.9.0"
 gradleDoctor = "0.12.1"
 dependencyAnalysis = "3.5.1"
+composeRules = "0.5.3"
 
 gms = "4.4.4"
 inAppUpdate = "2.1.0"
@@ -136,6 +137,9 @@ robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectr
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
+composeRules-ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "composeRules" }
+composeRules-detekt = { module = "io.nlopez.compose.rules:detekt", version.ref = "composeRules" }
+
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
@@ -151,7 +155,7 @@ firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "
 gms-googleServices = { id = "com.google.gms.google-services", version.ref = "gms" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 jacocoAggregationCoverage = { id = "io.github.gmazzo.test.aggregation.coverage", version.ref = "jacocoAggregation" }
 jacocoAggregationResults = { id = "io.github.gmazzo.test.aggregation.results", version.ref = "jacocoAggregation" }

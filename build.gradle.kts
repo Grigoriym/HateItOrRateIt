@@ -34,6 +34,8 @@ doctor {
 
 allprojects {
     tasks.withType<Test> {
+        // https://github.com/gradle/gradle/issues/33619#issuecomment-2913519014
+        failOnNoDiscoveredTests = false
         failFast = true
         reports {
             html.required.set(true)
@@ -49,7 +51,7 @@ allprojects {
 
 subprojects {
     apply {
-        plugin("io.gitlab.arturbosch.detekt")
+        plugin("dev.detekt")
         plugin("org.jlleitschuh.gradle.ktlint")
         plugin("com.autonomousapps.dependency-analysis")
     }
@@ -78,8 +80,8 @@ subprojects {
     }
 
     dependencies {
-        ktlintRuleset("io.nlopez.compose.rules:ktlint:0.4.27")
-        detektPlugins("io.nlopez.compose.rules:detekt:0.4.27")
+        ktlintRuleset(rootProject.libs.composeRules.ktlint)
+        detektPlugins(rootProject.libs.composeRules.detekt)
     }
 }
 
@@ -112,12 +114,6 @@ private val coverageExclusions = listOf(
 
     "**/*Plato*",
     "**/*Button*",
-    "**/TextH*",
-    "**/*Texts*",
-    "**/Theme",
-    "**/Colors",
-    "**/*HateItOrRateItTheme*",
-    "**/TypeKt",
 
     "**/LocalDataStorageImpl",
     "**/TransactionControllerImpl",
@@ -133,7 +129,6 @@ private val coverageExclusions = listOf(
     "**/DebugAnalyticsControllerImpl",
     "**/RemoteConfigsListenerImpl",
 
-    "**/TestUtils",
     "**/HioriTestRunner",
 
     "**/NoOp*",
@@ -154,6 +149,13 @@ private val coverageExclusions = listOf(
 }
 
 testAggregation {
+    modules {
+        exclude(rootProject)
+        exclude(projects.testing.core)
+        exclude(projects.testing.domain)
+        exclude(projects.uikit)
+        exclude(projects.strings)
+    }
     coverage {
         exclude(coverageExclusions)
     }
