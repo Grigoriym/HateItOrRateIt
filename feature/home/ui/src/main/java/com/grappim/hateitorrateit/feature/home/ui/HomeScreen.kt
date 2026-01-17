@@ -36,7 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
 import com.grappim.hateitorrateit.feature.home.ui.models.ProductListUI

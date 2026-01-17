@@ -76,9 +76,9 @@ include(":strings")
 include(":data:backup-api")
 include(":data:backup-impl")
 
-check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_21)) {
     """
-    HateItOrRateIt requires JDK 17+ but it is currently using JDK ${JavaVersion.current()}.
+    HateItOrRateIt requires JDK 21+ but it is currently using JDK ${JavaVersion.current()}.
     Java Home: [${System.getProperty("java.home")}]
     https://developer.android.com/build/jdks#jdk-config-in-studio
     """.trimIndent()
