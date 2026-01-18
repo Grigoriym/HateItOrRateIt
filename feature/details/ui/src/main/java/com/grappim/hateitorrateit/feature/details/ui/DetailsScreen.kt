@@ -1,8 +1,4 @@
-@file:OptIn(
-    ExperimentalFoundationApi::class,
-    ExperimentalPermissionsApi::class,
-    ExperimentalFoundationApi::class
-)
+@file:OptIn(ExperimentalPermissionsApi::class)
 
 package com.grappim.hateitorrateit.feature.details.ui
 
@@ -11,14 +7,16 @@ import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.os.Build
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
@@ -41,11 +39,14 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
@@ -98,6 +99,7 @@ fun DetailsRoute(
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val resources = LocalResources.current
     val topBarController = LocalTopBarConfig.current
 
     LaunchedEffect(Unit) {
@@ -106,7 +108,7 @@ fun DetailsRoute(
 
     ObserveAsEvents(viewModel.snackBarMessage) { snackbarMessage ->
         if (snackbarMessage !is NativeText.Empty) {
-            showSnackbar(snackbarMessage, context.getString(RString.close))
+            showSnackbar(snackbarMessage, resources.getString(RString.close))
         }
     }
 
@@ -136,23 +138,7 @@ fun DetailsRoute(
         state.trackScreenStart
         onDispose {}
     }
-    DetailsScreen(
-        state = state,
-        goBack = goBack,
-        onImageClick = onImageClick,
-        onEditClick = onEditClick,
-        isFromEdit = isFromEdit
-    )
-}
 
-@Composable
-internal fun DetailsScreen(
-    state: DetailsViewState,
-    goBack: () -> Unit,
-    onImageClick: (productId: Long, index: Int) -> Unit,
-    onEditClick: (id: Long) -> Unit,
-    isFromEdit: Boolean
-) {
     LaunchedEffect(state.productDeleted) {
         if (state.productDeleted) {
             goBack()
@@ -165,6 +151,21 @@ internal fun DetailsScreen(
         }
     }
 
+    DetailsScreen(
+        state = state,
+        goBack = goBack,
+        onImageClick = onImageClick,
+        onEditClick = onEditClick
+    )
+}
+
+@Composable
+internal fun DetailsScreen(
+    state: DetailsViewState,
+    goBack: () -> Unit,
+    onImageClick: (productId: Long, index: Int) -> Unit,
+    onEditClick: (id: Long) -> Unit
+) {
     PlatoAlertDialog(
         text = stringResource(id = R.string.are_you_sure_to_delete_product),
         showAlertDialog = state.showAlertDialog,
@@ -215,14 +216,39 @@ private fun DetailsScreenContent(
             onEditClick = onEditClick
         )
 
-        DetailsDemonstrationContent(
+        val scrollState = rememberScrollState()
+        val showBottomFade = scrollState.canScrollForward
+
+        Box(
             modifier = Modifier
                 .padding(top = 16.dp)
                 .weight(1f)
                 .fillMaxWidth()
-                .verticalScroll(rememberScrollState()),
-            state = state
-        )
+        ) {
+            DetailsDemonstrationContent(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState),
+                state = state
+            )
+
+            if (showBottomFade) {
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter)
+                        .fillMaxWidth()
+                        .height(48.dp)
+                        .background(
+                            brush = Brush.verticalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    MaterialTheme.colorScheme.surface
+                                )
+                            )
+                        )
+                )
+            }
+        }
     }
 }
 
@@ -278,6 +304,7 @@ private fun TopAppBarContent(
 @Composable
 private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
     val context = LocalContext.current
+    val resources = LocalResources.current
     val activity = context as Activity
     val permissionState = rememberPermissionState(
         permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -320,7 +347,7 @@ private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
                 onDownloadClicked(
                     state = state,
                     permissionState = permissionState,
-                    text = context.getString(R.string.provide_permission)
+                    text = resources.getString(R.string.provide_permission)
                 )
             }
         )
@@ -332,7 +359,6 @@ private fun openAppSettings(activity: Activity, state: DetailsViewState) {
     activity.startActivity(intent)
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 private fun onDownloadClicked(
     state: DetailsViewState,
     permissionState: PermissionState,
@@ -401,7 +427,6 @@ private fun AppBarTopButtonsContent(
     )
 }
 
-@ExperimentalFoundationApi
 @Composable
 private fun BoxScope.AppBarImageContent(
     state: DetailsViewState,
@@ -454,23 +479,35 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
             .testTag(DETAILS_DEMONSTRATION_CONTENT_TAG)
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+            horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Top
         ) {
             val type = requireNotNull(state.type)
-            Text(
-                text = state.name,
-                style = MaterialTheme.typography.headlineMedium
-            )
 
-            if (state.description.isNotEmpty()) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
                 Text(
-                    text = state.description,
-                    style = MaterialTheme.typography.titleMedium
+                    modifier = Modifier.weight(1f),
+                    text = state.name,
+                    style = MaterialTheme.typography.headlineMedium,
+                    overflow = TextOverflow.Ellipsis
+                )
+                PlatoIcon(
+                    imageVector = type.icon(),
+                    tint = type.color()
                 )
             }
 
             if (state.shop.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(id = RString.shop),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
                 Text(
                     text = state.shop,
                     style = MaterialTheme.typography.titleMedium
@@ -478,17 +515,30 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
             }
 
             if (state.createdDate.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
                 Text(
-                    modifier = Modifier.padding(top = 8.dp),
+                    text = stringResource(id = RString.date),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
                     text = state.createdDate,
                     style = MaterialTheme.typography.titleMedium
                 )
             }
 
-            PlatoIcon(
-                imageVector = type.icon(),
-                tint = type.color()
-            )
+            if (state.description.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    text = stringResource(id = RString.description),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = state.description,
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
         }
     }
 }
@@ -500,8 +550,7 @@ private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: 
             state = state,
             goBack = {},
             onImageClick = { _, _ -> },
-            onEditClick = {},
-            isFromEdit = false
+            onEditClick = {}
         )
     }
 }
@@ -515,8 +564,7 @@ private fun DetailsScreenWithLoadingPreview(
             state = state.copy(isLoading = true),
             goBack = {},
             onImageClick = { _, _ -> },
-            onEditClick = {},
-            isFromEdit = false
+            onEditClick = {}
         )
     }
 }
@@ -547,7 +595,7 @@ private class StateProvider : PreviewParameterProvider<DetailsViewState> {
             DetailsViewState(
                 productId = 1L,
                 name = "Darren Stanton fn89r qw089h890qwn qw9ej90qw qw90jeqwjn qwe9jqw90e",
-                description = "altera",
+                description = "altera 23f8230rj 3nr289r 2389hr2389r 2398hr29837r 283hr8923r932",
                 shop = "pulvinar",
                 createdDate = "ornare",
                 productFolderName = "Estelle Duke",
