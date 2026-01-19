@@ -32,10 +32,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -79,7 +75,7 @@ import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarState
 import com.grappim.hateitorrateit.utils.ui.NativeText
 import com.grappim.hateitorrateit.utils.ui.ObserveAsEvents
-import kotlinx.coroutines.launch
+import com.grappim.hateitorrateit.utils.ui.findActivity
 import timber.log.Timber
 
 const val DETAILS_SCREEN_CONTENT_TAG = "details_screen_content_tag"
@@ -125,7 +121,7 @@ fun DetailsRoute(
     }
 
     ObserveAsEvents(viewModel.intentAction) { intent ->
-        val activity = context as Activity
+        val activity = context.findActivity()
         try {
             activity.startActivity(intent)
         } catch (e: ActivityNotFoundException) {
@@ -151,21 +147,6 @@ fun DetailsRoute(
         }
     }
 
-    DetailsScreen(
-        state = state,
-        goBack = goBack,
-        onImageClick = onImageClick,
-        onEditClick = onEditClick
-    )
-}
-
-@Composable
-internal fun DetailsScreen(
-    state: DetailsViewState,
-    goBack: () -> Unit,
-    onImageClick: (productId: Long, index: Int) -> Unit,
-    onEditClick: (id: Long) -> Unit
-) {
     PlatoAlertDialog(
         text = stringResource(id = R.string.are_you_sure_to_delete_product),
         showAlertDialog = state.showAlertDialog,
@@ -270,12 +251,13 @@ private fun TopAppBarContent(
         }
     }
 
-    ScrollToLastImageOnUpdate(state, pagerState)
-
     Box(
         modifier = modifier.testTag(DETAILS_TOP_APP_BAR_TAG)
     ) {
         AppBarImageContent(
+            modifier = Modifier
+                .fillMaxSize()
+                .align(Alignment.TopCenter),
             state = state,
             pagerState = pagerState,
             onImageClick = onImageClick
@@ -298,14 +280,10 @@ private fun TopAppBarContent(
     }
 }
 
-/**
- * On why we use activity for ShareCompat: https://stackoverflow.com/a/11335794/9822532
- */
 @Composable
 private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
     val context = LocalContext.current
     val resources = LocalResources.current
-    val activity = context as Activity
     val permissionState = rememberPermissionState(
         permission = Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
@@ -319,6 +297,7 @@ private fun BoxScope.ImageInteractionsSection(state: DetailsViewState) {
                 state.onShowPermissionsAlertDialog(false, null)
             },
             onConfirmButtonClick = {
+                val activity = context.findActivity()
                 openAppSettings(activity, state)
                 state.onShowPermissionsAlertDialog(false, null)
             },
@@ -379,26 +358,6 @@ private fun onDownloadClicked(
     }
 }
 
-/**
- * A fix ensuring that the pagerState updates accurately
- * whenever an image is added or deleted.
- * On adding: we move to the last image
- * On deleting we don't do anything
- */
-@Composable
-private fun ScrollToLastImageOnUpdate(state: DetailsViewState, pagerState: PagerState) {
-    var firstRecomposition by remember { mutableStateOf(true) }
-    val coroutineScope = rememberCoroutineScope()
-    LaunchedEffect(state.images) {
-        coroutineScope.launch {
-            if (!firstRecomposition && state.images.isNotEmpty()) {
-                pagerState.animateScrollToPage(state.images.lastIndex)
-            }
-            firstRecomposition = false
-        }
-    }
-}
-
 @Composable
 private fun AppBarTopButtonsContent(
     state: DetailsViewState,
@@ -428,16 +387,15 @@ private fun AppBarTopButtonsContent(
 }
 
 @Composable
-private fun BoxScope.AppBarImageContent(
+private fun AppBarImageContent(
     state: DetailsViewState,
     pagerState: PagerState,
-    onImageClick: (productId: Long, index: Int) -> Unit
+    onImageClick: (productId: Long, index: Int) -> Unit,
+    modifier: Modifier = Modifier
 ) {
     if (state.images.isNotEmpty()) {
         HorizontalPager(
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.TopCenter),
+            modifier = modifier,
             state = pagerState
         ) { index ->
             val productImage = state.images[index]
@@ -464,9 +422,7 @@ private fun BoxScope.AppBarImageContent(
         }
     } else {
         PlatoPlaceholderImage(
-            modifier = Modifier
-                .fillMaxSize()
-                .align(Alignment.TopCenter)
+            modifier = modifier
         )
     }
 }
@@ -544,10 +500,20 @@ private fun DetailsDemonstrationContent(state: DetailsViewState, modifier: Modif
 }
 
 @[Composable PreviewDarkLight]
-private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: DetailsViewState) {
+private fun DetailsScreenPreview() {
     HateItOrRateItTheme {
-        DetailsScreen(
-            state = state,
+        DetailsScreenContent(
+            state = DetailsViewState(
+                productId = 1L,
+                appSettingsIntent = Intent(),
+                isLoading = false,
+                type = HateRateType.HATE,
+                name = "Darren Stanton fn89r qw089h890qwn qw9ej90qw qw90jeqwjn qwe9jqw90e",
+                description = "altera 23f8230rj 3nr289r 2389hr2389r 2398hr29837r 283hr8923r932",
+                shop = "pulvinar",
+                createdDate = "ornare",
+                productFolderName = "Estelle Duke"
+            ),
             goBack = {},
             onImageClick = { _, _ -> },
             onEditClick = {}
@@ -556,12 +522,15 @@ private fun DetailsScreenPreview(@PreviewParameter(StateProvider::class) state: 
 }
 
 @[Composable PreviewDarkLight]
-private fun DetailsScreenWithLoadingPreview(
-    @PreviewParameter(StateProvider::class) state: DetailsViewState
-) {
+private fun DetailsScreenWithLoadingPreview() {
     HateItOrRateItTheme {
-        DetailsScreen(
-            state = state.copy(isLoading = true),
+        DetailsScreenContent(
+            state = DetailsViewState(
+                productId = 1L,
+                appSettingsIntent = Intent(),
+                isLoading = true,
+                type = HateRateType.HATE
+            ),
             goBack = {},
             onImageClick = { _, _ -> },
             onEditClick = {}

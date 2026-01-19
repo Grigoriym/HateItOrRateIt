@@ -97,7 +97,7 @@ class DetailsViewModel @Inject constructor(
                 name = productImage.name,
                 mimeType = productImage.mimeType,
                 folderName = requireNotNull(viewState.value.productFolderName)
-            ).onSuccess { result ->
+            ).onSuccess { _ ->
                 _viewEvents.send(DetailsEvents.SaveImageSuccess)
             }.onFailure { error ->
                 Timber.e(error)
