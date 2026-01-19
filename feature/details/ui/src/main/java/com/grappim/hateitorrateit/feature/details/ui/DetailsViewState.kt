@@ -34,15 +34,15 @@ data class DetailsViewState(
     val trackScreenStart: () -> Unit = {},
     val trackEditButtonClicked: () -> Unit = {},
 
-    val setCurrentDisplayedImageIndex: (Int) -> Unit,
-    val setSnackbarMessage: (NativeText) -> Unit,
+    val setCurrentDisplayedImageIndex: (Int) -> Unit = {},
+    val setSnackbarMessage: (NativeText) -> Unit = {},
 
-    val saveFileToGallery: (ProductImage) -> Unit,
+    val saveFileToGallery: (ProductImage) -> Unit = {},
 
-    val onShareImageClick: (productImage: ProductImage) -> Unit,
+    val onShareImageClick: (productImage: ProductImage) -> Unit = {},
     val showProvidePermissionsAlertDialog: Boolean = false,
     val permissionsAlertDialogText: String = "",
-    val onShowPermissionsAlertDialog: (show: Boolean, text: String?) -> Unit
+    val onShowPermissionsAlertDialog: (show: Boolean, text: String?) -> Unit = { _, _ -> }
 )
 
 sealed interface DetailsEvents {

@@ -13,6 +13,7 @@
     <string name="camera">Kamera</string>
     <string name="gallery">Galerie</string>
     <string name="shop">Shop</string>
+    <string name="date">Datum</string>
     <string name="description">Beschreibung</string>
     <string name="name_obligatory">Name *</string>
     <string name="create">Erstellen</string>
