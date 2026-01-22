@@ -19,7 +19,7 @@ kotlin-serialization-json = "1.10.0"
 
 detekt = "2.0.0-alpha.1"
 ktlint = "14.0.1"
-jacocoAggregation = "2.4.7"
+jacocoAggregation = "2.5.0"
 moduleGraphAssertion = "2.9.0"
 gradleDoctor = "0.12.1"
 dependencyAnalysis = "3.5.1"
