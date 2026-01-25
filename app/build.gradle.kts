@@ -18,8 +18,8 @@ android {
         applicationId = "com.grappim.hateitorrateit"
         testApplicationId = "com.grappim.hateitorrateit.tests"
 
-        versionCode = 29
-        versionName = "1.5.0"
+        versionCode = 30
+        versionName = "1.5.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
