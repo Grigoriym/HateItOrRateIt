@@ -38,12 +38,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.rememberAsyncImagePainter
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
@@ -74,8 +75,8 @@ fun ProductManagerRoute(
     viewModel: ProductManagerViewModel = hiltViewModel()
 ) {
     val state by viewModel.viewState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val topBarController = LocalTopBarConfig.current
+    val resources = LocalResources.current
 
     LaunchedEffect(Unit) {
         topBarController.update(
@@ -98,7 +99,7 @@ fun ProductManagerRoute(
 
     ObserveAsEvents(viewModel.snackBarMessage) { snackBarMessage ->
         if (snackBarMessage !is NativeText.Empty) {
-            showActionSnackbar(snackBarMessage, context.getString(RString.close))
+            showActionSnackbar(snackBarMessage, resources.getString(RString.close))
         }
     }
 
@@ -334,18 +335,6 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
 
         OutlinedTextField(
             modifier = Modifier
-                .padding(top = 8.dp)
-                .fillMaxWidth(),
-            value = state.description,
-            onValueChange = state.setDescription,
-            singleLine = true,
-            label = {
-                Text(text = stringResource(id = RString.description))
-            }
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
                 .padding(top = 8.dp, bottom = 8.dp)
                 .fillMaxWidth(),
             value = state.shop,
@@ -353,6 +342,18 @@ private fun TextFieldsContent(state: ProductManagerViewState, modifier: Modifier
             singleLine = true,
             label = {
                 Text(text = stringResource(id = RString.shop))
+            }
+        )
+
+        OutlinedTextField(
+            modifier = Modifier
+                .padding(top = 8.dp)
+                .fillMaxWidth(),
+            value = state.description,
+            onValueChange = state.setDescription,
+            singleLine = false,
+            label = {
+                Text(text = stringResource(id = RString.description))
             }
         )
     }

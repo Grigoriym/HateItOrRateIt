@@ -6,6 +6,8 @@ This application offers a straightforward way to keep track of products you like
 or dislike. It allows you to easily upload photos, names, descriptions, and store
 information, enabling you to make informed decisions about future purchases.
 
+[Project board](https://tasks.gregstuff.click/project/hateitorrateit/kanban)
+
 Install
 ---------
 
@@ -22,7 +24,9 @@ There are times when you purchase a product that you either like or dislike, onl
 
 <https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/de24f8f3-ed42-4944-af75-548de1988259>
 
-|  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/d745e722-9e59-4a81-a5ba-bdb1b614ab02" alt="drawing" width="400" height="900"/> | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/902d61c4-ab54-43dc-a51c-1d8b87a6ac56" alt="drawing" width="400" height="900"/>  |
+| Dark | Light |
 |---|---|
-| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3e79ad35-7b87-43d0-b7fe-8adb5bcdd212" alt="drawing" width="400" height="900"/>  |  <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/ec249ed8-fa86-4aac-9c72-70bdc9e862f5" alt="drawing" width="400" height="900"/> |
-| <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/c8acad80-5211-4d1f-94ff-2fba5bfdff1e" alt="drawing" width="400" height="900"/>  | <img src="https://github.com/Grigoriym/HateItOrRateIt/assets/31949421/3a76cb2c-1a87-4492-9d4f-930efe0d840e" alt="drawing" width="400" height="900"/>  |
+| ![List Dark](docs/graphics/list_dark.png) | ![List Light](docs/graphics/list_light.png) |
+| ![Details Dark](docs/graphics/details_dark.png) | ![Details Light](docs/graphics/details_light.png) |
+| ![Settings Dark](docs/graphics/settings_dark.png) | ![Settings Light](docs/graphics/settings_light.png) |
+| ![Import Dark](docs/graphics/import_dark.png) | ![Import Light](docs/graphics/import_light.png) |
