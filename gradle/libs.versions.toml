@@ -6,7 +6,7 @@ compileSdk = "36"
 minSdk = "24"
 targetSdk = "36"
 
-agp = "8.13.2"
+agp = "9.2.1"
 androidTools = "32.0.0"
 androidDesugarJdkLibs = "2.1.5"
 
