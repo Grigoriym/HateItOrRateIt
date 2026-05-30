@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.hateitorrateit.android.app)
     alias(libs.plugins.hateitorrateit.android.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose)
 
