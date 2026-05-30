@@ -7,7 +7,7 @@ import com.grappim.hateitorrateit.utils.datetimeapi.DateTimeUtils
 import io.mockk.mockk
 import org.junit.Before
 import org.junit.Rule
-import kotlin.test.Test
+import org.junit.Test
 import kotlin.test.assertFalse
 import kotlin.test.assertNull
 import kotlin.test.assertTrue
