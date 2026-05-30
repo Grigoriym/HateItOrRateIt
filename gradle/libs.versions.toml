@@ -2,9 +2,9 @@
 compose-bom = "2026.05.01"
 firebase-bom = "34.14.0"
 
-compileSdk = "37"
+compileSdk = "36"
 minSdk = "24"
-targetSdk = "37"
+targetSdk = "36"
 
 agp = "9.2.1"
 androidTools = "32.2.1"
