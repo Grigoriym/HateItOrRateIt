@@ -211,15 +211,17 @@ The app recently migrated to Material 3. When working with text visibility issue
 
 ## Skills
 
-Skills live in `.claude/skills/`. Shared skills come from the `agentic-grappim` git submodule at `.claude/agentic-grappim/`.
+Skills live in `.claude/skills/`. Shared skills come from the `agentic-grappim`
+git submodule at `.claude/agentic-grappim/`.
 
 **After cloning**, initialize the submodule to make shared skills available:
+
 ```bash
 git submodule update --init
 ```
 
 | Skill | Usage | Description |
 |-------|-------|-------------|
-| `navigation-3` | Reference skill (auto-loaded) | Google's official Navigation 3 recipes |
-| `edge-to-edge` | Reference skill (auto-loaded) | System bars, insets, IME handling for SDK 35+ |
-| `adaptive` | Reference skill (auto-loaded) | Adaptive layouts for tablets/foldables — window size classes, list-detail, FlexboxLayout |
+| `navigation-3` | auto-loaded | Google's official Navigation 3 recipes |
+| `edge-to-edge` | auto-loaded | System bars, insets, IME for SDK 35+ |
+| `adaptive` | auto-loaded | Adaptive layouts for tablets/foldables |
