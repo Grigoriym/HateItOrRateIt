@@ -25,7 +25,7 @@ gradleDoctor = "0.12.1"
 dependencyAnalysis = "3.14.0"
 composeRules = "0.5.9"
 
-gms = "4.4.4"
+gms = "4.5.0"
 inAppUpdate = "2.1.0"
 firebaseCrashlytics = "3.0.7"
 material = "1.14.0"
