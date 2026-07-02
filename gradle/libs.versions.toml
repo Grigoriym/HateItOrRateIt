@@ -13,7 +13,7 @@ androidDesugarJdkLibs = "2.1.5"
 kotlin = "2.3.21"
 coroutines = "1.11.0"
 ksp = "2.3.9"
-kotlinx-collections = "0.4.0"
+kotlinx-collections = "0.5.1"
 kotlin-serialization-plugin = "2.3.21"
 kotlin-serialization-json = "1.11.0"
 
