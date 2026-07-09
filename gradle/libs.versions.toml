@@ -1,6 +1,6 @@
 [versions]
 compose-bom = "2026.05.01"
-firebase-bom = "34.14.0"
+firebase-bom = "34.16.0"
 
 compileSdk = "36"
 minSdk = "24"
