@@ -10,11 +10,11 @@ agp = "9.2.1"
 androidTools = "32.2.1"
 androidDesugarJdkLibs = "2.1.5"
 
-kotlin = "2.3.21"
+kotlin = "2.4.10"
 coroutines = "1.11.0"
 ksp = "2.3.9"
 kotlinx-collections = "0.4.0"
-kotlin-serialization-plugin = "2.3.21"
+kotlin-serialization-plugin = "2.4.10"
 kotlin-serialization-json = "1.11.0"
 
 detekt = "2.0.0-alpha.3"
