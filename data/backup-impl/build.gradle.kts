@@ -20,5 +20,4 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.hilt.android)
     implementation(libs.timber)
-    testImplementation(libs.robolectric)
 }
