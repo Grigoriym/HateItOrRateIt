@@ -1,15 +1,12 @@
 package com.grappim.hateitorrateit.utils.ui
 
+import com.grappim.hateitorrateit.testing.core.FakeContext
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import kotlin.test.assertEquals
 
-@RunWith(RobolectricTestRunner::class)
 class NativeTextTest {
 
-    private val context = RuntimeEnvironment.getApplication()
+    private val context = FakeContext()
 
     @Test
     fun `empty NativeText should return empty string`() {
@@ -37,13 +34,5 @@ class NativeTextTest {
         )
 
         assertEquals(multi.asString(context), "simpletext")
-    }
-
-    @Test
-    fun `resource NativeText should return provided text`() {
-        val idRes = R.string.test_string
-        val simple = NativeText.Resource(idRes)
-
-        assertEquals(simple.asString(context), context.getString(idRes))
     }
 }

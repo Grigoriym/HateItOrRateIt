@@ -14,11 +14,8 @@ import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 import kotlin.test.assertEquals
 
-@RunWith(RobolectricTestRunner::class)
 class ProductImageViewModelTest {
 
     private val index = 0

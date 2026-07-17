@@ -124,8 +124,6 @@ dependencies {
 
     implementation(libs.google.material)
 
-    testImplementation(libs.robolectric)
-
     implementation(libs.coil)
     implementation(libs.timber)
 }

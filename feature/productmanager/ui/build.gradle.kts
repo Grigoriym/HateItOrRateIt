@@ -37,6 +37,4 @@ dependencies {
 
     implementation(libs.timber)
     implementation(libs.coil)
-
-    testImplementation(libs.robolectric)
 }

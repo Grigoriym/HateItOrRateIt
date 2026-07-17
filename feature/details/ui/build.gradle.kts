@@ -38,6 +38,4 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.accompanist.permissions)
-
-    testImplementation(libs.robolectric)
 }

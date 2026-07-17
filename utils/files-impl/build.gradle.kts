@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.utils.filesimpl"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 dependencies {
@@ -16,6 +20,4 @@ dependencies {
     implementation(libs.androidx.core.ktx)
 
     implementation(libs.timber)
-
-    testImplementation(libs.robolectric)
 }
