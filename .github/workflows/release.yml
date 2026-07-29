@@ -4,12 +4,17 @@ on:
   push:
     tags:
       - v*
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g. v1.6.0)'
+        required: true
 
 jobs:
   release:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     env:
       HIOR_PATH_R: ${{ secrets.HIOR_PATH_R }}
       HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
@@ -61,6 +66,7 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           generate_release_notes: true
           draft: false
           make_latest: true
