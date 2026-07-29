@@ -1,1 +1,1 @@
-What's new in v1.5.2
+Maintenance release: updated dependencies and internal improvements. No user-facing changes.
