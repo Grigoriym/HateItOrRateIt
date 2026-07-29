@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.hateitorrateit.android.app)
     alias(libs.plugins.hateitorrateit.android.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose)
 
@@ -18,8 +17,8 @@ android {
         applicationId = "com.grappim.hateitorrateit"
         testApplicationId = "com.grappim.hateitorrateit.tests"
 
-        versionCode = 30
-        versionName = "1.5.1"
+        versionCode = 31
+        versionName = "1.5.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -124,8 +123,6 @@ dependencies {
     gplayImplementation(libs.firebase.analytics)
 
     implementation(libs.google.material)
-
-    testImplementation(libs.robolectric)
 
     implementation(libs.coil)
     implementation(libs.timber)

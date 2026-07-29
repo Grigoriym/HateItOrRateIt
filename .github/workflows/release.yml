@@ -4,12 +4,17 @@ on:
   push:
     tags:
       - v*
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Tag to release (e.g. v1.6.0)'
+        required: true
 
 jobs:
   release:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/') || github.event_name == 'workflow_dispatch'
     env:
       HIOR_PATH_R: ${{ secrets.HIOR_PATH_R }}
       HIOR_KEY_PASS_R: ${{ secrets.HIOR_KEY_PASS_R }}
@@ -28,7 +33,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out the repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup Android Environment
         uses: ./.github/actions/android-setup-composite-action
@@ -51,7 +56,7 @@ jobs:
           ./gradlew assembleGplayRelease bundleGplayRelease
 
       - name: Upload Release Build To Artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: release-artifacts
           path: |
@@ -59,8 +64,9 @@ jobs:
             app/build/outputs/bundle/*
 
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
           generate_release_notes: true
           draft: false
           make_latest: true

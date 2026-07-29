@@ -14,16 +14,16 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
     commonExtension.apply {
         compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
 
-        defaultConfig {
+        defaultConfig.apply {
             minSdk = libs.findVersion("minSdk").get().toString().toInt()
         }
 
-        compileOptions {
+        compileOptions.apply {
             sourceCompatibility = JavaVersion.VERSION_21
             targetCompatibility = JavaVersion.VERSION_21
 
@@ -36,13 +36,13 @@ internal fun Project.configureKotlinAndroid(
             add("META-INF/LICENSE-notice.md")
         }
 
-        lint {
+        lint.apply {
             checkDependencies = false
             abortOnError = false
             warningsAsErrors = false
         }
 
-        testOptions {
+        testOptions.apply {
             unitTests {
                 isReturnDefaultValues = true
                 isIncludeAndroidResources = true

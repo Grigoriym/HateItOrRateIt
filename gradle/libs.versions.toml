@@ -1,46 +1,46 @@
 [versions]
-compose-bom = "2026.01.00"
-firebase-bom = "34.8.0"
+compose-bom = "2026.06.01"
+firebase-bom = "34.16.0"
 
-compileSdk = "36"
+compileSdk = "37"
 minSdk = "24"
-targetSdk = "36"
+targetSdk = "37"
 
-agp = "8.13.2"
-androidTools = "32.0.0"
+agp = "9.3.0"
+androidTools = "32.3.0"
 androidDesugarJdkLibs = "2.1.5"
 
-kotlin = "2.3.0"
-coroutines = "1.10.2"
-ksp = "2.3.4"
-kotlinx-collections = "0.4.0"
-kotlin-serialization-plugin = "2.3.0"
-kotlin-serialization-json = "1.10.0"
+kotlin = "2.4.10"
+coroutines = "1.11.0"
+ksp = "2.3.9"
+kotlinx-collections = "0.5.1"
+kotlin-serialization-plugin = "2.4.10"
+kotlin-serialization-json = "1.11.0"
 
-detekt = "2.0.0-alpha.1"
-ktlint = "14.0.1"
-jacocoAggregation = "2.5.0"
-moduleGraphAssertion = "2.9.0"
+detekt = "2.0.0-alpha.5"
+ktlint = "14.2.0"
+jacocoAggregation = "2.5.1"
+moduleGraphAssertion = "2.9.1"
 gradleDoctor = "0.12.1"
-dependencyAnalysis = "3.5.1"
-composeRules = "0.5.5"
+dependencyAnalysis = "3.17.0"
+composeRules = "0.6.2"
 
-gms = "4.4.4"
+gms = "4.5.0"
 inAppUpdate = "2.1.0"
-firebaseCrashlytics = "3.0.6"
-material = "1.13.0"
+firebaseCrashlytics = "3.0.7"
+material = "1.14.0"
 
-hilt = "2.58"
-androidx-hilt = "1.3.0"
-navigation = "2.9.6"
-lifecycle = "2.10.0"
+hilt = "2.60.1"
+androidx-hilt = "1.4.0"
+navigation = "2.9.8"
+lifecycle = "2.11.0"
 appcompat = "1.7.1"
-core-ktx = "1.17.0"
+core-ktx = "1.19.0"
 startup = "1.2.0"
-datastore-prefs = "1.2.0"
-activity-compose = "1.12.2"
+datastore-prefs = "1.2.1"
+activity-compose = "1.13.0"
 room = "2.8.4"
-sqlite = "2.6.2"
+sqlite = "2.7.0"
 archCore = "2.2.0"
 splashScreen = "1.2.0"
 
@@ -48,7 +48,7 @@ accompanist = "0.37.3"
 
 coil = "2.7.0"
 timber = "5.0.1"
-mockk = "1.14.6"
+mockk = "1.14.11"
 
 junit4 = "4.13.2"
 turbine = "1.2.1"
@@ -56,8 +56,6 @@ turbine = "1.2.1"
 androidxTestCore = "1.7.0"
 androidxTestRunner = "1.7.0"
 androidxTestRules = "1.7.0"
-
-robolectric = "4.16.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
@@ -133,8 +131,6 @@ kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 kotlinx-collections = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinx-collections" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
 
-robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
-
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 composeRules-ktlint = { module = "io.nlopez.compose.rules:ktlint", version.ref = "composeRules" }
@@ -150,7 +146,6 @@ firebase-crashlytics-gradlePlugin = { group = "com.google.firebase", name = "fir
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlytics" }
 gms-googleServices = { id = "com.google.gms.google-services", version.ref = "gms" }
 hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
