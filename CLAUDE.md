@@ -208,3 +208,20 @@ The app recently migrated to Material 3. When working with text visibility issue
 - Do not add comments in newly written code
 - The code should be self-documenting through clear naming and structure
 - Only add comments when explicitly requested by the user
+
+## Skills
+
+Skills live in `.claude/skills/`. Shared skills come from the `agentic-grappim`
+git submodule at `.claude/agentic-grappim/`.
+
+**After cloning**, initialize the submodule to make shared skills available:
+
+```bash
+git submodule update --init
+```
+
+| Skill | Usage | Description |
+|-------|-------|-------------|
+| `navigation-3` | auto-loaded | Google's official Navigation 3 recipes |
+| `edge-to-edge` | auto-loaded | System bars, insets, IME for SDK 35+ |
+| `adaptive` | auto-loaded | Adaptive layouts for tablets/foldables |

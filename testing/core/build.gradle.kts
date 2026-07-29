@@ -12,9 +12,8 @@ dependencies {
     implementation(projects.utils.filesApi)
     implementation(projects.data.repoApi)
 
-    implementation(platform(libs.androidx.compose.bom))
+    api(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.robolectric)
 
     api(libs.junit4)
     api(libs.kotlinx.coroutines.test)

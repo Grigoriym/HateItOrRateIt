@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.hateitorrateit.android.app)
     alias(libs.plugins.hateitorrateit.android.hilt)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.compose)
 
@@ -124,8 +123,6 @@ dependencies {
     gplayImplementation(libs.firebase.analytics)
 
     implementation(libs.google.material)
-
-    testImplementation(libs.robolectric)
 
     implementation(libs.coil)
     implementation(libs.timber)

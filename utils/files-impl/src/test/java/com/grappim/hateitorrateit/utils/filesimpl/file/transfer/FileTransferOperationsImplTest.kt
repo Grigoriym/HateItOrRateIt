@@ -1,64 +1,47 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file.transfer
 
+import com.grappim.hateitorrateit.testing.core.FakeFolderPathManager
 import com.grappim.hateitorrateit.testing.domain.getRandomString
-import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesapi.transfer.FileTransferOperations
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
+import org.junit.rules.TemporaryFolder
 import java.io.File
+import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
-@RunWith(RobolectricTestRunner::class)
-@Config(
-    manifest = Config.NONE
-)
 class FileTransferOperationsImplTest {
 
-    private lateinit var sut: FileTransferOperations
+    @get:Rule
+    val tempFolder = TemporaryFolder()
 
-    private val folderPathManager: FolderPathManager = mockk()
-
-    private val context = RuntimeEnvironment.getApplication()
-
-    @ExperimentalCoroutinesApi
-    @Before
-    fun setUp() {
-        sut = FileTransferOperationsImpl(
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun createSut(folderPathManager: FakeFolderPathManager): FileTransferOperations =
+        FileTransferOperationsImpl(
             ioDispatcher = UnconfinedTestDispatcher(),
             folderPathManager = folderPathManager
         )
-    }
 
     @Test
     fun `on moveSourceFilesToDestinationFolder should correctly move files from source to destination and delete source folder`() =
         runTest {
-            val sourceFolder = File(context.filesDir, "products/source")
+            val sourceFolder = File(tempFolder.root, "products/source")
             assertTrue(sourceFolder.mkdirs())
 
             val file1 = File(sourceFolder, "testFile1.jpg").apply { createNewFile() }
             val file2 = File(sourceFolder, "testFile2.jpg").apply { createNewFile() }
 
-            val destinationFolder = File(context.filesDir, "products/destination")
+            val destinationFolder = File(tempFolder.root, "products/destination")
             assertTrue(destinationFolder.mkdirs())
 
-            every { folderPathManager.getMainFolder(any()) } returns File(
-                context.filesDir,
-                "products/source"
-            ) andThen File(context.filesDir, "products/destination") andThen File(
-                context.filesDir,
-                "products/source"
+            val folderPathManager = FakeFolderPathManager(
+                mainFolders = listOf(sourceFolder, destinationFolder, sourceFolder)
             )
+            val sut = createSut(folderPathManager)
 
             sut.moveSourceFilesToDestinationFolder(
                 sourceFolder.name,
@@ -78,24 +61,19 @@ class FileTransferOperationsImplTest {
     @Test
     fun `on copySourceFilesToDestination should copy source folder contents to destination folder`() =
         runTest {
-            every { folderPathManager.getMainFolder(any()) } returns File(
-                context.filesDir,
-                "products"
-            )
-
-            val sourceFolder = File(context.filesDir, "products/source")
+            val sourceFolder = File(tempFolder.root, "products/source")
             assertTrue(sourceFolder.mkdirs())
 
             val file1 = File(sourceFolder, "testFile1.jpg").apply { createNewFile() }
             val file2 = File(sourceFolder, "testFile2.jpg").apply { createNewFile() }
 
-            val destinationFolder = File(context.filesDir, "products/destination")
+            val destinationFolder = File(tempFolder.root, "products/destination")
             assertTrue(destinationFolder.mkdirs())
 
-            every { folderPathManager.getMainFolder(any()) } returns File(
-                context.filesDir,
-                "products/source"
-            ) andThen File(context.filesDir, "products/destination")
+            val folderPathManager = FakeFolderPathManager(
+                mainFolders = listOf(sourceFolder, destinationFolder)
+            )
+            val sut = createSut(folderPathManager)
 
             sut.copySourceFilesToDestination(
                 sourceFolder.name,
@@ -111,14 +89,17 @@ class FileTransferOperationsImplTest {
             assertTrue(file1.exists())
             assertTrue(file2.exists())
 
-            verify { folderPathManager.getMainFolder(sourceFolder.name) }
+            assertEquals(
+                listOf(sourceFolder.name, destinationFolder.name),
+                folderPathManager.getMainFolderCalls
+            )
         }
 
     @Test
     fun `on writeSourceFileToTargetFile copies file successfully`() = runTest {
         val content = getRandomString().toByteArray()
 
-        val sourceFolder = File(context.filesDir, "products/source")
+        val sourceFolder = File(tempFolder.root, "products/source")
         assertTrue(sourceFolder.mkdirs())
 
         val sourceFile = File(sourceFolder, "testFile1.jpg").apply {
@@ -126,6 +107,8 @@ class FileTransferOperationsImplTest {
             writeBytes(content)
         }
         val targetFile = File(sourceFolder, "testFile2.jpg").apply { createNewFile() }
+
+        val sut = createSut(FakeFolderPathManager())
 
         sut.writeSourceFileToTargetFile(sourceFile, targetFile)
         assertTrue(targetFile.exists())

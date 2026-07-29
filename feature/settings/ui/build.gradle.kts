@@ -7,6 +7,10 @@ plugins {
 
 android {
     namespace = "com.grappim.hateitorrateit.feature.settings.ui"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
 }
 
 dependencies {
@@ -39,6 +43,4 @@ dependencies {
     implementation(libs.androidx.compose.material.icons.extended)
 
     implementation(libs.timber)
-
-    testImplementation(libs.robolectric)
 }

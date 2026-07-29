@@ -1,25 +1,18 @@
 package com.grappim.hateitorrateit.utils.filesimpl.file
 
+import com.grappim.hateitorrateit.testing.core.FakeContext
 import com.grappim.hateitorrateit.utils.filesapi.pathmanager.FolderPathManager
 import com.grappim.hateitorrateit.utils.filesimpl.file.pathmanager.FolderPathManagerImpl
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
 import java.io.File
 import kotlin.test.assertEquals
 
-@RunWith(RobolectricTestRunner::class)
-@Config(
-    manifest = Config.NONE
-)
 class FolderPathManagerImplTest {
 
     private lateinit var sut: FolderPathManager
 
-    private val context = RuntimeEnvironment.getApplication()
+    private val context = FakeContext()
 
     @Before
     fun setUp() {
