@@ -17,7 +17,7 @@ kotlinx-collections = "0.5.1"
 kotlin-serialization-plugin = "2.4.10"
 kotlin-serialization-json = "1.11.0"
 
-detekt = "2.0.0-alpha.5"
+detekt = "2.0.0-alpha.6"
 ktlint = "14.2.0"
 jacocoAggregation = "2.5.1"
 moduleGraphAssertion = "2.9.1"
