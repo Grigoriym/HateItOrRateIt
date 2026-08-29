@@ -1,5 +1,5 @@
 [versions]
-compose-bom = "2026.06.01"
+compose-bom = "2026.08.00"
 firebase-bom = "34.16.0"
 
 compileSdk = "37"
