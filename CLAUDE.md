@@ -209,6 +209,24 @@ The app recently migrated to Material 3. When working with text visibility issue
 - The code should be self-documenting through clear naming and structure
 - Only add comments when explicitly requested by the user
 
+## Template Adoption
+
+This file predates `agentic-grappim/templates/CLAUDE.md.template` and has not been
+migrated to it — no "Working agreements", "Close-out", "Friction", or "Settled
+decisions" sections in the template's sense. **Decision (2026-09-05): leave as
+intentionally different, not brought in line.** This file works as a generated-style
+architecture/build reference; the template's session-discipline sections (checklist
+close-out, `/finalize`, friction logging) assume the kind of multi-session, plan-driven
+work this repo doesn't currently do. Revisit if that changes.
+
+## Git Workflow
+
+`dev` has a GitHub branch-protection rule requiring PRs. A direct push still succeeds
+today only because the repo owner has bypass rights (`remote: Bypassed rule
+violations ... Changes must be made through a pull request`) — treat that as a
+loophole, not permission: default to branch + PR into `dev`, the same as if the rule
+were enforced with no bypass.
+
 ## Skills
 
 Skills live in `.claude/skills/`. Shared skills come from the `agentic-grappim`
