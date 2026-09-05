@@ -229,17 +229,9 @@ were enforced with no bypass.
 
 ## Skills
 
-Skills live in `.claude/skills/`. Shared skills come from the `agentic-grappim`
-git submodule at `.claude/agentic-grappim/`.
-
-**After cloning**, initialize the submodule to make shared skills available:
-
-```bash
-git submodule update --init
-```
-
-| Skill | Usage | Description |
-|-------|-------|-------------|
-| `navigation-3` | auto-loaded | Google's official Navigation 3 recipes |
-| `edge-to-edge` | auto-loaded | System bars, insets, IME for SDK 35+ |
-| `adaptive` | auto-loaded | Adaptive layouts for tablets/foldables |
+Skills and agents are wired up **per machine, not per clone**, via symlinks into
+`~/.claude/skills/` and `~/.claude/agents/` — there is nothing in this repo to install,
+and `.claude/skills/` here holds none of its own. `navigation-3`, `edge-to-edge`, and
+`adaptive` are first-party `android-skills:*` skills, available every session with no
+wiring at all; anything from the `agentic-grappim` repo (`finalize`, `masvs-review`,
+`emulator-testing`, etc.) is linked globally the same way.
