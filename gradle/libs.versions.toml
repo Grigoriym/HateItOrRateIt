@@ -7,7 +7,7 @@ minSdk = "24"
 targetSdk = "37"
 
 agp = "9.4.0"
-androidTools = "32.3.0"
+androidTools = "32.4.0"
 androidDesugarJdkLibs = "2.1.5"
 
 kotlin = "2.4.10"
