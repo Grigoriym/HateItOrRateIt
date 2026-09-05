@@ -22,7 +22,7 @@ ktlint = "14.2.0"
 jacocoAggregation = "2.5.1"
 moduleGraphAssertion = "2.9.1"
 gradleDoctor = "0.12.1"
-dependencyAnalysis = "3.17.0"
+dependencyAnalysis = "3.19.1"
 composeRules = "0.6.6"
 
 gms = "4.5.0"
