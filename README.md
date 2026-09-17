@@ -18,6 +18,8 @@ height="80">](https://play.google.com/store/apps/details?id=com.grappim.hateitor
 alt="Get it on F-Droid"
 height="80">](https://f-droid.org/en/packages/com.grappim.hateitorrateit.fdroid/)
 
+The F-Droid build does not use Google Play in-app updates.
+
 ## Why This App Can Be Helpful
 
 There are times when you purchase a product that you either like or dislike, only to realize later that you can't remember its name. This is particularly true for items like cheese, ham, etc., where there are countless variations and it's challenging to keep up with all the names. This app aims to solve that problem, enabling you to recall the exact product the next time you need it.
