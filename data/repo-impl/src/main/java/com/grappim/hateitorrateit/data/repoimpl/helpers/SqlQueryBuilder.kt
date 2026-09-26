@@ -8,43 +8,47 @@ import javax.inject.Inject
 
 class SqlQueryBuilder @Inject constructor() {
 
-    fun buildSqlQuery(query: String, type: HateRateType?): String {
+    fun buildSqlQuery(query: String, type: HateRateType?): SqlQuery {
         val whereClause = buildWhereClause(query, type)
         val orderByClause = "ORDER BY createdDate DESC"
-        val resultQuery = "SELECT * FROM $PRODUCTS_TABLE $whereClause $orderByClause"
+        val resultQuery = "SELECT * FROM $PRODUCTS_TABLE ${whereClause.sql} $orderByClause"
         Timber.d("SQL query: $resultQuery")
-        return resultQuery
+        return SqlQuery(sql = resultQuery, args = whereClause.args)
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun buildWhereClause(query: String, type: HateRateType?): String {
+    fun buildWhereClause(query: String, type: HateRateType?): SqlQuery {
         val conditions = mutableListOf<String>()
+        val args = mutableListOf<Any>()
 
         if (query.isNotEmpty()) {
-            val wrappedQuery = query.wrapWithPercentWildcards().wrapWithSingleQuotes()
             conditions.add(
-                "(name LIKE $wrappedQuery " +
-                    "OR shop LIKE $wrappedQuery " +
-                    "OR description LIKE $wrappedQuery)"
+                "(name LIKE ? ESCAPE '\\' " +
+                    "OR shop LIKE ? ESCAPE '\\' " +
+                    "OR description LIKE ? ESCAPE '\\')"
             )
+            val pattern = query.escapeLikeWildcards().wrapWithPercentWildcards()
+            repeat(SEARCHABLE_COLUMNS_COUNT) { args.add(pattern) }
         }
 
         type?.let {
-            conditions.add("type=${it.name.wrapWithSingleQuotes()}")
+            conditions.add("type=?")
+            args.add(it.name)
         }
 
         conditions.add("isCreated=1")
 
-        return "WHERE ${conditions.joinToString(" AND ")}"
+        return SqlQuery(sql = "WHERE ${conditions.joinToString(" AND ")}", args = args)
     }
 
-    /**
-     * Finds any values that have "query" in any position
-     */
+    private fun String.escapeLikeWildcards(): String = this
+        .replace("\\", "\\\\")
+        .replace("%", "\\%")
+        .replace("_", "\\_")
+
     private fun String.wrapWithPercentWildcards(): String = "%$this%"
 
-    /**
-     * It is needed to wrap string with single quotes to avoid SQL syntax errors
-     */
-    private fun String.wrapWithSingleQuotes(): String = "'$this'"
+    private companion object {
+        const val SEARCHABLE_COLUMNS_COUNT = 3
+    }
 }
