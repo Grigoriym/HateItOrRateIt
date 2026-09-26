@@ -142,8 +142,10 @@ class ProductsRepositoryImpl @Inject constructor(
                 if (query.isEmpty() && type == null) {
                     productsDao.getAllProductsFlow()
                 } else {
-                    val sqLiteQuery = sqlQueryBuilder.buildSqlQuery(query, type)
-                    productsDao.getAllProductsByRawQueryFlow(SimpleSQLiteQuery(sqLiteQuery))
+                    val sqlQuery = sqlQueryBuilder.buildSqlQuery(query, type)
+                    productsDao.getAllProductsByRawQueryFlow(
+                        SimpleSQLiteQuery(sqlQuery.sql, sqlQuery.args.toTypedArray())
+                    )
                 }.mapLatest { list ->
                     list.map {
                         productsMapper.toProduct(

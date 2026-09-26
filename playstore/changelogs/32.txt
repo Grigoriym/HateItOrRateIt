@@ -1,0 +1,1 @@
+Fixed a crash when searching for products with an apostrophe or other special characters in the name. Also includes updated dependencies and internal improvements.
