@@ -1,11 +1,13 @@
 package com.grappim.hateitorrateit.data.repoimpl
 
+import androidx.sqlite.db.SupportSQLiteQuery
 import app.cash.turbine.test
 import com.grappim.hateitorrateit.data.db.dao.ProductsDao
 import com.grappim.hateitorrateit.data.localdatastorageapi.LocalDataStorage
 import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.data.repoapi.models.DraftProduct
 import com.grappim.hateitorrateit.data.repoapi.models.HateRateType
+import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQuery
 import com.grappim.hateitorrateit.data.repoimpl.helpers.SqlQueryBuilder
 import com.grappim.hateitorrateit.data.repoimpl.mappers.ProductMapper
 import com.grappim.hateitorrateit.testing.domain.getRandomLong
@@ -15,6 +17,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -206,7 +209,7 @@ class ProductsRepositoryImplTest {
         val type = HateRateType.RATE
 
         val productsWithImages = getProductWithImagesEntityList()
-        val sqlQuery = "sqlQuery"
+        val sqlQuery = SqlQuery(sql = "sqlQuery", args = emptyList())
         val product = getProduct()
 
         coEvery { sqlQueryBuilder.buildSqlQuery(any(), any()) } returns sqlQuery
@@ -224,12 +227,33 @@ class ProductsRepositoryImplTest {
     }
 
     @Test
+    fun `getProductsFlow with query should pass bind args to dao`() = runTest {
+        val query = "Sam's"
+        val type = HateRateType.RATE
+        val sqlQuery = SqlQuery(sql = "sqlQuery", args = listOf("%Sam's%", "RATE"))
+        val rawQuery = slot<SupportSQLiteQuery>()
+
+        coEvery { sqlQueryBuilder.buildSqlQuery(any(), any()) } returns sqlQuery
+        coEvery { productsDao.getAllProductsByRawQueryFlow(capture(rawQuery)) } returns flowOf(
+            emptyList()
+        )
+
+        repository.getProductsFlow(query, type).test {
+            awaitItem()
+            awaitComplete()
+        }
+
+        assertEquals("sqlQuery", rawQuery.captured.sql)
+        assertEquals(2, rawQuery.captured.argCount)
+    }
+
+    @Test
     fun `getProductsFlow with empty query should return products flow by query`() = runTest {
         val query = ""
         val type = HateRateType.RATE
 
         val productsWithImages = getProductWithImagesEntityList()
-        val sqlQuery = "sqlQuery"
+        val sqlQuery = SqlQuery(sql = "sqlQuery", args = emptyList())
         val product = getProduct()
 
         coEvery { sqlQueryBuilder.buildSqlQuery(any(), any()) } returns sqlQuery
@@ -252,7 +276,7 @@ class ProductsRepositoryImplTest {
         val type: HateRateType? = null
 
         val productsWithImages = getProductWithImagesEntityList()
-        val sqlQuery = "sqlQuery"
+        val sqlQuery = SqlQuery(sql = "sqlQuery", args = emptyList())
         val product = getProduct()
 
         coEvery { sqlQueryBuilder.buildSqlQuery(any(), any()) } returns sqlQuery
