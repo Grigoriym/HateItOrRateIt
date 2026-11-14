@@ -6,7 +6,7 @@ This application offers a straightforward way to keep track of products you like
 or dislike. It allows you to easily upload photos, names, descriptions, and store
 information, enabling you to make informed decisions about future purchases.
 
-[Project board](https://tasks.gregstuff.click/project/hateitorrateit/kanban)
+[Project board](https://taiga.gregstuff.click/project/hateitorrateit/kanban)
 
 Install
 ---------
