@@ -23,7 +23,7 @@ jacocoAggregation = "3.0.7"
 moduleGraphAssertion = "2.9.1"
 gradleDoctor = "0.12.1"
 dependencyAnalysis = "3.20.2"
-composeRules = "0.6.6"
+composeRules = "0.6.8"
 
 gms = "4.5.0"
 inAppUpdate = "2.1.0"
