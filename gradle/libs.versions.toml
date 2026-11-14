@@ -15,7 +15,7 @@ coroutines = "1.11.0"
 ksp = "2.3.14"
 kotlinx-collections = "0.5.2"
 kotlin-serialization-plugin = "2.4.21"
-kotlin-serialization-json = "1.11.0"
+kotlin-serialization-json = "1.13.0"
 
 detekt = "2.0.0-alpha.6"
 ktlint = "14.2.0"
