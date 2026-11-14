@@ -144,7 +144,7 @@ class BackupRepositoryImpl @Inject constructor(
             version = ImportVersionChecker.CURRENT_VERSION,
             appVersionName = appInfoProvider.getAppInfo(),
             exportTimestamp = dateTimeUtils.getInstantNow().toEpochMilli(),
-            deviceInfo = Build.MODEL,
+            deviceInfo = Build.MODEL.orEmpty(),
             totalProducts = products.size,
             totalImages = products.sumOf { it.images.size }
         )
