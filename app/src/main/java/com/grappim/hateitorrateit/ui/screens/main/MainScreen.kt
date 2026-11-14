@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import com.grappim.hateitorrateit.core.navigation.BottomNavDestination
 import com.grappim.hateitorrateit.feature.productmanager.ui.navigation.navigateToProductManager
 import com.grappim.hateitorrateit.ui.widgets.BottomBar
@@ -32,6 +33,8 @@ import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarConfig
 import com.grappim.hateitorrateit.uikit.widgets.topbar.TopBarController
 import com.grappim.hateitorrateit.utils.ui.asString
 import kotlinx.coroutines.launch
+
+const val ADD_PRODUCT_FAB_TAG = "add_product_fab"
 
 @Composable
 fun MainScreen() {
@@ -74,6 +77,7 @@ private fun MainScreenContent(topBarConfig: TopBarConfig) {
         floatingActionButton = {
             if (appState.isBottomBarVisible) {
                 FloatingActionButton(
+                    modifier = Modifier.testTag(ADD_PRODUCT_FAB_TAG),
                     onClick = {
                         appState.navController.navigateToProductManager()
                     },
