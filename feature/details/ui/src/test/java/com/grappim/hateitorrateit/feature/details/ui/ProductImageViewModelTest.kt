@@ -4,6 +4,7 @@ import com.grappim.hateitorrateit.data.repoapi.ProductsRepository
 import com.grappim.hateitorrateit.feature.details.ui.mappers.UiModelsMapper
 import com.grappim.hateitorrateit.feature.details.ui.navigation.ProductImageNavDestination
 import com.grappim.hateitorrateit.feature.details.ui.productimage.ProductImageViewModel
+import com.grappim.hateitorrateit.testing.core.MainDispatcherRule
 import com.grappim.hateitorrateit.testing.core.SavedStateHandleRule
 import com.grappim.hateitorrateit.testing.domain.PRODUCT_ID
 import com.grappim.hateitorrateit.testing.domain.createEditProduct
@@ -20,6 +21,9 @@ class ProductImageViewModelTest {
 
     private val index = 0
     private val route = ProductImageNavDestination(PRODUCT_ID, index)
+
+    @get:Rule
+    val coroutineRule = MainDispatcherRule()
 
     @get:Rule
     val savedStateHandleRule = SavedStateHandleRule(route)
