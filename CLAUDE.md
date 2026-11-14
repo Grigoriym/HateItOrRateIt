@@ -20,8 +20,11 @@ HateItOrRateIt is a modern Android app that helps users track products they like
 # Run a specific test class
 ./gradlew :feature:settings:ui:testGplayDebugUnitTest --tests="*SettingsViewModelTest"
 
-# Run instrumented tests
+# Run instrumented tests (needs a running emulator/device)
 ./gradlew connectedAndroidTest
+
+# Run the end-to-end suite (needs a running emulator/device)
+./gradlew :app:connectedFdroidDebugAndroidTest
 
 # Generate test coverage report
 ./gradlew testAggregateTestReport
@@ -116,6 +119,9 @@ class FeatureViewModel : ViewModel() {
 - **Unit tests**: ViewModels, repositories, utilities
 - **Integration tests**: Database operations, API interactions  
 - **UI tests**: Limited to complex navigation flows
+- **E2E tests**: `app/src/androidTest/.../e2e/` drive the real app (real Hilt graph, Room,
+  DataStore) through user flows via `AppRobot`. They run under AndroidX Test Orchestrator
+  with `clearPackageData`, so every test starts from a fresh install
 
 ### Test Conventions
 
@@ -123,6 +129,16 @@ class FeatureViewModel : ViewModel() {
 - Coroutine tests use `MainDispatcherRule`
 - Database tests use in-memory databases
 - ViewState testing focuses on state transitions and business logic
+
+### Prefer JVM Tests
+
+- Codecov only sees JVM unit tests (`./gradlew test jacocoAggregatedReport`); code tested
+  only in `androidTest` counts as uncovered
+- Needing a `Uri` is not a reason to go instrumented: use `fakeUri()` from `:testing:core`
+  (MockK-backed). Only real `ContentResolver`/`FileProvider`/`Intent` behaviour belongs in
+  `androidTest`
+- `testOptions.unitTests.isReturnDefaultValues = true`, so framework statics like
+  `Build.MODEL` are `null` on the JVM
 
 ### Test Location Pattern
 ```
@@ -218,6 +234,23 @@ intentionally different, not brought in line.** This file works as a generated-s
 architecture/build reference; the template's session-discipline sections (checklist
 close-out, `/finalize`, friction logging) assume the kind of multi-session, plan-driven
 work this repo doesn't currently do. Revisit if that changes.
+
+## E2E Before PR / Merge (required)
+
+E2E tests can't run on CI, so they are a local gate. **Before opening a PR, pushing new
+commits to one, or merging into `dev`**, run:
+
+```bash
+./gradlew :app:connectedFdroidDebugAndroidTest
+```
+
+- All tests must pass. State the result in the PR description (`E2E: N/N passed on <AVD>`),
+  or say plainly that it was not run and why. Never claim it passed without running it
+- If a change adds or alters a user-visible flow, add or update an e2e test for it
+- The emulator may be in use by another agent session. Check `adb devices` and ask
+  before booting, installing to, or running tests on a device you didn't start this
+  session. The orchestrator wipes the app's data on whatever device it runs on
+- No emulator available: tell the user and wait. Don't skip the gate silently
 
 ## Git Workflow
 
