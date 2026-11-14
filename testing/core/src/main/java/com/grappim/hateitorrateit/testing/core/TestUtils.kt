@@ -14,6 +14,8 @@ import com.grappim.hateitorrateit.testing.domain.getRandomString
 import com.grappim.hateitorrateit.testing.domain.nowDate
 import com.grappim.hateitorrateit.utils.filesapi.models.CameraTakePictureData
 import com.grappim.hateitorrateit.utils.filesapi.models.ProductImageUIData
+import io.mockk.every
+import io.mockk.mockk
 import java.io.File
 
 fun getRandomUri(): Uri {
@@ -22,10 +24,15 @@ fun getRandomUri(): Uri {
     return Uri.parse(uriString)
 }
 
+fun fakeUri(value: String = "https://grappim.com/${getRandomString()}"): Uri = mockk {
+    every { this@mockk.toString() } returns value
+    every { path } returns "/" + value.substringAfter("://").substringAfter('/')
+}
+
 val testException = IllegalStateException("error")
 
 fun createCameraTakePictureData(): CameraTakePictureData = CameraTakePictureData(
-    uri = getRandomUri(),
+    uri = fakeUri(),
     file = File(getRandomString())
 )
 
@@ -39,7 +46,7 @@ fun createImageData(
     isEdit: Boolean? = null
 ): ProductImageUIData = ProductImageUIData(
     imageId = imageId ?: getRandomLong(),
-    uri = newUri ?: getRandomUri(),
+    uri = newUri ?: fakeUri(),
     name = name ?: getRandomString(),
     size = size ?: getRandomLong(),
     mimeType = mimeType ?: getRandomString(),

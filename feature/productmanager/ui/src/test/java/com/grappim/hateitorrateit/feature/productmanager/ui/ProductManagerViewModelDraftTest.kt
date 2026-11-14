@@ -142,7 +142,7 @@ class ProductManagerViewModelDraftTest {
     }
 
     @Test
-    fun with_draftProduct_on_onProductDone_productManagerAnalytics_should_call_trackCreateButtonClicked() {
+    fun with_draftProduct_on_onProductDone_should_track_create_clicked() {
         coEvery { productsRepository.addProduct(any()) } just Runs
         coEvery { imageDataMapper.toProductImageDataList(any()) } returns editProductImages
         coEvery {
@@ -285,5 +285,6 @@ class ProductManagerViewModelDraftTest {
         viewModel.viewState.value.onAddImageFromGalleryClicked(productImageUIData.uri)
     }
 
-    private fun getProductFolderName(): String = requireNotNull(viewModel.viewState.value.draftProduct).productFolderName
+    private fun getProductFolderName(): String =
+        requireNotNull(viewModel.viewState.value.draftProduct).productFolderName
 }
